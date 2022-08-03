@@ -6,12 +6,12 @@
                 <div class="project_info_left">
                     <div class="upload_top">
                         <div class="selected_search">
-                            <div class="selected"
-                                :class="[
-                                    {'bg_disabled': datasetcheckedIds.length == 0}]">
-                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="datasetcheckedIds.length === allData.dss.length">
+                            <div class="selected" :class="[
+                            { 'bg_disabled': datasetcheckedIds.length == 0 }]">
+                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()'
+                                    :checked="datasetcheckedIds.length === allData.dss.length">
                                 <div class="opt-area" @click="dropShow">
-                                    <span class="action" >选项</span>
+                                    <span class="action">选项</span>
                                     <img :src="dropDownIcon" alt="" class="d_icon">
                                     <div class="drop_dialog" v-if="dropDialogShow">
                                         <div class="label_icon" @click="createTagsOpen">
@@ -24,43 +24,43 @@
                                             <span>
                                                 <img :src="clear_data_icon" alt="">
                                             </span>
-                                            <p >清除数据</p>
+                                            <p>清除数据</p>
                                         </div>
                                         <div class="label_icon border_none" @click="deletedialogopen">
                                             <span>
                                                 <img :src="delete_icon" alt="">
                                             </span>
-                                            <p >删除数据集</p>
+                                            <p>删除数据集</p>
                                         </div>
                                     </div>
                                 </div>
-                           </div>
+                            </div>
                             <div class="search_area">
-                                   <div class="search_icon">
-                                       <img :src="search_icon">
-                                   </div>
-                                   <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
+                                <div class="search_icon">
+                                    <img :src="search_icon">
+                                </div>
+                                <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
                             </div>
                             <button class="upload_btn" @click="toggle">新建数据集</button>
                             <div class="dialog" v-show="showDialog">
-								<div>
-									<p @click="upload">本地上传</p>
-								</div>
-								<div>
-									<p @click="s3Upload">s3上传</p>
-								</div>
-								<div>
-									<!-- @click="on_click_max_input" -->
-									<p class="disabled">Max1.0入口</p>
-								</div>
-								<div>
-									<!-- @click="on_click_max_output" -->
-									<p class="disabled">Max1.0出口</p>
-								</div>
-								<div>
-									<p @click="on_click_catalog">数据目录</p>
-								</div>
-							</div>
+                                <div>
+                                    <p @click="upload">本地上传</p>
+                                </div>
+                                <div>
+                                    <p @click="s3Upload">s3上传</p>
+                                </div>
+                                <div>
+                                    <!-- @click="on_click_max_input" -->
+                                    <p class="disabled">Max1.0入口</p>
+                                </div>
+                                <div>
+                                    <!-- @click="on_click_max_output" -->
+                                    <p class="disabled">Max1.0出口</p>
+                                </div>
+                                <div>
+                                    <p @click="on_click_catalog">数据目录</p>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="tag_selected">
@@ -70,22 +70,24 @@
                                 <!-- 降序(默认) -->
                                 <img :src="descending_order" alt="" v-if="!ascending" @click="sort('descending')">
                             </div>
-                            <div class="down_sel" >
-                                <bp-select-vue :src="selectIcon" :choosedValue="scriptValue" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+                            <div class="down_sel">
+                                <bp-select-vue :src="selectIcon" :choosedValue="scriptValue"
+                                    @showSelectOption="showSelectOption" :closeTosts="closeTosts">
                                     <bp-option-vue text="名称" @click="selectScript(1)"></bp-option-vue>
                                 </bp-select-vue>
                             </div>
                             <div class="line">|</div>
-                            <div class="down_sel tags_down_sel" >
+                            <div class="down_sel tags_down_sel">
                                 <p class="sel" @click="labelShow">标签</p>
                                 <span class="drop_icon" @click="labelShow">
                                     <img :src="dropDownIcon" alt="">
                                 </span>
                                 <div class="label_selected" v-if="labelShowDialog">
                                     <div class="tag_arr">
-                                        <div class="label_name" v-for="(item,index) in allData.tagsArray" :key="index">
-                                            <span  :style="{background: tagsColorArray[allData.tagsArray.indexOf(item)]}"></span>
-                                            <div class="tags_name">{{item}}</div>
+                                        <div class="label_name" v-for="(item, index) in allData.tagsArray" :key="index">
+                                            <span
+                                                :style="{ background: tagsColorArray[allData.tagsArray.indexOf(item)] }"></span>
+                                            <div class="tags_name">{{ item }}</div>
                                         </div>
                                     </div>
                                     <div class="management">
@@ -95,27 +97,31 @@
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
                             <div class="dataset_number">
-                                <p>{{searchData.length}} 条数据集</p>
+                                <p>{{ searchData.length }} 条数据集</p>
                             </div>
                         </div>
                     </div>
                     <div class="upload_bottom">
-                        <div class="data_content" v-for="(dataset,index) in searchData" :key="index" ref="content" :class="{bg: datasetcheckedIds.indexOf(dataset.id) > -1}" @click="clickOnlyOne(dataset, index)">
+                        <div class="data_content" v-for="(dataset, index) in searchData" :key="index" ref="content"
+                            :class="{ bg: datasetcheckedIds.indexOf(dataset.id) > -1 }"
+                            @click="clickOnlyOne(dataset, index)">
                             <div class="data_input" @click.stop="checkedMore(dataset)">
-                                <input type="checkbox" ref="data" name="datasetList" :checked="datasetcheckedIds.indexOf(dataset.id) > -1" @click.stop="checkedOneDataset(dataset)">
+                                <input type="checkbox" ref="data" name="datasetList"
+                                    :checked="datasetcheckedIds.indexOf(dataset.id) > -1"
+                                    @click.stop="checkedOneDataset(dataset)">
                             </div>
                             <div class="item_list">
                                 <span class="script_icon">
                                     <img :src="selectDatasetIcon(dataset.cat)" alt="">
                                 </span>
-                                <p class="data_name" @click.stop="clickDatasetName(dataset)" :title="dataset.name">{{dataset.name}}</p>
+                                <p class="data_name" @click.stop="clickDatasetName(dataset)" :title="dataset.name">
+                                    {{ dataset.name }}</p>
                                 <div class="tag_area" ref="tagsArea">
-                                    <div v-for="(tag,inx) in dataset.label" :key="inx">
+                                    <div v-for="(tag, inx) in dataset.label" :key="inx">
                                         <span v-if="dataset.label !== ''">
-                                            <p
-                                                :title="tag"
-                                                class="tag_bg"
-                                                :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
+                                            <p :title="tag" class="tag_bg"
+                                                :style="{ background: tagsColorArray[allData.tagsArray.indexOf(tag)] }">
+                                                {{ tag }}
                                             </p>
                                         </span>
                                     </div>
@@ -126,23 +132,28 @@
                         </div>
                         <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
                     </div>
+                    <div class="block">
+                        <el-pagination background @current-change="handleCurrentChange" :current-page.sync="currentPage"
+                            :page-size="20" layout="total, prev, pager, next" :total=allData.dss.length>
+                        </el-pagination>
+                    </div>
                 </div>
                 <div class="project_info_right">
-                    <div class="view_content" v-if="datasetcheckedIds.length > 0" >
+                    <div class="view_content" v-if="datasetcheckedIds.length > 0">
                         <div class="project_name_view">
                             <span class="space">
                                 <img :src="database_icon" alt="">
                             </span>
                             <div class="show-name" v-if="datasetcheckedIds.length == 1">
                                 <p class="project_name_info" :title="datasetcheckedNames[0]">
-                                {{datasetcheckedNames[0]}}
+                                    {{ datasetcheckedNames[0] }}
                                 </p>
                             </div>
-                           <div class="show-name">
-                               <p class="project_name_info" v-if="datasetcheckedIds.length > 1">
-                                    {{datasetcheckedIds.length}} 条数据集
+                            <div class="show-name">
+                                <p class="project_name_info" v-if="datasetcheckedIds.length > 1">
+                                    {{ datasetcheckedIds.length }} 条数据集
                                 </p>
-                           </div>
+                            </div>
                         </div>
                         <div class="view_func">
                             <span @click="createTagsOpen" class="view_list">
@@ -153,7 +164,7 @@
                                 <img class='tags_imgs_tag' :src="clear_data_icon" alt="">
                                 <span class='tags_func'>清除数据</span>
                             </span>
-                            <span  @click='deletedialogopen' class="view_list">
+                            <span @click='deletedialogopen' class="view_list">
                                 <img class='tags_imgs_tag' :src="delete_icon" alt="">
                                 <span class='tags_func'>删除</span>
                             </span>
@@ -164,51 +175,29 @@
             </div>
         </div>
         <!-- 清除数据集数据 -->
-        <clear-dataset-dialog
-            v-if="cleardialogshow"
-            :datasetcheckedIds="datasetcheckedIds"
-            :datasetcheckedNames="datasetcheckedNames"
-            @clearTagsEvent="clearTags"
-            @closeClearDialog="closeClearDialog">
+        <clear-dataset-dialog v-if="cleardialogshow" :datasetcheckedIds="datasetcheckedIds"
+            :datasetcheckedNames="datasetcheckedNames" @clearTagsEvent="clearTags" @closeClearDialog="closeClearDialog">
         </clear-dataset-dialog>
         <!-- 删除数据集 -->
-        <clear-delete
-            v-if="deletedialogshow"
-            :datasetcheckedIds="datasetcheckedIds"
-            :datasetcheckedNames="datasetcheckedNames"
-            :datasetRelaResult="datasetRelaResult"
-            @deleteDatasetsEvent="deleteDataset"
-            @closeDeleteDialog="closeDeleteDialog">
+        <clear-delete v-if="deletedialogshow" :datasetcheckedIds="datasetcheckedIds"
+            :datasetcheckedNames="datasetcheckedNames" :datasetRelaResult="datasetRelaResult"
+            @deleteDatasetsEvent="deleteDataset" @closeDeleteDialog="closeDeleteDialog">
         </clear-delete>
         <!-- 添加tag -->
-        <create-tags-dialog
-            v-if="showCreateTagsDialog"
-            :datasetcheckedIds="datasetcheckedIds"
-            :datasetcheckedNames="datasetcheckedNames"
-            :datasets="allData.dss"
-            :tagsArray="allData.tagsArray"
-            :tagsColorArray="tagsColorArray"
-            @addTagsEvent="addTagsEvent"
-            @closeCreateDialog="closeCreateDialog">
+        <create-tags-dialog v-if="showCreateTagsDialog" :datasetcheckedIds="datasetcheckedIds"
+            :datasetcheckedNames="datasetcheckedNames" :datasets="allData.dss" :tagsArray="allData.tagsArray"
+            :tagsColorArray="tagsColorArray" @addTagsEvent="addTagsEvent" @closeCreateDialog="closeCreateDialog">
         </create-tags-dialog>
         <!-- 管理标签 -->
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDia" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
         <!-- max1.0入口 -->
-        <fit-max-input-dialog
-            v-if="clickMax"
-            @fitMaxEvent="fitMaxEvent"
-            @closeDialog="closeDialog">
+        <fit-max-input-dialog v-if="clickMax" @fitMaxEvent="fitMaxEvent" @closeDialog="closeDialog">
         </fit-max-input-dialog>
         <!-- max1.0出口 -->
-        <fit-max-output-dialog
-            v-if="clickMaxOutput"
-            @fitMaxEvent="fitMaxEvent"
-            @closeDialog="closeDialog">
+        <fit-max-output-dialog v-if="clickMaxOutput" @fitMaxEvent="fitMaxEvent" @closeDialog="closeDialog">
         </fit-max-output-dialog>
-        <select-catalog 
-            @confirmeCreateCatalog="confirmeCreateCatalog"
-            @closeCreateCatalogDialog="closeCreateCatalogDialog"
-            v-if="selectCatalogVisible">
+        <select-catalog @confirmeCreateCatalog="confirmeCreateCatalog"
+            @closeCreateCatalogDialog="closeCreateCatalogDialog" v-if="selectCatalogVisible">
         </select-catalog>
     </div>
 </template>
@@ -226,6 +215,7 @@ import selectCatalog from './select-catalog'
 import PhDagDefinitions from "./policy/definitions/definitions";
 import { staticFilePath, hostName, actionTableName } from '../config/envConfig'
 import { MessageBox, Message } from 'element-ui'
+import { valueEquals } from '../../../vue-resouce-component/dist/ph-resources'
 
 
 export default {
@@ -259,7 +249,7 @@ export default {
             deleteTagsDia: false,
             searchValue: '',
             ascending: false,
-            tags: ['name','description','啦啦啦'],
+            tags: ['name', 'description', '啦啦啦'],
             ary: [],
             checked: false,
             manual: true,
@@ -269,9 +259,11 @@ export default {
             isCheckedAllDataset: false,
             datasetcheckedIds: [], //选中项id
             datasetcheckedNames: [], //选中项name
-            color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            selectCatalogVisible: false
+            color: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab', '#77bec2', '#c7c7c7', '#a088bd', '#d66b9b', '#5354ec', '#acacff', '#1e8103', '#ec7211', '#ec7211', '#ea1c82', '#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+            tagsColorArray: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab', '#77bec2', '#c7c7c7', '#a088bd', '#d66b9b', '#5354ec', '#acacff', '#1e8103', '#ec7211', '#ec7211', '#ea1c82', '#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
+            selectCatalogVisible: false,
+            currentPage: 1,
+            allDatas: []
         }
     },
     props: {
@@ -279,7 +271,7 @@ export default {
             type: Object,
             default: () => ({
                 projectName: "项目名称",
-                dss:[{
+                dss: [{
                     "projectId": "",
                     "schema": "[]",
                     "version": "",
@@ -309,23 +301,23 @@ export default {
         fitMaxOutputDialog,
         selectCatalog
     },
-    computed: { 
-        searchData: function() {
+    computed: {
+        searchData: function () {
             let searchValue = this.searchValue
             this.state = 'search'
-            if(searchValue) {
+            if (searchValue) {
                 return this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
             }
             this.sort("ascending")
-            return this.allData.dss
+            return this.allData.dss.slice(20 * (this.currentPage - 1), 20 * this.currentPage)
         }
     },
     mounted() { },
     watch: {
-        "allData.tagsArray": function() {
+        "allData.tagsArray": function () {
             this.tagsColorArray = []
             this.allData.tagsArray.forEach((item, index) => {
-                this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
+                this.tagsColorArray.push(this.color[Math.floor(Math.random() * 10 + Math.random() * 10)])
             })
         }
         // "allData.dss": function(n, o) {
@@ -344,14 +336,17 @@ export default {
         // }
     },
     methods: {
+        handleCurrentChange(val) {
+            this.currentPage = val
+        },
         confirmeCreateCatalog(data) {
             let bool = this.checkName(data.args.param.dsName)
-            if(!bool) {
+            if (!bool) {
                 alert("该数据目录已被调用")
                 return false
             }
             data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
+                data.args.param.projectId = this.allData.projectId
             data.args.param.maxcat = this.maxcat
             data.args.param.datasetArray = this.allData.dss
             data.args.param.tableName = data.args.param.dsName
@@ -373,17 +368,17 @@ export default {
         // max1.0
         fitMaxEvent(data) {
             data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
+                data.args.param.projectId = this.allData.projectId
             data.args.param.maxcat = this.maxcat
             data.args.param.datasetArray = this.allData.dss
             let creatDS = true
             this.allData.dss.forEach(item => {
-                if(item.name === data.args.param.dsName) {
+                if (item.name === data.args.param.dsName) {
                     creatDS = false
                     alert("数据集已存在！")
                 }
             })
-            if(creatDS) {
+            if (creatDS) {
                 this.$emit('event', data)
                 this.clickMax = false
                 this.clickMaxOutput = false
@@ -399,7 +394,7 @@ export default {
             data.args.param.selectedDatasets = this.datasetcheckedIds
             data.args.param.datasetArray = this.allData.dss
             data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
+                data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.showCreateTagsDialog = false;
         },
@@ -416,7 +411,7 @@ export default {
         async deleteDataset(data) {
             // 是否需要删除关联关系
             let msgArr = []
-            if(data.args.param.datasetRelaResult.length > 0) {
+            if (data.args.param.datasetRelaResult.length > 0) {
                 data.args.param.datasetRelaResult.forEach(async item => {
                     msgArr.push({
                         "actionName": item.jobShowName,
@@ -428,7 +423,7 @@ export default {
             data.args.param.selectedDatasets = this.datasetcheckedIds
             data.args.param.datasetArray = this.allData.dss
             data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
+                data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.deletedialogshow = false;
         },
@@ -440,10 +435,10 @@ export default {
             this.datasetcheckedIds.push(dataset.id)
             this.datasetcheckedNames.push(dataset.name)
         },
-        checkedMore(dataset){
+        checkedMore(dataset) {
             this.checked = !this.checked
             let idIndex = this.datasetcheckedIds.indexOf(dataset.id)
-            if(idIndex >= 0) { 
+            if (idIndex >= 0) {
                 this.datasetcheckedIds.splice(idIndex, 1)
                 this.datasetcheckedNames.splice(idIndex, 1)
                 this.checked = false
@@ -452,25 +447,25 @@ export default {
                 this.datasetcheckedIds.push(dataset.id)
                 this.datasetcheckedNames.push(dataset.name)
             }
-            if(this.datasetcheckedIds.length == 1){
+            if (this.datasetcheckedIds.length == 1) {
                 this.database_icon = this.selectDatasetIcon(dataset.cat)
-            }else{
+            } else {
                 this.database_icon = `${staticFilePath}` + "/icons/all_dataset.svg"
             }
         },
         //点击list多选框
         checkedOneDataset(dataset) {
             let idIndex = this.datasetcheckedIds.indexOf(dataset.id)
-            if(idIndex >= 0) { 
+            if (idIndex >= 0) {
                 this.datasetcheckedIds.splice(idIndex, 1)
                 this.datasetcheckedNames.splice(idIndex, 1)
             } else {
                 this.datasetcheckedIds.push(dataset.id)
                 this.datasetcheckedNames.push(dataset.name)
             }
-            if(this.datasetcheckedIds.length == 1){
+            if (this.datasetcheckedIds.length == 1) {
                 this.database_icon = this.selectDatasetIcon(dataset.cat)
-            }else{
+            } else {
                 this.database_icon = `${staticFilePath}` + "/icons/all_dataset.svg"
             }
         },
@@ -493,13 +488,13 @@ export default {
         chechedAllDataset() {
             // this.database_icon = `${staticFilePath}` + "/icons/all_dataset.svg"
             this.isCheckedAllDataset = true
-            if(this.datasetcheckedIds.length == this.allData.dss.length) {
+            if (this.datasetcheckedIds.length == this.allData.dss.length) {
                 this.isCheckedAllDataset = false
             }
             this.datasetcheckedIds = []
             this.datasetcheckedNames = []
             //全选状态
-            if(this.isCheckedAllDataset) {
+            if (this.isCheckedAllDataset) {
                 this.database_icon = `${staticFilePath}` + "/icons/all_dataset.svg"
                 this.allData.dss.forEach(item => {
                     this.datasetcheckedIds.push(item.id)
@@ -517,7 +512,7 @@ export default {
         },
         //排序
         sort(val) {
-            if(val == 'ascending') {
+            if (val == 'ascending') {
                 // 升序->降序
                 this.ascending = false
                 this.allData.dss.sort(
@@ -525,7 +520,7 @@ export default {
                         return param1.name.localeCompare(param2.name);
                     }
                 )
-            }else if (val == 'descending') {
+            } else if (val == 'descending') {
                 // 降序->升序
                 this.ascending = true
                 this.allData.dss.reverse()
@@ -557,7 +552,7 @@ export default {
              * 1. 先请求phcomputedeletionimpact，找到关联关系
              * 2. 返回空数组 原来流程；不是空数组，原来流程 + 新流程
              */
-            if(this.datasetcheckedIds.length > 10){
+            if (this.datasetcheckedIds.length > 10) {
                 Message.error("超出数量上限,单次最多同时删除10个数据集!", { duration: 0, showClose: true })
                 return
             }
@@ -565,7 +560,7 @@ export default {
             const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
             const checkUrl = `${hostName}/phcomputedeletionimpact`
             let query = []
-            this.datasetcheckedIds.forEach((item,index) => {
+            this.datasetcheckedIds.forEach((item, index) => {
                 query.push({
                     "id": item,
                     "name": that.datasetcheckedNames[index],
@@ -602,7 +597,7 @@ export default {
             this.cleardialogshow = false;
         },
         //打开清除数据集弹框
-        clearDialogOpen(){
+        clearDialogOpen() {
             this.cleardialogshow = true
         },
         //标签下拉框
@@ -613,7 +608,7 @@ export default {
         },
         //左上角选项下拉框
         dropShow() {
-            if(this.datasetcheckedIds.length < 1) {
+            if (this.datasetcheckedIds.length < 1) {
                 this.dropDialogShow = false
             } else {
                 this.dropDialogShow = !this.dropDialogShow
@@ -678,16 +673,16 @@ export default {
         },
         selectDatasetIcon(cat) {
             switch (cat) {
-            case "input_index":
-                return this.input_index_icon
-            case "output_index":
-                return this.output_index_icon
-            case "intermediate":
-                return this.intermediate_icon
-            case "catalog":
-                return this.catalog_icon
-            default:
-                return this.dataset_icon
+                case "input_index":
+                    return this.input_index_icon
+                case "output_index":
+                    return this.output_index_icon
+                case "intermediate":
+                    return this.intermediate_icon
+                case "catalog":
+                    return this.catalog_icon
+                default:
+                    return this.dataset_icon
             }
         }
     }
@@ -700,9 +695,11 @@ export default {
     margin: 0;
     box-sizing: border-box;
 }
+
 .bg {
     background: #dfe7ff;
 }
+
 .name {
     position: absolute;
     top: 25px;
@@ -716,7 +713,8 @@ export default {
     padding-left: 10px;
     font-size: 14px;
 }
- .dialog {
+
+.dialog {
     position: absolute;
     top: 30px;
     right: 40px;
@@ -726,8 +724,10 @@ export default {
     background: #fff;
     z-index: 9999;
     cursor: pointer;
+
     div {
         border-bottom: 1px solid #979797;
+
         p {
             margin-left: 10px;
             font-family: PingFangSC-Medium;
@@ -735,20 +735,24 @@ export default {
             color: #000000;
             font-weight: 600;
         }
-		p.disabled {
-			color: #ccc;
-		}
+
+        p.disabled {
+            color: #ccc;
+        }
     }
 }
+
 .upload_dataset_container {
     width: 100vw;
     height: calc(100vh - 40px);
+
     // border: 2px solid #dddddd;
     .project_name_header {
         height: 50px;
         width: 100%;
         // background: rgba(0,0,0,.2);
         border-bottom: 1px solid #dddddd;
+
         .project_name {
             // width: 200px;
             margin-left: 30px;
@@ -760,6 +764,7 @@ export default {
             cursor: pointer;
         }
     }
+
     .info {
         display: flex;
         width: 100%;
@@ -768,6 +773,8 @@ export default {
         .project_info_left {
             flex: 1;
             border-right: 1px solid #dddddd;
+            display: flex;
+            flex-direction: column;
 
             .upload_top {
                 height: 100px;
@@ -780,9 +787,11 @@ export default {
                 .selected_search {
                     display: flex;
                     position: relative;
+
                     .bg_disabled {
                         background: #eee !important;
                     }
+
                     .selected {
                         position: relative;
                         width: 90px;
@@ -792,9 +801,11 @@ export default {
                         cursor: pointer;
                         display: flex;
                         align-items: center;
+
                         .opt-area {
                             display: flex;
                         }
+
                         .checkbox {
                             margin-left: 10px;
                         }
@@ -818,6 +829,7 @@ export default {
                             width: 120px;
                             height: 90px;
                             background: #fff;
+
                             // border: 1px solid #000;
                             .label_icon {
                                 display: flex;
@@ -914,6 +926,7 @@ export default {
                         width: 25px;
                         height: 25px;
                         cursor: pointer;
+
                         img {
                             width: 100%;
                         }
@@ -940,6 +953,7 @@ export default {
                         }
 
                         cursor: pointer;
+
                         // border-right: 1px solid #c0cfe4;
                         .sel {
                             font-size: 14px;
@@ -966,6 +980,7 @@ export default {
                         border: 0;
                         margin-left: 10px;
                         width: 50px;
+
                         .label_selected {
                             box-shadow: 2px 4px 6px #dddddd;
                             // display: flex;
@@ -978,16 +993,19 @@ export default {
                             background: #fff;
                             padding-top: 10px;
                             z-index: 3333;
+
                             .tag_arr {
                                 height: 150px;
                                 overflow: auto;
                             }
+
                             .management {
                                 margin-top: 5px;
                                 width: 150px;
                                 height: 30px;
                                 border-top: 1px solid #dddddd;
                                 background: #e6e6e6;
+
                                 .manage_label {
                                     font-size: 14px;
                                     // text-align: center;
@@ -1045,6 +1063,8 @@ export default {
             .upload_bottom {
                 height: calc(100vh - 280px);
                 overflow: auto;
+                border-bottom: 1px solid #ccc;
+
                 .word {
                     width: 100%;
                     height: 618px;
@@ -1069,17 +1089,19 @@ export default {
                     border-bottom: 1px solid #dddddd;
                     padding: 10px 0 10px 10px;
                     align-items: center;
-                    .data_input{
+
+                    .data_input {
                         width: 40px;
                         height: 40px;
-                        input{
+
+                        input {
                             height: 40px;
                             cursor: pointer;
                         }
                     }
-                    
+
                     .tag_bg:hover::after {
-                        content: attr(data-title);    //取到data-title属性的值
+                        content: attr(data-title); //取到data-title属性的值
                         display: inline-block;
                         padding: 10px 14px;
                         border: 1px solid #ddd;
@@ -1088,6 +1110,7 @@ export default {
                         top: -50px;
                         left: -30px;
                     }
+
                     .tag_bg {
                         position: relative;
                         // top: -8px;
@@ -1109,9 +1132,11 @@ export default {
                         text-overflow: ellipsis;
                         padding: 0 10px;
                     }
+
                     .item_list {
                         display: flex;
                     }
+
                     .script_icon {
                         // margin-left: 27px;
                         width: 30px;
@@ -1123,6 +1148,7 @@ export default {
                             height: 30px;
                         }
                     }
+
                     .data_name {
                         margin-left: 27px;
                         font-family: PingFangSC-Medium;
@@ -1137,14 +1163,17 @@ export default {
                         white-space: nowrap;
                         text-overflow: ellipsis;
                     }
+
                     .tag_area {
                         display: flex;
                         flex-wrap: wrap;
                         overflow: hidden;
+
                         img {
                             width: 20px;
                             height: 20px;
                         }
+
                         .more_tags {
                             display: none;
                             position: relative;
@@ -1162,6 +1191,13 @@ export default {
                     // height: 80px;
 
                 }
+            }
+
+            .block {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                flex: 1;
             }
         }
 
@@ -1186,6 +1222,7 @@ export default {
                     display: flex;
                     justify-content: space-between;
                     padding: 0 30px;
+
                     .view_list {
                         display: flex;
                         flex-direction: column;
@@ -1205,6 +1242,7 @@ export default {
                     height: 60px;
                     border-bottom: 1px solid #979797;
                     height: 44px;
+
                     .space {
                         display: flex;
                         width: 60px;
@@ -1217,13 +1255,16 @@ export default {
                         min-width: 44px;
                         justify-content: center;
                         align-items: center;
+
                         img {
                             width: 44px;
                             height: 44px;
                         }
                     }
+
                     .show-name {
                         line-height: 44px;
+
                         .project_name_info {
                             margin-left: 20px;
                             font-family: PingFangSC-Medium;
@@ -1340,6 +1381,7 @@ export default {
         }
     }
 }
+
 .tags_imgs_tag {
     width: 24px;
     height: 24px;
