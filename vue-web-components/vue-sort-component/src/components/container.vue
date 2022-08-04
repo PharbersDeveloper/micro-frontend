@@ -26,24 +26,24 @@
             </div>
             <div class="sort_right" v-if="datasource.isReady && datasource.isMetaReady">
                 <pre-filter v-show="active === 1"
-                            ref="prefilter"
-                            :step="datasource.step"
-                            :schema="datasource.dataset.schema"
-                            @statusChange="preFilterStatus" />
+					ref="prefilter"
+					:step="datasource.step"
+					:schema="datasource.dataset.schema"
+					@statusChange="preFilterStatus" />
                 <computed v-show="active === 2"
-                          ref="computed"
-                          :step="datasource.step"
-                          :schema="datasource.dataset.schema"
-                          @statusChange="computedStatus" />
+					ref="computed"
+					:step="datasource.step"
+					:schema="datasource.dataset.schema"
+					@statusChange="computedStatus" />
                 <sort v-show="active === 3"
-                            ref="sort"
-                            :step="datasource.step"
-                            :schema="datasource.dataset.schema"
-                            @statusChange="sortStatus" />
+					ref="sort"
+					:step="datasource.step"
+					:schema="datasource.dataset.schema"
+					@statusChange="sortStatus" />
                 <outputs v-show="active === 4"
-                                ref="outputs"
-                                :schema="computedSchema"
-                                @statusChange="outputsStatus" />
+					ref="outputs"
+					:schema="computedSchema"
+					@statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
