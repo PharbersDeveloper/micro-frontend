@@ -42,7 +42,7 @@ export default class PhGroupStep {
         return {
 			globalCount: this.globalCount,
             keys: this.keys,
-            values: this.commands.filter(x => Object.values(x).includes(true)).map(x => x.revert2Defs())
+            values: this.commands.filter(x => !this.keys.includes(x.column) && Object.values(x).includes(true)).map(x => x.revert2Defs())
         }
     }
 }

@@ -404,7 +404,9 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&inputName=" +
 					inputName +
 					"&outputName=" +
-					recipt.outputs
+					recipt.outputs +
+					"&jobId=" +
+					recipt.jobId
 			} else if (
 				params.name === "codeditor" &&
 				params.recipt.runtime === "prepare"
