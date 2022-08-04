@@ -37,6 +37,7 @@
                     :class="[{'el-input-error': currentExpr === ''}]"
                     type="textarea"
                     :rows="10"
+					@change="currentExprChange"
                     v-model="currentExpr"
                     placeholder="Please input" />
         </div>
@@ -98,6 +99,9 @@ export default {
             this.currentExpr += "`" + v + "`"
             this.datasource.command.computedCols[this.currentIdx]["expr"] = this.currentExpr
         },
+		currentExprChange(n) {
+            this.datasource.command.computedCols[this.currentIdx]["expr"] = n
+		},
         computedClicked(it, idx) {
             this.currentExpr = it.expr
             this.currentIdx = idx

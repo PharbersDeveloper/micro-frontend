@@ -139,17 +139,54 @@ export default {
     },
     mounted() {
         this.datasource = new PhTopNStep(this.step)
-		this.schemaArray = this.$parent.computeSchema()
-		this.schema = this.schemaArray
 		this.validate()
+		this.renderSchema()
     },
     methods: {
-		deleteOrders(schema) {
-			this.schemaArray = schema
-			this.schema = this.schemaArray
-			const columns = schema.map(it => it.title)
+		renderSchema() {
+			const schemas = this.$parent.computeSchema()
+
+			const columns = schemas.map(it => it.title)
 			this.datasource.command.orders = this.datasource.command.orders.filter(it => columns.includes(it.column))
-			this.datasource.command.keys = this.datasource.command.keys.filter(it => columns.includes(it.column))
+			this.datasource.command.keys = this.datasource.command.keys.filter(it => columns.includes(it))
+
+			const orders = this.datasource.command.orders.map(it => it.column)
+			const keys = this.datasource.command.keys.map(it => it)
+			const arrs = orders.concat(keys)
+			this.schemaArray = schemas.filter(it => !arrs.includes(it.title))
+			this.schema = this.schemaArray
+		},
+		addtionCols() {
+			let arr = []
+			if (this.datasource.command.duplicateCount) {
+				arr.push({
+					type: "bigint",
+					title: "__duplicate_count"
+				})
+			}
+
+			if (this.datasource.command.rowNumber) {
+				arr.push({
+					type: "bigint",
+					title: "__row_number"
+				})
+			}
+
+			if (this.datasource.command.rank) {
+				arr.push({
+					type: "bigint",
+					title: "__rank"
+				})
+			}
+
+			if (this.datasource.command.denseRank) {
+				arr.push({
+					type: "bigint",
+					title: "__dense_rank"
+				})
+			}
+
+			return arr
 		},
         sortInserted() {
             this.datasource.command.insertSortCloase(this.placeholderSort)
