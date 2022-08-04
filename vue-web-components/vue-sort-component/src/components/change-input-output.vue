@@ -1,5 +1,5 @@
 <template>
-   <div class="input-output">
+   <div class="input-output-sort">
        <div class="left">
             <div class="title">Input</div>
             <div class="input-selected" v-show="!selectInput">
@@ -138,7 +138,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.input-output {
+.input-output-sort {
 	width: 100%;
 	flex-grow: 1;
 	display: flex;

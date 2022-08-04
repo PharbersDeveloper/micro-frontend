@@ -30,11 +30,13 @@
                     <div class="topn-sort-item">
                         <span class="topn-sort-title">{{item.column}}</span>
                         <div topn-sort-btn-group>
-                            <el-switch
+                            <!-- <el-switch
                                     class="topn-sort-desc-btn"
                                     v-model="item.desc"
                                     active-text="降序"
-                                    active-color="#13ce66" />
+                                    active-color="#13ce66" /> -->
+							<img class="sort-icon" v-show="!item.desc" @click="item.desc = !item.desc" :src="defs.iconsByName('topn', 'asce')" alt="">
+							<img class="sort-icon" v-show="item.desc" @click="item.desc = !item.desc" :src="defs.iconsByName('topn', 'desc')" alt="">
                             <el-button class="topn-sort-del-btn" type="text" icon="el-icon-close" @click="sortDeletion(item, index)" />
                         </div>
                     </div>
@@ -99,11 +101,12 @@ import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElDivider from 'element-ui/packages/divider/index'
 import ElRadioGroup from 'element-ui/packages/radio-group/index'
 import ElRadio from 'element-ui/packages/radio/index'
-import ElSwitch from 'element-ui/packages/switch/index'
+// import ElSwitch from 'element-ui/packages/switch/index'
 import ElInputNumber from 'element-ui/packages/input-number/index'
 import ElForm from 'element-ui/packages/form/index'
 import ElFormItem from 'element-ui/packages/form-item/index'
 import { PhTopNDefs } from "./defs"
+import PhDefinitions from '../../../policy/definitions/definitions'
 import PhTopNStep from "./step"
 
 export default {
@@ -124,6 +127,12 @@ export default {
             default: () => {
                 return PhTopNDefs
             }
+        },
+		defs: {
+            type: Object,
+            default: function() {
+                return new PhDefinitions(1)
+            }
         }
     },
     components: {
@@ -134,22 +143,59 @@ export default {
         ElCheckbox,
         ElRadioGroup,
         ElRadio,
-        ElSwitch,
+        // ElSwitch,
         ElDivider
     },
     mounted() {
         this.datasource = new PhTopNStep(this.step)
-		this.schemaArray = this.$parent.computeSchema()
-		this.schema = this.schemaArray
 		this.validate()
+		this.renderSchema()
     },
     methods: {
-		deleteOrders(schema) {
-			this.schemaArray = schema
-			this.schema = this.schemaArray
-			const columns = schema.map(it => it.title)
+		renderSchema() {
+			const schemas = this.$parent.computeSchema()
+
+			const columns = schemas.map(it => it.title)
 			this.datasource.command.orders = this.datasource.command.orders.filter(it => columns.includes(it.column))
-			this.datasource.command.keys = this.datasource.command.keys.filter(it => columns.includes(it.column))
+			this.datasource.command.keys = this.datasource.command.keys.filter(it => columns.includes(it))
+
+			const orders = this.datasource.command.orders.map(it => it.column)
+			const keys = this.datasource.command.keys.map(it => it)
+			const arrs = orders.concat(keys)
+			this.schemaArray = schemas.filter(it => !arrs.includes(it.title))
+			this.schema = this.schemaArray
+		},
+		addtionCols() {
+			let arr = []
+			if (this.datasource.command.duplicateCount) {
+				arr.push({
+					type: "bigint",
+					title: "__duplicate_count"
+				})
+			}
+
+			if (this.datasource.command.rowNumber) {
+				arr.push({
+					type: "bigint",
+					title: "__row_number"
+				})
+			}
+
+			if (this.datasource.command.rank) {
+				arr.push({
+					type: "bigint",
+					title: "__rank"
+				})
+			}
+
+			if (this.datasource.command.denseRank) {
+				arr.push({
+					type: "bigint",
+					title: "__dense_rank"
+				})
+			}
+
+			return arr
 		},
         sortInserted() {
             this.datasource.command.insertSortCloase(this.placeholderSort)
@@ -250,8 +296,11 @@ export default {
             .topn-sort-item {
                 display: flex;
 				flex-direction: row;
-				// justify-content: space-between;
 				align-items: center;
+
+				.sort-icon {
+					width: 16px;
+				}
 
                 .topn-sort-btn-group {
                     display: flex;

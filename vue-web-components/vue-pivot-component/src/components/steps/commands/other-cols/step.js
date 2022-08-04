@@ -52,6 +52,6 @@ export default class PhGroupStep {
     }
 
     revert2Defs() {
-        return this.commands.filter(x => Object.values(x).includes(true)).map(x => x.revert2Defs())
+        return this.commands.filter(x => !this.keys.includes(x.column) && Object.values(x).includes(true)).map(x => x.revert2Defs())
     }
 }
