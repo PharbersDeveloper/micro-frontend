@@ -222,6 +222,7 @@ export default {
 			}
         },
         validate() {
+			this.renderSchema()
 			const ErrorVales = 
 				(this.datasource.command.firstRows < 1 && this.datasource.command.lastRows < 1) || 
 				this.datasource.command.orders.length === 0 || 
