@@ -238,10 +238,15 @@ export default {
                     "title": this.datasource.dataset.schema[idx]["src"]
                 })
             }
+
+            let addCols = []
+            if (this.$refs.computed) {
+                addCols = this.$refs.computed.datasource.revert2Defs()
+            } else {
+                const computedStep = JSON.parse(this.datasource.step["expressions"])
+                addCols = computedStep["params"]["computedColumns"]
+            }
             
-            const computedStep = JSON.parse(this.datasource.step["expressions"])
-            const addCols = this.$refs.computed ? this.$refs.computed.datasource.revert2Defs() : computedStep["params"]["computedColumns"]
-            // const addCols = this.$refs.computed.datasource.revert2Defs()
             for (let idx = 0; idx < addCols.length; ++idx) {
                 result.push({
                     "type": addCols[idx]["type"].toLowerCase(),

@@ -149,7 +149,6 @@ export default {
     mounted() {
         this.datasource = new PhTopNStep(this.step)
 		this.validate()
-		this.renderSchema()
     },
     methods: {
 		renderSchema() {
