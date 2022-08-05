@@ -81,9 +81,7 @@ export default class PhDataSource {
         ele.datasource.buildQuery(ele, key)
             .then((response) => response.json())
             .then((response) => {
-                // that.store.sync(response)
-                // ele.datasource.data = ele.datasource.data.concat(that.store.findAll("datasets"))
-                ele.datasource.data = ele.datasource.data.concat(response.data.map(x => x.attributes))
+                ele.datasource.data = ele.AllData.concat(response.data.map(x => x.attributes))
                 ele.datasource.data = that.data
                 that.startKey = response.meta.start_key
                 // ele.cur_page++
