@@ -1,0 +1,22 @@
+{
+    "devops": {
+        "prod": {
+            "prefix": "dist",
+            "files": [
+            ],
+            "destinations": [
+                   {
+                        "bucket": "ph-platform",
+                        "key": "2020-11-11/cicd/test/iframe-codeditor-component/"
+                   }
+               ],
+            "resolve": ""
+            }
+        },
+    "prod": {
+
+    },
+    "dev": {
+
+    }
+}

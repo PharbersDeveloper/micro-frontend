@@ -1,0 +1,23 @@
+{
+    "devops": {
+        "prod": {
+            "prefix": "dist",
+            "files": [
+                "*.js"
+            ],
+            "destinations": [
+                   {
+                        "bucket": "ph-platform",
+                        "key": "2020-11-11/cicd/test/offweb-model-helper/"
+                   }
+               ],
+            "resolve": ""
+            }
+        },
+    "prod": {
+
+    },
+    "dev": {
+
+    }
+}
