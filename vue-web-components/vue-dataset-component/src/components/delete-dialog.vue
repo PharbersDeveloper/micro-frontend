@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="clear_dialog_container">
+        <div class="delete_dialog_container">
             <div class="dialog_area">
                <div class="header">
                    <img :src="model_err" alt="">
@@ -63,7 +63,7 @@ export default {
     padding: 0;
     margin: 0;
 }
-.clear_dialog_container {
+.delete_dialog_container {
    	height: 100vh;
     width: 100vw;
     background: rgba(37,35,45,0.55);

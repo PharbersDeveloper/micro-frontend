@@ -6,12 +6,13 @@ export default class PhDataSource {
     constructor(id, adapter=null) {
         this.id = id
         this.data = []
-        this.key = ""
+        this.startKey = ""
+        this.totalCount = 0
         this.projectId = ''
         this.batch_size = 20
-        this.curPage = 0
+        // this.curPage = 0
         this.store = new JsonApiDataStore()
-        this.dubbgerToken = "df8578e46fff0258f95195704e38f14ee98488c3b31f43199fd6225a8dba739a"
+        this.debugToken = "350842d4967cebc9d31a66ec5f44719cc7bc9630efd7ddb0324e33578cd6ed01"
         if (!adapter) {
             this.adapter = this.defaultAdapter
         }
@@ -33,16 +34,17 @@ export default class PhDataSource {
         else return null
     }
 
-    buildQuery(projectId){
-        const accessToken = route.cookies.read("access_token") || debugToken
+    buildQuery(ele, key){
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = ele.getCookie("access_token") || this.debugToken
         let body = {
             table: "dataset",
             conditions: {
-                projectId: ["=", parseParams.query.projectId]
+                projectId: ["=", ele.projectId]
             },
             index_name: "dataset-projectId-name-index",
-            limit: 20,
-            start_key: this.key
+            limit: this.batch_size,
+            start_key: key
         }
 
         let options = {
@@ -57,23 +59,37 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    refreshData(ele) {
+    refreshData(ele, key, callback=null) {
         let that = this
-        ele.datasource.buildQuery(ele)
+        ele.datasource.buildQuery(ele, key)
             .then((response) => response.json())
             .then((response) => {
-                console.log(response)
+                that.store.sync(response)
+                // 下一页的key
+                that.startKey = response.meta.start_key
+                that.totalCount = response.meta.total_count
+                that.data = that.store.findAll("datasets")
+                // that.curPage = 1
                 ele.needRefresh++
+                if(callback)
+                    callback()
             })
     }
 
-    appendData(ele) {
-        ele.datasource.buildQuery(ele, true)
+    appendData(ele, key, callback=null) {
+        let that = this
+        ele.datasource.buildQuery(ele, key)
+            .then((response) => response.json())
             .then((response) => {
-                // ele.datasource.data = ele.datasource.data.concat(response.map(ele.datasource.adapter))
-                // ele.datasource.data = this.data
+                // that.store.sync(response)
+                // ele.datasource.data = ele.datasource.data.concat(that.store.findAll("datasets"))
+                ele.datasource.data = ele.datasource.data.concat(response.data.map(x => x.attributes))
+                ele.datasource.data = that.data
+                that.startKey = response.meta.start_key
                 // ele.cur_page++
                 ele.needRefresh++
+                if(callback)
+                    callback()
             })
     }
 
