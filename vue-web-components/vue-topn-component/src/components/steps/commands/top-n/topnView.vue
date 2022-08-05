@@ -30,18 +30,20 @@
                     <div class="topn-sort-item">
                         <span class="topn-sort-title">{{item.column}}</span>
                         <div topn-sort-btn-group>
-                            <el-switch
+                            <!-- <el-switch
                                     class="topn-sort-desc-btn"
                                     v-model="item.desc"
                                     active-text="降序"
-                                    active-color="#13ce66" />
-                            <el-button class="topn-sort-del-btn" type="text" icon="el-icon-close" @click="sortDeletion(index)" />
+                                    active-color="#13ce66" /> -->
+							<img class="sort-icon" v-show="!item.desc" @click="item.desc = !item.desc" :src="defs.iconsByName('topn', 'asce')" alt="">
+							<img class="sort-icon" v-show="item.desc" @click="item.desc = !item.desc" :src="defs.iconsByName('topn', 'desc')" alt="">
+                            <el-button class="topn-sort-del-btn" type="text" icon="el-icon-close" @click="sortDeletion(item, index)" />
                         </div>
                     </div>
                 </div>
                 <div class="topn-add-btn">
                     <select v-model="placeholderSort" @change="sortInserted">
-                        <option v-for="(item, index) in schema" :value="item.src" :key="index" :label="item.src" />
+                        <option v-for="(item, index) in schemaArray" :value="item.title" :key="index" :label="item.title" />
                         <option value="选择列" label="选择列" />
                     </select>
                 </div>
@@ -61,7 +63,7 @@
                     </div>
                     <div class="topn-add-btn">
                         <select v-model="placeholderKey" >
-                            <option v-for="(item, index) in schema" :value="item.src" :key="index" :label="item.src" />
+                            <option v-for="(item, index) in schemaArray" :value="item.title" :key="index" :label="item.title" />
                             <option value="选择列" label="选择列" />
                         </select>
                     </div>
@@ -70,12 +72,12 @@
                     <div class="topn-sort-item-list" v-for="(item, index) in datasource.command.keys" :key="index">
                         <div class="topn-sort-item">
                             <span class="topn-sort-title">{{item}}</span>
-                            <el-button class="topn-sort-del-btn" type="text" icon="el-icon-close" @click="keyDeletion(index)" />
+                            <el-button class="topn-sort-del-btn" type="text" icon="el-icon-close" @click="keyDeletion(item, index)" />
                         </div>
                     </div>
                     <div class="topn-add-btn">
                         <select v-model="placeholderKey" @change="keyInserted">
-                            <option v-for="(item, index) in schema" :value="item.src" :key="index" :label="item.src" />
+                            <option v-for="(item, index) in schemaArray" :value="item.title" :key="index" :label="item.title" />
                             <option value="选择列" label="选择列" />
                         </select>
                     </div>
@@ -99,11 +101,12 @@ import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElDivider from 'element-ui/packages/divider/index'
 import ElRadioGroup from 'element-ui/packages/radio-group/index'
 import ElRadio from 'element-ui/packages/radio/index'
-import ElSwitch from 'element-ui/packages/switch/index'
+// import ElSwitch from 'element-ui/packages/switch/index'
 import ElInputNumber from 'element-ui/packages/input-number/index'
 import ElForm from 'element-ui/packages/form/index'
 import ElFormItem from 'element-ui/packages/form-item/index'
 import { PhTopNDefs } from "./defs"
+import PhDefinitions from '../../../policy/definitions/definitions'
 import PhTopNStep from "./step"
 
 export default {
@@ -111,16 +114,24 @@ export default {
         return {
             datasource: null,
             placeholderSort: "选择列",
-            placeholderKey: "选择列"
+            placeholderKey: "选择列",
+			schemaArray: [],
+			schema: []
         }
     },
     props: {
         step: Object,
-        schema: Array,
+        // schema: Array,
         concretDefs: {
             type: Object,
             default: () => {
                 return PhTopNDefs
+            }
+        },
+		defs: {
+            type: Object,
+            default: function() {
+                return new PhDefinitions(1)
             }
         }
     },
@@ -132,31 +143,83 @@ export default {
         ElCheckbox,
         ElRadioGroup,
         ElRadio,
-        ElSwitch,
+        // ElSwitch,
         ElDivider
     },
     mounted() {
         this.datasource = new PhTopNStep(this.step)
-		const ErrorVales = 
-			(this.datasource.command.firstRows < 1 && this.datasource.command.lastRows < 1) || 
-			this.datasource.command.orders.length === 0 || 
-			(!this.datasource.command.isAllCols && this.datasource.command.keys.length === 0)
-		this.$emit('statusChange', ErrorVales)
+		this.validate()
+		this.renderSchema()
     },
     methods: {
+		renderSchema() {
+			const schemas = this.$parent.computeSchema()
+
+			const columns = schemas.map(it => it.title)
+			this.datasource.command.orders = this.datasource.command.orders.filter(it => columns.includes(it.column))
+			this.datasource.command.keys = this.datasource.command.keys.filter(it => columns.includes(it))
+
+			const orders = this.datasource.command.orders.map(it => it.column)
+			const keys = this.datasource.command.keys.map(it => it)
+			const arrs = orders.concat(keys)
+			this.schemaArray = schemas.filter(it => !arrs.includes(it.title))
+			this.schema = this.schemaArray
+		},
+		addtionCols() {
+			let arr = []
+			if (this.datasource.command.duplicateCount) {
+				arr.push({
+					type: "bigint",
+					title: "__duplicate_count"
+				})
+			}
+
+			if (this.datasource.command.rowNumber) {
+				arr.push({
+					type: "bigint",
+					title: "__row_number"
+				})
+			}
+
+			if (this.datasource.command.rank) {
+				arr.push({
+					type: "bigint",
+					title: "__rank"
+				})
+			}
+
+			if (this.datasource.command.denseRank) {
+				arr.push({
+					type: "bigint",
+					title: "__dense_rank"
+				})
+			}
+
+			return arr
+		},
         sortInserted() {
             this.datasource.command.insertSortCloase(this.placeholderSort)
+			this.schemaArray = this.schemaArray.filter(it => it.title !== this.placeholderSort)
             this.placeholderSort = "选择列"
         },
-        sortDeletion(idx) {
+        sortDeletion(item, idx) {
             this.datasource.command.deleteSortCloase(idx)
+			const schemaItem = this.schema.filter(it => it.title === item.column)
+			if (schemaItem.length > 0) {
+				this.schemaArray = this.schemaArray.concat(schemaItem)
+			}
         },
         keyInserted() {
             this.datasource.command.insertKeyCloase(this.placeholderKey)
+			this.schemaArray = this.schemaArray.filter(it => it.title !== this.placeholderKey)
             this.placeholderKey = "选择列"
         },
-        keyDeletion(idx) {
+        keyDeletion(item, idx) {
             this.datasource.command.deleteKeyCloase(idx)
+			const schemaItem = this.schema.filter(it => it.title === item.column)
+			if (schemaItem.length > 0) {
+				this.schemaArray = this.schemaArray.concat(schemaItem)
+			}
         },
         validate() {
 			const ErrorVales = 
@@ -166,9 +229,7 @@ export default {
             this.$emit('statusChange', ErrorVales)
         }
     },
-    computed: {
-
-    },
+    computed: {},
 	watch: {
 		"datasource.command.isAllCols": function(n) {
 			if (n) { 
@@ -235,8 +296,11 @@ export default {
             .topn-sort-item {
                 display: flex;
 				flex-direction: row;
-				// justify-content: space-between;
 				align-items: center;
+
+				.sort-icon {
+					width: 16px;
+				}
 
                 .topn-sort-btn-group {
                     display: flex;

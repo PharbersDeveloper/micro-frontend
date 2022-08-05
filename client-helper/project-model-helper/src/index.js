@@ -1,5 +1,7 @@
-import { phAnalyzeUploadDatasetEventHandler } from "./eventHandler/phAnalyzeUploadDatasetEventHandler"
+import { phDatasetContainerEventHandler } from "./eventHandler/phDatasetContainerEventHandler"
+import { phDatasetContainerRouteModel } from "./routeModel/phDatasetContainerRouteModel"
 import { phAnalyzeUploadDatasetRouteModel } from "./routeModel/phAnalyzeUploadDatasetRouteModel"
+import { phAnalyzeUploadDatasetEventHandler } from "./eventHandler/phAnalyzeUploadDatasetEventHandler"
 import { phAnalyzeDataListHomeEventHandler } from "./eventHandler/phAnalyzeDataListHomeEventHandler"
 import { phAnalyzeDataListHomeRouteModel } from "./routeModel/phAnalyzeDataListHomeRouteModel"
 import { phAnalyzeSelectFileRouteModel } from "./routeModel/phAnalyzeSelectFileRouteModel"
@@ -60,8 +62,10 @@ import { phGroupContainerEventHandler } from "./eventHandler/phGroupContainerEve
 import { phPivotContainerEventHandler } from "./eventHandler/phPivotContainerEventHandler"
 
 export {
-	phAnalyzeUploadDatasetEventHandler,
 	phAnalyzeUploadDatasetRouteModel,
+	phAnalyzeUploadDatasetEventHandler,
+	phDatasetContainerEventHandler,
+	phDatasetContainerRouteModel,
 	phAnalyzeDataListHomeEventHandler,
 	phAnalyzeDataListHomeRouteModel,
 	phAnalyzeSelectFileRouteModel,

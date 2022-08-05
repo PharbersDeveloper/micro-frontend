@@ -80,45 +80,51 @@
                         <div class="data_content" v-for="(notebook, index) in searchData" :key="index" ref="content"
                             :class="{ bg: notebookscheckedIds.indexOf(notebook.id) > -1 }"
                             @click="clickOnlyOne(notebook, index)">
-                            <div class="content-left">
-                                <div style="display: flex; flex-direction: column; justify-content: space-around">
-                                    <div class="data_input" @click.stop="checkedMore(notebook)">
+                            <!-- @click="clickOnlyOne(notebook, index)" -->
+                            <div class="data_input" @click.stop="checkedMore(notebook,index)">
+                                <input type="checkbox" ref="data" name="notebooksList"
+                                :checked="notebookscheckedIds.indexOf(notebook.detail.id) > -1"
+                                @click.stop="checkedOnenotebooks(notebook)">
+                            </div>
+                            <div class="data_input_left">
+                                <div class="content-left">
+                                    <!-- <div style="display: flex; flex-direction: column; justify-content: space-around"> -->
+                                    <!-- <div class="data_input" @click="checkedMore(notebook)">
                                         <input type="checkbox" ref="data" name="notebooksList"
                                         :checked="notebookscheckedIds.indexOf(notebook.detail.id) > -1"
                                         @click.stop="checkedOnenotebooks(notebook)">
-                                    </div>
-                                </div>
-                                <div class="item_list">
-                                    <span class="script_icon">
-                                        <img :src="defs.iconsByName(notebook.detail.ctype)" alt="">
-                                    </span>
-                                    <p class="data_name" @click.stop="clickNotebooksName(notebook)"
-                                        :title="notebook.name">
-                                        {{ notebook.detail.name }}
-                                    </p>
-                                    <el-tag type="danger" v-if="owner === notebook.detail.owner">我的编译器</el-tag>
+                                    </div> -->
+                                    <div class="item_list">
+                                        <span class="script_icon">
+                                            <img :src="defs.iconsByName(notebook.detail.ctype)" alt="">
+                                        </span>
+                                        <p class="data_name" @click.stop="clickNotebooksName(notebook)"
+                                            :title="notebook.name">
+                                            {{ notebook.detail.name }}
+                                        </p>
+                                        <el-tag type="danger" v-if="owner === notebook.detail.owner">我的编译器</el-tag>
 
-                                    <div class="tag_area" ref="tagsArea">
-                                        <div v-for="(tag, inx) in notebook.detail.label" :key="inx">
-                                            <span v-if="notebook.label !== ''">
-                                                <p :title="tag" class="tag_bg"
-                                                    :style="{ background: tagsColorArray[allData.tagsArray.indexOf(tag)] }">
-                                                    {{ tag }}
-                                                </p>
-                                            </span>
+                                        <div class="tag_area" ref="tagsArea">
+                                            <div v-for="(tag, inx) in notebook.detail.label" :key="inx">
+                                                <span v-if="notebook.label !== ''">
+                                                    <p :title="tag" class="tag_bg"
+                                                        :style="{ background: tagsColorArray[allData.tagsArray.indexOf(tag)] }">
+                                                        {{ tag }}
+                                                    </p>
+                                                </span>
+                                            </div>
+                                            <!-- tag的更多按钮，暂时隐藏 -->
+                                            <!-- <img src=`${staticFilePath}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                         </div>
-                                        <!-- tag的更多按钮，暂时隐藏 -->
-                                        <!-- <img src=`${staticFilePath}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                     </div>
                                 </div>
+                                <div @click.stop>
+                                    <span>{{ notebook.message }}</span>
+                                    <el-switch v-if="notebook.editable && owner === notebook.detail.owner"
+                                        v-model="notebook.switch" active-color="#13ce66" @change="resetStatus(notebook)" />
+                                    <el-switch v-else disabled v-model="notebook.switch" active-color="#13ce66" />
+                                </div>
                             </div>
-                            <div @click.stop>
-                                <span>{{ notebook.message }}</span>
-                                <el-switch v-if="notebook.editable && owner === notebook.detail.owner"
-                                    v-model="notebook.switch" active-color="#13ce66" @change="resetStatus(notebook)" />
-                                <el-switch v-else disabled v-model="notebook.switch" active-color="#13ce66" />
-                            </div>
-
                         </div>
                         <div class="word" v-if="allData.dns === ''">当前项目无注册编辑器</div>
                     </div>
@@ -328,17 +334,18 @@ export default {
                 this.isStopStatus = false
             }
         },
-        checkedMore(notebook){
-            this.checked = !this.checked
-            let idIndex = this.notebookscheckedIds.indexOf(notebook.id)
+        checkedMore(notebook,index){
+            this.$refs.data[index].checked = !this.$refs.data[index].checked
+            console.log(this.$refs.data[index].checked)
+            let idIndex = this.notebookscheckedIds.indexOf(notebook.detail.id)
             if(idIndex >= 0) { 
                 this.notebookscheckedIds.splice(idIndex, 1)
                 this.notebookscheckedNames.splice(idIndex, 1)
-                this.checked = false
+                this.$refs.data[index].checked = false
             } else {
-                this.checked = true
-                this.notebookscheckedIds.push(notebook.id)
-                this.notebookscheckedNames.push(notebook.name)
+                this.$refs.data[index].checked = true
+                this.notebookscheckedIds.push(notebook.detail.id)
+                this.notebookscheckedNames.push(notebook.detail.name)
             }
             if(this.notebookscheckedIds.length == 1){
                 this.script_icon_show = this.defs.iconsByName(notebook.detail.ctype)
@@ -1015,7 +1022,7 @@ export default {
 
                 .data_content {
                     display: flex;
-                    justify-content: space-between;
+                    // justify-content: space-between;
                     width: 100%;
                     box-sizing: border-box;
                     // height: 60px;
@@ -1026,12 +1033,17 @@ export default {
                     .data_input {
                         width: 40px;
                         height: 40px;
+                        line-height: 40px;
                         input {
                             height: 40px;
                             cursor: pointer;
                         }
                     }
-
+                    .data_input_left{
+                        display: flex;
+                        justify-content: space-between;
+                        flex-grow: 1;
+                    }
                     .tag_bg:hover::after {
                         content: attr(data-title); //取到data-title属性的值
                         display: inline-block;

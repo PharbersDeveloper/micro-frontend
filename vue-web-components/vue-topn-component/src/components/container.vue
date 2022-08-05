@@ -26,29 +26,28 @@
             </div>
             <div class="topn_right" v-if="datasource.isReady && datasource.isMetaReady">
                 <pre-filter v-show="active === 1"
-                            ref="filter"
-                            :step="datasource.step"
-                            :schema="datasource.dataset.schema"
-                            @statusChange="preFilterStatus" />
+					ref="filter"
+					:step="datasource.step"
+					:schema="datasource.dataset.schema"
+					@statusChange="preFilterStatus" />
                 <computed v-show="active === 2"
-                            ref="computed"
-                            :step="datasource.step"
-                            :schema="datasource.dataset.schema"
-                            @statusChange="computedStatus" />
+					ref="computed"
+					:step="datasource.step"
+					:schema="datasource.dataset.schema"
+					@statusChange="computedStatus" />
                 <top-n v-show="active === 3"
-                          ref="topn"
-                          :step="datasource.step"
-                          :schema="datasource.dataset.schema"
-                          @statusChange="topnStatus" />
+					ref="topn"
+					:step="datasource.step"
+					@statusChange="topnStatus" />
                 <retrieved-cols v-show="active === 4"
-                                ref="retrieved"
-                                :step="datasource.step"
-                                :schema="computedSchema"
-                                @statusChange="retrievedStatus" />
+					ref="retrieved"
+					:step="datasource.step"
+					:schema="computedSchema"
+					@statusChange="retrievedStatus" />
                 <outputs v-show="active === 5"
-                                ref="outputs"
-                                :schema="outputsSchema"
-                                @statusChange="outputsStatus" />
+					ref="outputs"
+					:schema="outputsSchema"
+					@statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
@@ -94,10 +93,7 @@ export default {
         RetrievedCols,
         Outputs,
         ElRadioGroup,
-        // ElForm,
-        // ElFormItem,
         ElRadioButton,
-        // ElInput,
         changeInputOutput
     },
     data() {
@@ -220,29 +216,37 @@ export default {
         },
         computeSchema() {
             const result = []
-            for (let idx = 0; idx < this.datasource.dataset.schema.length; ++idx) {
-                result.push({
-                    "type": this.datasource.dataset.schema[idx]["type"].toLowerCase(),
-                    "title": this.datasource.dataset.schema[idx]["src"]
-                })
-            }
-            const addCols = this.$refs.computed.datasource.revert2Defs()
-            for (let idx = 0; idx < addCols.length; ++idx) {
-                result.push({
-                    "type": addCols[idx]["type"].toLowerCase(),
-                    "title": addCols[idx]["name"]
-                })
-            }
+			if (this.datasource.dataset) {
+				for (let idx = 0; idx < this.datasource.dataset.schema.length; ++idx) {
+					result.push({
+						"type": this.datasource.dataset.schema[idx]["type"].toLowerCase(),
+						"title": this.datasource.dataset.schema[idx]["src"]
+					})
+				}
+				const addCols = this.$refs.computed.datasource.revert2Defs()
+				for (let idx = 0; idx < addCols.length; ++idx) {
+					if (addCols[idx]["name"] !== "") {
+						result.push({
+							"type": addCols[idx]["type"].toLowerCase(),
+							"title": addCols[idx]["name"]
+						})
+					}
+				}
+			}
             return result
         },
         genOutputsSchema() {
             const retrieved = this.$refs.retrieved.datasource.revert2Defs()
             const retrievedType = this.$refs.retrieved.datasource.command.retrievedCols.length === 0
+			let result = []
             if (retrievedType) {
-                return this.computedSchema
+                result = this.computedSchema
             } else {
-                return this.computedSchema.filter(x => retrieved.includes(x.title))
+                result = this.computedSchema.filter(x => retrieved.includes(x.title))
             }
+			const addtionCols = this.$refs.topn.addtionCols()
+
+			return result.concat(addtionCols)
         },
         save() {
             if (this.activeName === "Setting") {
@@ -354,13 +358,17 @@ export default {
     },
     watch: {
         active(n) {
-            if (n === 4 || n === 5) {
-                this.computedSchema = this.computeSchema()
+            if (n === 3) {
+				this.$refs.topn.renderSchema()
             }
 
-            if (n === 4 || n === 5) {
-                this.outputsSchema = this.genOutputsSchema()
-            }
+			if (n === 4) {
+                this.computedSchema = this.computeSchema()
+			}
+
+			if (n === 5) {
+				this.outputsSchema = this.genOutputsSchema()
+			}
 
             this.$refs.filter.validate()
             this.$refs.computed.validate()
