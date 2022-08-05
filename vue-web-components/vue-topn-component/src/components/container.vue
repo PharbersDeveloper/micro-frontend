@@ -362,11 +362,8 @@ export default {
 				this.$refs.topn.renderSchema()
             }
 
-			if (n === 4) {
+			if (n === 4 || n === 5) {
                 this.computedSchema = this.computeSchema()
-			}
-
-			if (n === 5) {
 				this.outputsSchema = this.genOutputsSchema()
 			}
 
