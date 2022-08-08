@@ -11,7 +11,8 @@
 					"key": "prod/general/"
 				}
 			],
-            "resolve":  ""
+            "resolve":  "",
+			"modifications": []
 		},
 		"dev": {
             "prefix": "dist",
@@ -24,7 +25,8 @@
 					"key": "dev/general/"
 				}
 			],
-            "resolve":  ""
+            "resolve":  "",
+			"modifications": []
 		}
 	},
     "prod": {

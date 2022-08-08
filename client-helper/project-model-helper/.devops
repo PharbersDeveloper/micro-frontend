@@ -11,7 +11,8 @@
 					"key": "prod/deploy/"
 				}
 			],
-            "resolve":  ""
+            "resolve":  "",
+			"modifications": []
 		},
 		"dev": {
             "prefix": "dist",
@@ -24,7 +25,8 @@
 					"key": "dev/deploy/"
 				}
 			],
-            "resolve":  ""
+            "resolve":  "",
+			"modifications": []
 		}
 	},
     "prod": {
