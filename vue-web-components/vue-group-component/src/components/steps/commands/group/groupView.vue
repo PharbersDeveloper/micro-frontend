@@ -173,7 +173,7 @@ export default {
             this.$refs.table.doLayout()
         },
 		renderSchema() {
-			const columns = this.schemas.map(it => it.title)
+			const columns = this.schema.map(it => it.title)
 			this.datasource.keys = this.datasource.keys.filter(it => columns.includes(it))
 			this.datasource.commands = this.datasource.commands.filter(it => columns.includes(it.column))
 		},
