@@ -3,20 +3,20 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="scenario">
             <scenario-nav 
-				:scenario="datasource.scenario" 
+				:scenario="datasource.scenario"
 				@active="activeChange" 
 				@save="saveAll"
 				@trigger="trigger"></scenario-nav>
             <div class="scenario-container" v-if="activeName === 'Setting'">
                 <detail-form :scenario="datasource.scenario"></detail-form>
                 <trigger-lst :triggers="triggerDisplay"
-                             :scenario-id="datasource.scenario.id" />
+					:scenario-id="datasource.scenario.id" />
                 <report-lst :triggers="[]"></report-lst>
             </div>
             <div v-else class="scenario-container">
                 <scenario-steps :steps="stepDisplay"
-								:datasets="datasetsDisplay"
-                                :scenario-id="datasource.scenario.id" />
+					:datasets="datasetsDisplay"
+					:scenario-id="datasource.scenario.id" />
             </div>
         </div>
     </div>
