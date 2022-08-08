@@ -1,0 +1,36 @@
+{
+    "devops": {
+        "prod": {
+            "prefix": "dist",
+            "files": [],
+            "destinations": [
+				{
+					"bucket": "components.pharbers.com",
+					"key": "prod/deploy/"
+				}
+			],
+            "resolve":  "",
+			"modifications": []
+		},
+		"dev": {
+            "prefix": "dist",
+            "files": [
+				"*.js"
+			],
+            "destinations": [
+				{
+					"bucket": "components.pharbers.com",
+					"key": "dev/deploy/"
+				}
+			],
+            "resolve":  "",
+			"modifications": []
+		}
+	},
+    "prod": {
+
+    },
+    "dev": {
+
+    }
+}
