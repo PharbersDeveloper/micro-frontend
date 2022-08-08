@@ -5,7 +5,7 @@
             "files": [],
             "destinations": [
 				{
-					"bucket": "codeditor.pharbers.com",
+					"bucket": "dag.pharbers.com",
 					"key": ""
 				}
 			],
@@ -16,7 +16,7 @@
             "files": [],
             "destinations": [
 				{
-					"bucket": "codeditor.pharbers.com",
+					"bucket": "dagv2.pharbers.com",
 					"key": ""
 				}
 			],
