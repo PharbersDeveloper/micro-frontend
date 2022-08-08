@@ -1,0 +1,32 @@
+{
+    "devops": {
+        "prod": {
+            "prefix": "dist",
+            "files": [],
+            "destinations": [
+				{
+					"bucket": "dag.pharbers.com",
+					"key": ""
+				}
+			],
+            "resolve":  ""
+		},
+		"dev": {
+            "prefix": "dist",
+            "files": [],
+            "destinations": [
+				{
+					"bucket": "dagv2.pharbers.com",
+					"key": ""
+				}
+			],
+            "resolve":  ""
+		}
+	},
+    "prod": {
+
+    },
+    "dev": {
+
+    }
+}
