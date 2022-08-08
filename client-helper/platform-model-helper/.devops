@@ -8,7 +8,7 @@
             "destinations": [
 				{
 					"bucket": "components.pharbers.com",
-					"key": "prod/offweb/"
+					"key": "prod/general/"
 				}
 			],
             "resolve": ""
@@ -21,7 +21,7 @@
             "destinations": [
 				{
 					"bucket": "components.pharbers.com",
-					"key": "dev/offweb/"
+					"key": "dev/general/"
 				}
 			],
             "resolve": ""
