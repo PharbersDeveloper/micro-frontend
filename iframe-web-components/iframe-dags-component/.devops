@@ -9,7 +9,8 @@
 					"key": ""
 				}
 			],
-            "resolve":  ""
+            "resolve":  "",
+			"modifications": []
 		},
 		"dev": {
             "prefix": "dist",
@@ -20,7 +21,8 @@
 					"key": ""
 				}
 			],
-            "resolve":  ""
+            "resolve":  "",
+			"modifications": []
 		}
 	},
     "prod": {

@@ -2,9 +2,7 @@
     "devops": {
         "prod": {
             "prefix": "dist",
-            "files": [
-                "*.min.js"
-            ],
+            "files": [],
             "destinations": [
 				{
 					"bucket": "components.pharbers.com",
@@ -17,8 +15,8 @@
 		"dev": {
             "prefix": "dist",
             "files": [
-                "*.js"
-            ],
+				"*.js"
+			],
             "destinations": [
 				{
 					"bucket": "components.pharbers.com",

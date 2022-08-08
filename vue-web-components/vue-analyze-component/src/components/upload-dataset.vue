@@ -213,10 +213,8 @@ import bpOptionVue from '../../node_modules/vue-components/src/components/bp-opt
 import fitMaxInputDialog from './fit-max-dialog.vue'
 import fitMaxOutputDialog from './fit-max-output-dialog.vue'
 import selectCatalog from './select-catalog'
-import PhDagDefinitions from "./policy/definitions/definitions";
 import { staticFilePath, hostName, actionTableName } from '../config/envConfig'
-import { MessageBox, Message } from 'element-ui'
-import { valueEquals } from '../../../vue-resouce-component/dist/ph-resources'
+import { Message } from 'element-ui'
 import { PhUploadDatasource } from './model/uploadDatasource'
 
 
