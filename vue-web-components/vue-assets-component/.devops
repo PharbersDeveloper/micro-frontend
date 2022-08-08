@@ -2,22 +2,26 @@
     "devops": {
         "prod": {
             "prefix": "dist",
-            "files": [],
+            "files": [
+				*.min.js
+			],
             "destinations": [
 				{
-					"bucket": "codeditor.pharbers.com",
-					"key": ""
+					"bucket": "components.pharbers.com",
+					"key": "prod/general/"
 				}
 			],
             "resolve":  ""
 		},
 		"dev": {
             "prefix": "dist",
-            "files": [],
+            "files": [
+				*.js
+			],
             "destinations": [
 				{
-					"bucket": "codeditor.pharbers.com",
-					"key": ""
+					"bucket": "components.pharbers.com",
+					"key": "dev/general/"
 				}
 			],
             "resolve":  ""

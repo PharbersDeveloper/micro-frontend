@@ -11,7 +11,7 @@
 					"key": "prod/general/"
 				}
 			],
-            "resolve": ""
+            "resolve":  ""
 		},
 		"dev": {
             "prefix": "dist",
@@ -24,7 +24,7 @@
 					"key": "dev/general/"
 				}
 			],
-            "resolve": ""
+            "resolve":  ""
 		}
 	},
     "prod": {

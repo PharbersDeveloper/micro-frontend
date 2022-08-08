@@ -3,28 +3,36 @@
         "prod": {
             "prefix": "dist",
             "files": [
-                "*.min.js"
-            ],
+				*.min.js
+			],
             "destinations": [
 				{
 					"bucket": "components.pharbers.com",
-					"key": "prod/deploy/"
+					"key": "prod/offweb/"
 				}
 			],
-            "resolve":  ""
+			"resolve": "",
+            "modifications": [{
+                "source": "pharbers.min.js",
+                "target": "phbc.min.js"
+            }]
 		},
 		"dev": {
             "prefix": "dist",
             "files": [
-                "*.js"
-            ],
+				*.js
+			],
             "destinations": [
 				{
 					"bucket": "components.pharbers.com",
-					"key": "dev/deploy/"
+					"key": "dev/offweb/"
 				}
 			],
-            "resolve":  ""
+			"resolve": "",
+            "modifications": [{
+                "source": "pharbers.js",
+                "target": "phbc.js"
+            }]
 		}
 	},
     "prod": {

@@ -9,7 +9,7 @@
 					"key": ""
 				}
 			],
-            "resolve": ""
+            "resolve":  ""
 		},
 		"dev": {
             "prefix": "dist",
@@ -20,7 +20,7 @@
 					"key": ""
 				}
 			],
-            "resolve": ""
+            "resolve":  ""
 		}
 	},
     "prod": {
