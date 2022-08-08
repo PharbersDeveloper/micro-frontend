@@ -12,9 +12,9 @@ export default class PhGroupStep {
         const defs = this.expressions["params"]["values"].filter(x => !Object.keys(x).includes("customExpr"))
         this.commands = schema.map(x => {
             const tmp = new PhGroupCmd()
-            const par = defs.filter(xi => xi["column"] === x.src)
+            const par = defs.filter(xi => xi["column"] === x.title)
             if (par.length > 0) tmp.initWithDefs(par[0])
-            else tmp.initWithSchema(x.src, x.type)
+            else tmp.initWithSchema(x.title, x.type)
             return tmp
         })
     }
