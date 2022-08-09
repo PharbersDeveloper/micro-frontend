@@ -29,6 +29,27 @@ export default class PhDataSource {
         return arr
     }
 
+    jsonapiAdapter(data) {
+        const dashToHump = function (value) {
+            const textArr = value.split("-");
+            return textArr.map((item, index) => {
+			  if (index === 0) return item.toLowerCase();
+			  return item.slice(0, 1).toUpperCase() + item.slice(1);
+            }).join("");
+        }
+        data.map(item => {
+            Object.keys(item).map(keys => {
+                let newK = dashToHump(keys)
+                if (newK) {
+                    item[newK] = item[keys]
+                    delete item[keys]
+                }
+            })
+            return item
+        })
+        return data
+    }
+
     getCookie(name) {
         let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
         arr = document.cookie.match(reg)
@@ -71,7 +92,7 @@ export default class PhDataSource {
                 // 下一页的key
                 that.startKey = response.meta.start_key
                 that.totalCount = response.meta.total_count
-                that.dcs = that.store.findAll("dag-confs")
+                that.dcs = that.jsonapiAdapter(that.store.findAll("dag-confs"))
                 // that.curPage = 1
                 ele.needRefresh++
                 if(callback)
