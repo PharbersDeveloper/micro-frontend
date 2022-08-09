@@ -112,7 +112,7 @@ export default class PhDataSource {
                 //     attributes.id = x.id
                 //     return attributes
                 // })
-                ele.datasource.dcs = that.store.findAll("dag-confs")
+                ele.datasource.dcs = that.jsonapiAdapter(that.store.findAll("dag-confs"))
                 that.startKey = response.meta.start_key
                 // ele.cur_page++
                 ele.needRefresh++

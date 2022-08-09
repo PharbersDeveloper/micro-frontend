@@ -467,6 +467,9 @@ export default {
             that.AllData = this.datasource.dcs
             this.loading = false
         })
+        this.datasource.refreshData1(this, ()=>{
+            that.datasource.dss = this.datasource.dss
+        })
     },
     watch: {
         // "allData.tagsArray": function() {
@@ -611,10 +614,10 @@ export default {
             } else {
                 this.checked = true
                 this.reciptcheckedIds.push(recipt.id)
-                this.reciptcheckedNames.push(recipt.name)
+                this.reciptcheckedNames.push(recipt.jobShowName)
             }
             if(this.reciptcheckedIds.length == 1){
-                this.script_icon_show = this.selectDatasetIcon(recipt.cat)
+                this.script_icon_show = this.selectScriptIcon(recipt.runtime)
             }else{
                 this.script_icon_show = `${staticFilePath}` + "/icons/all_script.svg"
             }
