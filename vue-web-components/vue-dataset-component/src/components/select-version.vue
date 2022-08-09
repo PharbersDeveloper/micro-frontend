@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="clear_dialog_container_version">
+        <div class="version_dialog_container_version">
             <div class="dialog_area">
                 <div class="header">
                         <span>可调用数据集</span>
@@ -123,7 +123,7 @@ export default {
     padding: 0;
     box-sizing: border-box;
 }
-.clear_dialog_container_version {
+.version_dialog_container_version {
     height: 100vh;
     width: 100vw;
     // background: rgba(37,35,45,0.55);

@@ -34,12 +34,12 @@
                 <li v-for="(item, index) in schema" :key="index" @click="itemClicked(item.src)">{{item.src}}</li>
             </ul>
             <el-input class="computed-expression-expr"
-                    :class="[{'el-input-error': currentExpr === ''}]"
-                    type="textarea"
-                    :rows="10"
-					@change="currentExprChange"
-                    v-model="currentExpr"
-                    placeholder="Please input" />
+				:class="[{'el-input-error': currentExpr === ''}]"
+				type="textarea"
+				:rows="10"
+				@change="currentExprChange"
+				v-model="currentExpr"
+				placeholder="Please input" />
         </div>
 
         <div class="computed-add-button">
@@ -92,7 +92,7 @@ export default {
         delComputedColumns(index) {
             this.datasource.command.removeComputedCol(index)
             const len = this.datasource.command.computedCols.length - 1
-            if (len > 0)
+            if (len >= 0)
                 this.computedClicked(this.datasource.command.computedCols[len], len)
         },
         itemClicked(v) {

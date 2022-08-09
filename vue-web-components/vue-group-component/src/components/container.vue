@@ -38,8 +38,8 @@
                 <group v-show="active === 3"
                         ref="group"
                         :step="datasource.step"
-                        :schemaDafault="datasource.dataset.schema"
-                        :schema="datasource.dataset.schema"
+                        :schemaDafault="computedSchema"
+                        :schema="computedSchema"
                         @statusChange="groupStatus" />
                 <custom-agg v-show="active === 4"
                        ref="customagg"
@@ -238,13 +238,22 @@ export default {
                     "title": this.datasource.dataset.schema[idx]["src"]
                 })
             }
-            const addCols = this.$refs.computed.datasource.revert2Defs()
+
+            let addCols = []
+            if (this.$refs.computed) {
+                addCols = this.$refs.computed.datasource.revert2Defs()
+            } else {
+                const computedStep = JSON.parse(this.datasource.step["expressions"])
+                addCols = computedStep["params"]["computedColumns"]
+            }
+            
             for (let idx = 0; idx < addCols.length; ++idx) {
                 result.push({
                     "type": addCols[idx]["type"].toLowerCase(),
                     "title": addCols[idx]["name"]
                 })
             }
+
             return result
         },
         genOutputsSchema() {
@@ -291,10 +300,6 @@ export default {
                     return false
                 }
 
-                // let globalCount = true
-                // if (this.$refs.group.datasource.commands.length > 0) {
-                //     globalCount =  this.$refs.group.datasource.commands[0].count
-                // }
                 const params = {
                     "globalCount": this.$refs.group.datasource.revert2Defs().globalCount,
                     "preFilter": this.$refs.filter.datasource.revert2Defs(),

@@ -933,7 +933,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 			alert("新建脚本成功！")
 			route.router.transitionTo(
 				"shell",
-				`codeditor?projectName=${route.projectName}&projectId=${route.projectId}&jobName=${jobName}`
+				`codeditor?projectName=${route.projectName}&projectId=${route.projectId}&jobName=${jobName}&runtime=${runtime}`
 			)
 		} else if (status == "failed") {
 			console.log(error)

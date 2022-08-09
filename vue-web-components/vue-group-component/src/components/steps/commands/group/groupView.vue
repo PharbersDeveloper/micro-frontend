@@ -21,7 +21,7 @@
                 <div class="group-key-add-btn" >
                     <select v-model="selectedAdd" @change="addSelectedColToKey">
                         <option label="选中添加" value="选中添加" />
-                        <option v-for="(item, index) in schemaArray" :label="item.src" :key="index" :value="item.src" />
+                        <option v-for="(item, index) in schemaArray" :label="item.title" :key="index" :value="item.title" />
                     </select>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                                     <!-- <el-input v-model="scope.row.orderColumn"></el-input> -->
                                     <select 
                                         v-model="scope.row.orderColumn">
-                                        <option v-for="(item, index) in schemaDafault" :label="item.src" :key="index" :value="item.src" />
+                                        <option v-for="(item, index) in schemaDafault" :label="item.title" :key="index" :value="item.title" />
                                     </select>
                                 </div>
                                 <div class="popitem" v-show="scope.row.first || scope.row.last">
@@ -172,14 +172,21 @@ export default {
             data.showPopover = !data.showPopover
             this.$refs.table.doLayout()
         },
+		renderSchema() {
+			const columns = this.schema.map(it => it.title)
+			this.datasource.keys = this.datasource.keys.filter(it => columns.includes(it))
+			this.datasource.commands = this.datasource.commands.filter(it => columns.includes(it.column))
+		},
         validate() {
+			this.renderSchema()
+
             const ErrorVales = !this.computedGroupCount && !this.checkGroupedKeys()
             this.$emit('statusChange', ErrorVales)
         },
         delSelectCol(item, index) {
             this.datasource.keys.splice(index, 1)
             this.notGroupedCommands = this.resetSelectGroupKeys()
-            this.schemaArray = this.schemaArray.concat(this.schema.filter(it => it.src === item))
+            this.schemaArray = this.schemaArray.concat(this.schema.filter(it => it.title === item))
         },
         resetSelectGroupKeys() {
             const res = []
@@ -212,7 +219,7 @@ export default {
         },
         addSelectedColToKey() {
             this.datasource.addCol2Key(this.selectedAdd)
-            this.schemaArray = this.schemaArray.filter(it => it.src !== this.selectedAdd)
+            this.schemaArray = this.schemaArray.filter(it => it.title !== this.selectedAdd)
             this.selectedAdd = "选中添加"
             this.notGroupedCommands = this.resetSelectGroupKeys()
         },

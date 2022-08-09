@@ -9,7 +9,7 @@
                             <div class="selected" :class="[
                             { 'bg_disabled': datasetcheckedIds.length == 0 }]">
                                 <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()'
-                                    :checked="datasetcheckedIds.length === allData.dss.length">
+                                    :checked="(datasetcheckedIds.length === datasource.data.length) && datasetcheckedIds.length !== 0">
                                 <div class="opt-area" @click="dropShow">
                                     <span class="action">选项</span>
                                     <img :src="dropDownIcon" alt="" class="d_icon">
@@ -39,7 +39,7 @@
                                 <div class="search_icon">
                                     <img :src="search_icon">
                                 </div>
-                                <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
+                                <input type="text" placeholder="搜索当前页面" class="text_input" v-model="searchValue">
                             </div>
                             <button class="upload_btn" @click="toggle">新建数据集</button>
                             <div class="dialog" v-show="showDialog">
@@ -72,10 +72,10 @@
                             </div>
                             <div class="down_sel">
                                 <!-- TODO: @hfzhang -->
-                                <!-- <bp-select-vue :src="selectIcon" :choosedValue="scriptValue"
+                                <bp-select-vue :src="selectIcon" :choosedValue="scriptValue"
                                     @showSelectOption="showSelectOption" :closeTosts="closeTosts">
                                     <bp-option-vue text="名称" @click="selectScript(1)"></bp-option-vue>
-                                </bp-select-vue> -->
+                                </bp-select-vue>
                             </div>
                             <div class="line">|</div>
                             <div class="down_sel tags_down_sel">
@@ -85,9 +85,9 @@
                                 </span>
                                 <div class="label_selected" v-if="labelShowDialog">
                                     <div class="tag_arr">
-                                        <div class="label_name" v-for="(item, index) in allData.tagsArray" :key="index">
+                                        <div class="label_name" v-for="(item, index) in tagsArray" :key="index">
                                             <span
-                                                :style="{ background: tagsColorArray[allData.tagsArray.indexOf(item)] }"></span>
+                                                :style="{ background: tagsColorArray[tagsArray.indexOf(item)] }"></span>
                                             <div class="tags_name">{{ item }}</div>
                                         </div>
                                     </div>
@@ -97,16 +97,19 @@
                                 </div>
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
-                            <div class="dataset_number">
-                                <p>{{ searchData.length }} 条数据集</p>
+                            <div class="dataset_number" v-if="searchValue.length !== 0">
+                                <p>{{ datasource.data.length }} / {{ totalCount }} 条数据集</p>
+                            </div>
+                            <div class="dataset_number" v-else>
+                                <p>{{ totalCount }} 条数据集</p>
                             </div>
                         </div>
                     </div>
-                    <div class="upload_bottom">
-                        <div class="data_content" v-for="(dataset, index) in searchData" :key="index" ref="content"
+                    <div class="upload_bottom" ref="centerData">
+                        <div class="data_content" v-for="(dataset, index) in datasource.data" :key="index" ref="content"
                             :class="{ bg: datasetcheckedIds.indexOf(dataset.id) > -1 }"
                             @click="clickOnlyOne(dataset, index)">
-                            <div class="data_input" @click.stop="checkedMore(dataset)">
+                            <div class="data_input" @click.stop="checkedMore(dataset,index)">
                                 <input type="checkbox" ref="data" name="datasetList"
                                     :checked="datasetcheckedIds.indexOf(dataset.id) > -1"
                                     @click.stop="checkedOneDataset(dataset)">
@@ -121,8 +124,8 @@
                                     <div v-for="(tag, inx) in dataset.label" :key="inx">
                                         <span v-if="dataset.label !== ''">
                                             <p :title="tag" class="tag_bg"
-                                                :style="{ background: tagsColorArray[allData.tagsArray.indexOf(tag)] }">
-                                                {{ tag }}
+                                                :style="{ background: tagsColorArray[tagsArray.indexOf(tag)] }">
+                                                <!-- {{ tag }} -->
                                             </p>
                                         </span>
                                     </div>
@@ -131,12 +134,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="word" v-if="allData.dss == ''">当前项目无数据</div>
+                        <div class="word" v-show="datasource.data.length == 0" v-if="searchValue.length !== 0">当前页面搜索无结果</div>
+                        <div class="word" v-show="datasource.data.length == 0" v-else>当前项目无数据</div>
                     </div>
                     <div class="block">
                         <div class="block_content">
-                            <!-- <button :disabled="disabledForword" @click="goForword">上一页</button>
-                            <button :disabled="disabledUp" @click="goUp">下一页</button> -->
+                            <button @click="goForword" :disabled="cur_page === 1 ? true:false">上一页</button>
+                            <div class="block_pag">{{ cur_page }} / {{ Math.ceil(totalCount / 20) }}</div>
+                            <button @click="goUp" :disabled="Math.ceil(totalCount / 20) === cur_page ?true:false">下一页</button>
                         </div>
                     </div>
                 </div>
@@ -175,19 +180,32 @@
                     <p v-if="datasetcheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
+            <div id="loadingio-spinner-double-ring-ho1zizxmctu" v-show="loading">
+                <div class="ldio-400lpppmiue">
+                    <div></div>
+                    <div></div>
+                    <div>
+                        <div></div>
+                    </div>
+                    <div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
         </div>
+       
         <!-- 清除数据集数据 -->
         <clear-dataset-dialog v-if="cleardialogshow" :datasetcheckedIds="datasetcheckedIds"
             :datasetcheckedNames="datasetcheckedNames" @clearTagsEvent="clearTags" @closeClearDialog="closeClearDialog">
         </clear-dataset-dialog>
         <!-- 删除数据集 -->
-        <clear-delete v-if="deletedialogshow" :datasetcheckedIds="datasetcheckedIds"
+        <clear-delete v-show="deletedialogshow" :datasetcheckedIds="datasetcheckedIds"
             :datasetcheckedNames="datasetcheckedNames" :datasetRelaResult="datasetRelaResult"
             @deleteDatasetsEvent="deleteDataset" @closeDeleteDialog="closeDeleteDialog">
         </clear-delete>
         <!-- 添加tag -->
         <create-tags-dialog v-if="showCreateTagsDialog" :datasetcheckedIds="datasetcheckedIds"
-            :datasetcheckedNames="datasetcheckedNames" :datasets="allData.dss" :tagsArray="allData.tagsArray"
+            :datasetcheckedNames="datasetcheckedNames" :datasets="datasource.data" :tagsArray="tagsArray"
             :tagsColorArray="tagsColorArray" @addTagsEvent="addTagsEvent" @closeCreateDialog="closeCreateDialog">
         </create-tags-dialog>
         <!-- 管理标签 -->
@@ -209,8 +227,8 @@ import clearDatasetDialog from './clear-dataset-dialog.vue'
 import clearDelete from './delete-dialog.vue'
 import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
-// import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
-// import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
+import bpSelectVue from '../../node_modules/vue-components/src/components/bp-select-vue.vue'
+import bpOptionVue from '../../node_modules/vue-components/src/components/bp-option-vue.vue'
 import fitMaxInputDialog from './fit-max-dialog.vue'
 import fitMaxOutputDialog from './fit-max-output-dialog.vue'
 import selectCatalog from './select-catalog'
@@ -265,38 +283,33 @@ export default {
             color: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab', '#77bec2', '#c7c7c7', '#a088bd', '#d66b9b', '#5354ec', '#acacff', '#1e8103', '#ec7211', '#ec7211', '#ea1c82', '#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab', '#77bec2', '#c7c7c7', '#a088bd', '#d66b9b', '#5354ec', '#acacff', '#1e8103', '#ec7211', '#ec7211', '#ea1c82', '#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             selectCatalogVisible: false,
-            // currentPage: 1,
-            actionsKey: "",
-            preKey: "",
-            // searchData: [],
-            disabledUp: false,
-            disabledForword: false
+            startKey: "",
+            cur_page: 1,
+            // canClick: false,
+            // canClicks: false,
+            projectId: "",
+            projectName: "",
+            AllData: [],
+            tagsArray: [],
+            totalCount: 0,
+            loading: false
         }
     },
     props: {
-        allData: {
-            type: Object,
-            default: () => ({
-                projectName: "项目名称",
-                // dss: [{
-                //     "projectId": "",
-                //     "schema": "[]",
-                //     "version": "",
-                //     "name": "",
-                //     "label": "",
-                //     "cat": "",
-                //     "path": ""
-                // }],
-                tagsArray: []
-            })
-        },
+        // allData: {
+        //     type: Object,
+        //     default: () => ({
+        //         projectName: "项目名称",
+        //         tagsArray: []
+        //     })
+        // },
         defs: {
             type: Object,
             default: function () {
                 return new PhDagDefinitions("1");
             }
         },
-        dss: {
+        datasource: {
             type: Object,
             default: function() {
                 return new PhDataSource('1')
@@ -308,81 +321,132 @@ export default {
         clearDelete,
         createTagsDialog,
         deleteTagsDialog,
-        // bpSelectVue,
-        // bpOptionVue,
+        bpSelectVue,
+        bpOptionVue,
         fitMaxInputDialog,
         fitMaxOutputDialog,
         selectCatalog
     },
     computed: {
-        searchData: function () {
-            let searchValue = this.searchValue
-            this.state = 'search'
-            if (searchValue) {
-                return this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-            }
-            this.sort("ascending")
-            return this.allData.dss
-        }
+        // searchData: function () {
+        //     let searchValue = this.searchValue
+        //     this.state = 'search'
+        //     if (searchValue) {
+        //         return this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+        //     }
+        //     this.sort("ascending")
+        //     return this.allData.dss
+        // }
     },
-    mounted() {
-        const hrefParam = href.split("&")
-        // TODO: @hfzhang 
-        const projectId = hrefParam[1].split("=")[1]
-        const projectName = hrefParam[0].split("=")[1]
-
-        if (projectId) {
-            this.datasource.refreshData(projectId)
-        }
+    created() {
+        this.loading = true
+        this.projectId = this.getUrlParam("projectId")
+        this.projectName = this.getUrlParam("projectName")
+        let that = this
+        this.datasource.refreshData(this, '', ()=>{
+            that.startKey = this.datasource.startKey
+            that.totalCount = this.datasource.totalCount
+            // 总数据
+            that.AllData = this.datasource.data
+            this.loading = false
+        })
     },
     watch: {
-        "allData.tagsArray": function () {
-            this.tagsColorArray = []
-            this.allData.tagsArray.forEach((item, index) => {
-                this.tagsColorArray.push(this.color[Math.floor(Math.random() * 10 + Math.random() * 10)])
-            })
-        }
+        // "allData.tagsArray": function () {
+        //     this.tagsColorArray = []
+        //     this.allData.tagsArray.forEach((item, index) => {
+        //         this.tagsColorArray.push(this.color[Math.floor(Math.random() * 10 + Math.random() * 10)])
+        //     })
+        // },
         // "allData.dss": function(n, o) {
         //     console.log(n)
         //     this.searchData = Array.from(n)
         // },
-        // searchValue: function() {
-        //     let searchValue = this.searchValue
-        //     this.state = 'search'
-        //     if(searchValue) {
-        //         this.searchData = this.allData.dss.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-        //     } else {
-        //         this.searchData = this.allData.dss
-        //     }
-        //     this.sort("ascending")
-        // }
+        searchValue(newValue, oldValue) {
+            this.searchValue = newValue
+            this.state = 'search'
+            this.search(this.searchValue)
+        }
     },
     methods: {
+        search(value){
+            if (value) {
+                this.datasource.data = this.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page).filter(item => item.name.toLowerCase().indexOf(value.toLowerCase()) > -1)
+            }else{
+                this.datasource.data = this.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+            }
+            this.sort("ascending")
+        },
         // 点击上一页
-        // goForword(){
-        //     this.getDatasets(this.preKey)
-        // },
-        // // 点击下一页
-        // goUp(){
-        //     this.getDatasets(this.actionsKey)
-        // },
+        goForword(){
+            this.$refs.centerData.scrollTop = 0
+            this.cur_page = this.cur_page - 1
+            this.loading = true
+            if(this.cur_page >= 1 || this.cur_page < Math.ceil(this.AllData.length / 20)){
+                if(this.searchValue.length !== 0){
+                    this.datasource.data = this.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                    this.state = 'search'
+                    this.search(this.searchValue)
+                }else{
+                    this.datasource.data = this.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                }
+            }
+            this.loading = false
+        },
+        // 点击下一页
+        goUp(){
+            this.$refs.centerData.scrollTop = 0
+            this.cur_page = this.cur_page + 1
+            if (Math.ceil(this.AllData.length / 20) >= this.cur_page) {
+                this.loading= true
+                if(this.searchValue.length !== 0){
+                    this.datasource.data = this.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                    this.state = 'search'
+                    this.search(this.searchValue)
+                }else{
+                    this.datasource.data = this.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                }
+                this.loading = false
+            } else{
+                let that = this
+                this.loading = true
+                this.datasource.appendData(this,this.startKey,()=>{
+                    that.startKey = this.datasource.startKey
+                    that.AllData = this.datasource.data
+                    if(that.searchValue.length !== 0){
+                        that.datasource.data = that.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                        this.state = 'search'
+                        this.search(this.searchValue)
+                    }else{
+                        that.datasource.data = that.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                    }
+                    this.loading = false
+                })
+            }
+        },
+        getUrlParam(value) {
+            let href = window.location.href
+            let paramArr = href.split("?")[1].split("&")
+            let data = paramArr.find(item => item.indexOf(value) > -1)
+            return data ? decodeURI(data).split("=")[1] : undefined
+        },
         confirmeCreateCatalog(data) {
             let bool = this.checkName(data.args.param.dsName)
             if (!bool) {
                 alert("该数据目录已被调用")
                 return false
             }
-            data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
+            data.args.param.projectName = this.projectName,
+            data.args.param.projectId = this.projectId
             data.args.param.maxcat = this.maxcat
-            data.args.param.datasetArray = this.allData.dss
+            data.args.param.datasetArray = this.datasource.data
             data.args.param.tableName = data.args.param.dsName
             // data.args.param.dsName = this.checkName(data.args.param.dsName)
             this.$emit('event', data)
             this.selectCatalogVisible = false
         },
         checkName(data) {
-            let arr = this.allData.dss.filter(it => it.name === data)
+            let arr = this.datasource.data.filter(it => it.name === data)
             return arr.length === 0
         },
         closeCreateCatalogDialog() {
@@ -394,12 +458,12 @@ export default {
         },
         // max1.0
         fitMaxEvent(data) {
-            data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
+            data.args.param.projectName = this.projectName,
+            data.args.param.projectId = this.projectId
             data.args.param.maxcat = this.maxcat
-            data.args.param.datasetArray = this.allData.dss
+            data.args.param.datasetArray = this.datasource.data
             let creatDS = true
-            this.allData.dss.forEach(item => {
+            this.datasource.data.forEach(item => {
                 if (item.name === data.args.param.dsName) {
                     creatDS = false
                     alert("数据集已存在！")
@@ -419,18 +483,18 @@ export default {
         //增加tag
         addTagsEvent(data) {
             data.args.param.selectedDatasets = this.datasetcheckedIds
-            data.args.param.datasetArray = this.allData.dss
-            data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
+            data.args.param.datasetArray = this.datasource.data
+            data.args.param.projectName = this.projectName,
+            data.args.param.projectId = this.projectId
             this.$emit('event', data)
             this.showCreateTagsDialog = false;
         },
         //清除数据集中数据
         clearTags(data) {
             data.args.param.selectedDatasets = this.datasetcheckedIds
-            data.args.param.datasetArray = this.allData.dss
-            data.args.param.projectName = this.allData.projectName
-            data.args.param.projectId = this.allData.projectId
+            data.args.param.datasetArray = this.datasource.data
+            data.args.param.projectName = this.projectName
+            data.args.param.projectId = this.projectId
             this.$emit('event', data)
             this.cleardialogshow = false;
         },
@@ -448,9 +512,9 @@ export default {
             }
             data.args.param.scriptsArray = msgArr
             data.args.param.selectedDatasets = this.datasetcheckedIds
-            data.args.param.datasetArray = this.allData.dss
-            data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
+            data.args.param.datasetArray = this.datasource.data
+            data.args.param.projectName = this.projectName,
+            data.args.param.projectId = this.projectId
             this.$emit('event', data)
             this.deletedialogshow = false;
         },
@@ -462,15 +526,16 @@ export default {
             this.datasetcheckedIds.push(dataset.id)
             this.datasetcheckedNames.push(dataset.name)
         },
-        checkedMore(dataset) {
-            this.checked = !this.checked
+        checkedMore(dataset,index) {
+            // this.checked = !this.checked
+            this.$refs.data[index].checked = !this.$refs.data[index].checked
             let idIndex = this.datasetcheckedIds.indexOf(dataset.id)
             if (idIndex >= 0) {
                 this.datasetcheckedIds.splice(idIndex, 1)
                 this.datasetcheckedNames.splice(idIndex, 1)
-                this.checked = false
+                this.$refs.data[index].checked = false
             } else {
-                this.checked = true
+                this.$refs.data[index].checked = true
                 this.datasetcheckedIds.push(dataset.id)
                 this.datasetcheckedNames.push(dataset.name)
             }
@@ -504,8 +569,8 @@ export default {
                 element: this,
                 param: {
                     name: "analyze",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId,
+                    projectName: this.projectName,
+                    projectId: this.projectId,
                     dataset: dataset
                 }
             }
@@ -515,7 +580,7 @@ export default {
         chechedAllDataset() {
             // this.database_icon = `${staticFilePath}` + "/icons/all_dataset.svg"
             this.isCheckedAllDataset = true
-            if (this.datasetcheckedIds.length == this.allData.dss.length) {
+            if (this.datasetcheckedIds.length == this.datasource.data.length) {
                 this.isCheckedAllDataset = false
             }
             this.datasetcheckedIds = []
@@ -523,7 +588,7 @@ export default {
             //全选状态
             if (this.isCheckedAllDataset) {
                 this.database_icon = `${staticFilePath}` + "/icons/all_dataset.svg"
-                this.allData.dss.forEach(item => {
+                this.datasource.data.forEach(item => {
                     this.datasetcheckedIds.push(item.id)
                     this.datasetcheckedNames.push(item.name)
                 })
@@ -542,7 +607,7 @@ export default {
             if (val == 'ascending') {
                 // 升序->降序
                 this.ascending = false
-                this.allData.dss.sort(
+                this.datasource.data.sort(
                     function compareFunction(param1, param2) {
                         return param1.name.localeCompare(param2.name);
                     }
@@ -550,7 +615,7 @@ export default {
             } else if (val == 'descending') {
                 // 降序->升序
                 this.ascending = true
-                this.allData.dss.reverse()
+                this.datasource.data.reverse()
             }
         },
         //排序条件下拉框
@@ -584,7 +649,7 @@ export default {
                 return
             }
             let that = this
-            const accessToken = this.getCookie("access_token") || "318a0bd769a6c0f59b8885762703df522bcb724fcdfa75a9df9667921d4a0629"
+            const accessToken = this.getCookie("access_token") || "50241983f62bffe25c7e23ef38d7d6e9da9447689f7f282817cd957dad1d2942"
             const checkUrl = `${hostName}/phcomputedeletionimpact`
             let query = []
             this.datasetcheckedIds.forEach((item, index) => {
@@ -595,7 +660,7 @@ export default {
                 })
             })
             let checkBody = {
-                "projectId": this.allData.projectId,
+                "projectId": this.projectId,
                 "type": "ds",
                 "query": query
             }
@@ -660,8 +725,8 @@ export default {
                 element: this,
                 param: {
                     name: "upload",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId,
+                    projectName: this.projectName,
+                    projectId: this.projectId,
                     type: "localUpload"
                 }
             }
@@ -676,8 +741,8 @@ export default {
                 param: {
                     name: "upload",
                     type: "s3Upload",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId
+                    projectName: this.projectName,
+                    projectId: this.projectId
                 }
             }
             this.$emit('event', event)
@@ -689,8 +754,8 @@ export default {
                 element: this,
                 param: {
                     name: "linkToProject",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId
+                    projectName: this.projectName,
+                    projectId: this.projectId
                 }
             }
             this.$emit('event', event)
@@ -721,6 +786,11 @@ export default {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+}
+.upload-dataset {
+    height: calc(100vh - 40px);
+    width: 100vw;
+    // position: relative;
 }
 
 .bg {
@@ -771,7 +841,8 @@ export default {
 
 .upload_dataset_container {
     width: 100vw;
-    height: calc(100vh - 40px);
+    // height: calc(100vh - 40px);
+    height: 100%;
 
     // border: 2px solid #dddddd;
     .project_name_header {
@@ -795,7 +866,8 @@ export default {
     .info {
         display: flex;
         width: 100%;
-        height: calc(100vh - 60px);
+        // height: calc(100vh - 40px);
+        height: 100%;
 
         .project_info_left {
             flex: 1;
@@ -1225,12 +1297,25 @@ export default {
                 justify-content: space-around;
                 align-items: center;
                 flex: 1;
-                .block_content{
-                    width: 100px;
+                .block_content {
+                    width: 200px;
                     height: 100px;
                     display: flex;
                     justify-content: space-around;
                     align-items: center;
+                    color:black;
+                    button {
+                        width: 50px;
+                        height: 30px;
+                        line-height: 30px;
+                        align-items: center;
+                        border: none;
+                        background-color: #F4F4F5;
+                        border-radius: 5px;
+                    }
+                    div {
+                        font-size: 14px;
+                    }
                 }
             }
         }
@@ -1243,7 +1328,7 @@ export default {
                 font-size: 14px;
                 color: #838383;
                 text-align: center;
-                line-height: 800px;
+                line-height: calc(100vh - 40px);
             }
 
             .view_content {
@@ -1421,5 +1506,134 @@ export default {
     height: 24px;
     cursor: pointer;
     margin-bottom: 5px;
+}
+
+#loadingio-spinner-double-ring-ho1zizxmctu {
+    backdrop-filter: blur(1px);
+    /* 毛玻璃特效 */
+    background: rgba(200, 0, 0, 0.05);
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* 	使用transform: translateZ(0)加快动画和过渡的速度
+	使用scale进行缩放
+*/
+.ldio-400lpppmiue {
+    position: absolute;
+    transform: translateZ(0) scale(0.8);
+}
+
+/*  创建动画
+	1. 0%是动画开始时间
+	2. 100%是动画结束时间
+	3. transform: rorate()是正时针旋转的角度
+*/
+@keyframes ldio-400lpppmiue {
+    0% {
+        transform: rotate(0)
+    }
+
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+.ldio-400lpppmiue div {
+    box-sizing: border-box;
+}
+
+.ldio-400lpppmiue>div {
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    top: -30px;
+    left: -30px;
+    border-radius: 50%;
+    border: 4px solid #000;
+    border-color: #f5c924 transparent #f5c924 transparent;
+    animation: ldio-400lpppmiue 1s linear infinite;
+}
+
+.ldio-400lpppmiue>div:nth-child(2),
+.ldio-400lpppmiue>div:nth-child(4) {
+    width: 58px;
+    height: 58px;
+    top: -26px;
+    left: -26px;
+    animation: ldio-400lpppmiue 1s linear infinite reverse;
+}
+
+.ldio-400lpppmiue>div:nth-child(2) {
+    border-color: transparent #747789 transparent #747789
+}
+
+.ldio-400lpppmiue>div:nth-child(3) {
+    border-color: transparent
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div:before,
+.ldio-400lpppmiue>div:nth-child(3) div:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    top: -4px;
+    left: 28px;
+    background: #f5c924;
+    border-radius: 0%;
+    box-shadow: 0 64px 0 0 #f5c924;
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div:after {
+    left: -4px;
+    top: 28px;
+    box-shadow: 64px 0 0 0 #f5c924;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) {
+    border-color: transparent;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div:before,
+.ldio-400lpppmiue>div:nth-child(4) div:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    top: -4px;
+    left: 23px;
+    background: #747789;
+    border-radius: 0%;
+    box-shadow: 0 54px 0 0 #747789;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div:after {
+    left: -4px;
+    top: 23px;
+    box-shadow: 54px 0 0 0 #747789;
 }
 </style>
