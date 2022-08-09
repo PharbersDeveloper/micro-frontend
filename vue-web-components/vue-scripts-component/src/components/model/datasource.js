@@ -40,7 +40,7 @@ export default class PhDataSource {
         data.map(item => {
             Object.keys(item).map(keys => {
                 let newK = dashToHump(keys)
-                if (newK) {
+                if (newK !== keys) {
                     item[newK] = item[keys]
                     delete item[keys]
                 }
