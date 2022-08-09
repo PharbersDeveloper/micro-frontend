@@ -153,6 +153,7 @@ export default class PhDataSource {
 				that.parent.datasetArray = data
                 that.dataset = data.filter(it => it.id === dsId)[0]
                 that.dataset.schema = JSON.parse(that.dataset["schema"])
+				that.parent.computedSchema = that.parent.computeSchema()
 				if (that.dataset.schema.length === 0) {
                     that.hasNoSchema = true
                 } else {

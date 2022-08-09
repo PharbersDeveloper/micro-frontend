@@ -6,7 +6,7 @@
                 <el-switch v-model="scenario.active"></el-switch>
             </el-form-item>
             <el-form-item label="运行用户名">
-                <el-input v-model="scenario['show-name']"></el-input>
+                <el-input disabled v-model="scenario['show-name']"></el-input>
             </el-form-item>
         </el-form>
     </div>
