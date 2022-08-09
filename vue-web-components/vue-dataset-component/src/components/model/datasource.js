@@ -81,12 +81,14 @@ export default class PhDataSource {
         ele.datasource.buildQuery(ele, key)
             .then((response) => response.json())
             .then((response) => {
-                var newData = response.data.map(x=>{
-                    let attributes = x.attributes
-                    attributes.id = x.id
-                    return attributes
-                })
-                ele.datasource.data = ele.AllData.concat(newData)
+                that.store.sync(response)
+                that.data = that.store.findAll("datasets")
+                // var newData = response.data.map(x=>{
+                //     let attributes = x.attributes
+                //     attributes.id = x.id
+                //     return attributes
+                // })
+                // ele.datasource.data = ele.AllData.concat(newData)
                 ele.datasource.data = that.data
                 that.startKey = response.meta.start_key
                 // ele.cur_page++
