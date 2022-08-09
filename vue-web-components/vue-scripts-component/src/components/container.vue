@@ -52,10 +52,10 @@
                                     <img :src="defs.iconsByName('path')" class="path" ref="pathSpark" alt="">
                                 </div>
                                 <!-- <div 
-									class="list"
-									v-for="script in scriptList"
-									:key="script.name+'script'"
-									@click="selectScripts(script.scriptName)">
+                                    class="list"
+                                    v-for="script in scriptList"
+                                    :key="script.name+'script'"
+                                    @click="selectScripts(script.scriptName)">
                                     <img :src="defs.iconsByName(script.iconName)" alt="">
                                     <p class="">{{script.name}}</p>
                                 </div> -->
@@ -343,20 +343,14 @@ export default {
             AllData: [],
             tagsArray: [],
             totalCount: 0,
-            loading: false
+            loading: false,
+            inputDs: []
         }
     },
     props: {
         allData: {
             type: Object,
-            default: () => ({
-                // "projectName": "ETL_Iterator",
-                // "projectId": "JfSmQBYUpyb4jsei",
-                // "dcs": [],
-                // "dss": [],
-                // "tagsArray": [],
-                "_isVue": true
-            })
+            default: () => ({})
         },
         defs: {
             type: Object,
@@ -438,24 +432,8 @@ export default {
         bpOptionVue,
         ElButton
     },
-    computed: {
-        // searchData: function() {
-        //     let searchValue = this.searchValue
-        //     this.state = 'search'
-        //     if(searchValue) {
-        //         return this.allData.dcs.filter(item => item.jobShowName.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-        //     }
-        //     this.sort("ascending")
-        //     return this.allData.dcs
-        // }
-    },
+    computed: {},
     mounted() {
-        // let that = this
-        // if(this.$refs.tagsArea) {
-        //     this.$refs.tagsArea.forEach((item, index) => {
-        //         item.style["height"] = "40px"
-        //     })
-        // }
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
         let that = this
@@ -467,19 +445,9 @@ export default {
             that.AllData = this.datasource.dcs
             this.loading = false
         })
-        this.datasource.refreshData1(this, ()=>{
-            that.datasource.dss = this.datasource.dss
-        })
+        // this.datasource.refreshData1()
     },
     watch: {
-        // "allData.tagsArray": function() {
-        //     this.tagsColorArray = []
-        //     this.allData.tagsArray.forEach((item, index) => {
-        //         this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
-        //     })
-        // }
-
-
         searchValue(newValue, oldValue) {
             this.searchValue = newValue
             this.state = 'search'
@@ -560,10 +528,10 @@ export default {
             }).catch(_ => {});
         },
         //打开script弹框
-        selectScripts(data) {
+        async selectScripts(data) {
             this.showDialog = false
             this.runtime = data
-            this.datasource.refreshData1(this)
+            await this.datasource.refreshData1(this)
             this.showCreateScriptsDialog = true
             this.showVisualAll = false
             this.showCodeAll = false
@@ -639,9 +607,10 @@ export default {
             }
         },
         //点击dataset name
-        clickReciptName(recipt) {
+        async clickReciptName(recipt) {
             const inputName = JSON.parse(recipt.inputs)[0]
-            const inputDS = this.datasource.dss.filter(it => it.name === inputName)
+            await this.datasource.getInputDs(this, inputName)
+            console.log(this.inputDs)
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
@@ -651,7 +620,7 @@ export default {
                     projectName: this.projectName,
                     projectId: this.projectId,
                     recipt: recipt,
-                    inputDS: inputDS
+                    inputDS: this.inputDs
                 }
             }
             this.$emit('event', event)
@@ -743,7 +712,7 @@ export default {
             let multiInputs = ["join", "stack"]
             if (
                 data.args.param.inputs.length != 2 &&
-				multiInputs.includes(this.runtime)
+                multiInputs.includes(this.runtime)
             ) {
                 Message.error("请选择两个输入数据！", { duration: 3000} )
                 return false
@@ -1658,7 +1627,7 @@ export default {
 }
 
 /* 	使用transform: translateZ(0)加快动画和过渡的速度
-	使用scale进行缩放
+    使用scale进行缩放
 */
 .ldio-400lpppmiue {
     position: absolute;
@@ -1666,9 +1635,9 @@ export default {
 }
 
 /*  创建动画
-	1. 0%是动画开始时间
-	2. 100%是动画结束时间
-	3. transform: rorate()是正时针旋转的角度
+    1. 0%是动画开始时间
+    2. 100%是动画结束时间
+    3. transform: rorate()是正时针旋转的角度
 */
 @keyframes ldio-400lpppmiue {
     0% {
