@@ -630,7 +630,7 @@ export default {
                 this.reciptcheckedNames.splice(idIndex, 1)
             } else {
                 this.reciptcheckedIds.push(recipt.id)
-                this.reciptcheckedNames.push(recipt.name)
+                this.reciptcheckedNames.push(recipt.jobShowName)
             }
             if(this.reciptcheckedIds.length == 1){
                 this.script_icon_show = this.selectScriptIcon(recipt.runtime)
