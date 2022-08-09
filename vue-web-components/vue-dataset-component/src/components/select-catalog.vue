@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="clear_dialog_container">
+        <div class="select_dialog_container">
             <div class="dialog_area">
                 <div class="header">
                         <span>调用</span>
@@ -100,7 +100,7 @@ export default {
     padding: 0;
     box-sizing: border-box;
 }
-.clear_dialog_container {
+.select_dialog_container {
     height: 100vh;
     width: 100vw;
     // background: rgba(37,35,45,0.55);

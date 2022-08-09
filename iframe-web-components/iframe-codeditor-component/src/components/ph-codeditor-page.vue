@@ -3,7 +3,7 @@
         <div class="header">
              <div class="title">
                 <img :src="defs.iconsByName(runtime)" class="title_icon" alt="">
-                <span class="name">computed_{{datasource.outputs}}</span>
+                <span class="name">computed_{{jobName}}</span>
             </div>
             <div class="coding-title">
                 <button class="button btn-fir">运行</button>
