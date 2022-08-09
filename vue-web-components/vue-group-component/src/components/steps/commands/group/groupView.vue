@@ -82,7 +82,7 @@
                                     <!-- <el-input v-model="scope.row.orderColumn"></el-input> -->
                                     <select 
                                         v-model="scope.row.orderColumn">
-                                        <option v-for="(item, index) in schemaDafault" :label="item.title" :key="index" :value="item.title" />
+                                        <option v-for="(item, index) in schemaDafault" :label="item.src" :key="index" :value="item.src" />
                                     </select>
                                 </div>
                                 <div class="popitem" v-show="scope.row.first || scope.row.last">
@@ -174,6 +174,7 @@ export default {
         },
         renderSchema() {
             this.schemaArray = this.$parent.computeSchema()
+            this.datasource.resetCommands(this.schemaArray)
             this.notGroupedCommands = this.resetSelectGroupKeys()
             // const columns = this.schema.map(it => it.title)
             // this.datasource.keys = this.datasource.keys.filter(it => columns.includes(it))

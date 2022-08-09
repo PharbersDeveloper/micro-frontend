@@ -38,7 +38,7 @@
                 <group v-show="active === 3"
                         ref="group"
                         :step="datasource.step"
-                        :schemaDafault="computedSchema"
+                        :schemaDafault="datasource.dataset.schema"
                         :schema="computedSchema"
                         @statusChange="groupStatus" />
                 <custom-agg v-show="active === 4"

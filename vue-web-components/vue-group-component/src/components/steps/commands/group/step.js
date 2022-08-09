@@ -9,19 +9,23 @@ export default class PhGroupStep {
         this.expressions = JSON.parse(dbstep["expressions"])
 		this.globalCount = this.expressions["params"]["globalCount"]
         this.keys = this.expressions["params"]["keys"]
-        const defs = this.expressions["params"]["values"].filter(x => !Object.keys(x).includes("customExpr"))
-        this.commands = schema.map(x => {
-            const tmp = new PhGroupCmd()
-            const par = defs.filter(xi => xi["column"] === x.title)
-            if (par.length > 0) tmp.initWithDefs(par[0])
-            else tmp.initWithSchema(x.title, x.type)
-            return tmp
-        })
+        this.defs = this.expressions["params"]["values"].filter(x => !Object.keys(x).includes("customExpr"))
+        this.resetCommands(schema)
     }
 
     addCol2Key(col) {
         this.keys.push(col)
     }
+
+	resetCommands(schema) {
+		this.commands = schema.map(x => {
+            const tmp = new PhGroupCmd()
+            const par = this.defs.filter(xi => xi["column"] === x.title)
+            if (par.length > 0) tmp.initWithDefs(par[0])
+            else tmp.initWithSchema(x.title, x.type)
+            return tmp
+        })
+	}
 
     // isComputedGroupCount() {
     //     if (this.commands.length > 0) return this.commands[0].count
