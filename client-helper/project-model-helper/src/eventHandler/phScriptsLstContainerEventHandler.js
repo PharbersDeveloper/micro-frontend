@@ -79,7 +79,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&inputName=" +
 					inputName +
 					"&datasetId=" +
-					params.inputDS[0]["id"] +
+					params.inputDS["id"] +
 					"&jobId=" +
 					recipt.jobId
 			} else if (
@@ -126,7 +126,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&inputName=" +
 					inputName +
 					"&datasetId=" +
-					params.inputDS[0]["id"] +
+					params.inputDS["id"] +
 					"&jobId=" +
 					recipt.jobId
 			} else if (
@@ -173,7 +173,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&inputName=" +
 					inputName +
 					"&datasetId=" +
-					params.inputDS[0]["id"] +
+					params.inputDS["id"] +
 					"&jobId=" +
 					recipt.jobId
 			} else if (
@@ -310,7 +310,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&inputName=" +
 					inputName +
 					"&datasetId=" +
-					params.inputDS[0]["id"] +
+					params.inputDS["id"] +
 					"&jobId=" +
 					recipt.jobId
 			} else if (
@@ -357,7 +357,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					"&inputName=" +
 					inputName +
 					"&datasetId=" +
-					params.inputDS[0]["id"] +
+					params.inputDS["id"] +
 					"&jobId=" +
 					recipt.jobId
 			} else if (
