@@ -486,11 +486,11 @@ export default {
             if (Math.ceil(this.AllData.length / 10) >= this.cur_page) {
                 this.loading= true
                 if(this.searchValue.length !== 0){
-                    this.datasource.dCS = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
+                    this.datasource.dcs = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
                     this.state = 'search'
                     this.search(this.searchValue)
                 }else{
-                    this.datasource.dCS = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
+                    this.datasource.dcs = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
                 }
                 this.loading = false
             } else{
@@ -598,7 +598,7 @@ export default {
                 this.reciptcheckedNames.splice(idIndex, 1)
             } else {
                 this.reciptcheckedIds.push(recipt.id)
-                this.reciptcheckedNames.push(recipt.name)
+                this.reciptcheckedNames.push(recipt.jobShowName)
             }
             if(this.reciptcheckedIds.length == 1){
                 this.script_icon_show = this.selectScriptIcon(recipt.runtime)
