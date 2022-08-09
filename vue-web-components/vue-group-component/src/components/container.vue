@@ -158,11 +158,19 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    projectId: "YZYijD17N9L6LXx",
-                    projectName: "autorawdata2021",
-                    scriptsParams: null,
-                    dss: []
-                }
+					"projectName": "demo",
+					"projectId": "ggjpDje0HUC2JW",
+					"inputs": [
+						"水果718"
+					],
+					"outputs": [
+						"group718"
+					],
+					"jobName": "compute_group718",
+					"jobId": "QGFcL2ML6n4koEk",
+					"_isVue": true,
+					"popupBack": true
+				}
             }
         },
         defs: {
@@ -238,7 +246,6 @@ export default {
                     "title": this.datasource.dataset.schema[idx]["src"]
                 })
             }
-
             let addCols = []
             if (this.$refs.computed) {
                 addCols = this.$refs.computed.datasource.revert2Defs()
@@ -247,10 +254,10 @@ export default {
                 addCols = computedStep["params"]["computedColumns"]
             }
             
-            for (let idx = 0; idx < addCols.length; ++idx) {
+            for (let x = 0; x < addCols.length; ++x) {
                 result.push({
-                    "type": addCols[idx]["type"].toLowerCase(),
-                    "title": addCols[idx]["name"]
+                    "type": addCols[x]["type"].toLowerCase(),
+                    "title": addCols[x]["name"]
                 })
             }
 
@@ -392,7 +399,7 @@ export default {
     watch: {
         active(n) {
             if (n === 3) {
-                this.computedSchema = this.computeSchema()
+                // this.computedSchema = this.computeSchema()
             }
             
             if (n === 5 || n === 6) {

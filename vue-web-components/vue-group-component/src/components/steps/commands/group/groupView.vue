@@ -61,7 +61,7 @@
                                 <el-checkbox-button v-model="scope.row.sum">Sum</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.avg">Avg</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.stddev">Stddev</el-checkbox-button>
-								<el-checkbox-button v-model="scope.row.count">count</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.count">count</el-checkbox-button>
                             </div>
                         </template>
                     </el-table-column>
@@ -172,13 +172,15 @@ export default {
             data.showPopover = !data.showPopover
             this.$refs.table.doLayout()
         },
-		renderSchema() {
-			const columns = this.schema.map(it => it.title)
-			this.datasource.keys = this.datasource.keys.filter(it => columns.includes(it))
-			this.datasource.commands = this.datasource.commands.filter(it => columns.includes(it.column))
-		},
+        renderSchema() {
+            this.schemaArray = this.$parent.computeSchema()
+            this.notGroupedCommands = this.resetSelectGroupKeys()
+            // const columns = this.schema.map(it => it.title)
+            // this.datasource.keys = this.datasource.keys.filter(it => columns.includes(it))
+            // this.datasource.commands = this.datasource.commands.filter(it => columns.includes(it.column))
+        },
         validate() {
-			this.renderSchema()
+            this.renderSchema()
 
             const ErrorVales = !this.computedGroupCount && !this.checkGroupedKeys()
             this.$emit('statusChange', ErrorVales)
