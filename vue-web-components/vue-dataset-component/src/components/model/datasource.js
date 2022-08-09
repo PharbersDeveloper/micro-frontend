@@ -12,7 +12,7 @@ export default class PhDataSource {
         this.batch_size = 20
         // this.curPage = 0
         this.store = new JsonApiDataStore()
-        this.debugToken = "350842d4967cebc9d31a66ec5f44719cc7bc9630efd7ddb0324e33578cd6ed01"
+        this.debugToken = "2d2c2d462cff65ef47ad18d7ad3bae299639e5fa2a4adb7dc2c483ee2c7e9357"
         if (!adapter) {
             this.adapter = this.defaultAdapter
         }
@@ -81,7 +81,12 @@ export default class PhDataSource {
         ele.datasource.buildQuery(ele, key)
             .then((response) => response.json())
             .then((response) => {
-                ele.datasource.data = ele.AllData.concat(response.data.map(x => x.attributes))
+                var newData = response.data.map(x=>{
+                    let attributes = x.attributes
+                    attributes.id = x.id
+                    return attributes
+                })
+                ele.datasource.data = ele.AllData.concat(newData)
                 ele.datasource.data = that.data
                 that.startKey = response.meta.start_key
                 // ele.cur_page++

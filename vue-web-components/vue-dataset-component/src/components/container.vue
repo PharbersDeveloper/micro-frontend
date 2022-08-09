@@ -39,7 +39,7 @@
                                 <div class="search_icon">
                                     <img :src="search_icon">
                                 </div>
-                                <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
+                                <input type="text" placeholder="搜索当前页面" class="text_input" v-model="searchValue">
                             </div>
                             <button class="upload_btn" @click="toggle">新建数据集</button>
                             <div class="dialog" v-show="showDialog">
@@ -105,7 +105,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="upload_bottom">
+                    <div class="upload_bottom" ref="centerData">
                         <div class="data_content" v-for="(dataset, index) in datasource.data" :key="index" ref="content"
                             :class="{ bg: datasetcheckedIds.indexOf(dataset.id) > -1 }"
                             @click="clickOnlyOne(dataset, index)">
@@ -134,7 +134,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="word" v-show="datasource.data.length == 0">当前项目无数据</div>
+                        <div class="word" v-show="datasource.data.length == 0" v-if="searchValue.length !== 0">当前页面搜索无结果</div>
+                        <div class="word" v-show="datasource.data.length == 0" v-else>当前项目无数据</div>
                     </div>
                     <div class="block">
                         <div class="block_content">
@@ -179,7 +180,20 @@
                     <p v-if="datasetcheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
+            <div id="loadingio-spinner-double-ring-ho1zizxmctu" v-show="loading">
+                <div class="ldio-400lpppmiue">
+                    <div></div>
+                    <div></div>
+                    <div>
+                        <div></div>
+                    </div>
+                    <div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
         </div>
+       
         <!-- 清除数据集数据 -->
         <clear-dataset-dialog v-if="cleardialogshow" :datasetcheckedIds="datasetcheckedIds"
             :datasetcheckedNames="datasetcheckedNames" @clearTagsEvent="clearTags" @closeClearDialog="closeClearDialog">
@@ -271,13 +285,14 @@ export default {
             selectCatalogVisible: false,
             startKey: "",
             cur_page: 1,
-            // disabledUp: false,
-            // disabledForword: false,
+            // canClick: false,
+            // canClicks: false,
             projectId: "",
             projectName: "",
             AllData: [],
             tagsArray: [],
-            totalCount: 0
+            totalCount: 0,
+            loading: false
         }
     },
     props: {
@@ -323,16 +338,17 @@ export default {
         //     return this.allData.dss
         // }
     },
-    mounted() {
+    created() {
+        this.loading = true
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
         let that = this
         this.datasource.refreshData(this, '', ()=>{
             that.startKey = this.datasource.startKey
-            // that.cur_page = this.cur_page
             that.totalCount = this.datasource.totalCount
             // 总数据
             that.AllData = this.datasource.data
+            this.loading = false
         })
     },
     watch: {
@@ -363,26 +379,48 @@ export default {
         },
         // 点击上一页
         goForword(){
-            // window.scrollTo(0,0)
+            this.$refs.centerData.scrollTop = 0
             this.cur_page = this.cur_page - 1
+            this.loading = true
             if(this.cur_page >= 1 || this.cur_page < Math.ceil(this.AllData.length / 20)){
-                this.datasource.data = this.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                if(this.searchValue.length !== 0){
+                    this.datasource.data = this.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                    this.state = 'search'
+                    this.search(this.searchValue)
+                }else{
+                    this.datasource.data = this.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                }
             }
+            this.loading = false
         },
         // 点击下一页
         goUp(){
-            // window.scrollTo(0,0)
+            this.$refs.centerData.scrollTop = 0
             this.cur_page = this.cur_page + 1
-            console.log(this.cur_page)
             if (Math.ceil(this.AllData.length / 20) >= this.cur_page) {
-                this.datasource.data = this.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                this.loading= true
+                if(this.searchValue.length !== 0){
+                    this.datasource.data = this.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                    this.state = 'search'
+                    this.search(this.searchValue)
+                }else{
+                    this.datasource.data = this.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                }
+                this.loading = false
             } else{
                 let that = this
+                this.loading = true
                 this.datasource.appendData(this,this.startKey,()=>{
-                    // that.cur_page = this.cur_page 
                     that.startKey = this.datasource.startKey
                     that.AllData = this.datasource.data
-                    that.datasource.data = that.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                    if(that.searchValue.length !== 0){
+                        that.datasource.data = that.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                        this.state = 'search'
+                        this.search(this.searchValue)
+                    }else{
+                        that.datasource.data = that.AllData.slice(20 * (this.cur_page - 1), 20 * this.cur_page)
+                    }
+                    this.loading = false
                 })
             }
         },
@@ -749,6 +787,11 @@ export default {
     margin: 0;
     box-sizing: border-box;
 }
+.upload-dataset {
+    height: calc(100vh - 40px);
+    width: 100vw;
+    // position: relative;
+}
 
 .bg {
     background: #dfe7ff;
@@ -798,7 +841,8 @@ export default {
 
 .upload_dataset_container {
     width: 100vw;
-    height: calc(100vh - 40px);
+    // height: calc(100vh - 40px);
+    height: 100%;
 
     // border: 2px solid #dddddd;
     .project_name_header {
@@ -822,7 +866,8 @@ export default {
     .info {
         display: flex;
         width: 100%;
-        height: calc(100vh - 60px);
+        // height: calc(100vh - 40px);
+        height: 100%;
 
         .project_info_left {
             flex: 1;
@@ -1283,7 +1328,7 @@ export default {
                 font-size: 14px;
                 color: #838383;
                 text-align: center;
-                line-height: 800px;
+                line-height: calc(100vh - 40px);
             }
 
             .view_content {
@@ -1463,4 +1508,132 @@ export default {
     margin-bottom: 5px;
 }
 
+#loadingio-spinner-double-ring-ho1zizxmctu {
+    backdrop-filter: blur(1px);
+    /* 毛玻璃特效 */
+    background: rgba(200, 0, 0, 0.05);
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* 	使用transform: translateZ(0)加快动画和过渡的速度
+	使用scale进行缩放
+*/
+.ldio-400lpppmiue {
+    position: absolute;
+    transform: translateZ(0) scale(0.8);
+}
+
+/*  创建动画
+	1. 0%是动画开始时间
+	2. 100%是动画结束时间
+	3. transform: rorate()是正时针旋转的角度
+*/
+@keyframes ldio-400lpppmiue {
+    0% {
+        transform: rotate(0)
+    }
+
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+.ldio-400lpppmiue div {
+    box-sizing: border-box;
+}
+
+.ldio-400lpppmiue>div {
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    top: -30px;
+    left: -30px;
+    border-radius: 50%;
+    border: 4px solid #000;
+    border-color: #f5c924 transparent #f5c924 transparent;
+    animation: ldio-400lpppmiue 1s linear infinite;
+}
+
+.ldio-400lpppmiue>div:nth-child(2),
+.ldio-400lpppmiue>div:nth-child(4) {
+    width: 58px;
+    height: 58px;
+    top: -26px;
+    left: -26px;
+    animation: ldio-400lpppmiue 1s linear infinite reverse;
+}
+
+.ldio-400lpppmiue>div:nth-child(2) {
+    border-color: transparent #747789 transparent #747789
+}
+
+.ldio-400lpppmiue>div:nth-child(3) {
+    border-color: transparent
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div:before,
+.ldio-400lpppmiue>div:nth-child(3) div:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    top: -4px;
+    left: 28px;
+    background: #f5c924;
+    border-radius: 0%;
+    box-shadow: 0 64px 0 0 #f5c924;
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div:after {
+    left: -4px;
+    top: 28px;
+    box-shadow: 64px 0 0 0 #f5c924;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) {
+    border-color: transparent;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div:before,
+.ldio-400lpppmiue>div:nth-child(4) div:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    top: -4px;
+    left: 23px;
+    background: #747789;
+    border-radius: 0%;
+    box-shadow: 0 54px 0 0 #747789;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div:after {
+    left: -4px;
+    top: 23px;
+    box-shadow: 54px 0 0 0 #747789;
+}
 </style>
