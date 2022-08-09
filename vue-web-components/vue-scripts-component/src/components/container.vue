@@ -8,7 +8,7 @@
                         <div class="selected_search">
                             <div class="selected"
                                 :class="[{'bg_disabled': reciptcheckedIds.length == 0}]">
-                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="reciptcheckedIds.length === allData.dcs.length">
+                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="reciptcheckedIds.length === datasource.dcs.length">
                                 <div class="opt-area" @click="dropShow">
                                     <span class="action" >选项</span>
                                     <img :src="dropDownIcon" alt="" class="d_icon">
@@ -32,7 +32,7 @@
                                    <div class="search_icon">
                                        <img :src="search_icon">
                                    </div>
-                                   <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
+                                   <input type="text" placeholder="搜索当前页面" class="text_input" v-model="searchValue">
                             </div>
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
@@ -90,7 +90,7 @@
                                 <div 
                                     class="list"
                                     v-show="showSparkAll"
-                                    v-for="script in scriptList.slice(11,14)"
+                                    v-for="script in scriptList.slice(11,13)"
                                     :key="script.name+'script'"
                                     @mouseenter="showSpark"
                                     @mouseleave="hide"
@@ -121,9 +121,9 @@
                                 </span>
                                 <div class="label_selected" v-if="labelShowDialog">
                                     <div class="tag_arr">
-                                        <div class="label_name" v-for="(item,index) in allData.tagsArray" :key="index">
-                                            <span  :style="{background: tagsColorArray[allData.tagsArray.indexOf(item)]}"></span>
-                                            <div class="tags_name">{{item}}</div>
+                                        <div class="label_name" v-for="(item,index) in tagsArray" :key="index">
+                                            <span  :style="{background: tagsColorArray[tagsArray.indexOf(item)]}"></span>
+                                            <!-- <div class="tags_name">{{item}}</div> -->
                                         </div>
                                     </div>
                                     <div class="management">
@@ -132,13 +132,16 @@
                                 </div>
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
-                            <div class="dataset_number">
-                                <p>{{allData.dcs.length}} 条脚本</p>
+                            <div class="dataset_number" v-if="searchValue.length !== 0">
+                                <p>{{ datasource.dcs.length }} / {{ totalCount }} 条脚本</p>
+                            </div>
+                            <div class="dataset_number" v-else>
+                                <p>{{ totalCount }} 条脚本</p> 
                             </div>
                         </div>
                     </div>
-                    <div class="upload_bottom">
-                        <div class="data_content" v-for="(recipt,index) in searchData" :key="index" ref="content" :class="{bg: reciptcheckedIds.indexOf(recipt.id) > -1}" @click="clickOnlyOne(recipt, index)">
+                    <div class="upload_bottom" ref="centerData">
+                        <div class="data_content" v-for="(recipt,index) in datasource.dcs" :key="index" ref="content" :class="{bg: reciptcheckedIds.indexOf(recipt.id) > -1}" @click="clickOnlyOne(recipt, index)">
                             <div class="data_input" @click.stop="checkedMore(recipt)">
                                 <input type="checkbox" ref="data" name="reciptList" :checked="reciptcheckedIds.indexOf(recipt.id) > -1" @click.stop="checkedOneDataset(recipt)">
                             </div>
@@ -146,7 +149,7 @@
                                 <span class="script_icon">
                                     <img :src="selectScriptIcon(recipt.runtime)" alt="">
                                 </span>
-                                <p class="data_name" @click.stop="clickReciptName(recipt)" :title="recipt.jobShowName">{{recipt.jobShowName}}</p>
+                                <p class="data_name" @click.stop="clickReciptName(recipt)" :title="recipt.outputs">compute_{{recipt.outputs}}</p>
                                 <div class="tag_area" ref="tagsArea">
                                     <div v-for="(tag,inx) in recipt.label" :key="inx">
                                         <span v-if="recipt.label !== ''">
@@ -160,7 +163,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="word" v-if="allData.dcs == ''">当前项目无数据</div>
+                        <div class="word" v-show="datasource.dcs.length == 0" v-if="searchValue.length !== 0">当前页面搜索无结果</div>
+                        <div class="word" v-show="datasource.dcs.length == 0" v-else>当前项目无数据</div>
+                    </div>
+                    <div class="block">
+                        <div class="block_content">
+                            <button @click="goForword" :disabled="cur_page === 1 ? true:false">上一页</button>
+                            <div class="block_pag">{{ cur_page }} / {{ Math.ceil(totalCount / 10) }}</div>
+                            <button @click="goUp" :disabled="Math.ceil(totalCount / 10) === cur_page ?true:false">下一页</button>
+                        </div>
                     </div>
                 </div>
                 <div class="project_info_right">
@@ -214,6 +225,18 @@
                     <p v-if="reciptcheckedIds.length == 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
+            <div id="loadingio-spinner-double-ring-ho1zizxmctu" v-show="loading">
+                <div class="ldio-400lpppmiue">
+                    <div></div>
+                    <div></div>
+                    <div>
+                        <div></div>
+                    </div>
+                    <div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
         <!-- 删除脚本 -->
         <clear-delete
             v-if="deletedialogshow"
@@ -238,7 +261,7 @@
         <!-- 新建脚本 -->
         <create-scripts-dialog
             v-if="showCreateScriptsDialog"
-            :datasets="allData.dss"
+            :datasets="datasource.dss"
             :runtime="runtime"
             @createScripts="createScripts"
             @closeCreateDialog="closeScriptDialog">
@@ -258,6 +281,7 @@ import ElButton from 'element-ui/packages/option/index'
 import { staticFilePath } from '../config/envConfig'
 import PhDagDefinitions from "./policy/definitions/definitions";
 import { Message } from 'element-ui'
+import PhDataSource from './model/datasource'
 
 export default {
     data() {
@@ -310,18 +334,27 @@ export default {
             runtime: "",
             showVisualAll: false,
             showCodeAll: false,
-            showSparkAll: false
+            showSparkAll: false,
+
+            startKey: "",
+            cur_page: 1,
+            projectId: "",
+            projectName: "",
+            AllData: [],
+            tagsArray: [],
+            totalCount: 0,
+            loading: false
         }
     },
     props: {
         allData: {
             type: Object,
             default: () => ({
-                "projectName": "ETL_Iterator",
-                "projectId": "JfSmQBYUpyb4jsei",
-                "dcs": [],
-                "dss": [],
-                "tagsArray": [],
+                // "projectName": "ETL_Iterator",
+                // "projectId": "JfSmQBYUpyb4jsei",
+                // "dcs": [],
+                // "dss": [],
+                // "tagsArray": [],
                 "_isVue": true
             })
         },
@@ -329,6 +362,12 @@ export default {
             type: Object,
             default: function () {
                 return new PhDagDefinitions("1");
+            }
+        },
+        datasource: {
+            type: Object,
+            default: function() {
+                return new PhDataSource('1')
             }
         },
         scriptList: {
@@ -400,33 +439,118 @@ export default {
         ElButton
     },
     computed: {
-        searchData: function() {
-            let searchValue = this.searchValue
-            this.state = 'search'
-            if(searchValue) {
-                return this.allData.dcs.filter(item => item.jobShowName.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-            }
-            this.sort("ascending")
-            return this.allData.dcs
-        }
+        // searchData: function() {
+        //     let searchValue = this.searchValue
+        //     this.state = 'search'
+        //     if(searchValue) {
+        //         return this.allData.dcs.filter(item => item.jobShowName.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+        //     }
+        //     this.sort("ascending")
+        //     return this.allData.dcs
+        // }
     },
     mounted() {
+        // let that = this
+        // if(this.$refs.tagsArea) {
+        //     this.$refs.tagsArea.forEach((item, index) => {
+        //         item.style["height"] = "40px"
+        //     })
+        // }
+        this.projectId = this.getUrlParam("projectId")
+        this.projectName = this.getUrlParam("projectName")
         let that = this
-        if(this.$refs.tagsArea) {
-            this.$refs.tagsArea.forEach((item, index) => {
-                item.style["height"] = "40px"
-            })
-        }
+        this.loading = true
+        this.datasource.refreshData(this, '', ()=>{
+            that.startKey = this.datasource.startKey
+            that.totalCount = this.datasource.totalCount
+            // 总数据
+            that.AllData = this.datasource.dcs
+            this.loading = false
+        })
     },
     watch: {
-        "allData.tagsArray": function() {
-            this.tagsColorArray = []
-            this.allData.tagsArray.forEach((item, index) => {
-                this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
-            })
+        // "allData.tagsArray": function() {
+        //     this.tagsColorArray = []
+        //     this.allData.tagsArray.forEach((item, index) => {
+        //         this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
+        //     })
+        // }
+
+
+        searchValue(newValue, oldValue) {
+            this.searchValue = newValue
+            this.state = 'search'
+            this.search(this.searchValue)
         }
     },
     methods: {
+        search(value){
+            if (value) {
+                this.datasource.dcs = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page).filter(item => item.outputs.toLowerCase().indexOf(value.toLowerCase()) > -1)
+            }else{
+                this.datasource.dcs = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
+            }
+            this.sort("ascending")
+        },
+        // 点击上一页
+        goForword(){
+            this.$refs.centerData.scrollTop = 0
+            this.cur_page = this.cur_page - 1
+            this.loading = true
+            if(this.cur_page >= 1 || this.cur_page < Math.ceil(this.AllData.length / 10)){
+                if(this.searchValue.length !== 0){
+                    this.datasource.dcs = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
+                    this.state = 'search'
+                    this.search(this.searchValue)
+                }else{
+                    this.datasource.dcs = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
+                }
+            }
+            this.loading = false
+        },
+        // 点击下一页
+        goUp(){
+            this.$refs.centerData.scrollTop = 0
+            this.cur_page = this.cur_page + 1
+            if (Math.ceil(this.AllData.length / 10) >= this.cur_page) {
+                this.loading= true
+                if(this.searchValue.length !== 0){
+                    this.datasource.dCS = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
+                    this.state = 'search'
+                    this.search(this.searchValue)
+                }else{
+                    this.datasource.dCS = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
+                }
+                this.loading = false
+            } else{
+                let that = this
+                this.loading = true
+                this.datasource.appendData(this,this.startKey,()=>{
+                    that.startKey = this.datasource.startKey
+                    that.AllData = this.datasource.dcs
+                    if(that.searchValue.length !== 0){
+                        that.datasource.dcs = that.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
+                        this.state = 'search'
+                        this.search(this.searchValue)
+                    }else{
+                        that.datasource.dcs = that.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
+                    }
+                    this.loading = false
+                })
+            }
+        },
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
+            arr = document.cookie.match(reg)
+            if (arr) return (arr[2])
+            else return null
+        },
+        getUrlParam(value) {
+            let href = window.location.href
+            let paramArr = href.split("?")[1].split("&")
+            let data = paramArr.find(item => item.indexOf(value) > -1)
+            return data ? decodeURI(data).split("=")[1] : undefined
+        },
         handleClose(done) {
             this.$confirm('确认关闭？').then(_ => {
                 done();
@@ -436,6 +560,7 @@ export default {
         selectScripts(data) {
             this.showDialog = false
             this.runtime = data
+            this.datasource.refreshData1(this)
             this.showCreateScriptsDialog = true
             this.showVisualAll = false
             this.showCodeAll = false
@@ -444,27 +569,27 @@ export default {
         //增加tag
         addTagsEvent(data) {
             data.args.param.selectedDatasets = this.reciptcheckedIds
-            data.args.param.datasetArray = this.allData.dcs
-            data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
+            data.args.param.datasetArray = this.datasource.dcs
+            data.args.param.projectName = this.projectName,
+            data.args.param.projectId = this.projectId
             this.$emit('event', data)
             this.showCreateTagsDialog = false;
         },
         //清除脚本中数据
         clearTags(data) {
             data.args.param.selectedDatasets = this.reciptcheckedIds
-            data.args.param.datasetArray = this.allData.dcs
-            data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
+            data.args.param.datasetArray = this.datasource.dcs
+            data.args.param.projectName = this.projectName,
+            data.args.param.projectId = this.projectId
             this.$emit('event', data)
             this.cleardialogshow = false;
         },
         //删除脚本
         deleteScript(data) {
             data.args.param.selectedScripts = this.reciptcheckedIds
-            data.args.param.scriptArray = this.allData.dcs
-            data.args.param.projectName = this.allData.projectName,
-            data.args.param.projectId = this.allData.projectId
+            data.args.param.scriptArray = this.datasource.dcs
+            data.args.param.projectName = this.projectName,
+            data.args.param.projectId = this.projectId
             this.$emit('event', data)
             this.deletedialogshow = false;
         },
@@ -513,15 +638,15 @@ export default {
         //点击dataset name
         clickReciptName(recipt) {
             const inputName = JSON.parse(recipt.inputs)[0]
-            const inputDS = this.allData.dss.filter(it => it.name === inputName)
+            const inputDS = this.datasource.dss.filter(it => it.name === inputName)
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
                 element: this,
                 param: {
                     name: "codeditor",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId,
+                    projectName: this.projectName,
+                    projectId: this.projectId,
                     recipt: recipt,
                     inputDS: inputDS
                 }
@@ -531,7 +656,7 @@ export default {
         //全选list
         chechedAllDataset() {
             this.isCheckedAllDataset = true
-            if(this.reciptcheckedIds.length == this.allData.dcs.length) {
+            if(this.reciptcheckedIds.length == this.datasource.dcs.length) {
                 this.isCheckedAllDataset = false
             }
             this.reciptcheckedIds = []
@@ -539,7 +664,7 @@ export default {
             //全选状态
             if(this.isCheckedAllDataset) {
                 this.script_icon_show  = `${staticFilePath}` + "/icons/all_script.svg"
-                this.allData.dcs.forEach(item => {
+                this.datasource.dcs.forEach(item => {
                     this.reciptcheckedIds.push(item.id)
                     this.reciptcheckedNames.push(item.name)
                 })
@@ -559,7 +684,7 @@ export default {
                 // 升序->降序
                 this.ascending = false
                 // this.allData.dcs.sort()
-                this.allData.dcs.sort(
+                this.datasource.dcs.sort(
                     function compareFunction(param1, param2) {
                         if(param1.jobName) {
                             return param1.jobName.localeCompare(param2.name);
@@ -570,7 +695,7 @@ export default {
             }else if (val === 'descending') {
                 // 降序->升序
                 this.ascending = true
-                this.allData.dcs.reverse()
+                this.datasource.dcs.reverse()
             }
         },
         //排序条件下拉框
@@ -584,15 +709,15 @@ export default {
         //编辑脚本
         edit() {
             let tid = this.reciptcheckedIds[0]
-            let recipt = this.allData.dcs.filter(it => it.id === tid)
+            let recipt = this.datasource.dcs.filter(it => it.id === tid)
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
                 element: this,
                 param: {
                     name: "codeditor",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId,
+                    projectName: this.projectName,
+                    projectId: this.projectId,
                     recipt: recipt[0]
                 }
             }
@@ -621,8 +746,8 @@ export default {
                 return false
             }
 
-            data.args.param.projectName = this.allData.projectName
-            data.args.param.projectId = this.allData.projectId
+            data.args.param.projectName = this.projectName
+            data.args.param.projectId = this.projectId
             data.args.param.runtime = this.runtime			
             this.$emit('event', data)
             this.showCreateScriptsDialog = false
@@ -663,8 +788,8 @@ export default {
                 element: this,
                 param: {
                     name: "localUpload",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId
+                    projectName: this.projectName,
+                    projectId: this.projectId
                 }
             }
             this.$emit('event', event)
@@ -676,8 +801,8 @@ export default {
                 element: this,
                 param: {
                     name: "linkToProject",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId
+                    projectName: this.projectName,
+                    projectId: this.projectId
                 }
             }
             this.$emit('event', event)
@@ -1301,6 +1426,33 @@ export default {
 
                 }
             }
+
+            .block {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                flex: 1;
+                .block_content {
+                    width: 200px;
+                    height: 100px;
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
+                    color:black;
+                    button {
+                        width: 50px;
+                        height: 30px;
+                        line-height: 30px;
+                        align-items: center;
+                        border: none;
+                        background-color: #F4F4F5;
+                        border-radius: 5px;
+                    }
+                    div {
+                        font-size: 14px;
+                    }
+                }
+            }
         }
 
         .project_info_right {
@@ -1485,5 +1637,134 @@ export default {
     height: 20px;
     cursor: pointer;
     margin-bottom: 5px;
+}
+
+#loadingio-spinner-double-ring-ho1zizxmctu {
+    backdrop-filter: blur(1px);
+    /* 毛玻璃特效 */
+    background: rgba(200, 0, 0, 0.05);
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* 	使用transform: translateZ(0)加快动画和过渡的速度
+	使用scale进行缩放
+*/
+.ldio-400lpppmiue {
+    position: absolute;
+    transform: translateZ(0) scale(0.8);
+}
+
+/*  创建动画
+	1. 0%是动画开始时间
+	2. 100%是动画结束时间
+	3. transform: rorate()是正时针旋转的角度
+*/
+@keyframes ldio-400lpppmiue {
+    0% {
+        transform: rotate(0)
+    }
+
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+.ldio-400lpppmiue div {
+    box-sizing: border-box;
+}
+
+.ldio-400lpppmiue>div {
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    top: -30px;
+    left: -30px;
+    border-radius: 50%;
+    border: 4px solid #000;
+    border-color: #f5c924 transparent #f5c924 transparent;
+    animation: ldio-400lpppmiue 1s linear infinite;
+}
+
+.ldio-400lpppmiue>div:nth-child(2),
+.ldio-400lpppmiue>div:nth-child(4) {
+    width: 58px;
+    height: 58px;
+    top: -26px;
+    left: -26px;
+    animation: ldio-400lpppmiue 1s linear infinite reverse;
+}
+
+.ldio-400lpppmiue>div:nth-child(2) {
+    border-color: transparent #747789 transparent #747789
+}
+
+.ldio-400lpppmiue>div:nth-child(3) {
+    border-color: transparent
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div:before,
+.ldio-400lpppmiue>div:nth-child(3) div:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    top: -4px;
+    left: 28px;
+    background: #f5c924;
+    border-radius: 0%;
+    box-shadow: 0 64px 0 0 #f5c924;
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div:after {
+    left: -4px;
+    top: 28px;
+    box-shadow: 64px 0 0 0 #f5c924;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) {
+    border-color: transparent;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div:before,
+.ldio-400lpppmiue>div:nth-child(4) div:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    top: -4px;
+    left: 23px;
+    background: #747789;
+    border-radius: 0%;
+    box-shadow: 0 54px 0 0 #747789;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div:after {
+    left: -4px;
+    top: 23px;
+    box-shadow: 54px 0 0 0 #747789;
 }
 </style>
