@@ -9,7 +9,7 @@ export default class PhDataSource {
 		this.parent = parent
         this.store = new JsonApiDataStore()
         this.resetData()
-        this.debugToken = "23468fc87c8f6fd40f961d49cceeaeb2ee091d657cdcee906e823f56c1266466"
+        this.debugToken = "569215fe7d9a4df4ee26f891fa18bbed596da35eba67cef828e168a932327dbd"
     }
 
     resetData() {
@@ -236,6 +236,7 @@ export default class PhDataSource {
 			runtime : this.step["runtime"],
 			stepName: this.step["step-name"]
 		}]
+		console.log(steps)
 		const event = new Event("event")
 		event.args = {
 			callback: "saveGroup",
@@ -248,36 +249,6 @@ export default class PhDataSource {
 			}
 		}
 		this.parent.$emit('event', event)
-        // @wodelu 这里改成code gen 逻辑
-        // const url = `${hostName}/phdydatasource/put_item`
-        // const accessToken = this.getCookie( "access_token" ) || this.debugToken
-        // let body = {
-        //     table: "step",
-        //     item: {
-        //         pjName: this.step["pj-name"],
-        //         stepId: this.step["step-id"],
-        //         ctype: this.step["ctype"],
-        //         expressions: JSON.stringify({ "params": param }),
-        //         expressionsValue: this.step["expressions-value"],
-        //         groupIndex: this.step["group-index"],
-        //         groupName: this.step["group-name"],
-        //         id: this.step["id"],
-        //         index: this.step["index"],
-        //         runtime : this.step["runtime"],
-        //         stepName: this.step["step-name"]
-        //     }
-        // }
-
-        // let options = {
-        //     method: "POST",
-        //     headers: {
-        //         "Authorization": accessToken,
-        //         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        //         "accept": "application/json"
-        //     },
-        //     body: JSON.stringify(body)
-        // }
-        // return fetch(url, options)
     }
 
     saveAndGenCode(projectId, jobName, param) {
