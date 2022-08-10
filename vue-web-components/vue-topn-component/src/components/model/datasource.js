@@ -9,7 +9,7 @@ export default class PhDataSource {
         this.store = new JsonApiDataStore()
         this.resetData()
 		this.parent = parent
-        this.debugToken = "27a68748c55abfadcab0a85e012b1c73f7380ed319cf734a6cb179d45b1ea24d"
+        this.debugToken = "569215fe7d9a4df4ee26f891fa18bbed596da35eba67cef828e168a932327dbd"
     }
 
     resetData() {
@@ -211,4 +211,102 @@ export default class PhDataSource {
     saveAndGenCode(projectId, jobName, param) {
         this.buildSaveQuery(projectId, jobName, param)
     }
+
+	buildRefreshScriptParameter(projectId, jobId) {
+		const url = `${hostName}/phdydatasource/query`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+			"table": "dagconf",
+			"conditions": {
+				"projectId": [
+					"=",
+					projectId
+				],
+				"id": [
+					"=",
+					jobId
+				]
+			},
+			"index_name": "dagconf-projectId-id-indexd",
+			"limit": 10,
+			"start_key": ""
+		}
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+	}
+
+	refreshScriptParameter(projectId, jobId) {
+		const that = this
+        this.buildRefreshScriptParameter(projectId, jobId)
+            .then((response) => response.json())
+            .then((response) => {
+				that.store.sync(response)
+				const data = that.store.findAll("dag-confs")
+				that.scriptData = data[0]
+				that.scriptParamsData = []
+				if (that.scriptData.prop !== "") {
+					that.scriptParamsData = JSON.parse(that.scriptData.prop)
+				}
+            })
+	}
+
+	buildSaveScriptParams(ele) {
+		const url = `${hostName}/phdydatasource/put_item`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+		const param = ele.datasource.scriptData
+        let body = {
+			"table": "dagconf",
+			"item":  {
+				"id": param["id"],
+				"projectId": param["project-id"],
+				"jobName": param["job-name"],
+				"flowVersion": param["flow-version"],
+				"dagName": param["dag-name"],
+				"inputs": param["inputs"],
+				"jobDisplayName": param["job-display-name"],
+				"jobId": param["job-id"],
+				"jobVersion": param["job-version"],
+				"outputs": param["outputs"],
+				"owner": param["owner"],
+				"runtime": param["runtime"],
+				"targetJobId": param["target-job-id"],
+				"timeout": param["timeout"],
+				"labels": param["labels"],
+				"projectName": param["project-name"],
+				"jobPath": param["job-path"],
+				"jobShowName": param["job-show-name"],
+				"prop": param["prop"],
+				"operatorParameters": param["operator-parameters"]
+			}
+		}
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+	}
+
+	saveScriptParams(data, ele) {
+		ele.datasource.scriptData.prop = JSON.stringify(ele.datasource.scriptParamsData)
+		ele.datasource.buildSaveScriptParams(ele)
+			.then((response) => response.json())
+			.then((response) => {
+				console.log(response)
+			})
+	}
 }
