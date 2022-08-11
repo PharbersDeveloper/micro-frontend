@@ -136,6 +136,7 @@ export async function phTopnContainerEventHandler(e, route) {
 			break
 		case "saveScriptParams":
 			if (params) {
+				element.refreshPageSuccess()
 				const transition = params.transition
 				if (transition) {
 					route.router.transitionTo(
@@ -239,9 +240,10 @@ export async function phTopnContainerEventHandler(e, route) {
 		} = JSON.parse(message)
 		if (status == "succeed") {
 			if (params.type === "preview") {
-				element.steps.refreshData()
+				element.datasource.steps.refreshData()
 			} else {
-				alert(`${route.msg}脚本成功！`)
+				// alert(`${route.msg}脚本成功！`)
+				element.refreshPageSuccess()
 				if (transition) {
 					route.router.transitionTo(
 						"shell",
@@ -270,7 +272,8 @@ export async function phTopnContainerEventHandler(e, route) {
 			if (params.type === "preview") {
 				element.steps.refreshData()
 			} else {
-				alert(`${route.msg}脚本成功！`)
+				// alert(`${route.msg}脚本成功！`)
+				element.refreshPageSuccess()
 				if (transition) {
 					route.router.transitionTo(
 						"shell",

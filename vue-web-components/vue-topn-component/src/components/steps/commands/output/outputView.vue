@@ -38,11 +38,13 @@ export default {
     components: {
     },
     mounted() {
-		this.$emit('statusChange', false)
+		this.validate()
     },
     methods: {
+		rerender() {
+			this.validate()
+		},
         validate() {
-			console.log("outputs")
             this.$emit('statusChange', false)
         }
     },

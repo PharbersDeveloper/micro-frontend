@@ -7,7 +7,7 @@
                     :key="item+index"
                     v-for="(item,index) in inputsArray">{{item}}</div>
                 <el-button 
-                    @click="selectInput=!selectInput"
+                    @click="changeInput"
                     type="primary">更换</el-button>
             </div>
             <div class="input-for-select" v-show="selectInput">
@@ -42,7 +42,7 @@
                     :key="item+index"
                     v-for="(item,index) in outputsArray">{{item}}</div>
                 <el-button 
-                    @click="selectOutput=!selectOutput"
+                    @click="changeOutput"
                     type="primary">更换</el-button>
             </div>
             <div class="input-for-select" v-show="selectOutput">
@@ -90,7 +90,8 @@ export default {
             inputsArray: [],
             searchInputName: "",
             selectInput: false,
-            selectOutput: false
+            selectOutput: false,
+			inOutCount: 0
         }
     },
     props: {
@@ -100,6 +101,18 @@ export default {
         outArray: Array
     },
     methods: {
+		changeOutput() {
+			this.inOutCount++
+			this.selectOutput=!this.selectOutput
+		},
+		changeInput() {
+			this.inOutCount++
+			this.selectInput=!this.selectInput
+		},
+        rerender() {
+            this.inputsArray = this.inputs 
+            this.outputsArray = this.outputs
+        },
         selectInputItem(data) {
             this.inputsArray = []
             this.inputsArray.push(data)
@@ -118,23 +131,20 @@ export default {
                 param: {
                     outputsArray: this.outputsArray,
                     inputsArray: this.inputsArray,
-					transition: transition
+                    transition: transition
                 }
             }
             this.$emit('changScriptInputOutput', event)
         }
     },
-    mounted() {
-        // this.inputsArray = this.inputs 
-        // this.outputsArray = this.outputs
-    },
+    mounted() {},
     watch: {
         "inputs": function(n) {
             this.inputsArray = n
         },
-		"outputs": function(n) {
+        "outputs": function(n) {
             this.outputsArray = n
-		}
+        }
     }
 }
 </script>

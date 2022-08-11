@@ -117,7 +117,7 @@ import ElInput from "element-ui/packages/input/index"
 import ElButton from 'element-ui/packages/button/index'
 import ElTable from 'element-ui/packages/table/index'
 import ElTableColumn from 'element-ui/packages/table-column/index'
-import PhDagDefinitions from "../policy/definitions/definitions"
+import PhDagDefinitions from "./policy/definitions/definitions"
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElInputNumber from 'element-ui/packages/input-number/index'
 
@@ -147,7 +147,8 @@ export default {
                 "des": "",
                 "level": 1, 
                 "index": 1
-            }
+            },
+			paramCount: 0
         }
     },
     props: {
@@ -160,6 +161,9 @@ export default {
         scriptParamsData: Array
     },
     methods: {
+		rerender() {
+			this.scriptParamsList = JSON.parse(JSON.stringify(this.scriptParamsData))
+		},
         addScriptParamsList() {
             this.dialogTitle = "添加参数"
             this.content = {
@@ -187,6 +191,7 @@ export default {
             this.changeScriptParamsList = true
         },
         delParams(scope) {
+			this.paramCount++
             this.scriptParamsList.splice(scope.$index, 1)
         },
         inputContentName() {
@@ -212,11 +217,12 @@ export default {
             return true
         },
         confirm() {
+			this.paramCount++
             const val = this.validate()
             if(!val) return false
 
             if (this.dialogTitle === "添加参数") {
-                this.scriptParamsData.push(this.content)
+                this.scriptParamsList.push(this.content)
             } else if (this.dialogTitle === "修改参数") {
                 this.$set(this.scriptParamsList, this.scopeRowIndex, this.content)
             }
@@ -226,8 +232,9 @@ export default {
             const event = new Event("event")
             event.args = {
                 callback: "changeScriptParams",
-                element: this,
+                element: this.parent,
                 param: {
+					scriptParamsList: this.scriptParamsList,
                     transition: transition
                 }
             }
@@ -238,7 +245,7 @@ export default {
     },
     watch: {
         scriptParamsData: function(n) {
-            this.scriptParamsList = n
+            this.scriptParamsList = JSON.parse(JSON.stringify(n))
         }
     }
 }

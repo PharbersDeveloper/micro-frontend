@@ -9,7 +9,7 @@ export default class PhDataSource {
         this.store = new JsonApiDataStore()
         this.resetData()
 		this.parent = parent
-        this.debugToken = "97e634b103cc5c14cc2aa00c1f5b8f4bb73b1d4bc727af0183c262649e1af5ad"
+        this.debugToken = "eacce9388efc85f51de434531e31f1dc8ef188982c298a7b68ad503bb66d6dcd"
     }
 
     resetData() {
@@ -197,7 +197,7 @@ export default class PhDataSource {
 		const event = new Event("event")
 		event.args = {
 			callback: "saveTopn",
-			element: this,
+			element: this.parent,
 			param: {
 				name: "saveTopn",
 				projectId: this.parent.projectId,
@@ -254,7 +254,7 @@ export default class PhDataSource {
 				const data = that.store.findAll("dag-confs")
 				that.scriptData = data[0]
 				that.scriptParamsData = []
-				if (that.scriptData.prop !== "") {
+				if (that.scriptData && that.scriptData.prop !== "") {
 					that.scriptParamsData = JSON.parse(that.scriptData.prop)
 				}
             })
@@ -286,7 +286,8 @@ export default class PhDataSource {
 				"jobPath": param["job-path"],
 				"jobShowName": param["job-show-name"],
 				"prop": param["prop"],
-				"operatorParameters": param["operator-parameters"]
+				"operatorParameters": param["operator-parameters"],
+				"actionName": param["job-show-name"]
 			}
 		}
 
@@ -303,7 +304,8 @@ export default class PhDataSource {
 	}
 
 	saveScriptParams(data, ele) {
-		ele.datasource.scriptData.prop = JSON.stringify(ele.datasource.scriptParamsData)
+		const param = data.args.param
+		ele.datasource.scriptData.prop = JSON.stringify(param.scriptParamsList)
 		const that = this
 		ele.datasource.buildSaveScriptParams(ele)
 			.then((response) => response.json())
@@ -312,12 +314,12 @@ export default class PhDataSource {
 					const event = new Event("event")
 					event.args = {
 						callback: "saveScriptParams",
-						element: this,
+						element: that.parent,
 						param: {
 							name: "saveScriptParams",
 							projectId: ele.projectId,
 							projectName: ele.projectName,
-							transition: data.transition
+							transition: param.transition
 						}
 					}
 					that.parent.$emit('event', event)

@@ -7,14 +7,19 @@
                 <span>{{jobShowName}}</span>
             </div>
             <div class="header_right">
+				<!-- @input="clickTab" -->
                 <el-radio-group 
 					:value="activeName"
-					@input="clickTab"
 					class="content">
                     <el-radio-button 
+						@click.native.prevent="clickitemdataType('Setting')"
 						label="Setting" ></el-radio-button>
-                    <el-radio-button label="脚本参数"></el-radio-button>
-                    <el-radio-button label="input/output"></el-radio-button>
+                    <el-radio-button 
+						@click.native.prevent="clickitemdataType('脚本参数')"
+						label="脚本参数"></el-radio-button>
+                    <el-radio-button 
+						@click.native.prevent="clickitemdataType('input/output')"
+						label="input/output"></el-radio-button>
                 </el-radio-group>
                 <el-button class="save" @click="savePopup = true">保存</el-button>
             </div>
@@ -84,7 +89,7 @@
                 当前页面的修改尚未保存！
             </div>
             <span slot="footer" class="dialog-footer">
-                <!-- <el-button @click="cancelScriptParams">取消</el-button> -->
+                <el-button @click="cancelScriptParams">取消</el-button>
                 <el-button type="primary"  @click="saveScriptParams(0)">不保存并继续</el-button>
                 <el-button type="primary"  @click="saveScriptParams(1)">保存并继续</el-button>
             </span>
@@ -118,7 +123,7 @@ import ElRadioGroup from "element-ui/packages/radio-group/index"
 import ElRadioButton from "element-ui/packages/radio-button/index"
 import changeInputOutput from "./change-input-output"
 import ElDialog from 'element-ui/packages/dialog/src/component'
-import scriptParameters from "./script-parameters/parameters"
+import scriptParameters from "./script-parameters"
 import { Message } from 'element-ui'
 
 export default {
@@ -181,6 +186,7 @@ export default {
 			ScriptParams: false,
 			activeNameNext: "",
 			savePopup: false,
+			stepCount: 0
         }
     },
     props: {
@@ -217,24 +223,41 @@ export default {
         }
     },
     methods: {
-		// cancelScriptParams() {
-		// 	const name = this.activeName
-		// 	this.activeName = this.activeNameNext
-		// 	// this.activeName = name
-		// 	this.ScriptParams = false
-		// },
+		refreshPageSuccess() {
+			Message.success("修改脚本成功！", { duration: 0} )
+			this.activeName = this.activeNameNext
+		},
+		clickitemdataType(e) {
+			this.clickTab(e)
+		},
+		cancelScriptParams() {
+			const name = this.activeName
+			this.activeName = this.activeNameNext
+			this.activeName = name
+			this.ScriptParams = false
+		},
+		resetCount() {
+			this.stepCount = 0
+			this.$refs.scriptParameters.paramCount = 0
+			this.$refs.changeInputOutput.inOutCount = 0
+		},
 		saveScriptParams(data) {
+			this.resetCount()
+			this.ScriptParams = false
 			if (data) {
 				this.save()
 			} else {
 				this.renderTab()
+				this.activeName = this.activeNameNext
 			}
-			this.activeName = this.activeNameNext
-			this.ScriptParams = false
 		},
 		clickTab(name) {
-			this.ScriptParams = true
 			this.activeNameNext = name
+			if (this.stepCount !== 0 || this.$refs.scriptParameters.paramCount !== 0 || this.$refs.changeInputOutput.inOutCount !== 0) {
+				this.ScriptParams = true
+			} else {
+				this.activeName = this.activeNameNext
+			}	
 		},
 		changeScriptParams(data) {
 			this.datasource.saveScriptParams(data, this)
@@ -324,7 +347,17 @@ export default {
 			return result.concat(addtionCols)
         },
 		renderTab() {
-			debugger
+			if (this.activeName === "input/output") {
+				this.$refs.changeInputOutput.rerender()
+			} else if (this.activeName === "脚本参数") {
+				this.$refs.scriptParameters.rerender()
+			} else if (this.activeName === "Setting") {
+				this.$refs.filter.rerender()
+                this.$refs.computed.rerender()
+                this.$refs.topn.rerender()
+                this.$refs.retrieved.rerender()
+                this.$refs.outputs.rerender()
+			}
 		},
         save(transition) {
 			this.savePopup = false
@@ -338,7 +371,13 @@ export default {
 
                 let errors = this.stepsDefs.filter(it => it.status === "error")
                 if(errors.length > 0) {
-                    Message.error("请修改参数！", { duration: 3000} )
+					Message({
+						type: 'error',
+						showClose: true,
+						duration: 3000,
+						message: '请修改参数！'
+					})
+					
                     return false
                 }
                 const params = {
@@ -439,6 +478,7 @@ export default {
     },
     watch: {
         active(n) {
+			this.stepCount++
 			if (n === 4 || n === 5) {
                 this.computedSchema = this.computeSchema()
 				this.outputsSchema = this.genOutputsSchema()
