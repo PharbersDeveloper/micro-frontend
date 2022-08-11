@@ -9,7 +9,7 @@ export default class PhDataSource {
         this.store = new JsonApiDataStore()
         this.resetData()
 		this.parent = parent
-        this.debugToken = "569215fe7d9a4df4ee26f891fa18bbed596da35eba67cef828e168a932327dbd"
+        this.debugToken = "97e634b103cc5c14cc2aa00c1f5b8f4bb73b1d4bc727af0183c262649e1af5ad"
     }
 
     resetData() {
@@ -176,7 +176,7 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    buildSaveQuery(projectId, jobName, param) {
+    buildSaveQuery(projectId, jobName, param, transition) {
 		const steps = [{
 			pjName: this.step["pj-name"],
 			stepId: this.step["step-id"],
@@ -202,14 +202,15 @@ export default class PhDataSource {
 				name: "saveTopn",
 				projectId: this.parent.projectId,
 				projectName: this.parent.projectName,
-				stepsArr: steps
+				stepsArr: steps,
+				transition: transition
 			}
 		}
 		this.parent.$emit('event', event)
     }
 
-    saveAndGenCode(projectId, jobName, param) {
-        this.buildSaveQuery(projectId, jobName, param)
+    saveAndGenCode(projectId, jobName, param, transition) {
+        this.buildSaveQuery(projectId, jobName, param, transition)
     }
 
 	buildRefreshScriptParameter(projectId, jobId) {
@@ -303,10 +304,24 @@ export default class PhDataSource {
 
 	saveScriptParams(data, ele) {
 		ele.datasource.scriptData.prop = JSON.stringify(ele.datasource.scriptParamsData)
+		const that = this
 		ele.datasource.buildSaveScriptParams(ele)
 			.then((response) => response.json())
 			.then((response) => {
-				console.log(response)
+				if (response) {
+					const event = new Event("event")
+					event.args = {
+						callback: "saveScriptParams",
+						element: this,
+						param: {
+							name: "saveScriptParams",
+							projectId: ele.projectId,
+							projectName: ele.projectName,
+							transition: data.transition
+						}
+					}
+					that.parent.$emit('event', event)
+				}
 			})
 	}
 }

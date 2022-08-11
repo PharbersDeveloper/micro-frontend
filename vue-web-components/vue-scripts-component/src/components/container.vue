@@ -470,8 +470,8 @@ export default {
                     this.search(this.searchValue)
                 }
                 if (this.reciptcheckedIds.length < this.datasource.dcs.length && this.reciptcheckedIds.length !== 0) {
-                        this.$refs.all.indeterminate = true
-                    }
+                    this.$refs.all.indeterminate = true
+                }
                 this.loading = false
             })
         },
