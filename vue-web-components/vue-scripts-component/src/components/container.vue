@@ -167,8 +167,8 @@
                             <div class="word" v-show="datasource.dcs.length == 0" v-if="searchValue.length !== 0">当前页面搜索无结果</div>
                             <div class="word" v-show="datasource.dcs.length == 0" v-else>当前项目无数据</div>
                         </div>
-                        <p @click="goUp" v-if="AllData.length !== totalCount">更多</p>
-                        <p v-else>暂无更多</p>
+                        <p class="block" @click="goUp" v-if="AllData.length !== totalCount">更多</p>
+                        <p class="block" v-else>暂无更多</p>
                     </div>
                 </div>
                 <div class="project_info_right">
@@ -556,6 +556,11 @@ export default {
             }
             if (this.reciptcheckedIds.length < this.datasource.dcs.length && this.reciptcheckedIds.length !== 0) {
                 this.$refs.all.indeterminate = true
+            } else if (this.reciptcheckedIds.length === this.datasource.dcs.length){
+                this.$refs.all.indeterminate = false
+                this.isCheckedAllDataset = true
+            } else {
+                this.$refs.all.indeterminate = false
             }
         },
         //点击list多选框
@@ -575,6 +580,11 @@ export default {
             }
             if (this.reciptcheckedIds.length < this.datasource.dcs.length && this.reciptcheckedIds.length !== 0) {
                 this.$refs.all.indeterminate = true
+            } else if (this.reciptcheckedIds.length === this.datasource.dcs.length){
+                this.$refs.all.indeterminate = false
+                this.isCheckedAllDataset = true
+            } else {
+                this.$refs.all.indeterminate = false
             }
         },
         //点击dataset name
@@ -1252,7 +1262,7 @@ export default {
             }
 
             .upload_bottom {
-                height: calc(100vh - 140px);
+                height: calc(100vh - 160px);
                 flex-grow: 1;
                 overflow: auto;
                 display: flex;
@@ -1361,6 +1371,7 @@ export default {
                             overflow: hidden;
                             white-space: nowrap;
                             text-overflow: ellipsis;
+                            text-align: none;
                         }
                 
                         .tag_area {
@@ -1393,7 +1404,7 @@ export default {
 
                 }
 
-                p{
+                .block{
                     color: rgb(28, 30, 36);
                     font-size: 18px;
                     cursor: pointer;
@@ -1405,14 +1416,13 @@ export default {
 
         .project_info_right {
             width: 500px;
-            // height: calc(100vh - 60px);
 
             .click_look {
                 font-family: PingFangSC-Medium;
                 font-size: 14px;
                 color: #838383;
                 text-align: center;
-                line-height: 700px;
+                line-height: calc(100vh - 40px);
             }
 
             .view_content {
