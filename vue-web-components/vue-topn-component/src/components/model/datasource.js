@@ -176,7 +176,7 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    buildSaveQuery(projectId, jobName, param) {
+    buildSaveQuery(projectId, jobName, param, transition) {
 		const steps = [{
 			pjName: this.step["pj-name"],
 			stepId: this.step["step-id"],
@@ -202,7 +202,8 @@ export default class PhDataSource {
 				name: "saveTopn",
 				projectId: this.parent.projectId,
 				projectName: this.parent.projectName,
-				stepsArr: steps
+				stepsArr: steps,
+				transition: transition
 			}
 		}
 		this.parent.$emit('event', event)
@@ -303,10 +304,24 @@ export default class PhDataSource {
 
 	saveScriptParams(data, ele) {
 		ele.datasource.scriptData.prop = JSON.stringify(ele.datasource.scriptParamsData)
+		const that = this
 		ele.datasource.buildSaveScriptParams(ele)
 			.then((response) => response.json())
 			.then((response) => {
-				console.log(response)
+				if (response) {
+					const event = new Event("event")
+					event.args = {
+						callback: "saveScriptParams",
+						element: this,
+						param: {
+							name: "saveScriptParams",
+							projectId: ele.projectId,
+							projectName: ele.projectName,
+							transition: data.transition
+						}
+					}
+					that.parent.$emit('event', event)
+				}
 			})
 	}
 }

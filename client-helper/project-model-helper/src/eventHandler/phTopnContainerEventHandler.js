@@ -5,6 +5,7 @@ export async function phTopnContainerEventHandler(e, route) {
 	const params = e.detail[0].args.param
 	const element = e.detail[0].args.element
 	const accessToken = route.cookies.read("access_token")
+	let transition = false
 	let uri = ""
 	route.msg = "新建"
 
@@ -62,6 +63,7 @@ export async function phTopnContainerEventHandler(e, route) {
 				route.loadingService.loading.style["z-index"] = 2
 				route.projectId = params.projectId
 				route.projectName = params.projectName
+				transition = params.transition
 				let job_cat_name = "topn_edit"
 				let scriptBody = {
 					common: {
@@ -131,6 +133,17 @@ export async function phTopnContainerEventHandler(e, route) {
 				})
 			}
 			break
+		case "saveScriptParams":
+			if (params) {
+				const transition = params.transition
+				if (transition) {
+					route.router.transitionTo(
+						"shell",
+						`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
+					)
+				}
+			}
+			break
 		case "changScriptInputOutput":
 			if (params) {
 				const changeurl = `${hostName}/phchangeresourcepositiontrigger`
@@ -139,6 +152,7 @@ export async function phTopnContainerEventHandler(e, route) {
 				route.loadingService.loading.style["z-index"] = 2
 				route.projectId = params.projectId
 				route.projectName = params.projectName
+				transition = params.transition
 				route.msg = "修改"
 				let change_job_cat_name = "changeInputOutput"
 				let changeScriptBody = {
@@ -227,10 +241,12 @@ export async function phTopnContainerEventHandler(e, route) {
 				element.steps.refreshData()
 			} else {
 				alert(`${route.msg}脚本成功！`)
-				route.router.transitionTo(
-					"shell",
-					`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
-				)
+				if (transition) {
+					route.router.transitionTo(
+						"shell",
+						`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
+					)
+				}
 			}
 		} else {
 			// let errorObj = error !== "" ? JSON.parse(error) : ""
@@ -254,10 +270,12 @@ export async function phTopnContainerEventHandler(e, route) {
 				element.steps.refreshData()
 			} else {
 				alert(`${route.msg}脚本成功！`)
-				route.router.transitionTo(
-					"shell",
-					`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
-				)
+				if (transition) {
+					route.router.transitionTo(
+						"shell",
+						`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
+					)
+				}
 			}
 		} else {
 			// let errorObj = error !== "" ? JSON.parse(error) : ""

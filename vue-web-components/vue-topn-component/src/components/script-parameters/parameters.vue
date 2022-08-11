@@ -221,13 +221,13 @@ export default {
             }
             this.changeScriptParamsList = false
         },
-        save() {
+        save(transition) {
             const event = new Event("event")
             event.args = {
                 callback: "changeScriptParams",
                 element: this,
                 param: {
-                    content: this.content
+                    transition: transition
                 }
             }
             this.$emit('changeScriptParams', event)

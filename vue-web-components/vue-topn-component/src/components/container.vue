@@ -7,12 +7,16 @@
                 <span>{{jobShowName}}</span>
             </div>
             <div class="header_right">
-                <el-radio-group v-model="activeName" class="content">
-                    <el-radio-button label="Setting"></el-radio-button>
+                <el-radio-group 
+					:value="activeName"
+					@input="clickTab"
+					class="content">
+                    <el-radio-button 
+						label="Setting" ></el-radio-button>
                     <el-radio-button label="脚本参数"></el-radio-button>
                     <el-radio-button label="input/output"></el-radio-button>
                 </el-radio-group>
-                <el-button class="save" @click="save">保存</el-button>
+                <el-button class="save" @click="savePopup = true">保存</el-button>
             </div>
         </div>
         <div class="topn_area" v-show="activeName === 'Setting'">
@@ -72,6 +76,31 @@
                 :datasetArray="datasetArray"
             />
         </div>
+		<el-dialog
+            title="尚未保存"
+            :visible.sync="ScriptParams"
+            width="400px">
+            <div class="content">
+                当前页面的修改尚未保存！
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <!-- <el-button @click="cancelScriptParams">取消</el-button> -->
+                <el-button type="primary"  @click="saveScriptParams(0)">不保存并继续</el-button>
+                <el-button type="primary"  @click="saveScriptParams(1)">保存并继续</el-button>
+            </span>
+        </el-dialog>
+		<el-dialog
+            title="保存"
+            :visible.sync="savePopup"
+            width="400px">
+            <div class="content">
+                保存当前页面参数！
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary"  @click="save(0)">保存不跳转</el-button>
+                <el-button type="primary"  @click="save(1)">保存并跳转</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -88,6 +117,7 @@ import RetrievedCols from './steps/commands/retrieved-cols/retrievedColsView'
 import ElRadioGroup from "element-ui/packages/radio-group/index"
 import ElRadioButton from "element-ui/packages/radio-button/index"
 import changeInputOutput from "./change-input-output"
+import ElDialog from 'element-ui/packages/dialog/src/component'
 import scriptParameters from "./script-parameters/parameters"
 import { Message } from 'element-ui'
 
@@ -104,7 +134,8 @@ export default {
         ElRadioGroup,
         ElRadioButton,
         changeInputOutput,
-		scriptParameters
+		scriptParameters,
+		ElDialog
     },
     data() {
         return {
@@ -117,7 +148,8 @@ export default {
             inputs: [],
             active: 3,
             flowVersion: "developer",
-            activeName: "脚本参数",
+            activeName: "Setting",
+			activeNameOld: "",
             datasetArray: [],
             stepsDefs: [
                 {
@@ -145,7 +177,10 @@ export default {
                     index: 5,
                     status: "wait"  // wait / process / finish / error / success
                 }
-            ]
+            ],
+			ScriptParams: false,
+			activeNameNext: "",
+			savePopup: false,
         }
     },
     props: {
@@ -182,6 +217,23 @@ export default {
         }
     },
     methods: {
+		// cancelScriptParams() {
+		// 	const name = this.activeName
+		// 	this.activeName = this.activeNameNext
+		// 	// this.activeName = name
+		// 	this.ScriptParams = false
+		// },
+		saveScriptParams(data) {
+			if (data) {
+				this.save()
+			}
+			this.activeName = this.activeNameNext
+			this.ScriptParams = false
+		},
+		clickTab(name) {
+			this.ScriptParams = true
+			this.activeNameNext = name
+		},
 		changeScriptParams(data) {
 			this.datasource.saveScriptParams(data, this)
 		},
@@ -269,7 +321,7 @@ export default {
 
 			return result.concat(addtionCols)
         },
-        save() {
+        save(transition) {
             if (this.activeName === "Setting") {
                 
                 this.$refs.filter.validate()
@@ -296,13 +348,12 @@ export default {
                     "retrievedColumns": this.$refs.retrieved.datasource.revert2Defs(),
                     "computedColumns": this.$refs.computed.datasource.revert2Defs()
                 }
-                this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
+                this.datasource.saveAndGenCode(this.projectId, this.jobName, params, transition)
             } else if (this.activeName === "input/output") {
-                this.$refs.changeInputOutput.save()
-            } else {
-				this.$refs.scriptParameters.save()
+                this.$refs.changeInputOutput.save(transition)
+            } else if (this.activeName === "脚本参数"){
+				this.$refs.scriptParameters.save(transition)
 			}
-            
         },
         changScriptInputOutput(data) {
             let inputNameOld = this.allData.inputs[0]
