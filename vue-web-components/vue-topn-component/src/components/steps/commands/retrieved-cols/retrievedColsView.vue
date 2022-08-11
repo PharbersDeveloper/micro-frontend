@@ -54,13 +54,17 @@ export default {
     mounted() {
         this.datasource = new PhRetrievedColsStep(this.step)
         this.isAllCols = this.datasource.command.retrievedCols.length === 0
-        const ErrorVales = !this.isAllCols && this.datasource.command.retrievedCols.length === 0
-		this.$emit('statusChange', ErrorVales)
+        this.validate()
     },
     updated() {
 
     },
     methods: {
+		rerender() {
+			this.datasource = new PhRetrievedColsStep(this.step)
+			this.isAllCols = this.datasource.command.retrievedCols.length === 0
+			this.validate()
+		},
         validate() {
 			const ErrorVales = !this.isAllCols && this.datasource.command.retrievedCols.length === 0
             this.$emit('statusChange', ErrorVales)

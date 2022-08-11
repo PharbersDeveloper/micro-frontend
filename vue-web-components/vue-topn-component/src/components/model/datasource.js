@@ -303,7 +303,9 @@ export default class PhDataSource {
 	}
 
 	saveScriptParams(data, ele) {
-		ele.datasource.scriptData.prop = JSON.stringify(ele.datasource.scriptParamsData)
+		debugger
+		const param = data.args.param
+		ele.datasource.scriptData.prop = JSON.stringify(param.scriptParamsList)
 		const that = this
 		ele.datasource.buildSaveScriptParams(ele)
 			.then((response) => response.json())
@@ -317,7 +319,7 @@ export default class PhDataSource {
 							name: "saveScriptParams",
 							projectId: ele.projectId,
 							projectName: ele.projectName,
-							transition: data.transition
+							transition: param.transition
 						}
 					}
 					that.parent.$emit('event', event)

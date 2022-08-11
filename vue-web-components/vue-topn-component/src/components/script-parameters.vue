@@ -117,7 +117,7 @@ import ElInput from "element-ui/packages/input/index"
 import ElButton from 'element-ui/packages/button/index'
 import ElTable from 'element-ui/packages/table/index'
 import ElTableColumn from 'element-ui/packages/table-column/index'
-import PhDagDefinitions from "../policy/definitions/definitions"
+import PhDagDefinitions from "./policy/definitions/definitions"
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElInputNumber from 'element-ui/packages/input-number/index'
 
@@ -160,6 +160,9 @@ export default {
         scriptParamsData: Array
     },
     methods: {
+		rerender() {
+			this.scriptParamsList = JSON.parse(JSON.stringify(this.scriptParamsData))
+		},
         addScriptParamsList() {
             this.dialogTitle = "添加参数"
             this.content = {
@@ -212,11 +215,12 @@ export default {
             return true
         },
         confirm() {
+			debugger
             const val = this.validate()
             if(!val) return false
 
             if (this.dialogTitle === "添加参数") {
-                this.scriptParamsData.push(this.content)
+                this.scriptParamsList.push(this.content)
             } else if (this.dialogTitle === "修改参数") {
                 this.$set(this.scriptParamsList, this.scopeRowIndex, this.content)
             }
@@ -228,6 +232,7 @@ export default {
                 callback: "changeScriptParams",
                 element: this,
                 param: {
+					scriptParamsList: this.scriptParamsList,
                     transition: transition
                 }
             }
@@ -238,7 +243,7 @@ export default {
     },
     watch: {
         scriptParamsData: function(n) {
-            this.scriptParamsList = n
+            this.scriptParamsList = JSON.parse(JSON.stringify(n))
         }
     }
 }
