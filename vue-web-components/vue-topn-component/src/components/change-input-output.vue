@@ -100,6 +100,10 @@ export default {
         outArray: Array
     },
     methods: {
+		rerender() {
+			this.inputsArray = this.inputs 
+        	this.outputsArray = this.outputs
+		},
         selectInputItem(data) {
             this.inputsArray = []
             this.inputsArray.push(data)
@@ -124,10 +128,7 @@ export default {
             this.$emit('changScriptInputOutput', event)
         }
     },
-    mounted() {
-        // this.inputsArray = this.inputs 
-        // this.outputsArray = this.outputs
-    },
+    mounted() {},
     watch: {
         "inputs": function(n) {
             this.inputsArray = n

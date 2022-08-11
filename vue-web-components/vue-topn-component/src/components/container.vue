@@ -118,7 +118,7 @@ import ElRadioGroup from "element-ui/packages/radio-group/index"
 import ElRadioButton from "element-ui/packages/radio-button/index"
 import changeInputOutput from "./change-input-output"
 import ElDialog from 'element-ui/packages/dialog/src/component'
-import scriptParameters from "./script-parameters/parameters"
+import scriptParameters from "./script-parameters"
 import { Message } from 'element-ui'
 
 export default {
@@ -324,7 +324,17 @@ export default {
 			return result.concat(addtionCols)
         },
 		renderTab() {
-			debugger
+			if (this.activeName === "input/output") {
+				this.$refs.changeInputOutput.rerender()
+			} else if (this.activeName === "脚本参数") {
+				this.$refs.scriptParameters.rerender()
+			} else if (this.activeName === "Setting") {
+				this.$refs.filter.rerender()
+                this.$refs.computed.rerender()
+                this.$refs.topn.rerender()
+                this.$refs.retrieved.rerender()
+                this.$refs.outputs.rerender()
+			}
 		},
         save(transition) {
 			this.savePopup = false

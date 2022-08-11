@@ -76,6 +76,10 @@ export default {
 		this.validate()
     },
     methods: {
+		rerender() {
+			this.datasource = new PhFilterStep(this.step, this.schema)
+			this.validate()
+		},
         validate() {
 			const ErrorVales = this.datasource.command.cloases.filter(it => it['op'] !== 'EXISTS' && it['op'] !== 'NOT-EXISTS' && it.right.replace(/\s*/g,"").length === 0)
 			const event = new Event("event")
