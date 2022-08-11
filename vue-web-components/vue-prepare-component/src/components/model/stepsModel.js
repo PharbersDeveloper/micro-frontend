@@ -11,7 +11,7 @@ export default class PhStepsDyModel {
         this.jobName = this.getJobName()
         this.dsName = this.getUrlParam("inputName")
         this.stepsCount = 100
-        this.debugToken = "97e634b103cc5c14cc2aa00c1f5b8f4bb73b1d4bc727af0183c262649e1af5ad"
+        this.debugToken = "eacce9388efc85f51de434531e31f1dc8ef188982c298a7b68ad503bb66d6dcd"
         this.data = []
         this.store = new JsonApiDataStore()
         this.isReady = false

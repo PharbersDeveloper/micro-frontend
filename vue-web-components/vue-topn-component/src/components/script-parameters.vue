@@ -147,7 +147,8 @@ export default {
                 "des": "",
                 "level": 1, 
                 "index": 1
-            }
+            },
+			paramCount: 0
         }
     },
     props: {
@@ -190,6 +191,7 @@ export default {
             this.changeScriptParamsList = true
         },
         delParams(scope) {
+			this.paramCount++
             this.scriptParamsList.splice(scope.$index, 1)
         },
         inputContentName() {
@@ -215,7 +217,7 @@ export default {
             return true
         },
         confirm() {
-			debugger
+			this.paramCount++
             const val = this.validate()
             if(!val) return false
 
@@ -230,7 +232,7 @@ export default {
             const event = new Event("event")
             event.args = {
                 callback: "changeScriptParams",
-                element: this,
+                element: this.parent,
                 param: {
 					scriptParamsList: this.scriptParamsList,
                     transition: transition
