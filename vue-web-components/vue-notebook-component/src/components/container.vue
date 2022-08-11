@@ -8,7 +8,7 @@
                         <div class="selected_search">
                             <div class="selected" :class="[{ 'bg_disabled': notebookscheckedIds.length === 0 }]">
                                 <input type="checkbox" class="checkbox" ref="all" @click='chechedAllnotebooks()'
-                                    :checked="notebookscheckedIds.length === searchData.length">
+                                    :checked="notebookscheckedIds.length === AllData.length && AllData.length !== 0">
                                 <div class="opt-area" @click="dropShow">
                                     <span class="action">选项</span>
                                     <img :src="dropDownIcon" alt="" class="d_icon">
@@ -32,7 +32,7 @@
                                 <div class="search_icon">
                                     <img :src="search_icon">
                                 </div>
-                                <input type="text" placeholder="搜索" class="text_input" v-model="searchValue">
+                                <input type="text" placeholder="搜索当前页面" class="text_input" v-model="searchValue">
                             </div>
                             <button class="upload_btn" @click.stop="showCreationDialog = true">新建编译器</button>
                         </div>
@@ -58,11 +58,11 @@
                                 </span>
                                 <div class="label_selected" v-if="labelShowDialog">
                                     <div class="tag_arr">
-                                        <div class="label_name" v-for="(item, index) in allData.tagsArray" :key="index">
+                                        <!-- <div class="label_name" v-for="(item, index) in allData.tagsArray" :key="index">
                                             <span
                                                 :style="{ background: tagsColorArray[allData.tagsArray.indexOf(item)] }"></span>
                                             <div class="tags_name">{{ item }}</div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="management">
                                         <div class="manage_label" @click="createTagsOpen">管理标签</div>
@@ -70,18 +70,20 @@
                                 </div>
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
-                            <div class="notebooks_number">
-                                <p>{{ allData.dns.length }} 条</p>
+                            <div class="notebooks_number" v-if="searchValue.length !== 0">
+                                <p>{{ datasource.dns.length }} / {{ totalCount }} 条</p>
+                            </div>
+                            <div class="notebooks_number" v-else>
+                                <p>{{ totalCount }} 条</p> 
                             </div>
                         </div>
                     </div>
                     <!--                    <div class="upload_bottom" v-if="datasource.isReady">-->
-                    <div class="upload_bottom">
-                        <div class="data_content" v-for="(notebook, index) in searchData" :key="index" ref="content"
-                            :class="{ bg: notebookscheckedIds.indexOf(notebook.id) > -1 }"
+                    <div class="upload_bottom" ref="centerData">
+                        <div class="data_content" v-for="(notebook, index) in datasource.dns" :key="index" ref="content"
+                            :class="{ bg: notebookscheckedIds.indexOf(notebook.detail.id) > -1 }"
                             @click="clickOnlyOne(notebook, index)">
-                            <!-- @click="clickOnlyOne(notebook, index)" -->
-                            <div class="data_input" @click.stop="checkedMore(notebook,index)">
+                            <div class="data_input" @click.stop="checkedMore(notebook, index)">
                                 <input type="checkbox" ref="data" name="notebooksList"
                                 :checked="notebookscheckedIds.indexOf(notebook.detail.id) > -1"
                                 @click.stop="checkedOnenotebooks(notebook)">
@@ -99,17 +101,17 @@
                                             <img :src="defs.iconsByName(notebook.detail.ctype)" alt="">
                                         </span>
                                         <p class="data_name" @click.stop="clickNotebooksName(notebook)"
-                                            :title="notebook.name">
+                                            :title="notebook.detail.name">
                                             {{ notebook.detail.name }}
                                         </p>
                                         <el-tag type="danger" v-if="owner === notebook.detail.owner">我的编译器</el-tag>
 
                                         <div class="tag_area" ref="tagsArea">
-                                            <div v-for="(tag, inx) in notebook.detail.label" :key="inx">
+                                            <div v-for="(tag, inx) in notebook.label" :key="inx">
                                                 <span v-if="notebook.label !== ''">
                                                     <p :title="tag" class="tag_bg"
                                                         :style="{ background: tagsColorArray[allData.tagsArray.indexOf(tag)] }">
-                                                        {{ tag }}
+                                                        <!-- {{ tag }} -->
                                                     </p>
                                                 </span>
                                             </div>
@@ -126,7 +128,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="word" v-if="allData.dns === ''">当前项目无注册编辑器</div>
+                        <div class="word" v-show="datasource.dns.length == 0" v-if="searchValue.length !== 0">当前页面搜索无结果</div>
+                        <div class="word" v-show="datasource.dns.length == 0" v-else>当前项目无注册编辑器</div>
+                    </div>
+                    <div class="block">
+                        <div class="block_content">
+                            <p @click="goUp" v-if="AllData.length !== totalCount">更多</p>
+                            <p v-else>暂无更多</p>
+                        </div>
                     </div>
                 </div>
                 <div class="project_info_right">
@@ -140,8 +149,8 @@
                                     {{ notebookscheckedNames[0] }}
                                 </p>
                             </div>
-                            <div class="show-name">
-                                <p class="project_name_info" v-if="notebookscheckedIds.length > 1">
+                            <div class="show-name" v-if="notebookscheckedIds.length > 1">
+                                <p class="project_name_info">
                                     {{ notebookscheckedIds.length }} 条
                                 </p>
                             </div>
@@ -162,7 +171,7 @@
             </div>
             <!-- 添加tag -->
             <create-tags-dialog v-if="showCreateTagsDialog" :datasetchecked-ids="notebookscheckedIds"
-                :datasetchecked-names="notebookscheckedNames" :datasets="allData.dns" :tagsArray="allData.tagsArray"
+                :datasetchecked-names="notebookscheckedNames" :datasets="datasource.dns" :tagsArray="allData.tagsArray"
                 :tagsColorArray="tagsColorArray" @addTagsEvent="addTagsEvent" @closeCreateDialog="closeCreateDialog">
             </create-tags-dialog>
             <!-- 新建NoteBook -->
@@ -232,17 +241,23 @@ export default {
             loading: false,
             color: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab', '#77bec2', '#c7c7c7', '#a088bd', '#d66b9b', '#5354ec', '#acacff', '#1e8103', '#ec7211', '#ec7211', '#ea1c82', '#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883', '#90a8b7', '#94be8e', '#ff21ee', '#1ac2ab', '#77bec2', '#c7c7c7', '#a088bd', '#d66b9b', '#5354ec', '#acacff', '#1e8103', '#ec7211', '#ec7211', '#ea1c82', '#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
-            owner: ""
+            owner: "",
+            startKey: "",
+            projectId: "",
+            projectName: "",
+            AllData: [],
+            tagsArray: [],
+            totalCount: 0
         }
     },
     props: {
         allData: {
             type: Object,
             default: () => ({
-                "projectName": "ETL_Iterator",
-                "projectId": "JfSmQBYUpyb4jsei",
-                "dns": [],
-                "tagsArray": [],
+                // "projectName": "ETL_Iterator",
+                // "projectId": "JfSmQBYUpyb4jsei",
+                // "dns": [],
+                // "tagsArray": [],
                 "_isVue": true
             })
         },
@@ -267,43 +282,85 @@ export default {
         ElSwitch,
         ElTag
     },
-    computed: {
-        searchData: function () {
-            let searchValue = this.searchValue
-            // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-            this.state = 'search'
-            if (searchValue) {
-                // return this.allData.dns.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-                return this.datasource.model.filter(item => item.detail.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-            }
-            this.sort("ascending")
-            return this.datasource.model
-        }
-    },
+    computed: { },
     mounted() {
-        // let that = this
-        if (this.$refs.tagsArea) {
-            this.$refs.tagsArea.forEach((item) => {
-                item.style["height"] = "40px"
-            })
-        }
+        // if (this.$refs.tagsArea) {
+        //     this.$refs.tagsArea.forEach((item) => {
+        //         item.style["height"] = "40px"
+        //     })
+        // }
         this.owner = this.datasource.getCookie("account_id")
+
+        this.projectId = this.getUrlParam("projectId")
+        this.projectName = this.getUrlParam("projectName")
+        let that = this
+        this.loading = true
+        this.datasource.refreshJupyterData(this, '', ()=>{
+            that.startKey = this.datasource.startKey
+            that.totalCount = this.datasource.totalCount
+            this.datasource.refreshPlaceholders(this.datasource.dns)
+            const dnsIds = this.datasource.dns.map(x => x.id)
+            this.datasource.refreshStatus(this.datasource.tenantId, dnsIds, ()=>{
+                that.datasource.dns = this.datasource.model
+                that.AllData = that.datasource.dns
+            })
+        })
     },
     watch: {
-        "allData.tagsArray": function () {
-            this.tagsColorArray = []
-            this.allData.tagsArray.forEach(() => {
-                // this.allData.tagsArray.forEach((item, index) => {
-                this.tagsColorArray.push(this.color[Math.floor(Math.random() * 10 + Math.random() * 10)])
-            })
-        },
-        "allData.dns": function () {
-            this.datasource.refreshPlaceholders(this.allData.dns)
-            const dnsIds = this.allData.dns.map(x => x.id)
-            this.datasource.refreshStatus(this.allData.tenantId, dnsIds)
+        // "allData.tagsArray": function () {
+        //     this.tagsColorArray = []
+        //     this.allData.tagsArray.forEach(() => {
+        //         // this.allData.tagsArray.forEach((item, index) => {
+        //         this.tagsColorArray.push(this.color[Math.floor(Math.random() * 10 + Math.random() * 10)])
+        //     })
+        // },
+        searchValue(newValue, oldValue) {
+            this.searchValue = newValue
+            this.state = 'search'
+            this.search(this.searchValue)
         }
     },
     methods: {
+        search(value){
+            if (value) {
+                this.datasource.dns = this.AllData.filter(item => item.detail.name.toLowerCase().indexOf(value.toLowerCase()) > -1)
+            } else {
+                this.datasource.dns = this.AllData
+            }
+            // this.sort("ascending")
+        },
+        goUp(){
+            let that = this
+            this.loading = true
+            this.datasource.appendJupyterData(this, this.startKey, ()=>{
+                that.startKey = this.datasource.startKey
+                this.datasource.refreshPlaceholders(this.datasource.dns)
+                const dnsIds = this.datasource.dns.map(x => x.id)
+                this.datasource.refreshStatus(this.datasource.tenantId, dnsIds, ()=>{
+                    that.datasource.dns = that.AllData.concat(this.datasource.model)
+                    that.AllData = this.datasource.dns
+                    if (that.searchValue.length !== 0) {
+                        this.state = 'search'
+                        this.search(this.searchValue)
+                    }
+                    if (this.notebookscheckedIds.length < this.datasource.dns.length && this.notebookscheckedIds.length !== 0) {
+                        this.$refs.all.indeterminate = true
+                    }
+                })
+            })
+        },
+        getCookie(name) {
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
+            arr = document.cookie.match(reg)
+            if (arr) return (arr[2])
+            else return null
+        },
+        getUrlParam(value) {
+            let href = window.location.href
+            let paramArr = href.split("?")[1].split("&")
+            let data = paramArr.find(item => item.indexOf(value) > -1)
+            return data ? decodeURI(data).split("=")[1] : undefined
+        },
         handleClose(done) {
             this.$confirm('确认关闭？').then(() => {
                 done();
@@ -311,9 +368,9 @@ export default {
         },
         addTagsEvent(data) {
             data.args.param.selectednotebooks = this.notebookscheckedIds
-            data.args.param.notebooksArray = this.allData.dns
-            data.args.param.projectName = this.allData.projectName
-            data.args.param.projectId = this.allData.projectId
+            data.args.param.notebooksArray = this.datasource.dns
+            data.args.param.projectName = this.projectName
+            data.args.param.projectId = this.projectId
             this.$emit('event', data)
             this.showCreateTagsDialog = false;
         },
@@ -336,9 +393,8 @@ export default {
         },
         checkedMore(notebook,index){
             this.$refs.data[index].checked = !this.$refs.data[index].checked
-            console.log(this.$refs.data[index].checked)
             let idIndex = this.notebookscheckedIds.indexOf(notebook.detail.id)
-            if(idIndex >= 0) { 
+            if(idIndex >= 0) {
                 this.notebookscheckedIds.splice(idIndex, 1)
                 this.notebookscheckedNames.splice(idIndex, 1)
                 this.$refs.data[index].checked = false
@@ -347,10 +403,13 @@ export default {
                 this.notebookscheckedIds.push(notebook.detail.id)
                 this.notebookscheckedNames.push(notebook.detail.name)
             }
-            if(this.notebookscheckedIds.length == 1){
+            if (this.notebookscheckedIds.length == 1) {
                 this.script_icon_show = this.defs.iconsByName(notebook.detail.ctype)
-            }else{
+            } else {
                 this.script_icon_show = `${staticFilePath}` + "/icons/all_jupyter.svg"
+            }
+            if (this.notebookscheckedIds.length < this.datasource.dns.length && this.notebookscheckedIds.length !== 0) {
+                this.$refs.all.indeterminate = true
             }
         },
         //点击list多选框
@@ -372,10 +431,13 @@ export default {
             } else {
                 this.isStopStatus = false
             }
-            if (this.notebookscheckedIds.length == 1){
+            if (this.notebookscheckedIds.length == 1) {
                 this.script_icon_show = this.defs.iconsByName(notebook.detail.ctype)
-            }else{
+            } else {
                 this.script_icon_show = `${staticFilePath}` + "/icons/all_jupyter.svg"
+            }
+            if (this.notebookscheckedIds.length < this.datasource.dns.length && this.notebookscheckedIds.length !== 0) {
+                this.$refs.all.indeterminate = true
             }
         },
         //点击notebooks name
@@ -396,25 +458,25 @@ export default {
                     name: "notebook-" + notebook.detail.ctype,
                     detailName: notebook.detail.name,
                     resourceId: notebook.resourceId,
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId
+                    projectName: this.projectName,
+                    projectId: this.projectId
                 }
             }
             this.$emit('event', event)
         },
         //全选list
         chechedAllnotebooks() {
-            this.isCheckedAllnotebooks = this.notebookscheckedIds.length !== this.allData.dns.length;
+            this.isCheckedAllnotebooks = this.notebookscheckedIds.length !== this.AllData.length;
             this.notebookscheckedIds = []
             this.notebookscheckedNames = []
             this.notebookscheckedOwners = []
             //全选状态
             if (this.isCheckedAllnotebooks) {
                 this.script_icon_show = `${staticFilePath}` + "/icons/all_jupyter.svg"
-                this.allData.dns.forEach(item => {
-                    this.notebookscheckedIds.push(item.id)
-                    this.notebookscheckedNames.push(item.name)
-                    this.notebookscheckedOwners.push(item.owner)
+                this.AllData.forEach(item => {
+                    this.notebookscheckedIds.push(item.detail.id)
+                    this.notebookscheckedNames.push(item.detail.name)
+                    this.notebookscheckedOwners.push(item.detail.owner)
                 })
             }
         },
@@ -431,18 +493,17 @@ export default {
             if (val === 'ascending') {
                 // 升序->降序
                 this.ascending = false
-                // this.allData.dns.sort()
-                this.allData.dns.sort(
+                this.datasource.dns.sort(
                     function compareFunction(param1, param2) {
-                        if (param1.jobName) {
-                            return param1.jobName.localeCompare(param2.name);
+                        if (param1.detail.name) {
+                            return param1.detail.name.localeCompare(param2.name);
                         }
                     }
                 )
             } else if (val === 'descending') {
                 // 降序->升序
                 this.ascending = true
-                this.allData.dns.reverse()
+                this.datasource.dns.reverse()
             }
         },
         //排序条件下拉框
@@ -459,7 +520,7 @@ export default {
         },
         //增加 notebook
         createNotebook(data) {
-            data.args.param.projectId = this.allData.projectId
+            data.args.param.projectId = this.projectId
             this.$emit('event', data)
             this.showCreationDialog = false
         },
@@ -529,8 +590,8 @@ export default {
                 element: this,
                 param: {
                     name: "linkToProject",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId
+                    projectName: this.projectName,
+                    projectId: this.projectId
                 }
             }
             this.$emit('event', event)
@@ -564,9 +625,9 @@ export default {
             this.loading = true
             this.isStopStatus = false
             if (notebook.switch) {
-                this.datasource.resourceStart(this.allData.tenantId, notebook)
+                this.datasource.resourceStart(this.datasource.tenantId, notebook)
             } else {
-                this.datasource.resourceStop(this.allData.tenantId, notebook)
+                this.datasource.resourceStop(this.datasource.tenantId, notebook)
             }
         }
     }
@@ -1134,6 +1195,27 @@ export default {
                     font-weight: 600;
                     // height: 80px;
 
+                }
+            }
+
+            .block {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                flex: 1;
+                border-top: 1px solid #ddd;
+                .block_content {
+                    width: 200px;
+                    height: 100px;
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
+                    color:black;
+                    p {
+                        color: rgb(28, 30, 36);
+                        font-size: 18px;
+                        cursor: pointer;
+                    }
                 }
             }
         }
