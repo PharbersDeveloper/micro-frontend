@@ -110,7 +110,7 @@ export default {
             this.outputsArray.push(data)
             this.selectOutput = !this.selectOutput
         },
-        save() {
+        save(transition) {
             const event = new Event("event")
             event.args = {
                 callback: "changScriptInputOutput",
@@ -118,6 +118,7 @@ export default {
                 param: {
                     outputsArray: this.outputsArray,
                     inputsArray: this.inputsArray,
+					transition: transition
                 }
             }
             this.$emit('changScriptInputOutput', event)

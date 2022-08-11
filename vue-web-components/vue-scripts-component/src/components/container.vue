@@ -8,7 +8,7 @@
                         <div class="selected_search">
                             <div class="selected"
                                 :class="[{'bg_disabled': reciptcheckedIds.length == 0}]">
-                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="reciptcheckedIds.length === datasource.dcs.length">
+                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllDataset()' :checked="reciptcheckedIds.length === AllData.length && AllData.length !== 0">
                                 <div class="opt-area" @click="dropShow">
                                     <span class="action" >选项</span>
                                     <img :src="dropDownIcon" alt="" class="d_icon">
@@ -141,37 +141,34 @@
                         </div>
                     </div>
                     <div class="upload_bottom" ref="centerData">
-                        <div class="data_content" v-for="(recipt,index) in datasource.dcs" :key="index" ref="content" :class="{bg: reciptcheckedIds.indexOf(recipt.id) > -1}" @click="clickOnlyOne(recipt, index)">
-                            <div class="data_input" @click.stop="checkedMore(recipt)">
-                                <input type="checkbox" ref="data" name="reciptList" :checked="reciptcheckedIds.indexOf(recipt.id) > -1" @click.stop="checkedOneDataset(recipt)">
-                            </div>
-                            <div class="item_list">
-                                <span class="script_icon">
-                                    <img :src="selectScriptIcon(recipt.runtime)" alt="">
-                                </span>
-                                <p class="data_name" @click.stop="clickReciptName(recipt)" :title="recipt.outputs">compute_{{recipt.outputs}}</p>
-                                <div class="tag_area" ref="tagsArea">
-                                    <div v-for="(tag,inx) in recipt.label" :key="inx">
-                                        <span v-if="recipt.label !== ''">
-                                            <p
-                                                :title="tag"
-                                                class="tag_bg"
-                                                :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
-                                            </p>
-                                        </span>
+                        <div class="data_block_content">
+                            <div class="data_content" v-for="(recipt,index) in datasource.dcs" :key="index" ref="content" :class="{bg: reciptcheckedIds.indexOf(recipt.id) > -1}" @click="clickOnlyOne(recipt, index)">
+                                <div class="data_input" @click.stop="checkedMore(recipt)">
+                                    <input type="checkbox" ref="data" name="reciptList" :checked="reciptcheckedIds.indexOf(recipt.id) > -1" @click.stop="checkedOneDataset(recipt)">
+                                </div>
+                                <div class="item_list">
+                                    <span class="script_icon">
+                                        <img :src="selectScriptIcon(recipt.runtime)" alt="">
+                                    </span>
+                                    <p class="data_name" @click.stop="clickReciptName(recipt)" :title="recipt.outputs">compute_{{recipt.outputs}}</p>
+                                    <div class="tag_area" ref="tagsArea">
+                                        <div v-for="(tag,inx) in recipt.label" :key="inx">
+                                            <span v-if="recipt.label !== ''">
+                                                <p
+                                                    :title="tag"
+                                                    class="tag_bg"
+                                                    :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
+                                                </p>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="word" v-show="datasource.dcs.length == 0" v-if="searchValue.length !== 0">当前页面搜索无结果</div>
+                            <div class="word" v-show="datasource.dcs.length == 0" v-else>当前项目无数据</div>
                         </div>
-                        <div class="word" v-show="datasource.dcs.length == 0" v-if="searchValue.length !== 0">当前页面搜索无结果</div>
-                        <div class="word" v-show="datasource.dcs.length == 0" v-else>当前项目无数据</div>
-                    </div>
-                    <div class="block">
-                        <div class="block_content">
-                            <button @click="goForword" :disabled="cur_page === 1 ? true:false">上一页</button>
-                            <div class="block_pag">{{ cur_page }} / {{ Math.ceil(totalCount / 10) }}</div>
-                            <button @click="goUp" :disabled="Math.ceil(totalCount / 10) === cur_page ?true:false">下一页</button>
-                        </div>
+                        <p class="block" @click="goUp" v-if="AllData.length !== totalCount">更多</p>
+                        <p class="block" v-else>暂无更多</p>
                     </div>
                 </div>
                 <div class="project_info_right">
@@ -335,9 +332,7 @@ export default {
             showVisualAll: false,
             showCodeAll: false,
             showSparkAll: false,
-
             startKey: "",
-            cur_page: 1,
             projectId: "",
             projectName: "",
             AllData: [],
@@ -432,7 +427,7 @@ export default {
         bpOptionVue,
         ElButton
     },
-    computed: {},
+    computed: { },
     mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
@@ -457,58 +452,28 @@ export default {
     methods: {
         search(value){
             if (value) {
-                this.datasource.dcs = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page).filter(item => item.outputs.toLowerCase().indexOf(value.toLowerCase()) > -1)
+                this.datasource.dcs = this.AllData.filter(item => ("compute_" + item.outputs).toLowerCase().indexOf(value.toLowerCase()) > -1)
             }else{
-                this.datasource.dcs = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
+                this.datasource.dcs = this.AllData
             }
-            this.sort("ascending")
+            // this.sort("ascending")
         },
-        // 点击上一页
-        goForword(){
-            this.$refs.centerData.scrollTop = 0
-            this.cur_page = this.cur_page - 1
-            this.loading = true
-            if(this.cur_page >= 1 || this.cur_page < Math.ceil(this.AllData.length / 10)){
-                if(this.searchValue.length !== 0){
-                    this.datasource.dcs = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
-                    this.state = 'search'
-                    this.search(this.searchValue)
-                }else{
-                    this.datasource.dcs = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
-                }
-            }
-            this.loading = false
-        },
-        // 点击下一页
         goUp(){
-            this.$refs.centerData.scrollTop = 0
-            this.cur_page = this.cur_page + 1
-            if (Math.ceil(this.AllData.length / 10) >= this.cur_page) {
-                this.loading= true
-                if(this.searchValue.length !== 0){
-                    this.datasource.dcs = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
+            let that = this
+            this.loading = true
+            this.datasource.appendData(this,this.startKey,()=>{
+                that.startKey = this.datasource.startKey
+                that.AllData = this.datasource.dcs
+                if(that.searchValue.length !== 0){
+                    that.datasource.dcs = that.AllData
                     this.state = 'search'
                     this.search(this.searchValue)
-                }else{
-                    this.datasource.dcs = this.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
+                }
+                if (this.reciptcheckedIds.length < this.datasource.dcs.length && this.reciptcheckedIds.length !== 0) {
+                    this.$refs.all.indeterminate = true
                 }
                 this.loading = false
-            } else{
-                let that = this
-                this.loading = true
-                this.datasource.appendData(this,this.startKey,()=>{
-                    that.startKey = this.datasource.startKey
-                    that.AllData = this.datasource.dcs
-                    if(that.searchValue.length !== 0){
-                        that.datasource.dcs = that.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
-                        this.state = 'search'
-                        this.search(this.searchValue)
-                    }else{
-                        that.datasource.dcs = that.AllData.slice(10 * (this.cur_page - 1), 10 * this.cur_page)
-                    }
-                    this.loading = false
-                })
-            }
+            })
         },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
@@ -584,10 +549,18 @@ export default {
                 this.reciptcheckedIds.push(recipt.id)
                 this.reciptcheckedNames.push(recipt.jobShowName)
             }
-            if(this.reciptcheckedIds.length == 1){
+            if (this.reciptcheckedIds.length == 1) {
                 this.script_icon_show = this.selectScriptIcon(recipt.runtime)
-            }else{
+            } else {
                 this.script_icon_show = `${staticFilePath}` + "/icons/all_script.svg"
+            }
+            if (this.reciptcheckedIds.length < this.datasource.dcs.length && this.reciptcheckedIds.length !== 0) {
+                this.$refs.all.indeterminate = true
+            } else if (this.reciptcheckedIds.length === this.datasource.dcs.length){
+                this.$refs.all.indeterminate = false
+                this.isCheckedAllDataset = true
+            } else {
+                this.$refs.all.indeterminate = false
             }
         },
         //点击list多选框
@@ -600,10 +573,18 @@ export default {
                 this.reciptcheckedIds.push(recipt.id)
                 this.reciptcheckedNames.push(recipt.jobShowName)
             }
-            if(this.reciptcheckedIds.length == 1){
+            if (this.reciptcheckedIds.length == 1) {
                 this.script_icon_show = this.selectScriptIcon(recipt.runtime)
-            }else{
-                this.script_icon_show  = `${staticFilePath}` + "/icons/all_script.svg"
+            } else {
+                this.script_icon_show = `${staticFilePath}` + "/icons/all_script.svg"
+            }
+            if (this.reciptcheckedIds.length < this.datasource.dcs.length && this.reciptcheckedIds.length !== 0) {
+                this.$refs.all.indeterminate = true
+            } else if (this.reciptcheckedIds.length === this.datasource.dcs.length){
+                this.$refs.all.indeterminate = false
+                this.isCheckedAllDataset = true
+            } else {
+                this.$refs.all.indeterminate = false
             }
         },
         //点击dataset name
@@ -974,6 +955,8 @@ export default {
         .project_info_left {
             flex: 1;
             border-right: 1px solid #dddddd;
+            display: flex;
+            flex-direction: column;
 
             .upload_top {
                 height: 100px;
@@ -1279,8 +1262,12 @@ export default {
             }
 
             .upload_bottom {
-                height: calc(100vh - 280px);
+                height: calc(100vh - 160px);
+                flex-grow: 1;
                 overflow: auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
                 .word {
                     width: 100%;
                     height: 618px;
@@ -1297,96 +1284,115 @@ export default {
                     cursor: pointer;
                 }
 
-                .data_content {
-                    display: flex;
-                    width: 100%;
-                    box-sizing: border-box;
-                    // height: 60px;
-                    border-bottom: 1px solid #dddddd;
-                    padding: 10px 0 10px 10px;
-                    align-items: center;
-                    .data_input {
-                        width: 40px;
-                        height: 40px;
-                        input{
-                            height: 40px;
-                            cursor: pointer;
-                        }
-                    }
-                    .tag_bg:hover::after {
-                        content: attr(data-title);    //取到data-title属性的值
-                        display: inline-block;
-                        padding: 10px 14px;
-                        border: 1px solid #ddd;
-                        border-radius: 5px;
-                        position: absolute;
-                        top: -50px;
-                        left: -30px;
-                    }
-                    .tag_bg {
-                        position: relative;
-                        // top: -8px;
-                        left: 0px;
-                        font-size: 12px;
-                        color: #fff;
-                        height: 16px;
-                        text-align: center;
-                        padding: 0 8px;
-                        border-radius: 10px;
-                        margin-left: 10px;
-                        margin-bottom: 5px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        max-width: 120px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                        padding: 0 10px;
-                    }
-                    .item_list {
-                        display: flex;
-                    }
-                    .script_icon {
-                        // margin-left: 27px;
-                        width: 30px;
-                        max-width: 30px;
-                        height: 30px;
+                .data_block_content{
+                    display:flex;
+                    flex-direction: column;
+                    flex-grow: 1;
 
-                        img {
-                            width: 30px;
-                            height: 30px;
-                        }
-                    }
-                    .data_name {
-                        margin-left: 27px;
-                        font-family: PingFangSC-Medium;
-                        font-size: 14px;
-                        color: #000000;
-                        font-weight: 600;
-                        width: 400px;
-                        min-width: 400px;
-                        height: 40px;
-                        line-height: 40px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                    }
-                    .tag_area {
+                    .data_content {
                         display: flex;
-                        flex-wrap: wrap;
-                        overflow: hidden;
-                        img {
-                            width: 20px;
-                            height: 20px;
+                        width: 100%;
+                        height: 60px;
+                        box-sizing: border-box;
+                        // height: 60px;
+                        border-bottom: 1px solid #dddddd;
+                        padding: 10px 0 10px 10px;
+                        // align-items: center;
+                
+                        .data_input {
+                            width: 40px;
+                            height: 40px;
+                
+                            input {
+                                height: 40px;
+                                cursor: pointer;
+                            }
                         }
-                        .more_tags {
-                            display: none;
+                    
+                        .tag_bg:hover::after {
+                            content: attr(data-title); //取到data-title属性的值
+                            display: inline-block;
+                            padding: 10px 14px;
+                            border: 1px solid #ddd;
+                            border-radius: 5px;
+                            position: absolute;
+                            top: -50px;
+                            left: -30px;
+                        }
+                
+                        .tag_bg {
                             position: relative;
-                            top: -8px;
+                            // top: -8px;
+                            left: 0px;
+                            font-size: 12px;
+                            color: #fff;
+                            height: 16px;
+                            text-align: center;
+                            padding: 0 8px;
+                            border-radius: 10px;
                             margin-left: 10px;
+                            margin-bottom: 5px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            max-width: 120px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            padding: 0 10px;
+                        }
+                    
+                        .item_list {
+                            display: flex;
+                        }
+                
+                        .script_icon {
+                            // margin-left: 27px;
+                            width: 30px;
+                            max-width: 30px;
+                            height: 30px;
+                
+                            img {
+                                width: 30px;
+                                height: 30px;
+                            }
+                        }
+                
+                        .data_name {
+                            margin-left: 27px;
+                            font-family: PingFangSC-Medium;
+                            font-size: 14px;
+                            color: #000000;
+                            font-weight: 600;
+                            width: 400px;
+                            min-width: 400px;
+                            height: 40px;
+                            line-height: 40px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            text-align: none;
+                        }
+                
+                        .tag_area {
+                            display: flex;
+                            flex-wrap: wrap;
+                            overflow: hidden;
+                
+                            img {
+                                width: 20px;
+                                height: 20px;
+                            }
+                
+                            .more_tags {
+                                display: none;
+                                position: relative;
+                                top: -8px;
+                                margin-left: 10px;
+                            }
                         }
                     }
+                    
                 }
 
                 .tip {
@@ -1397,32 +1403,13 @@ export default {
                     // height: 80px;
 
                 }
-            }
 
-            .block {
-                display: flex;
-                justify-content: space-around;
-                align-items: center;
-                flex: 1;
-                .block_content {
-                    width: 200px;
-                    height: 100px;
-                    display: flex;
-                    justify-content: space-around;
-                    align-items: center;
-                    color:black;
-                    button {
-                        width: 50px;
-                        height: 30px;
-                        line-height: 30px;
-                        align-items: center;
-                        border: none;
-                        background-color: #F4F4F5;
-                        border-radius: 5px;
-                    }
-                    div {
-                        font-size: 14px;
-                    }
+                .block{
+                    color: rgb(28, 30, 36);
+                    font-size: 18px;
+                    cursor: pointer;
+                    text-align: center;
+                    line-height: 60px;
                 }
             }
         }
@@ -1435,7 +1422,7 @@ export default {
                 font-size: 14px;
                 color: #838383;
                 text-align: center;
-                line-height: 800px;
+                line-height: calc(100vh - 40px);
             }
 
             .view_content {

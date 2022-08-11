@@ -16,12 +16,12 @@
             </div>
             <div class="count">
                 <el-button type="primary"  @click="addScriptParamsList">添加</el-button>
-                <div>count: {{totalCount}}</div>
+                <div>count: {{scriptParamsList.length}}</div>
             </div>
             <el-table
                 ref="table"
                 class="script-param-table"
-                :data="scriptParamsData"
+                :data="scriptParamsList"
                 style="width: 100%">
                 <el-table-column
                     type="index"
@@ -50,12 +50,11 @@
                     label="描述">
                 </el-table-column>
                 <el-table-column
-                    fixed="right"
                     label="操作"
                     width="100">
                     <template slot-scope="scope">
                         <el-button @click="editParams(scope)" type="text" size="medium">编辑</el-button>
-                        <el-button type="text" size="medium">删除</el-button>
+                        <el-button @click="delParams(scope)" type="text" size="medium">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -66,18 +65,28 @@
             width="800px">
             <div class="content">
                 <el-form ref="form" label-width="80px">
-                    <el-form-item label="活动名称">
-                        <el-input v-model="content.name"></el-input>
+                    <el-form-item label="名称">
+                        <el-input 
+                            :class="[{'error-border': content.name === '' || duplicateContentName}]"
+                            @input="inputContentName()"
+                            v-model="content.name"></el-input>
                     </el-form-item>
+                    <div class="error-msg" v-show="duplicateContentName">参数名称已存在！</div>
+                    <div class="error-msg" v-show="content.name === ''">请填写参数名称！</div>
                     <div class="type-param">
                         <el-form-item label="默认值" class="default">
-                            <el-input v-model="content.default"></el-input>
+                            <el-input 
+                                :class="[{'error-border': content.default === ''}]"
+                                v-model="content.default"></el-input>
                         </el-form-item>
                         <select name="type" id="" v-model="content.type">
                             <option value="String">String</option>
+                            <option value="Double">Double</option>
                             <option value="Bigint">Bigint</option>
                         </select>
                     </div>
+                    <div class="error-msg" v-show="content.default === ''">请填写默认值！</div>
+
                     <div class="level-param">
                         <el-form-item label="优先级">
                             <el-input-number 
@@ -87,13 +96,16 @@
                         <div class="desc">（数值越大，优先级越低）</div>
                     </div>
                     <el-form-item label="描述">
-                        <el-input type="textarea" v-model="content.des"></el-input>
+                        <el-input type="textarea" 
+                            :class="[{'error-border': content.des === ''}]"
+                            v-model="content.des"></el-input>
                     </el-form-item>
+                    <div class="error-msg" v-show="content.des === ''">请填写描述！</div>
                 </el-form>
             </div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="changeScriptParamsList = false">取消</el-button>
-                <el-button type="primary"  @click="on_clickChangeScriptParamsList">确认</el-button>
+                <el-button type="primary"  @click="confirm">确认</el-button>
             </span>
         </el-dialog>
    </div>
@@ -123,11 +135,11 @@ export default {
     data() {
         return {
             paramName: "",
-            totalCount: 0,
             changeScriptParamsList: false,
             scriptParamsList: [],
+            duplicateContentName: false,
             dialogTitle: "",
-			scopeRowIndex: 0,
+            scopeRowIndex: 0,
             content: {
                 "name": "",
                 "default": "",
@@ -135,8 +147,7 @@ export default {
                 "des": "",
                 "level": 1, 
                 "index": 1
-            },
-			scopeRowData: {}
+            }
         }
     },
     props: {
@@ -151,6 +162,15 @@ export default {
     methods: {
         addScriptParamsList() {
             this.dialogTitle = "添加参数"
+            this.content = {
+                "name": "",
+                "default": "",
+                "type": "String",
+                "des": "",
+                "level": 1, 
+                "index": 1
+            }
+            this.duplicateContentName = false
             this.changeScriptParamsList = true
         },
         searchParamName(data) {
@@ -160,38 +180,66 @@ export default {
             return index + 1;
         },
         editParams(scope) {
-			this.dialogTitle = "修改参数"
+            this.dialogTitle = "修改参数"
             this.scopeRowIndex = scope.$index
             this.content = JSON.parse(JSON.stringify(scope.row))
-            this.scopeRowData = scope.row
+            this.duplicateContentName = false
             this.changeScriptParamsList = true
         },
-        on_clickChangeScriptParamsList() {
+        delParams(scope) {
+            this.scriptParamsList.splice(scope.$index, 1)
+        },
+        inputContentName() {
+            const name = this.content.name
+            let arr = []
+            if (this.dialogTitle === "添加参数") {
+                arr = this.scriptParamsList.filter(it => it.name === name)
+            } else if (this.dialogTitle === "修改参数") {
+                const list = this.scriptParamsList.filter((it,i) => i !== this.scopeRowIndex)
+                arr = list.filter(it => it.name === name)
+            }
+
+            if (arr.length > 0) {
+                this.duplicateContentName = true
+            } else {
+                this.duplicateContentName = false
+            }
+        },
+        validate() {
+            if (this.content.name === "" || this.content.default === '' || this.content.des === '' || this.duplicateContentName) {
+                return false
+            }
+            return true
+        },
+        confirm() {
+            const val = this.validate()
+            if(!val) return false
+
             if (this.dialogTitle === "添加参数") {
                 this.scriptParamsData.push(this.content)
             } else if (this.dialogTitle === "修改参数") {
-                this.scopeRowData = this.content
-                this.$refs.table.doLayout()
+                this.$set(this.scriptParamsList, this.scopeRowIndex, this.content)
             }
             this.changeScriptParamsList = false
-		},
-		save() {
+        },
+        save(transition) {
             const event = new Event("event")
             event.args = {
                 callback: "changeScriptParams",
                 element: this,
                 param: {
-                    content: this.content
+                    transition: transition
                 }
             }
             this.$emit('changeScriptParams', event)
         }
     },
     mounted() {
-        this.scriptParamsList = this.scriptParamsData
     },
     watch: {
-        
+        scriptParamsData: function(n) {
+            this.scriptParamsList = n
+        }
     }
 }
 </script>
@@ -213,6 +261,7 @@ export default {
         /deep/.el-dialog__wrapper {
             background: rgba(0, 0, 0, 0.31);
         }
+
 
         .content {
             .type-param {
@@ -236,6 +285,23 @@ export default {
                     margin-top: 10px;
                 }
             }
+
+            .error-msg {
+                font-size: 13px;
+                color: #ce1228;
+                margin-left: 80px;
+                margin-bottom: 20px;
+            }
+
+            .error-border {
+                .el-input__inner, .el-textarea__inner {
+                    border-color: #ce1228 !important;
+                }
+            }
+
+            .el-form-item {
+                margin-bottom: 10px;
+            }
         }
 
         .script-param {
@@ -244,6 +310,7 @@ export default {
             padding: 20px;
             box-sizing: border-box;
             background: #fff;
+            overflow: hidden;
 
             .title {
                 display: flex;
@@ -280,7 +347,8 @@ export default {
             }
 
             .script-param-table {
-                
+                height: calc(100vh - 400px);
+                overflow: auto;
             }
             
         }
