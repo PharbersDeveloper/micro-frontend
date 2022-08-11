@@ -65,7 +65,7 @@
             width="800px">
             <div class="content">
                 <el-form ref="form" label-width="80px">
-                    <el-form-item label="活动名称">
+                    <el-form-item label="名称">
                         <el-input 
                             :class="[{'error-border': content.name === '' || duplicateContentName}]"
                             @input="inputContentName()"
@@ -81,6 +81,7 @@
                         </el-form-item>
                         <select name="type" id="" v-model="content.type">
                             <option value="String">String</option>
+                            <option value="Double">Double</option>
                             <option value="Bigint">Bigint</option>
                         </select>
                     </div>

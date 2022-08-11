@@ -226,6 +226,8 @@ export default {
 		saveScriptParams(data) {
 			if (data) {
 				this.save()
+			} else {
+				this.renderTab()
 			}
 			this.activeName = this.activeNameNext
 			this.ScriptParams = false
@@ -321,7 +323,11 @@ export default {
 
 			return result.concat(addtionCols)
         },
+		renderTab() {
+			debugger
+		},
         save(transition) {
+			this.savePopup = false
             if (this.activeName === "Setting") {
                 
                 this.$refs.filter.validate()

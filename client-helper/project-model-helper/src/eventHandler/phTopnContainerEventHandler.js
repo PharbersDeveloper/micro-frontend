@@ -5,7 +5,7 @@ export async function phTopnContainerEventHandler(e, route) {
 	const params = e.detail[0].args.param
 	const element = e.detail[0].args.element
 	const accessToken = route.cookies.read("access_token")
-	let transition = false
+	let transition = 0
 	let uri = ""
 	route.msg = "新建"
 
@@ -59,6 +59,7 @@ export async function phTopnContainerEventHandler(e, route) {
 			if (params) {
 				const url = `${hostName}/phresourcecodegentrigger`
 				const uuid = guid()
+				route.msg = "修改"
 				route.loadingService.loading.style.display = "flex"
 				route.loadingService.loading.style["z-index"] = 2
 				route.projectId = params.projectId
