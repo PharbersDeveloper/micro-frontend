@@ -9,7 +9,7 @@ export default class PhDataSource {
 		this.parent = parent
         this.store = new JsonApiDataStore()
         this.resetData()
-        this.debugToken = "27a68748c55abfadcab0a85e012b1c73f7380ed319cf734a6cb179d45b1ea24d"
+        this.debugToken = "569215fe7d9a4df4ee26f891fa18bbed596da35eba67cef828e168a932327dbd"
     }
 
     resetData() {

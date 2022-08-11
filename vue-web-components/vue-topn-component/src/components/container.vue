@@ -9,6 +9,7 @@
             <div class="header_right">
                 <el-radio-group v-model="activeName" class="content">
                     <el-radio-button label="Setting"></el-radio-button>
+                    <el-radio-button label="脚本参数"></el-radio-button>
                     <el-radio-button label="input/output"></el-radio-button>
                 </el-radio-group>
                 <el-button class="save" @click="save">保存</el-button>
@@ -53,6 +54,13 @@
                 Schema 不对，找产品处理
             </div>
         </div>
+        <div v-show="activeName === '脚本参数'">
+			<script-parameters
+				ref="scriptParameters"
+				@changeScriptParams="changeScriptParams"
+				:scriptParamsData="datasource.scriptParamsData"
+			/>
+		</div>
         <div v-show="activeName === 'input/output'">
             <change-input-output
                 ref="changeInputOutput"
@@ -80,6 +88,7 @@ import RetrievedCols from './steps/commands/retrieved-cols/retrievedColsView'
 import ElRadioGroup from "element-ui/packages/radio-group/index"
 import ElRadioButton from "element-ui/packages/radio-button/index"
 import changeInputOutput from "./change-input-output"
+import scriptParameters from "./script-parameters/parameters"
 import { Message } from 'element-ui'
 
 export default {
@@ -94,7 +103,8 @@ export default {
         Outputs,
         ElRadioGroup,
         ElRadioButton,
-        changeInputOutput
+        changeInputOutput,
+		scriptParameters
     },
     data() {
         return {
@@ -107,7 +117,7 @@ export default {
             inputs: [],
             active: 3,
             flowVersion: "developer",
-            activeName: "Setting",
+            activeName: "脚本参数",
             datasetArray: [],
             stepsDefs: [
                 {
@@ -143,11 +153,19 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    projectId: "YZYijD17N9L6LXx",
-                    projectName: "autorawdata2021",
-                    outputs: [],
-                    inputs: []
-                }
+					"projectName": "demo",
+					"projectId": "ggjpDje0HUC2JW",
+					"inputs": [
+						"水果"
+					],
+					"outputs": [
+						"t1"
+					],
+					"jobName": "compute_t1",
+					"jobId": "aFOud5mcnHsH9iR",
+					"_isVue": true,
+					"popupBack": true
+				}
             }
         },
         defs: {
@@ -164,6 +182,9 @@ export default {
         }
     },
     methods: {
+		changeScriptParams(data) {
+			this.datasource.saveScriptParams(data, this)
+		},
         getUrlParam(value) {
             let href = window.location.href
             let paramArr = href.split("?")[1].split("&")
@@ -276,9 +297,11 @@ export default {
                     "computedColumns": this.$refs.computed.datasource.revert2Defs()
                 }
                 this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
-            } else {
+            } else if (this.activeName === "input/output") {
                 this.$refs.changeInputOutput.save()
-            }
+            } else {
+				this.$refs.scriptParameters.save()
+			}
             
         },
         changScriptInputOutput(data) {
@@ -352,6 +375,7 @@ export default {
         this.jobName = this.getJobName()
         this.jobId = this.getUrlParam("jobId")
         this.datasetId = this.getUrlParam("datasetId")
+		this.datasource.refreshScriptParameter(this.projectId, this.jobId)
         this.datasource.refreshData(this.projectId, this.jobName, this.jobId)
         this.datasource.refreshDataset(this.projectId, this.datasetId)
         this.datasource.refreshInOut(this.projectId, this.jobShowName)

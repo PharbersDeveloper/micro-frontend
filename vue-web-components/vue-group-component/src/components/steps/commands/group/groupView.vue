@@ -61,7 +61,7 @@
                                 <el-checkbox-button v-model="scope.row.sum">Sum</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.avg">Avg</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.stddev">Stddev</el-checkbox-button>
-								<el-checkbox-button v-model="scope.row.count">count</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.count">count</el-checkbox-button>
                             </div>
                         </template>
                     </el-table-column>
@@ -76,13 +76,12 @@
                     </el-table-column>
                     <el-table-column width="120">
                         <template slot-scope="scope">
-                            <div class="popover" v-show="scope.row.showPopover">
+                            <div class="popover" v-show="scope.row.showPopover && (scope.row.first || scope.row.last || scope.row.concat)">
                                 <div class="popitem" v-show="scope.row.first || scope.row.last">
                                     <div class="label">Order first/last by</div>
-                                    <!-- <el-input v-model="scope.row.orderColumn"></el-input> -->
                                     <select 
                                         v-model="scope.row.orderColumn">
-                                        <option v-for="(item, index) in schemaDafault" :label="item.title" :key="index" :value="item.title" />
+                                        <option v-for="(item, index) in schemaDafault" :label="item.src" :key="index" :value="item.src" />
                                     </select>
                                 </div>
                                 <div class="popitem" v-show="scope.row.first || scope.row.last">
@@ -172,13 +171,17 @@ export default {
             data.showPopover = !data.showPopover
             this.$refs.table.doLayout()
         },
-		renderSchema() {
-			const columns = this.schema.map(it => it.title)
-			this.datasource.keys = this.datasource.keys.filter(it => columns.includes(it))
-			this.datasource.commands = this.datasource.commands.filter(it => columns.includes(it.column))
-		},
+        renderSchema() {
+            this.schemaArray = this.$parent.computeSchema()
+
+            this.datasource.resetCommands(this.schemaArray)
+            this.notGroupedCommands = this.resetSelectGroupKeys()
+
+            const columns = this.schemaArray.map(it => it.title)
+            this.datasource.keys = this.datasource.keys.filter(it => columns.includes(it))
+        },
         validate() {
-			this.renderSchema()
+            this.renderSchema()
 
             const ErrorVales = !this.computedGroupCount && !this.checkGroupedKeys()
             this.$emit('statusChange', ErrorVales)
