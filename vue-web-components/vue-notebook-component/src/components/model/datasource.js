@@ -15,7 +15,7 @@ export default class PhDataSource {
         this.dns = []
         this.startKey = ""
         this.totalCount = 0
-        this.batch_size = 10
+        this.batch_size = 20
         this.store = new JsonApiDataStore()
     }
 
