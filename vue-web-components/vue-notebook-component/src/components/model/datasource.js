@@ -1,5 +1,6 @@
 
 import { hostName } from "../../config/envConfig"
+import { JsonApiDataStore } from "jsonapi-datastore"
 import PhStatusModel from "./status-model"
 
 export default class PhDataSource {
@@ -10,6 +11,33 @@ export default class PhDataSource {
         this.isReady = false
         this.parent = parent
         this.model = []
+        this.tenantId = ""
+        this.dns = []
+        this.startKey = ""
+        this.totalCount = 0
+        this.batch_size = 10
+        this.store = new JsonApiDataStore()
+    }
+
+    jsonapiAdapter(data) {
+        const dashToHump = function (value) {
+            const textArr = value.split("-");
+            return textArr.map((item, index) => {
+			  if (index === 0) return item.toLowerCase();
+			  return item.slice(0, 1).toUpperCase() + item.slice(1);
+            }).join("");
+        }
+        data.map(item => {
+            Object.keys(item).map(keys => {
+                let newK = dashToHump(keys)
+                if (newK !== keys) {
+                    item[newK] = item[keys]
+                    delete item[keys]
+                }
+            })
+            return item
+        })
+        return data
     }
 
     getCookie(name) {
@@ -20,9 +48,71 @@ export default class PhDataSource {
     }
 
     refreshPlaceholders(dns) {
+        this.model = []
         dns.forEach(x => {
             this.model.push(new PhStatusModel(x.id, 0, this.guid(), x))
         })
+    }
+
+    // jupyter
+    buildQuery(ele, key){
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        this.tenantId = ele.getCookie("company_id")
+        let body = {
+            table: "resource",
+            conditions: {
+                tenantId: ["=", this.tenantId],
+                role: ["=", "codeeditor"]
+            },
+            index_name: "tenantId-role-index",
+            limit: this.batch_size,
+            start_key: key
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                Authorization: accessToken,
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                accept: "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    // 首次加载jupyter
+    refreshJupyterData(ele, key, callback=null) {
+        let that = this
+        ele.datasource.buildQuery(ele, key)
+            .then((response) => response.json())
+            .then((response) => {
+                that.store.sync(response)
+                // 下一页的key
+                that.startKey = response.meta.start_key
+                that.totalCount = response.meta.total_count
+                that.dns = that.jsonapiAdapter(that.store.findAll("resources"))
+                ele.needRefresh++
+                if(callback)
+                    callback()
+            })
+    }
+
+    // 下一页jupyter
+    appendJupyterData(ele, key, callback=null) {
+        let that = this
+        ele.datasource.buildQuery(ele, key)
+            .then((response) => response.json())
+            .then((response) => {
+                that.store = new JsonApiDataStore()
+                that.store.sync(response)
+                ele.datasource.dns = that.jsonapiAdapter(that.store.findAll("resources"))
+                that.startKey = response.meta.start_key
+                ele.needRefresh++
+                if(callback)
+                    callback()
+            })
     }
 
     buildStatusQuery(tenantId, resourceIds) {
@@ -44,7 +134,7 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    refreshStatus(tenantId, resourceIds) {
+    refreshStatus(tenantId, resourceIds, callback=null) {
         const that = this
         that.parent.loading = true
         this.buildStatusQuery(tenantId, resourceIds)
@@ -62,6 +152,8 @@ export default class PhDataSource {
                 })
                 this.isReady = true
                 that.parent.loading = false
+                if(callback)
+                    callback()
             })
     }
 
