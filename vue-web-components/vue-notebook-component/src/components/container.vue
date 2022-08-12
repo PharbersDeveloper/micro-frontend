@@ -74,68 +74,68 @@
                                 <p>{{ datasource.dns.length }} / {{ totalCount }} 条</p>
                             </div>
                             <div class="notebooks_number" v-else>
-                                <p>{{ totalCount }} 条</p> 
+                                <p>{{ totalCount }} 条</p>
                             </div>
                         </div>
                     </div>
                     <!--                    <div class="upload_bottom" v-if="datasource.isReady">-->
                     <div class="upload_bottom" ref="centerData">
-                        <div class="data_content" v-for="(notebook, index) in datasource.dns" :key="index" ref="content"
-                            :class="{ bg: notebookscheckedIds.indexOf(notebook.detail.id) > -1 }"
-                            @click="clickOnlyOne(notebook, index)">
-                            <div class="data_input" @click.stop="checkedMore(notebook, index)">
-                                <input type="checkbox" ref="data" name="notebooksList"
-                                :checked="notebookscheckedIds.indexOf(notebook.detail.id) > -1"
-                                @click.stop="checkedOnenotebooks(notebook)">
-                            </div>
-                            <div class="data_input_left">
-                                <div class="content-left">
-                                    <!-- <div style="display: flex; flex-direction: column; justify-content: space-around"> -->
-                                    <!-- <div class="data_input" @click="checkedMore(notebook)">
+                        <div class="data_block_content">
+                            <div class="data_content" v-for="(notebook, index) in datasource.dns" :key="index"
+                                ref="content" :class="{ bg: notebookscheckedIds.indexOf(notebook.detail.id) > -1 }"
+                                @click="clickOnlyOne(notebook, index)">
+                                <div class="data_input" @click.stop="checkedMore(notebook, index)">
+                                    <input type="checkbox" ref="data" name="notebooksList"
+                                        :checked="notebookscheckedIds.indexOf(notebook.detail.id) > -1"
+                                        @click.stop="checkedOnenotebooks(notebook)">
+                                </div>
+                                <div class="data_input_left">
+                                    <div class="content-left">
+                                        <!-- <div style="display: flex; flex-direction: column; justify-content: space-around"> -->
+                                        <!-- <div class="data_input" @click="checkedMore(notebook)">
                                         <input type="checkbox" ref="data" name="notebooksList"
                                         :checked="notebookscheckedIds.indexOf(notebook.detail.id) > -1"
                                         @click.stop="checkedOnenotebooks(notebook)">
                                     </div> -->
-                                    <div class="item_list">
-                                        <span class="script_icon">
-                                            <img :src="defs.iconsByName(notebook.detail.ctype)" alt="">
-                                        </span>
-                                        <p class="data_name" @click.stop="clickNotebooksName(notebook)"
-                                            :title="notebook.detail.name">
-                                            {{ notebook.detail.name }}
-                                        </p>
-                                        <el-tag type="danger" v-if="owner === notebook.detail.owner">我的编译器</el-tag>
+                                        <div class="item_list">
+                                            <span class="script_icon">
+                                                <img :src="defs.iconsByName(notebook.detail.ctype)" alt="">
+                                            </span>
+                                            <p class="data_name" @click.stop="clickNotebooksName(notebook)"
+                                                :title="notebook.detail.name">
+                                                {{ notebook.detail.name }}
+                                            </p>
+                                            <el-tag type="danger" v-if="owner === notebook.detail.owner">我的编译器</el-tag>
 
-                                        <div class="tag_area" ref="tagsArea">
-                                            <div v-for="(tag, inx) in notebook.label" :key="inx">
-                                                <span v-if="notebook.label !== ''">
-                                                    <p :title="tag" class="tag_bg"
-                                                        :style="{ background: tagsColorArray[allData.tagsArray.indexOf(tag)] }">
-                                                        <!-- {{ tag }} -->
-                                                    </p>
-                                                </span>
+                                            <div class="tag_area" ref="tagsArea">
+                                                <div v-for="(tag, inx) in notebook.label" :key="inx">
+                                                    <span v-if="notebook.label !== ''">
+                                                        <p :title="tag" class="tag_bg"
+                                                            :style="{ background: tagsColorArray[allData.tagsArray.indexOf(tag)] }">
+                                                            <!-- {{ tag }} -->
+                                                        </p>
+                                                    </span>
+                                                </div>
+                                                <!-- tag的更多按钮，暂时隐藏 -->
+                                                <!-- <img src=`${staticFilePath}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                             </div>
-                                            <!-- tag的更多按钮，暂时隐藏 -->
-                                            <!-- <img src=`${staticFilePath}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
                                         </div>
                                     </div>
-                                </div>
-                                <div @click.stop>
-                                    <span>{{ notebook.message }}</span>
-                                    <el-switch v-if="notebook.editable && owner === notebook.detail.owner"
-                                        v-model="notebook.switch" active-color="#13ce66" @change="resetStatus(notebook)" />
-                                    <el-switch v-else disabled v-model="notebook.switch" active-color="#13ce66" />
+                                    <div @click.stop>
+                                        <span>{{ notebook.message }}</span>
+                                        <el-switch v-if="notebook.editable && owner === notebook.detail.owner"
+                                            v-model="notebook.switch" active-color="#13ce66"
+                                            @change="resetStatus(notebook)" />
+                                        <el-switch v-else disabled v-model="notebook.switch" active-color="#13ce66" />
+                                    </div>
                                 </div>
                             </div>
+                            <div class="word" v-show="datasource.dns.length == 0" v-if="searchValue.length !== 0">
+                                当前页面搜索无结果</div>
+                            <div class="word" v-show="datasource.dns.length == 0" v-else>当前项目无注册编辑器</div>
                         </div>
-                        <div class="word" v-show="datasource.dns.length == 0" v-if="searchValue.length !== 0">当前页面搜索无结果</div>
-                        <div class="word" v-show="datasource.dns.length == 0" v-else>当前项目无注册编辑器</div>
-                    </div>
-                    <div class="block">
-                        <div class="block_content">
-                            <p @click="goUp" v-if="AllData.length !== totalCount">更多</p>
-                            <p v-else>暂无更多</p>
-                        </div>
+                        <p class="block" @click="goUp" v-if="AllData.length !== totalCount">更多</p>
+                        <p class="block" v-else>暂无更多</p>
                     </div>
                 </div>
                 <div class="project_info_right">
@@ -410,6 +410,11 @@ export default {
             }
             if (this.notebookscheckedIds.length < this.datasource.dns.length && this.notebookscheckedIds.length !== 0) {
                 this.$refs.all.indeterminate = true
+            } else if (this.notebookscheckedIds.length === this.datasource.dns.length){
+                this.$refs.all.indeterminate = false
+                this.isCheckedAllnotebooks = true
+            } else {
+                this.$refs.all.indeterminate = false
             }
         },
         //点击list多选框
@@ -438,6 +443,11 @@ export default {
             }
             if (this.notebookscheckedIds.length < this.datasource.dns.length && this.notebookscheckedIds.length !== 0) {
                 this.$refs.all.indeterminate = true
+            } else if (this.notebookscheckedIds.length === this.datasource.dns.length){
+                this.$refs.all.indeterminate = false
+                this.isCheckedAllnotebooks = true
+            } else {
+                this.$refs.all.indeterminate = false
             }
         },
         //点击notebooks name
@@ -742,6 +752,8 @@ export default {
         .project_info_left {
             flex: 1;
             border-right: 1px solid #dddddd;
+            display: flex;
+            flex-direction: column;
 
             .upload_top {
                 height: 100px;
@@ -1062,8 +1074,12 @@ export default {
             }
 
             .upload_bottom {
-                height: calc(100vh - 280px);
+                height: calc(100vh - 160px);
                 overflow: auto;
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
 
                 .word {
                     width: 100%;
@@ -1081,109 +1097,115 @@ export default {
                     cursor: pointer;
                 }
 
-                .data_content {
-                    display: flex;
-                    // justify-content: space-between;
-                    width: 100%;
-                    box-sizing: border-box;
-                    // height: 60px;
-                    border-bottom: 1px solid #dddddd;
-                    padding: 10px 0 10px 10px;
-                    align-items: center;
+                .data_block_content{
+                    display:flex;
+                    flex-direction: column;
+                    flex-grow: 1;
 
-                    .data_input {
-                        width: 40px;
-                        height: 40px;
-                        line-height: 40px;
-                        input {
-                            height: 40px;
-                            cursor: pointer;
-                        }
-                    }
-                    .data_input_left{
+                    .data_content {
                         display: flex;
-                        justify-content: space-between;
-                        flex-grow: 1;
-                    }
-                    .tag_bg:hover::after {
-                        content: attr(data-title); //取到data-title属性的值
-                        display: inline-block;
-                        padding: 10px 14px;
-                        border: 1px solid #ddd;
-                        border-radius: 5px;
-                        position: absolute;
-                        top: -50px;
-                        left: -30px;
-                    }
-
-                    .tag_bg {
-                        position: relative;
-                        // top: -8px;
-                        left: 0px;
-                        font-size: 12px;
-                        color: #fff;
-                        height: 16px;
-                        text-align: center;
-                        padding: 0 8px;
-                        border-radius: 10px;
-                        margin-left: 10px;
-                        margin-bottom: 5px;
-                        display: flex;
+                        // justify-content: space-between;
+                        width: 100%;
+                        box-sizing: border-box;
+                        // height: 60px;
+                        border-bottom: 1px solid #dddddd;
+                        padding: 10px 0 10px 10px;
                         align-items: center;
-                        justify-content: center;
-                        max-width: 120px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                        padding: 0 10px;
-                    }
 
-                    .item_list {
-                        display: flex;
-                    }
-
-                    .script_icon {
-                        // margin-left: 27px;
-                        width: 30px;
-                        max-width: 30px;
-                        height: 30px;
-
-                        img {
-                            width: 30px;
-                            height: 30px;
+                        .data_input {
+                            width: 40px;
+                            height: 40px;
+                            line-height: 40px;
+                            input {
+                                height: 40px;
+                                cursor: pointer;
+                            }
                         }
-                    }
-
-                    .data_name {
-                        margin-left: 27px;
-                        font-family: PingFangSC-Medium;
-                        font-size: 14px;
-                        color: #000000;
-                        font-weight: 600;
-                        width: 400px;
-                        min-width: 400px;
-                        height: 40px;
-                        line-height: 40px;
-                        overflow: hidden;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                    }
-
-                    .tag_area {
-                        display: flex;
-                        flex-wrap: wrap;
-                        overflow: hidden;
-
-                        img {
-                            width: 20px;
-                            height: 20px;
+                        .data_input_left{
+                            display: flex;
+                            justify-content: space-between;
+                            flex-grow: 1;
+                        }
+                        .tag_bg:hover::after {
+                            content: attr(data-title); //取到data-title属性的值
+                            display: inline-block;
+                            padding: 10px 14px;
+                            border: 1px solid #ddd;
+                            border-radius: 5px;
+                            position: absolute;
+                            top: -50px;
+                            left: -30px;
                         }
 
-                        .more_tags {
-                            display: none;
+                        .tag_bg {
                             position: relative;
-                            top: -8px;
+                            // top: -8px;
+                            left: 0px;
+                            font-size: 12px;
+                            color: #fff;
+                            height: 16px;
+                            text-align: center;
+                            padding: 0 8px;
+                            border-radius: 10px;
                             margin-left: 10px;
+                            margin-bottom: 5px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            max-width: 120px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                            padding: 0 10px;
+                        }
+
+                        .item_list {
+                            display: flex;
+                        }
+
+                        .script_icon {
+                            // margin-left: 27px;
+                            width: 30px;
+                            max-width: 30px;
+                            height: 30px;
+
+                            img {
+                                width: 30px;
+                                height: 30px;
+                            }
+                        }
+
+                        .data_name {
+                            margin-left: 27px;
+                            font-family: PingFangSC-Medium;
+                            font-size: 14px;
+                            color: #000000;
+                            font-weight: 600;
+                            width: 400px;
+                            min-width: 400px;
+                            height: 40px;
+                            line-height: 40px;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            text-overflow: ellipsis;
+                        }
+
+                        .tag_area {
+                            display: flex;
+                            flex-wrap: wrap;
+                            overflow: hidden;
+
+                            img {
+                                width: 20px;
+                                height: 20px;
+                            }
+
+                            .more_tags {
+                                display: none;
+                                position: relative;
+                                top: -8px;
+                                margin-left: 10px;
+                            }
                         }
                     }
                 }
@@ -1194,28 +1216,14 @@ export default {
                     font-size: 14px;
                     font-weight: 600;
                     // height: 80px;
-
                 }
-            }
 
-            .block {
-                display: flex;
-                justify-content: space-around;
-                align-items: center;
-                flex: 1;
-                border-top: 1px solid #ddd;
-                .block_content {
-                    width: 200px;
-                    height: 100px;
-                    display: flex;
-                    justify-content: space-around;
-                    align-items: center;
-                    color:black;
-                    p {
-                        color: rgb(28, 30, 36);
-                        font-size: 18px;
-                        cursor: pointer;
-                    }
+                .block{
+                    color: rgb(28, 30, 36);
+                    font-size: 18px;
+                    cursor: pointer;
+                    text-align: center;
+                    line-height: 60px;
                 }
             }
         }
@@ -1228,7 +1236,7 @@ export default {
                 font-size: 14px;
                 color: #838383;
                 text-align: center;
-                line-height: 800px;
+                line-height: calc(100vh - 40px);
             }
 
             .view_content {
