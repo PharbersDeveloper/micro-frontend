@@ -10,7 +10,7 @@ export default class PhDataSource {
         this.startKey = ""
         this.totalCount = 0
         this.projectId = ''
-        this.batch_size = 10
+        this.batch_size = 20
         this.dataset_size = 1000
         // this.curPage = 0
         this.store = new JsonApiDataStore()

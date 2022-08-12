@@ -30,6 +30,9 @@ export default class PhScenarioDetailDatasource {
 		const datasets = await this.buildDatasetQuery().then((response) => response.json())
         this.store.sync(datasets)
         this.datasets = this.store.findAll("datasets")
+        this.datasets = this.datasets.filter(
+            (it) => it.cat === "intermediate"
+        )
 
         const scenarios = await this.buildScenarioQuery().then((response) => response.json())
         this.store.sync(scenarios)
