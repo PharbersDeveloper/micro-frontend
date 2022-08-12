@@ -181,9 +181,6 @@ export default {
                 return false;
             }
         },
-        rerender() {
-            this.scriptParamsList = JSON.parse(JSON.stringify(this.scriptParamsData))
-        },
         addScriptParamsList() {
             this.dialogTitle = "添加参数"
             this.content = {

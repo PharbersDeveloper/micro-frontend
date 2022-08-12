@@ -41,9 +41,6 @@ export default {
 		this.validate()
     },
     methods: {
-		rerender() {
-			this.validate()
-		},
         validate() {
             this.$emit('statusChange', false)
         }

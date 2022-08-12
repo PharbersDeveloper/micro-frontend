@@ -151,10 +151,6 @@ export default {
 		this.validate()
     },
     methods: {
-		rerender() {
-			this.datasource = new PhTopNStep(this.step)
-			this.validate()
-		},
 		renderSchema() {
 			const schemas = this.$parent.computeSchema()
 
