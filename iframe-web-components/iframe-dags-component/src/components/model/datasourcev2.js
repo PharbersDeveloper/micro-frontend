@@ -59,7 +59,7 @@ export default class PhDagDatasource {
                     id
                 ]
             },
-            "limit": 100,
+            "limit": 3000,
             "start_key": ""
         }
         let options = {
