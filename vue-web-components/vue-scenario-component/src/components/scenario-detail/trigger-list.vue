@@ -57,7 +57,8 @@
 									v-for="iter in period"
 									:key="iter.desc"
 									:label="iter.desc"
-									:value="iter.cat">></option>
+									:value="iter.cat"
+									:disabled="iter.disable">></option>
 							</select>
                         </el-col>
                     </el-form-item>
@@ -106,27 +107,33 @@ export default {
             period: [
                 {
                     cat: "second",
-                    desc: "秒"
+                    desc: "秒",
+					disable: true
                 },
                 {
                     cat: "minute",
-                    desc: "分钟"
+                    desc: "分钟",
+					disable: false
                 },
                 {
                     cat: "hour",
-                    desc: "小时"
+                    desc: "小时",
+					disable: false
                 },
                 {
                     cat: "day",
-                    desc: "天"
+                    desc: "天",
+					disable: false
                 },
                 {
                     cat: "week",
-                    desc: "周"
+                    desc: "周",
+					disable: false
                 },
                 {
                     cat: "month",
-                    desc: "月"
+                    desc: "月",
+					disable: false
                 }
             ]
         }
@@ -169,7 +176,7 @@ export default {
 			const idx = this.triggers.length > 0 ? 1 + Math.max(...this.triggers.map(x => x.index)) : 0
             result["start"] = moment().format('YYYY-MM-DD HH:m:s')
             result["period"] = "minute"
-            result["value"] = 1
+            result["value"] = 10
             result["timezone"] = "中国北京"
             result["mode"] = "timer"
             result["active"] = true
