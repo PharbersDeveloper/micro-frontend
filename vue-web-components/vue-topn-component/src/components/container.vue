@@ -4,7 +4,8 @@
         <div class="topn_header">
             <div class="header_left">
                 <img :src="defs.iconsByName('topn')" alt="" />
-                <span>{{jobShowName}}</span>
+                <span class="title">{{jobShowName}}</span>
+				<span class="link-to" @click="linkToVideos">视频教程</span>
             </div>
             <div class="header_right">
                 <el-radio-group 
@@ -178,10 +179,7 @@ export default {
                     status: "wait"  // wait / process / finish / error / success
                 }
             ],
-            ScriptParams: false,
-            activeNameNext: "",
             savePopup: false,
-            stepCount: 0,
             transition: 0,
             loading: false,
         }
@@ -190,20 +188,7 @@ export default {
         allData: {
             type: Object,
             default: function() {
-                return {
-                    "projectName": "demo",
-                    "projectId": "ggjpDje0HUC2JW",
-                    "inputs": [
-                        "水果"
-                    ],
-                    "outputs": [
-                        "t1"
-                    ],
-                    "jobName": "compute_t1",
-                    "jobId": "aFOud5mcnHsH9iR",
-                    "_isVue": true,
-                    "popupBack": true
-                }
+                return { }
             }
         },
         defs: {
@@ -220,10 +205,9 @@ export default {
         }
     },
     methods: {
-        refreshPageSuccess() {
-            Message.success("修改脚本成功！", { duration: 0} )
-            this.activeName = this.activeNameNext
-        },
+		linkToVideos() {
+			window.open("https://www.bilibili.com/video/BV1dN4y1M7MV/")
+		},
         changeScriptParams(data) {
             this.datasource.saveScriptParams(data, this)
         },
@@ -449,7 +433,6 @@ export default {
     },
     watch: {
         active(n) {
-            this.stepCount++
             if (n === 4 || n === 5) {
                 this.computedSchema = this.computeSchema()
                 this.outputsSchema = this.genOutputsSchema()
@@ -499,12 +482,21 @@ export default {
                     margin-right: 10px;
                 }
 
-                span {
+                .title {
                     font-size: 20px;
                     color: #000000;
                     letter-spacing: 0.21px;
                     font-weight: 600;
                 }
+
+				.link-to {
+					color: #0073bb;
+					font-size: 14px;
+					margin-left: 20px;
+					font-weight: bold;
+					margin-top: 4px;
+					cursor: pointer;
+				}
             }
 
             .header_right {

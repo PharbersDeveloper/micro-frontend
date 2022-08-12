@@ -56,157 +56,8 @@ export async function phTopnContainerEventHandler(e, route) {
 			}
 			route.router.transitionTo(uri)
 			break
-		case "saveTopn":
-			if (params) {
-				const url = `${hostName}/phresourcecodegentrigger`
-				const uuid = guid()
-				route.msg = "修改"
-				route.loadingService.loading.style.display = "flex"
-				route.loadingService.loading.style["z-index"] = 2
-				route.projectId = params.projectId
-				route.projectName = params.projectName
-				transition = params.transition
-				let job_cat_name = "topn_edit"
-				let scriptBody = {
-					common: {
-						traceId: uuid,
-						tenantId: route.cookies.read("company_id"),
-						projectId: params.projectId,
-						projectName: params.projectName,
-						flowVersion: "developer",
-						dagName: params.projectName,
-						owner: route.cookies.read("account_id"),
-						showName: decodeURI(
-							route.cookies.read("user_name_show")
-						)
-					},
-					action: {
-						cat: "editTopn",
-						desc: "edit topn steps",
-						comments: "something need to say",
-						message: JSON.stringify({
-							optionName: "topn_edit",
-							cat: "intermediate",
-							runtime: "topn",
-							actionName: scriptsParams.jobShowName
-								? scriptsParams.jobShowName
-								: scriptsParams.jobName
-						}),
-						required: true
-					},
-					script: {
-						id: "",
-						jobName: scriptsParams.jobShowName
-							? scriptsParams.jobShowName
-							: scriptsParams.jobName,
-						jobPath: "",
-						inputs: inputs,
-						outputs: outputs,
-						runtime: "topn"
-					},
-					steps: params.stepsArr,
-					notification: {
-						required: true
-					},
-					oldImage: []
-				}
-				console.log(scriptBody)
-				let scriptOptions = {
-					method: "POST",
-					headers: {
-						Authorization: accessToken,
-						"Content-Type":
-							"application/x-www-form-urlencoded; charset=UTF-8",
-						accept: "application/json"
-					},
-					body: JSON.stringify(scriptBody)
-				}
-				await fetch(url, scriptOptions).then((res) => res.json())
-
-				route.noticeService.defineAction({
-					type: "iot",
-					remoteResource: "notification",
-					runnerId: "",
-					id: uuid,
-					eventName: job_cat_name,
-					projectId: scriptsParams.projectId,
-					ownerId: route.cookies.read("account_id"),
-					callBack: createScriptNoticeCallback
-				})
-			}
-			break
-		case "saveScriptParams":
-			if (params) {
-				element.refreshPageSuccess()
-				const transition = params.transition
-				if (transition) {
-					route.router.transitionTo(
-						"shell",
-						`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
-					)
-				}
-			}
-			break
 		case "changScriptInputOutput":
 			if (params) {
-				// const changeurl = `${hostName}/phchangeresourcepositiontrigger`
-				// const changeuuid = guid()
-				// route.loadingService.loading.style.display = "flex"
-				// route.loadingService.loading.style["z-index"] = 2
-				// route.projectId = params.projectId
-				// route.projectName = params.projectName
-				// transition = params.transition
-				// route.msg = "修改"
-				// let change_job_cat_name = "changeInputOutput"
-				// let changeScriptBody = {
-				// 	common: {
-				// 		traceId: changeuuid,
-				// 		tenantId: route.cookies.read("company_id"),
-				// 		projectId: params.projectId,
-				// 		projectName: params.projectName,
-				// 		owner: route.cookies.read("account_id"),
-				// 		showName: decodeURI(
-				// 			route.cookies.read("user_name_show")
-				// 		)
-				// 	},
-				// 	action: {
-				// 		cat: "changeResourcePosition",
-				// 		desc: "change resource position",
-				// 		comments: "something need to say",
-				// 		message: JSON.stringify({
-				// 			optionName: "changeInputOutput",
-				// 			cat: "intermediate",
-				// 			runtime: "topn",
-				// 			actionName: scriptsParams.jobShowName
-				// 				? scriptsParams.jobShowName
-				// 				: scriptsParams.jobName
-				// 		}),
-				// 		required: true
-				// 	},
-				// 	datasets: {
-				// 		inputs: params.dssInputs,
-				// 		output: params.dssOutputs
-				// 	},
-				// 	script: params.script,
-				// 	notification: {
-				// 		required: true
-				// 	}
-				// }
-				// console.log(changeScriptBody)
-				// let changeScriptOptions = {
-				// 	method: "POST",
-				// 	headers: {
-				// 		Authorization: accessToken,
-				// 		"Content-Type":
-				// 			"application/x-www-form-urlencoded; charset=UTF-8",
-				// 		accept: "application/json"
-				// 	},
-				// 	body: JSON.stringify(changeScriptBody)
-				// }
-				// await fetch(changeurl, changeScriptOptions).then((res) =>
-				// 	res.json()
-				// )
-
 				customCallbackFuncs[params.changeuuid] = params.callback
 				route.noticeService.defineAction({
 					type: "iot",
@@ -235,36 +86,6 @@ export async function phTopnContainerEventHandler(e, route) {
 		)
 	}
 
-	function createScriptNoticeCallback(param, payload) {
-		const { message, status } = JSON.parse(payload)
-		const {
-			cnotification: { error }
-		} = JSON.parse(message)
-		if (status == "succeed") {
-			if (params.type === "preview") {
-				element.datasource.steps.refreshData()
-			} else {
-				// alert(`${route.msg}脚本成功！`)
-				element.refreshPageSuccess()
-				if (transition) {
-					route.router.transitionTo(
-						"shell",
-						`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
-					)
-				}
-			}
-		} else {
-			// let errorObj = error !== "" ? JSON.parse(error) : ""
-			// let msg =
-			// 	errorObj["message"]["zh"] !== ""
-			// 		? errorObj["message"]["zh"]
-			// 		: `${route.msg}脚本失败，请重新操作！`
-			console.log(error)
-			alert(`${route.msg}脚本失败，请重新操作！`)
-		}
-		route.loadingService.loading.style.display = "none"
-	}
-
 	function changeInputOutputNoticeCallback(param, payload) {
 		const { message, status } = JSON.parse(payload)
 		const {
@@ -274,8 +95,6 @@ export async function phTopnContainerEventHandler(e, route) {
 			if (params.type === "preview") {
 				element.steps.refreshData()
 			} else {
-				// alert(`${route.msg}脚本成功！`)
-				// element.refreshPageSuccess()
 				customCallbackFuncs[param.id](param, payload)
 				if (transition) {
 					route.router.transitionTo(
