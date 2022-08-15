@@ -4,7 +4,8 @@
         <div class="join_header">
             <div class="header_left">
                 <img :src="defs.iconsByName('join')" alt="" />
-                <span>{{jobShowName}}</span>
+                <span class="title">{{jobShowName}}</span>
+				<span class="link-to" @click="linkToVideos">视频教程</span>
             </div>
             <div class="header_right">
                 <el-radio-group v-model="activeName" class="content">
@@ -13,6 +14,7 @@
                     <el-radio-button label="input/output"></el-radio-button>
                 </el-radio-group>
                 <el-button class="save" @click="savePopup = true">保存</el-button>
+				<!-- <el-button v-tooltip="abc">111</el-button> -->
             </div>
         </div>
         <div class="join_area" v-show="activeName === 'Setting'">
@@ -136,6 +138,12 @@ import ElRadioGroup from "element-ui/packages/radio-group/index"
 import ElRadioButton from "element-ui/packages/radio-button/index"
 import changeInputOutput from "./change-input-output"
 import { Message } from 'element-ui'
+import scriptParameters from "./script-parameters"
+import ElDialog from 'element-ui/packages/dialog/src/component'
+import Vue from 'vue'
+import VTooltip from 'v-tooltip'
+
+Vue.use(VTooltip)
 
 export default {
     components: {
@@ -151,10 +159,13 @@ export default {
         Outputs,
         ElRadioGroup,
         ElRadioButton,
-        changeInputOutput
+        changeInputOutput,
+        scriptParameters,
+        ElDialog
     },
     data() {
         return {
+			abc: "wqeawsda",
             computedSchema: [],
             active: 3,
             flowVersion: "developer",
@@ -229,6 +240,9 @@ export default {
         }
     },
     methods: {
+		linkToVideos() {
+			window.open("https://www.bilibili.com/video/BV1gG411p729?share_source=copy_web&vd_source=f9fa90b0e7f405eadac872bd04ff335f")
+		},
 		changeScriptParams(data) {
             this.datasource.saveScriptParams(data, this)
         },
@@ -244,6 +258,7 @@ export default {
 			let errors = this.stepsDefs.filter(it => it.status === "error")
 			if(errors.length > 0) {
 				Message.error("请修改参数！", { duration: 3000} )
+				this.loading = false
 				return false
 			}
 
@@ -258,7 +273,7 @@ export default {
 				"postJoinComputedColumns": this.$refs.postcomputed.datasource.revert2Defs(),
 				"postFilter": this.$refs.postfilter.datasource.revert2Defs()
 			}
-			this.datasource.saveAndGenCode(this.projectId, this.jobName, params, this.changeDs)
+			this.datasource.saveAndGenCode( params, this)
 		},
 		addDatasetFromJoin(data) {
 			this.changeDs = true
@@ -373,7 +388,6 @@ export default {
             }
         },
         outputsStatus(status) {
-            // @wodelu 我只给你了写了一个状态的例子，这个逻辑是不对的
             if (status) {
                 this.stepsDefs[6].status = "success"
             } else {
@@ -532,7 +546,7 @@ export default {
         this.datasource.refreshData(this.projectId, this.jobName, this.jobId)
         this.datasource.refreshInOut(this.projectId, this.jobShowName)
         this.datasource.refreshMateData(this.projectId, this.datasource.datasets)
-		
+        this.datasource.refreshScriptParameter(this.projectId, this.jobId)
     },
     watch: {
         active(n) {
@@ -594,12 +608,21 @@ export default {
                     margin-right: 10px;
                 }
 
-                span {
+                .title {
                     font-size: 20px;
                     color: #000000;
                     letter-spacing: 0.21px;
                     font-weight: 600;
                 }
+
+				.link-to {
+					color: #0073bb;
+					font-size: 14px;
+					margin-left: 20px;
+					font-weight: bold;
+					margin-top: 4px;
+					cursor: pointer;
+				}
             }
 
             .header_right {
