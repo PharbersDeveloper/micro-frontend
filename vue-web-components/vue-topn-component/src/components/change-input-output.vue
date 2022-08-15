@@ -109,10 +109,6 @@ export default {
 			this.inOutCount++
 			this.selectInput=!this.selectInput
 		},
-        rerender() {
-            this.inputsArray = this.inputs 
-            this.outputsArray = this.outputs
-        },
         selectInputItem(data) {
             this.inputsArray = []
             this.inputsArray.push(data)

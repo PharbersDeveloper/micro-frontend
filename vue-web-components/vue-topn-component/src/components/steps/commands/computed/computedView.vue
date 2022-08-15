@@ -84,13 +84,6 @@ export default {
         this.validate()
     },
     methods: {
-		rerender() {
-			this.datasource = new PhComputedStep(this.step)
-			if (this.datasource.command.computedCols.length > 0) {
-				this.currentExpr = this.datasource.command.computedCols[0]["expr"]
-			}
-			this.validate()
-		},
         addComputedColumns() {
             this.datasource.command.insertComputedCol()
             const len = this.datasource.command.computedCols.length - 1
