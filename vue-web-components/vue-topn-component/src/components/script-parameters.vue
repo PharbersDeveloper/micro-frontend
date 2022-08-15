@@ -68,6 +68,7 @@
                     <el-form-item label="名称">
                         <el-input 
                             :class="[{'error-border': content.name === '' || duplicateContentName}]"
+                            ref="contentName"
                             @input="inputContentName()"
                             v-model="content.name"></el-input>
                     </el-form-item>
@@ -119,6 +120,7 @@ import ElTable from 'element-ui/packages/table/index'
 import ElTableColumn from 'element-ui/packages/table-column/index'
 import PhDagDefinitions from "./policy/definitions/definitions"
 import ElDialog from 'element-ui/packages/dialog/src/component'
+import { Message } from 'element-ui'
 import ElInputNumber from 'element-ui/packages/input-number/index'
 
 export default {
@@ -148,7 +150,7 @@ export default {
                 "level": 1, 
                 "index": 1
             },
-			paramCount: 0
+            paramCount: 0
         }
     },
     props: {
@@ -161,9 +163,24 @@ export default {
         scriptParamsData: Array
     },
     methods: {
-		rerender() {
-			this.scriptParamsList = JSON.parse(JSON.stringify(this.scriptParamsData))
-		},
+        inputStrChecked(value, ref) {
+            // 只允许输入数字、字母、汉字、下划线
+            let r = /^[a-zA-Z0-9_^\u4E00-\u9FA5]{1,}$/
+            if (r.test(value)) {
+                if(value.length > 30) {
+                    this.$refs[ref].value = ""
+                    this.content.name = ""
+                    Message.error("输入内容过长！！")
+                    return false;
+                }
+                return value
+            } else {
+                this.$refs[ref].value = ""
+                this.content.name = ""
+                Message.error("请勿输入特殊字符！")
+                return false;
+            }
+        },
         addScriptParamsList() {
             this.dialogTitle = "添加参数"
             this.content = {
@@ -191,11 +208,14 @@ export default {
             this.changeScriptParamsList = true
         },
         delParams(scope) {
-			this.paramCount++
+            this.paramCount++
             this.scriptParamsList.splice(scope.$index, 1)
         },
         inputContentName() {
             const name = this.content.name
+            if (!this.inputStrChecked(name, "contentName")) {
+                return false
+            }
             let arr = []
             if (this.dialogTitle === "添加参数") {
                 arr = this.scriptParamsList.filter(it => it.name === name)
@@ -217,7 +237,7 @@ export default {
             return true
         },
         confirm() {
-			this.paramCount++
+            this.paramCount++
             const val = this.validate()
             if(!val) return false
 
@@ -228,14 +248,13 @@ export default {
             }
             this.changeScriptParamsList = false
         },
-        save(transition) {
+        save() {
             const event = new Event("event")
             event.args = {
                 callback: "changeScriptParams",
                 element: this.parent,
                 param: {
-					scriptParamsList: this.scriptParamsList,
-                    transition: transition
+                    scriptParamsList: this.scriptParamsList
                 }
             }
             this.$emit('changeScriptParams', event)

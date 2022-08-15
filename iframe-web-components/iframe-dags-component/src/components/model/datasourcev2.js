@@ -8,7 +8,7 @@ export default class PhDagDatasource {
         this.name = "demo"
         this.projectId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = 'cb319b8522f324d6f477a87c234e028511fd466bf00660d413c4140a08b98753'
+        this.debugToken = '0fd8f677d740500aa2d44f0625ac5155083a070799a1703423792663fce5c9e1'
         this.sizeHit = [0, 0]
         // this.hitWidthStep = 300
         // this.hitHeightStep = 500
@@ -59,7 +59,7 @@ export default class PhDagDatasource {
                     id
                 ]
             },
-            "limit": 100,
+            "limit": 3000,
             "start_key": ""
         }
         let options = {
