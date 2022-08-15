@@ -28,7 +28,7 @@ export default class PhDataSource {
         else return null
     }
 
-    buildQuery(projectId, jobName, jobId) {
+    buildQuery(projectId, jobId) {
         const url = `${hostName}/phdydatasource/query`
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
         let body = {
@@ -57,7 +57,7 @@ export default class PhDataSource {
 
     refreshData(projectId, jobName, jobId) {
         const that = this
-        this.buildQuery(projectId, jobName, jobId)
+        this.buildQuery(projectId, jobId)
             .then((response) => response.json())
             .then((response) => {
                 that.currentPageToken = response.meta.start_key
@@ -66,7 +66,7 @@ export default class PhDataSource {
                 if (data.length === 0) {
                     that.step = {
                         "pj-name": [projectId, jobName].join("_"),
-                        "step-id": `${projectId}_${jobId}_1`,
+                        "step-id": 1,
                         ctype: "TopN",
                         expressions: JSON.stringify({
                             "params": {
@@ -90,7 +90,7 @@ export default class PhDataSource {
                         "expressions-value": "JSON",
                         "group-index": "0",
                         "group-name": "",
-                        id: [projectId, jobId].join("_"),
+                        id: [projectId, jobId, "1"].join("_"),
                         index: "1",
                         runtime : "topn",
                         "step-name": "topn"
@@ -177,25 +177,6 @@ export default class PhDataSource {
     }
 
     buildSaveQuery(param) {
-
-		// const steps = [{
-		// 	pjName: this.step["pj-name"],
-		// 	stepId: this.step["step-id"],
-		// 	ctype: this.step["ctype"],
-			// expressions: {
-			// 	"type": "topn",
-			// 	"code": "pyspark",
-			// 	"params": param
-			// },
-		// 	expressionsValue: this.step["expressions-value"],
-		// 	groupIndex: this.step["group-index"],
-		// 	groupName: this.step["group-name"],
-		// 	id: this.step["id"],
-		// 	index: this.step["index"],
-		// 	runtime : this.step["runtime"],
-		// 	stepName: this.step["step-name"]
-		// }]
-
 		const url = `${hostName}/phdydatasource/put_item`
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
         let body = {
