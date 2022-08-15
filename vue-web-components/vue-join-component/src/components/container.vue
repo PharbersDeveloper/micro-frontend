@@ -14,7 +14,7 @@
                     <el-radio-button label="input/output"></el-radio-button>
                 </el-radio-group>
                 <el-button class="save" @click="savePopup = true">保存</el-button>
-				<button v-tooltip="abc">111</button>
+				<!-- <el-button v-tooltip="abc">111</el-button> -->
             </div>
         </div>
         <div class="join_area" v-show="activeName === 'Setting'">

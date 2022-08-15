@@ -47,13 +47,17 @@
                     prop="level" >
                     <template slot="header">
                         优先级
-                        <span
+                        <el-button 
+                            v-tooltip="levelMsg"
+                            class="ques-img" 
+                            icon="el-icon-question" circle></el-button>
+                        <!-- <span
                             @mouseover="hoverIn"
                             @mouseleave="hoverOut">
                             <img :src="defs.iconsByName('info')" 
                                 class="ques-img"/>
                         </span>
-                        <span class="info-msg" v-show="hover">同优先级按排列顺序运行</span>
+                        <span class="info-msg" v-show="hover"></span> -->
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -135,6 +139,16 @@ import ElDialog from 'element-ui/packages/dialog/src/component'
 // import ElTooltip from 'element-ui/packages/tooltip/index'
 import { Message } from 'element-ui'
 import ElInputNumber from 'element-ui/packages/input-number/index'
+import Vue from 'vue'
+import VTooltip from 'v-tooltip'
+
+Vue.use(VTooltip, {
+  themes: {
+    'info-tooltip': {
+      $extend: 'tooltip',
+    },
+  },
+})
 
 export default {
     components: {
@@ -166,7 +180,8 @@ export default {
             },
             paramCount: 0,
             hover: true,
-            itemkey: false
+            itemkey: false,
+            levelMsg: "同优先级按排列顺序运行"
         }
     },
     props: {
@@ -311,8 +326,7 @@ export default {
         /deep/.el-dialog__wrapper {
             background: rgba(0, 0, 0, 0.31);
         }
-
-
+        
         .content {
             .type-param {
                 display: flex;
@@ -401,8 +415,8 @@ export default {
                 overflow: auto;
                 
                 .ques-img {
-                    width: 12px;
                     cursor: pointer;
+                    border: none;
                 }
 
                 .info-msg {
