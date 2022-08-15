@@ -14,6 +14,7 @@
                     <el-radio-button label="input/output"></el-radio-button>
                 </el-radio-group>
                 <el-button class="save" @click="savePopup = true">保存</el-button>
+				<button v-tooltip="abc">111</button>
             </div>
         </div>
         <div class="join_area" v-show="activeName === 'Setting'">
@@ -136,8 +137,13 @@ import Outputs from './steps/commands/output/outputView'
 import ElRadioGroup from "element-ui/packages/radio-group/index"
 import ElRadioButton from "element-ui/packages/radio-button/index"
 import changeInputOutput from "./change-input-output"
-import scriptParameters from "./script-parameters"
 import { Message } from 'element-ui'
+import scriptParameters from "./script-parameters"
+import ElDialog from 'element-ui/packages/dialog/src/component'
+import Vue from 'vue'
+import VTooltip from 'v-tooltip'
+
+Vue.use(VTooltip)
 
 export default {
     components: {
@@ -153,11 +159,13 @@ export default {
         Outputs,
         ElRadioGroup,
         ElRadioButton,
+        changeInputOutput,
         scriptParameters,
-        changeInputOutput
+        ElDialog
     },
     data() {
         return {
+			abc: "wqeawsda",
             computedSchema: [],
             active: 3,
             flowVersion: "developer",
@@ -520,7 +528,6 @@ export default {
                 })
             } else {
 				this.loading = false
-				debugger
                 Message({
                     type: 'error',
                     showClose: true,
@@ -536,11 +543,10 @@ export default {
         this.jobName = this.getJobName()
         this.jobId = this.getUrlParam("jobId")
         await this.datasource.queryJob(this.projectId, this.jobId)
-        this.datasource.refreshScriptParameter(this.projectId, this.jobId)
         this.datasource.refreshData(this.projectId, this.jobName, this.jobId)
         this.datasource.refreshInOut(this.projectId, this.jobShowName)
         this.datasource.refreshMateData(this.projectId, this.datasource.datasets)
-		
+        this.datasource.refreshScriptParameter(this.projectId, this.jobId)
     },
     watch: {
         active(n) {

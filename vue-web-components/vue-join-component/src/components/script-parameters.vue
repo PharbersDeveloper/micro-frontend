@@ -22,6 +22,7 @@
                 ref="table"
                 class="script-param-table"
                 :data="scriptParamsList"
+                :key="itemkey"
                 style="width: 100%">
                 <el-table-column
                     type="index"
@@ -42,8 +43,18 @@
                     label="默认值类型">
                 </el-table-column>
                 <el-table-column
-                    prop="level"
-                    label="优先级(同优先级按排列顺序运行)">
+                    show-overflow-tooltip
+                    prop="level" >
+                    <template slot="header">
+                        优先级
+                        <span
+                            @mouseover="hoverIn"
+                            @mouseleave="hoverOut">
+                            <img :src="defs.iconsByName('info')" 
+                                class="ques-img"/>
+                        </span>
+                        <span class="info-msg" v-show="hover">同优先级按排列顺序运行</span>
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="des"
@@ -92,6 +103,7 @@
                         <el-form-item label="优先级">
                             <el-input-number 
                                 :min="1"
+                                :precision="0" :step="1"
                                 v-model="content.level"></el-input-number>
                         </el-form-item>
                         <div class="desc">（数值越大，优先级越低）</div>
@@ -120,6 +132,7 @@ import ElTable from 'element-ui/packages/table/index'
 import ElTableColumn from 'element-ui/packages/table-column/index'
 import PhDagDefinitions from "./policy/definitions/definitions"
 import ElDialog from 'element-ui/packages/dialog/src/component'
+// import ElTooltip from 'element-ui/packages/tooltip/index'
 import { Message } from 'element-ui'
 import ElInputNumber from 'element-ui/packages/input-number/index'
 
@@ -133,6 +146,7 @@ export default {
         ElTable,
         ElInputNumber,
         ElTableColumn,
+        // ElTooltip
     },
     data() {
         return {
@@ -150,7 +164,9 @@ export default {
                 "level": 1, 
                 "index": 1
             },
-            paramCount: 0
+            paramCount: 0,
+            hover: true,
+            itemkey: false
         }
     },
     props: {
@@ -163,6 +179,14 @@ export default {
         scriptParamsData: Array
     },
     methods: {
+        hoverIn() {
+            this.hover = true
+            this.itemkey = !this.hover
+        },
+        hoverOut() {
+            this.hover = false
+            this.itemkey = !this.hover
+        },
         inputStrChecked(value, ref) {
             // 只允许输入数字、字母、汉字、下划线
             let r = /^[a-zA-Z0-9_^\u4E00-\u9FA5]{1,}$/
@@ -375,6 +399,18 @@ export default {
             .script-param-table {
                 height: calc(100vh - 400px);
                 overflow: auto;
+                
+                .ques-img {
+                    width: 12px;
+                    cursor: pointer;
+                }
+
+                .info-msg {
+                    background: #fff;
+                    border: 1px solid #ddd;
+                    /* padding: 2px; */
+                    position: absolute;
+                }
             }
             
         }

@@ -34,7 +34,7 @@ export default class PhDataSource {
         let body = {
             "table": "step",
             "conditions": {
-                // "pjName": ["=", this.projectId + "_" + this.jobName]
+				// "id": ["=", [projectId, jobId].join("_")],
 				"id": ["=", projectId + "_" + jobId]
 
             },
@@ -90,7 +90,8 @@ export default class PhDataSource {
                         "expressions-value": "JSON",
                         "group-index": "0",
                         "group-name": "",
-                        id: [projectId, jobId, "1"].join("_"),
+                        // id: [projectId, jobId, "1"].join("_"),
+                        id: [projectId, jobId].join("_"),
                         index: "1",
                         runtime : "topn",
                         "step-name": "topn"

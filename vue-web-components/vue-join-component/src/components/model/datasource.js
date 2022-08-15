@@ -8,7 +8,7 @@ export default class PhDataSource {
 		this.parent = parent
         this.store = new JsonApiDataStore()
         this.resetData()
-        this.debugToken = "956c2519cddd8c76a896b85018d89892440afc31b896546b21293cb5d306937f"
+        this.debugToken = "0d7d4db02f9c2b069d6fe5fbd0b06a8b4b1725e2e4bd91b772994e42029e899d"
     }
 
     resetData() {
@@ -72,7 +72,8 @@ export default class PhDataSource {
         let body = {
             "table": "step",
             "conditions": {
-				"id": ["=", projectId + "_" + jobId]
+				// "id": ["=", [projectId, jobId, "1"].join("_")]
+				"id": ["=", [projectId, jobId].join("_")]
             },
 			"index_name": "id-index-index",
             "limit": 1,
@@ -153,7 +154,8 @@ export default class PhDataSource {
                         "expressions-value": "JSON",
                         "group-index": "0",
                         "group-name": "",
-						id: [projectId, jobId, "1"].join("_"),
+						// id: [projectId, jobId, "1"].join("_"),
+						id: [projectId, jobId].join("_"),
                         index: "1",
                         runtime : "join",
                         "step-name": "join"
@@ -319,37 +321,6 @@ export default class PhDataSource {
             body: JSON.stringify(body)
         }
         return fetch(url, options)
-
-		// const steps = [{
-		// 	pjName: this.step["pj-name"],
-		// 	stepId: this.step["step-id"],
-		// 	ctype: this.step["ctype"],
-		// 	expressions: {
-		// 		"type": "join",
-		// 		"code": "pyspark",
-		// 		"params": param
-		// 	},
-		// 	expressionsValue: this.step["expressions-value"],
-		// 	groupIndex: this.step["group-index"],
-		// 	groupName: this.step["group-name"],
-		// 	id: this.step["id"],
-		// 	index: this.step["index"],
-		// 	runtime : this.step["runtime"],
-		// 	stepName: this.step["step-name"]
-		// }]
-		// const event = new Event("event")
-		// event.args = {
-		// 	callback: "saveJoin",
-		// 	element: this,
-		// 	param: {
-		// 		name: "saveJoin",
-		// 		changeDs: changeDs,
-		// 		projectId: this.parent.projectId,
-		// 		projectName: this.parent.projectName,
-		// 		stepsArr: steps
-		// 	}
-		// }
-		// this.parent.$emit('event', event)
     }
 
     saveAndGenCode(param, ele) {
@@ -550,7 +521,6 @@ export default class PhDataSource {
 						ele.loading = false
                     })
                 } else {
-					debugger
 					ele.saveNotification("failed")
                 }
             })

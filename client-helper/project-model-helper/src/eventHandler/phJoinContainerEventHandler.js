@@ -91,10 +91,10 @@ export async function phJoinContainerEventHandler(e, route) {
 					"shell",
 					`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
 				)
-			} else {
-				console.log(error)
-				customCallbackFuncs[param.id](param, payload)
 			}
+		} else {
+			console.log(error)
+			customCallbackFuncs[param.id](param, payload)
 		}
 	}
 }
