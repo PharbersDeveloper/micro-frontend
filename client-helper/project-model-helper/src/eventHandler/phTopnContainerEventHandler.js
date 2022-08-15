@@ -1,9 +1,11 @@
+// eslint-disable-next-line
 import { hostName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
 export async function phTopnContainerEventHandler(e, route) {
 	const params = e.detail[0].args.param
 	const element = e.detail[0].args.element
+	// eslint-disable-next-line
 	const accessToken = route.cookies.read("access_token")
 	let customCallbackFuncs = {}
 	let transition = 0
@@ -75,6 +77,7 @@ export async function phTopnContainerEventHandler(e, route) {
 			console.log("submit event to parent")
 	}
 
+	// eslint-disable-next-line
 	function guid() {
 		return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(
 			/[xy]/g,

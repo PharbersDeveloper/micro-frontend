@@ -9,9 +9,9 @@ export default class PhDataSource {
         this.startKey = ""
         this.totalCount = 0
         this.projectId = ''
-        this.batch_size = 100
+        this.batch_size = 20
         this.store = new JsonApiDataStore()
-        this.debugToken = "b8108850e3ee693bfc356e1af0595231955ef66fd53332e4cbdbedb64fb134de"
+        this.debugToken = "c2c142d8c67dcd8e7aeb43acb9e86b4b8fe0eaab798dc2d2f86beadb5cb29658"
         if (!adapter) {
             this.adapter = this.defaultAdapter
         }
@@ -103,27 +103,29 @@ export default class PhDataSource {
             })
     }
 
-    // appendData(ele, key, callback=null) {
-    //     let that = this
-    //     ele.datasource.buildQuery(ele, key)
-    //         .then((response) => response.json())
-    //         .then((response) => {
-    //             that.store.sync(response)
-    //             that.data = that.store.findAll("datasets")
-    //             // var newData = response.data.map(x=>{
-    //             //     let attributes = x.attributes
-    //             //     attributes.id = x.id
-    //             //     return attributes
-    //             // })
-    //             // ele.datasource.data = ele.AllData.concat(newData)
-    //             ele.datasource.data = that.data
-    //             that.startKey = response.meta.start_key
-    //             // ele.cur_page++
-    //             ele.needRefresh++
-    //             if(callback)
-    //                 callback()
-    //         })
-    // }
+    appendData(ele, key, callback=null) {
+        let that = this
+        ele.datasource.buildQuery(ele, key)
+            .then((response) => response.json())
+            .then((response) => {
+                that.store = new JsonApiDataStore()
+                that.store.sync(response)
+                that.data = that.jsonapiAdapter(that.store.findAll("scenarios"))
+                // var newData = response.data.map(x=>{
+                //     let attributes = x.attributes
+                //     attributes.id = x.id
+                //     return attributes
+                // })
+                // ele.datasource.data = ele.AllData.concat(newData)
+                ele.datasource.data = that.data
+                that.startKey = response.meta.start_key
+                // ele.cur_page++
+                ele.needRefresh++
+                if(callback)
+                    callback()
+            })
+    }
+    
 
 
 }
