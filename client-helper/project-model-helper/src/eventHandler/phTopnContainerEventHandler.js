@@ -98,6 +98,5 @@ export async function phTopnContainerEventHandler(e, route) {
 			console.log(error)
 			customCallbackFuncs[param.id](param, payload)
 		}
-		route.loadingService.loading.style.display = "none"
 	}
 }
