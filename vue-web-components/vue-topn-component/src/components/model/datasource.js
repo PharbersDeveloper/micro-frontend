@@ -395,7 +395,6 @@ export default class PhDataSource {
     changeInputOutputQuery(ele, dssOutputs, dssInputs, script) {
 		const changeuuid = this.guid()
 		const eventName = "changeInputOutput"
-
         this.buildChangeInputOutputQuery(ele, dssOutputs, dssInputs, script, changeuuid)
             .then((response) => response.json())
             .then((response) => {

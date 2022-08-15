@@ -1,10 +1,10 @@
-import { hostName } from "../config/envConfig"
+// import { hostName } from "../config/envConfig"
 
 // eslint-disable-next-line no-unused-vars
 export async function phTopnContainerEventHandler(e, route) {
 	const params = e.detail[0].args.param
-	const element = e.detail[0].args.element
-	const accessToken = route.cookies.read("access_token")
+	// const element = e.detail[0].args.element
+	// const accessToken = route.cookies.read("access_token")
 	let customCallbackFuncs = {}
 	let transition = 0
 	let uri = ""
@@ -59,6 +59,7 @@ export async function phTopnContainerEventHandler(e, route) {
 		case "changScriptInputOutput":
 			if (params) {
 				customCallbackFuncs[params.changeuuid] = params.callback
+				transition = params.transition
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",
@@ -75,33 +76,18 @@ export async function phTopnContainerEventHandler(e, route) {
 			console.log("submit event to parent")
 	}
 
-	function guid() {
-		return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(
-			/[xy]/g,
-			function (c) {
-				var r = (Math.random() * 16) | 0,
-					v = c == "x" ? r : (r & 0x3) | 0x8
-				return v.toString(16)
-			}
-		)
-	}
-
 	function changeInputOutputNoticeCallback(param, payload) {
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: { error }
 		} = JSON.parse(message)
 		if (status == "success" || status == "succeed") {
-			if (params.type === "preview") {
-				element.steps.refreshData()
-			} else {
-				customCallbackFuncs[param.id](param, payload)
-				if (transition) {
-					route.router.transitionTo(
-						"shell",
-						`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
-					)
-				}
+			customCallbackFuncs[param.id](param, payload)
+			if (transition) {
+				route.router.transitionTo(
+					"shell",
+					`flow?projectId=${route.projectId}&projectName=${route.projectName}&flowVersion=developer`
+				)
 			}
 		} else {
 			// let errorObj = error !== "" ? JSON.parse(error) : ""
