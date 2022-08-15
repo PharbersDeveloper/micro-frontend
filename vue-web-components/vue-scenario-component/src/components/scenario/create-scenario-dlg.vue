@@ -4,9 +4,9 @@
             :visible.sync="dialogVisible"
             :before-close="close"
             width="30%">
-        <el-form ref="form" label-width="120px">
+        <el-form ref="form" label-width="120px" @submit.native.prevent>
             <el-form-item label="Scenario 名称">
-                <el-input v-model="scenarioName"></el-input>
+                <el-input v-model="scenarioName" @keyup.enter.native="save"></el-input>
             </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">

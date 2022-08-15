@@ -36,11 +36,12 @@ import ElDialog from "element-ui/packages/dialog/index"
 import ElForm from "element-ui/packages/form/index"
 import ElFormItem from "element-ui/packages/form-item/index"
 import PhDagDefinitions from "./policy/definitions/definitions"
+import { MessageBox, Message } from 'element-ui'
 
 export default {
     data() {
         return {
-            name: "test",
+            name: "",
 			visible: false,
             selectCodeeditorType: "jupyter",
             codeeditors: ["jupyter", "c9"]
@@ -66,22 +67,48 @@ export default {
 
     },
     mounted() {
-        this.name = this.initialName
+        // this.name = this.initialName
     },
     methods: {
 		close() {
 			this.$emit("cancel")
+            this.name = ''
 		},
         confirmCreation() {
-            const event = new Event("event")
-            event.args = {
-                callback: "createNotebook",
-                param: {
-                    name: this.name,
-                    type: this.selectCodeeditorType
+            // const event = new Event("event")
+            // event.args = {
+            //     callback: "createNotebook",
+            //     param: {
+            //         name: this.name,
+            //         type: this.selectCodeeditorType
+            //     }
+            // }
+            // this.$emit("confirm", event)
+
+
+            if (this.name.length > 0) {
+                if(this.name.length > 30){
+                    Message.error("输入内容过长！", { duration: 0, showClose: true })
+                } else {
+                    let reg = /^[A-Za-z0-9]+$/
+                    if (reg.test(this.name)) {
+                        const event = new Event("event")
+                        event.args = {
+                            callback: "createNotebook",
+                            param: {
+                                name: this.name,
+                                type: this.selectCodeeditorType
+                            }
+                        }
+                        this.$emit("confirm", event)
+                        this.name = ''
+                    } else {
+                        Message.error("请勿输入特殊字符！", { duration: 0, showClose: true })
+                    } 
                 }
+            } else {
+                Message.error("Scenario名称不能为空", { duration: 0, showClose: true })
             }
-            this.$emit("confirm", event)
         }
     },
 	watch: {
