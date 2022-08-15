@@ -9,7 +9,7 @@
                             <div class="selected"
                                  :class="[
                                     {'bg_disabled': scenarioCheckedIds.length === 0}]">
-                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllScenario()' :checked="scenarioCheckedIds.length === allData.scenarios.length">
+                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllScenario()' :checked="scenarioCheckedIds.length === datasource.data.length && datasource.data.length !== 0">
                                 <div class="opt-area" @click="dropShow">
                                     <span class="action" >选项</span>
                                     <img :src="dropDownIcon" alt="" class="d_icon">
@@ -66,7 +66,7 @@
                                     <div class="tag_arr">
                                         <div class="label_name" v-for="(item,index) in allData.tagsArray" :key="index">
                                             <span  :style="{background: tagsColorArray[allData.tagsArray.indexOf(item)]}"></span>
-                                            <div class="tags_name">{{item}}</div>
+                                            <!-- <div class="tags_name">{{item}}</div> -->
                                         </div>
                                     </div>
                                     <div class="management">
@@ -76,12 +76,12 @@
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
                             <div class="scenario_number">
-                                <p>{{allData.scenarios.length}} 条 Scenarios</p>
+                                <p>{{datasource.data.length}} 条 Scenarios</p>
                             </div>
                         </div>
                     </div>
                     <div class="upload_bottom">
-                        <div class="data_content" v-for="(scenario,index) in searchData" :key="index" ref="content" :class="{bg: scenarioCheckedIds.indexOf(scenario.id) > -1}" @click="clickOnlyOne(scenario, index)">
+                        <div class="data_content" v-for="(scenario,index) in datasource.data" :key="index" ref="content" :class="{bg: scenarioCheckedIds.indexOf(scenario.id) > -1}" @click="clickOnlyOne(scenario, index)">
                             <div class="data_input" @click.stop="checkedMore(scenario)">
                                 <input type="checkbox" ref="data" name="scenarioList" :checked="scenarioCheckedIds.indexOf(scenario.id) > -1" @click.stop="checkedOneScenario(scenario)" />
                             </div>
@@ -93,10 +93,10 @@
                                 <div class="tag_area" ref="tagsArea">
                                     <div v-for="(tag,inx) in scenario.label" :key="inx">
                                         <span v-if="scenario.label !== ''">
-                                            <p :title="tag" class="tag_bg"
+                                            <!-- <p :title="tag" class="tag_bg"
                                                :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">
                                                {{tag}}
-                                            </p>
+                                            </p> -->
                                         </span>
                                     </div>
 
@@ -114,7 +114,7 @@
                             </div>
 
                         </div>
-                        <div class="word" v-if="allData.scenarios === ''">当前项目无数据</div>
+                        <div class="word" v-if="datasource.data.length === 0">当前项目无数据</div>
                     </div>
                 </div>
                 <div class="project_info_right">
@@ -148,14 +148,25 @@
                     <p v-if="scenarioCheckedIds.length === 0" class="click_look">单击对象查看详细信息</p>
                 </div>
             </div>
+            <div id="loadingio-spinner-double-ring-ho1zizxmctu" v-show="loading">
+                <div class="ldio-400lpppmiue">
+                    <div></div>
+                    <div></div>
+                    <div>
+                        <div></div>
+                    </div>
+                    <div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- 添加tag -->
         <create-tags-dialog
 			v-if="showCreateTagsDialog"
 			:scenarioCheckedIds="scenarioCheckedIds"
 			:scenarioCheckedNames="scenarioCheckedNames"
-			:scenarios="allData.scenarios"
-			:tagsArray="allData.tagsArray"
+			:tagsArray="tagsArray"
 			:tagsColorArray="tagsColorArray"
 			@addTagsEvent="addTagsEvent"
 			@closeCreateDialog="closeCreateDialog">
@@ -164,8 +175,7 @@
         <delete-tags-dialog :tags="tags" v-if="deleteTagsDialog" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
         <create-scenario-dlg 
 			:dialog-visible="showCreateScenarioDialog"
-			:project-id="allData.projectId"
-			:project-name="allData.projectNam"
+			:project-name="projectName"
 			:index="nextIndexValue" owner="alfred"
 			@cancelCreateScenario="showCreateScenarioDialog = false" @createScenario="createNewScenario" />
 		<el-dialog
@@ -193,6 +203,7 @@ import CreateScenarioDlg from "./create-scenario-dlg"
 import PhDagDefinitions from "../policy/definitions/definitions";
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
+import PhDataSource from '../model/datasource'
 
 export default {
     data() {
@@ -233,7 +244,13 @@ export default {
             color: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
             tagsColorArray: ['#133883','#90a8b7','#94be8e','#ff21ee','#1ac2ab','#77bec2','#c7c7c7','#a088bd','#d66b9b','#5354ec','#acacff','#1e8103', '#ec7211','#ec7211', '#ea1c82','#2bb1ac', '#3c498c', '#000', 'blue', '#666'],
 			searchData: [],
-			deleteScenarioDialog: false
+			deleteScenarioDialog: false,
+            projectName: '',
+            projectId: '',
+            AllData: [],
+            tagsArray: [],
+            startKey: '',
+            loading: false
         }
     },
     props: {
@@ -241,10 +258,10 @@ export default {
             type: Object,
             default: () => {
                 return {
-                    projectName: "",
-                    projectId: "",
-                    scenarios: [],
-                    tagsArray: []
+                    // projectName: "",
+                    // projectId: "",
+                    // scenarios: [],
+                    // tagsArray: []
                 }
             }
         },
@@ -252,6 +269,12 @@ export default {
             type: Object,
             default: function () {
                 return new PhDagDefinitions("1");
+            }
+        },
+        datasource: {
+            type: Object,
+            default: function() {
+                return new PhDataSource('1')
             }
         }
     },
@@ -267,33 +290,51 @@ export default {
     },
     computed: {
         nextIndexValue() {
-            const ids = this.allData.scenarios.map(x => parseInt(x.index))
+            const ids = this.datasource.data.map(x => parseInt(x.index))
             return 1 + Math.max(...ids)
         }
     },
-    mounted() { },
+    mounted() { 
+        this.projectId = this.getUrlParam("projectId")
+        this.projectName = this.getUrlParam("projectName")
+        const that = this
+        this.loading = true
+        this.datasource.refreshData(this, '', ()=>{
+            that.startKey = this.datasource.startKey
+            // that.totalCount = this.datasource.totalCount
+            // 总数据
+            that.AllData = this.datasource.data
+            that.loading = false
+        })
+    },
     watch: {
-        "allData.tagsArray": function() {
-            this.tagsColorArray = []
-            this.allData.tagsArray.forEach(() => {
-                this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
-            })
-        },
-        "allData.scenarios": function() {
-            this.searchData = this.allData.scenarios
-        },
-        searchValue: function() {
-            let searchValue = this.searchValue
-            this.state = 'search'
-            if(searchValue) {
-                this.searchData = this.allData.scenarios.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-            } else {
-                this.searchData = this.allData.scenarios
-            }
-            this.sort("ascending")
-        }
+        // "allData.tagsArray": function() {
+        //     this.tagsColorArray = []
+        //     this.allData.tagsArray.forEach(() => {
+        //         this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
+        //     })
+        // },
+        // "allData.scenarios": function() {
+        //     this.searchData = this.allData.scenarios
+        // },
+        // searchValue: function() {
+        //     let searchValue = this.searchValue
+        //     this.state = 'search'
+        //     if(searchValue) {
+        //         this.searchData = this.allData.scenarios.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
+        //     } else {
+        //         this.searchData = this.allData.scenarios
+        //     }
+        //     this.sort("ascending")
+        // }
     },
     methods: {
+        getUrlParam(value) {
+            let href = window.location.href
+            let paramArr = href.split("?")[1].split("&")
+            let data = paramArr.find(item => item.indexOf(value) > -1)
+            return data ? decodeURI(data).split("=")[1] : undefined
+        },
 		on_clickDeleteScenarioDialog() {
 			const event = new Event("event")
             event.args = {
@@ -302,32 +343,32 @@ export default {
                 param: {
                     name: "deleteScenarios",
                     selectedScenarios: this.scenarioCheckedIds,
-					scenarioArray: this.allData.scenarios,
-					projectName: this.allData.projectName,
-					projectId: this.allData.projectId
+					scenarioArray: this.datasource.data,
+					projectName: this.projectName,
+					projectId: this.projectId
                 }
             }
             this.deleteScenarioDialog = false
             this.$emit('event', event)
 		},
         checkName(data) {
-            let arr = this.allData.scenarios.filter(it => it.name === data)
+            let arr = this.datasource.data.filter(it => it.name === data)
             return arr.length === 0
         },
         addTagsEvent(data) {
             data.args.param.selectedscenarios = this.scenarioCheckedIds
-            data.args.param.scenarioArray = this.allData.scenarios
-            data.args.param.projectName = this.allData.projectName
-            data.args.param.projectId = this.allData.projectId
+            data.args.param.scenarioArray = this.datasource.data
+            data.args.param.projectName = this.projectName
+            data.args.param.projectId = this.projectId
             this.$emit('event', data)
             this.showCreateTagsDialog = false;
         },
         //清除数据集中数据
         clearTags(data) {
             data.args.param.selectedscenarios = this.scenarioCheckedIds
-            data.args.param.scenarioArray = this.allData.scenarios
-            data.args.param.projectName = this.allData.projectName
-            data.args.param.projectId = this.allData.projectId
+            data.args.param.scenarioArray = this.datasource.data
+            data.args.param.projectName = this.projectName
+            data.args.param.projectId = this.projectId
             this.$emit('event', data)
             this.cleardialogshow = false;
         },
@@ -371,8 +412,8 @@ export default {
                 element: this,
                 param: {
                     name: "scenario-detail",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId,
+                    projectName: this.projectName,
+                    projectId: this.projectId,
                     scenario: data
                 }
             }
@@ -380,12 +421,12 @@ export default {
         },
         //全选list
         chechedAllScenario() {
-            this.isCheckedAllScenario = this.scenarioCheckedIds.length !== this.allData.scenarios.length;
+            this.isCheckedAllScenario = this.scenarioCheckedIds.length !== this.datasource.data.length;
             this.scenarioCheckedIds = []
             this.scenarioCheckedNames = []
             //全选状态
             if(this.isCheckedAllScenario) {
-                this.allData.scenarios.forEach(item => {
+                this.datasource.data.forEach(item => {
                     this.scenarioCheckedIds.push(item.id)
                     this.scenarioCheckedNames.push(item.name)
                 })
@@ -473,8 +514,8 @@ export default {
                 element: this,
                 param: {
                     name: "linkToProject",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId
+                    projectName: this.projectName,
+                    projectId: this.projectId
                 }
             }
             this.$emit('event', event)
@@ -485,7 +526,12 @@ export default {
 			this.deleteScenarioDialog = true
         },
         openCreateScenarioDialog() {
-            this.showCreateScenarioDialog = !this.showCreateScenarioDialog
+            if (this.showCreateScenarioDialog) {
+                this.showCreateScenarioDialog = false
+            } else {
+                this.showCreateScenarioDialog = true
+            }
+            // this.showCreateScenarioDialog = !this.showCreateScenarioDialog
         },
         scenarioActiveChange(scenario) {
             const event = new Event("event")
@@ -493,8 +539,8 @@ export default {
                 callback: "resetScenario",
                 element: this,
                 param: {
-                    projectId: this.allData.projectId,
-                    projectName: this.allData.projectName,
+                    projectId: this.projectId,
+                    projectName: this.projectName,
                     scenario: scenario
                 }
             }
@@ -506,8 +552,8 @@ export default {
                 callback: "createScenario",
                 element: this,
                 param: {
-                    projectId: this.allData.projectId,
-                    projectName: this.allData.projectName,
+                    projectId: this.projectId,
+                    projectName: this.projectName,
                     scenario: scenario
                 }
             }
@@ -1173,4 +1219,133 @@ export default {
         cursor: pointer;
         margin-bottom: 5px;
     }
+
+#loadingio-spinner-double-ring-ho1zizxmctu {
+    backdrop-filter: blur(1px);
+    /* 毛玻璃特效 */
+    background: rgba(200, 0, 0, 0.05);
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* 	使用transform: translateZ(0)加快动画和过渡的速度
+	使用scale进行缩放
+*/
+.ldio-400lpppmiue {
+    position: absolute;
+    transform: translateZ(0) scale(0.8);
+}
+
+/*  创建动画
+	1. 0%是动画开始时间
+	2. 100%是动画结束时间
+	3. transform: rorate()是正时针旋转的角度
+*/
+@keyframes ldio-400lpppmiue {
+    0% {
+        transform: rotate(0)
+    }
+
+    100% {
+        transform: rotate(360deg)
+    }
+}
+
+.ldio-400lpppmiue div {
+    box-sizing: border-box;
+}
+
+.ldio-400lpppmiue>div {
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    top: -30px;
+    left: -30px;
+    border-radius: 50%;
+    border: 4px solid #000;
+    border-color: #f5c924 transparent #f5c924 transparent;
+    animation: ldio-400lpppmiue 1s linear infinite;
+}
+
+.ldio-400lpppmiue>div:nth-child(2),
+.ldio-400lpppmiue>div:nth-child(4) {
+    width: 58px;
+    height: 58px;
+    top: -26px;
+    left: -26px;
+    animation: ldio-400lpppmiue 1s linear infinite reverse;
+}
+
+.ldio-400lpppmiue>div:nth-child(2) {
+    border-color: transparent #747789 transparent #747789
+}
+
+.ldio-400lpppmiue>div:nth-child(3) {
+    border-color: transparent
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div:before,
+.ldio-400lpppmiue>div:nth-child(3) div:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    top: -4px;
+    left: 28px;
+    background: #f5c924;
+    border-radius: 0%;
+    box-shadow: 0 64px 0 0 #f5c924;
+}
+
+.ldio-400lpppmiue>div:nth-child(3) div:after {
+    left: -4px;
+    top: 28px;
+    box-shadow: 64px 0 0 0 #f5c924;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) {
+    border-color: transparent;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div:before,
+.ldio-400lpppmiue>div:nth-child(4) div:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    top: -4px;
+    left: 23px;
+    background: #747789;
+    border-radius: 0%;
+    box-shadow: 0 54px 0 0 #747789;
+}
+
+.ldio-400lpppmiue>div:nth-child(4) div:after {
+    left: -4px;
+    top: 23px;
+    box-shadow: 54px 0 0 0 #747789;
+}
 </style>
