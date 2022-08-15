@@ -51,13 +51,6 @@
                             v-tooltip="levelMsg"
                             class="ques-img" 
                             icon="el-icon-question" circle></el-button>
-                        <!-- <span
-                            @mouseover="hoverIn"
-                            @mouseleave="hoverOut">
-                            <img :src="defs.iconsByName('info')" 
-                                class="ques-img"/>
-                        </span>
-                        <span class="info-msg" v-show="hover"></span> -->
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -142,13 +135,7 @@ import ElInputNumber from 'element-ui/packages/input-number/index'
 import Vue from 'vue'
 import VTooltip from 'v-tooltip'
 
-Vue.use(VTooltip, {
-  themes: {
-    'info-tooltip': {
-      $extend: 'tooltip',
-    },
-  },
-})
+Vue.use(VTooltip)
 
 export default {
     components: {
