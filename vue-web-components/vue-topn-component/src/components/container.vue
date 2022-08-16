@@ -150,7 +150,6 @@ export default {
             active: 3,
             flowVersion: "developer",
             activeName: "Setting",
-            activeNameOld: "",
             datasetArray: [],
             stepsDefs: [
                 {
@@ -181,7 +180,7 @@ export default {
             ],
             savePopup: false,
             transition: 0,
-            loading: false,
+            loading: false
         }
     },
     props: {

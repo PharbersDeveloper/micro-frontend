@@ -22,6 +22,7 @@
                 ref="table"
                 class="script-param-table"
                 :data="scriptParamsList"
+                :key="itemkey"
                 style="width: 100%">
                 <el-table-column
                     type="index"
@@ -166,6 +167,7 @@ export default {
             },
             paramCount: 0,
             hover: true,
+            itemkey: false,
             levelMsg: "同优先级按排列顺序运行"
         }
     },
@@ -179,6 +181,14 @@ export default {
         scriptParamsData: Array
     },
     methods: {
+        hoverIn() {
+            this.hover = true
+            this.itemkey = !this.hover
+        },
+        hoverOut() {
+            this.hover = false
+            this.itemkey = !this.hover
+        },
         inputStrChecked(value, ref) {
             // 只允许输入数字、字母、下划线
             let r = /^[a-zA-Z0-9_^]{1,}$/

@@ -60,6 +60,8 @@ export async function phTopnContainerEventHandler(e, route) {
 			if (params) {
 				customCallbackFuncs[params.changeuuid] = params.callback
 				transition = params.transition
+				route.projectId = params.projectId
+				route.projectName = params.projectName
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",
