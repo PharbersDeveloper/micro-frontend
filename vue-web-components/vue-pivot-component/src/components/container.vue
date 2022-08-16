@@ -3,7 +3,7 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="pivot_header">
             <div class="header_left">
-                <img :src="defs.iconsByName('topn')" alt="" />
+                <img :src="defs.iconsByName('pivot')" alt="" />
                 <span class="title">{{jobShowName}}</span>
 				<span class="link-to" @click="linkToVideos">视频教程</span>
             </div>

@@ -36,7 +36,7 @@ import ElDialog from "element-ui/packages/dialog/index"
 import ElForm from "element-ui/packages/form/index"
 import ElFormItem from "element-ui/packages/form-item/index"
 import PhDagDefinitions from "./policy/definitions/definitions"
-import { MessageBox, Message } from 'element-ui'
+import { Message } from 'element-ui'
 
 export default {
     data() {
