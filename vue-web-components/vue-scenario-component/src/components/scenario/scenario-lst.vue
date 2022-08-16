@@ -600,14 +600,14 @@ export default {
                             Message({
                                 type: 'error',
                                 showClose: true,
-                                duration: 3000,
+                                duration: 0,
                                 message: '该Scenario已存在！'
                             })
                         } else {
                             Message({
                                 type: 'error',
                                 showClose: true,
-                                duration: 3000,
+                                duration: 0,
                                 message: '新建失败'
                             })
                         }
