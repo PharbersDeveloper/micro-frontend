@@ -180,7 +180,7 @@ export default {
             selection: [],
             savePopup: false,
             transition: 0,
-            loading: false,
+            loading: false
         }
     },
     props: {
@@ -293,7 +293,7 @@ export default {
 			}
 			this.datasource.saveAndGenCode(params, this)
         },
-        save() {
+        save(transition) {
 			this.savePopup = false
             this.loading = true
             this.transition = transition
