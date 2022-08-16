@@ -1,7 +1,7 @@
 <template>
     <div class="scenario-detail">
         <h2>运行</h2>
-        <el-form :model="scenario" label-width="120px">
+        <el-form :model="scenario"  :label-position="labelPosition">
             <el-form-item label="自动触发" prop="delivery">
                 <el-switch v-model="scenario.active" class="switch"></el-switch>
             </el-form-item>
@@ -29,7 +29,7 @@ export default {
     },
     data() {
         return {
-
+            labelPosition:'left'
         }
     },
     props: {
@@ -79,15 +79,24 @@ export default {
 
     .el-form-item__content{
         position: relative;
+        .el-switch{
+            width:40px;
+            position: absolute;
+            top:4px;
+            left: 555px;
+        }
     }
-    .el-switch ,.is-checked{
-        position: absolute;
-        right: 0;
-    }
-    .user{
-        .el-input__inner{
-            width: 100%;
-            min-width: 226px;
+    .el-form {
+        margin-left: 75px;
+         .user{
+            .el-input{
+                width:430px;
+                height:32px;
+            }
+            /deep/.el-input__inner{
+                width:430px;
+                height: 32px !important;
+            }
         }
     }
 </style>
