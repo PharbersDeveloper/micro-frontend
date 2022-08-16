@@ -2,6 +2,7 @@
 import { hostName, actionTableName } from "../config/envConfig"
 
 export async function phScenarioScenarioLstEventHandler(e, route) {
+	let customCallbackFuncs = {}
 	let params = e.detail[0].args.param
 	const accessToken = route.cookies.read("access_token")
 	const deleteScenarioEventName = "deleteScenarios"
@@ -74,7 +75,10 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 						owner: targetscenario.owner,
 						active: targetscenario.active,
 						index: targetscenario.index,
-						traceId: targetscenario.traceId
+						traceId: targetscenario.traceId,
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						)
 					}
 				}
 
@@ -150,6 +154,8 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 				let createScenarioResult = await fetch(url, options).then(
 					(res) => res.json()
 				)
+				customCallbackFuncs[createScenarioResult.traceId] =
+					params.callback
 				console.log(createScenarioResult)
 				route.noticeService.defineAction({
 					type: "iot",
@@ -282,7 +288,8 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 			alert("新建scenario成功！")
 			route.router.transitionTo("shell", route.scenarioDetailUri)
 		} else if (status == "failed") {
-			alert("新建失败")
+			customCallbackFuncs[param.traceId](param, payload)
+			// alert("新建失败")
 			console.log(error)
 		}
 		route.loadingService.loading.style.display = "none"

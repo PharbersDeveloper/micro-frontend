@@ -6,12 +6,12 @@
                 <div class="project_info_left">
                     <div class="upload_top">
                         <div class="selected_search">
-                            <div class="selected"
-                                 :class="[
+                            <div class="selected" :class="[
                                     {'bg_disabled': scenarioCheckedIds.length === 0}]">
-                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllScenario()' :checked="scenarioCheckedIds.length === datasource.data.length && datasource.data.length !== 0">
+                                <input type="checkbox" class="checkbox" ref="all" @click='chechedAllScenario()'
+                                    :checked="scenarioCheckedIds.length === AllData.length && AllData.length !== 0">
                                 <div class="opt-area" @click="dropShow">
-                                    <span class="action" >选项</span>
+                                    <span class="action">选项</span>
                                     <img :src="dropDownIcon" alt="" class="d_icon">
                                     <div class="drop_dialog" v-if="dropDialogShow">
                                         <div class="label_icon" @click="createTagsOpen">
@@ -24,13 +24,13 @@
                                             <span>
                                                 <img :src="clear_data_icon" alt="">
                                             </span>
-                                            <p >清除数据</p>
+                                            <p>清除数据</p>
                                         </div>
                                         <div class="label_icon border_none" @click="deleteCurrentScenario">
                                             <span>
                                                 <img :src="delete_icon" alt="">
                                             </span>
-                                            <p >删除Scenario</p>
+                                            <p>删除Scenario</p>
                                         </div>
                                     </div>
                                 </div>
@@ -51,13 +51,14 @@
                                 <!-- 降序(默认) -->
                                 <img :src="descending_order" alt="" v-if="!ascending" @click="sort('descending')">
                             </div>
-                            <div class="down_sel" >
-                                <bp-select-vue :src="selectIcon" :choosedValue="scenarioSortedBy" @showSelectOption="showSelectOption" :closeTosts="closeTosts">
+                            <div class="down_sel">
+                                <bp-select-vue :src="selectIcon" :choosedValue="scenarioSortedBy"
+                                    @showSelectOption="showSelectOption" :closeTosts="closeTosts">
                                     <bp-option-vue text="名称" @click="selectScenario(1)"></bp-option-vue>
                                 </bp-select-vue>
                             </div>
                             <div class="line">|</div>
-                            <div class="down_sel tags_down_sel" >
+                            <div class="down_sel tags_down_sel">
                                 <p class="sel" @click="labelShow">标签</p>
                                 <span class="drop_icon" @click="labelShow">
                                     <img :src="dropDownIcon" alt="">
@@ -65,7 +66,8 @@
                                 <div class="label_selected" v-if="labelShowDialog">
                                     <div class="tag_arr">
                                         <div class="label_name" v-for="(item,index) in allData.tagsArray" :key="index">
-                                            <span  :style="{background: tagsColorArray[allData.tagsArray.indexOf(item)]}"></span>
+                                            <span
+                                                :style="{background: tagsColorArray[allData.tagsArray.indexOf(item)]}"></span>
                                             <!-- <div class="tags_name">{{item}}</div> -->
                                         </div>
                                     </div>
@@ -75,50 +77,61 @@
                                 </div>
                             </div>
                             <div class="clear_sea" @click="clearSearch" v-if="searchValue">清空搜索项</div>
-                            <div class="scenario_number">
-                                <p>{{datasource.data.length}} 条 Scenarios</p>
+                            <div class="scenario_number" v-if="searchValue.length !== 0">
+                                <p>{{ datasource.data.length }} / {{ totalCount }} 条 Scenarios</p>
+                            </div>
+                            <div class="scenario_number" v-else>
+                                <p>{{ totalCount }} 条 Scenarios</p>
                             </div>
                         </div>
                     </div>
                     <div class="upload_bottom">
-                        <div class="data_content" v-for="(scenario,index) in datasource.data" :key="index" ref="content" :class="{bg: scenarioCheckedIds.indexOf(scenario.id) > -1}" @click="clickOnlyOne(scenario, index)">
-                            <div class="data_input" @click.stop="checkedMore(scenario)">
-                                <input type="checkbox" ref="data" name="scenarioList" :checked="scenarioCheckedIds.indexOf(scenario.id) > -1" @click.stop="checkedOneScenario(scenario)" />
-                            </div>
-                            <div class="item_list">
-                                <span class="script_icon">
-                                    <img :src="defs.iconsByName('scenario')" alt="">
-                                </span>
-                                <p class="data_name" @click.stop="clickScenarioName(scenario)" :title="scenario.scenarioName">{{scenario.scenarioName}}</p>
-                                <div class="tag_area" ref="tagsArea">
-                                    <div v-for="(tag,inx) in scenario.label" :key="inx">
-                                        <span v-if="scenario.label !== ''">
-                                            <!-- <p :title="tag" class="tag_bg"
+                        <div class="data_block_content">
+                            <div class="data_content" v-for="(scenario,index) in datasource.data" :key="index"
+                                ref="content" :class="{bg: scenarioCheckedIds.indexOf(scenario.id) > -1}"
+                                @click="clickOnlyOne(scenario, index)">
+                                <div class="data_input" @click.stop="checkedMore(scenario)">
+                                    <input type="checkbox" ref="data" name="scenarioList"
+                                        :checked="scenarioCheckedIds.indexOf(scenario.id) > -1"
+                                        @click.stop="checkedOneScenario(scenario)" />
+                                </div>
+                                <div class="item_list">
+                                    <span class="script_icon">
+                                        <img :src="defs.iconsByName('scenario')" alt="">
+                                    </span>
+                                    <p class="data_name" @click.stop="clickScenarioName(scenario)"
+                                        :title="scenario.scenarioName">{{scenario.scenarioName}}</p>
+                                    <div class="tag_area" ref="tagsArea">
+                                        <div v-for="(tag,inx) in scenario.label" :key="inx">
+                                            <span v-if="scenario.label !== ''">
+                                                <!-- <p :title="tag" class="tag_bg"
                                                :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">
                                                {{tag}}
                                             </p> -->
-                                        </span>
-                                    </div>
+                                            </span>
+                                        </div>
 
-                                    <!-- tag的更多按钮，暂时隐藏 -->
-                                    <!-- <img src=`${staticFilePath}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
+                                        <!-- tag的更多按钮，暂时隐藏 -->
+                                        <!-- <img src=`${staticFilePath}` + "/%E6%9B%B4%E5%A4%9A.svg" alt="" class="more_tags" ref="moreTags"> -->
+                                    </div>
+                                </div>
+                                <div class="scenario-active-switch">
+                                    <span>自动运行</span>
+                                    <el-switch @change="scenarioActiveChange(scenario)" v-model="scenario.active"
+                                        active-color="#13ce66" inactive-color="#ff4949">
+                                    </el-switch>
                                 </div>
                             </div>
-                            <div class="scenario-active-switch" >
-                                <span>自动运行</span>
-                                <el-switch @change="scenarioActiveChange(scenario)"
-                                           v-model="scenario.active"
-                                           active-color="#13ce66"
-                                           inactive-color="#ff4949">
-                                </el-switch>
-                            </div>
-
+                            <div class="word" v-show="datasource.data.length == 0" v-if="searchValue.length !== 0">
+                                当前页面搜索无结果</div>
+                            <div class="word" v-show="datasource.data.length == 0" v-else>当前项目无数据</div>
                         </div>
-                        <div class="word" v-if="datasource.data.length === 0">当前项目无数据</div>
+                        <p class="block" @click="goUp" v-if="AllData.length !== totalCount">更多</p>
+                        <p class="block" v-else>暂无更多</p>
                     </div>
                 </div>
                 <div class="project_info_right">
-                    <div class="view_content" v-if="scenarioCheckedIds.length > 0" >
+                    <div class="view_content" v-if="scenarioCheckedIds.length > 0">
                         <div class="project_name_view">
                             <span class="space">
                                 <img :src="database_icon" alt="">
@@ -162,26 +175,17 @@
             </div>
         </div>
         <!-- 添加tag -->
-        <create-tags-dialog
-			v-if="showCreateTagsDialog"
-			:scenarioCheckedIds="scenarioCheckedIds"
-			:scenarioCheckedNames="scenarioCheckedNames"
-			:tagsArray="tagsArray"
-			:tagsColorArray="tagsColorArray"
-			@addTagsEvent="addTagsEvent"
-			@closeCreateDialog="closeCreateDialog">
+        <create-tags-dialog v-if="showCreateTagsDialog" :scenarioCheckedIds="scenarioCheckedIds"
+            :scenarioCheckedNames="scenarioCheckedNames" :tagsArray="tagsArray" :tagsColorArray="tagsColorArray"
+            @addTagsEvent="addTagsEvent" @closeCreateDialog="closeCreateDialog">
         </create-tags-dialog>
         <!-- 管理标签 -->
-        <delete-tags-dialog :tags="tags" v-if="deleteTagsDialog" @closeDeleteTags="closeDeleteTags"></delete-tags-dialog>
-        <create-scenario-dlg 
-			:dialog-visible="showCreateScenarioDialog"
-			:project-name="projectName"
-			:index="nextIndexValue" owner="alfred"
-			@cancelCreateScenario="showCreateScenarioDialog = false" @createScenario="createNewScenario" />
-		<el-dialog
-            title="数据样本配置"
-            :visible.sync="deleteScenarioDialog"
-            width="800px">
+        <delete-tags-dialog :tags="tags" v-if="deleteTagsDialog" @closeDeleteTags="closeDeleteTags">
+        </delete-tags-dialog>
+        <create-scenario-dlg :dialog-visible="showCreateScenarioDialog" :project-name="projectName"
+            :index="nextIndexValue" owner="alfred" @cancelCreateScenario="showCreateScenarioDialog = false"
+            @createScenario="createNewScenario" />
+        <el-dialog title="数据样本配置" :visible.sync="deleteScenarioDialog" width="800px">
             <div>确定删除以下scenario吗？</div>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="deleteScenarioDialog = false">取消</el-button>
@@ -204,6 +208,7 @@ import PhDagDefinitions from "../policy/definitions/definitions";
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from '../model/datasource'
+import { Message } from 'element-ui'
 
 export default {
     data() {
@@ -301,7 +306,7 @@ export default {
         this.loading = true
         this.datasource.refreshData(this, '', ()=>{
             that.startKey = this.datasource.startKey
-            // that.totalCount = this.datasource.totalCount
+            that.totalCount = this.datasource.totalCount
             // 总数据
             that.AllData = this.datasource.data
             that.loading = false
@@ -314,21 +319,35 @@ export default {
         //         this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
         //     })
         // },
-        // "allData.scenarios": function() {
-        //     this.searchData = this.allData.scenarios
-        // },
-        // searchValue: function() {
-        //     let searchValue = this.searchValue
-        //     this.state = 'search'
-        //     if(searchValue) {
-        //         this.searchData = this.allData.scenarios.filter(item => item.name.toLowerCase().indexOf(searchValue.toLowerCase()) > -1)
-        //     } else {
-        //         this.searchData = this.allData.scenarios
-        //     }
-        //     this.sort("ascending")
-        // }
+        searchValue(newValue, oldValue) {
+            this.searchValue = newValue
+            this.state = 'search'
+            this.search(this.searchValue)
+        }
     },
     methods: {
+        search(value){
+            if (value) {
+                this.datasource.data = this.AllData.filter(item => item.scenarioName.toLowerCase().indexOf(value.toLowerCase()) > -1)
+            } else {
+                this.datasource.data = this.AllData
+            }
+        },
+        goUp(){
+            let that = this
+            this.datasource.appendData(this,this.startKey,()=>{
+                that.startKey = this.datasource.startKey
+                that.AllData = that.AllData.concat(this.datasource.data)
+                this.datasource.data = that.AllData
+                if(that.searchValue.length !== 0){
+                    this.state = 'search'
+                    this.search(this.searchValue)
+                }
+                if (this.scenarioCheckedIds.length < this.datasource.data.length && this.scenarioCheckedIds.length !== 0) {
+                    this.$refs.all.indeterminate = true
+                }
+            })
+        },
         getUrlParam(value) {
             let href = window.location.href
             let paramArr = href.split("?")[1].split("&")
@@ -389,7 +408,15 @@ export default {
             } else {
                 this.checked = true
                 this.scenarioCheckedIds.push(scenario.id)
-                this.scenarioCheckedNames.push(scenario.name)
+                this.scenarioCheckedNames.push(scenario.scenarioName)
+            }
+            if (this.scenarioCheckedIds.length < this.datasource.data.length && this.scenarioCheckedIds.length !== 0) {
+                this.$refs.all.indeterminate = true
+            } else if (this.scenarioCheckedIds.length === this.datasource.data.length){
+                this.$refs.all.indeterminate = false
+                this.isCheckedAllScenario = true
+            } else {
+                this.$refs.all.indeterminate = false
             }
         },
         //点击list多选框
@@ -401,6 +428,14 @@ export default {
             } else {
                 this.scenarioCheckedIds.push(scenario.id)
                 this.scenarioCheckedNames.push(scenario.scenarioName)
+            }
+            if (this.scenarioCheckedIds.length < this.datasource.data.length && this.scenarioCheckedIds.length !== 0) {
+                this.$refs.all.indeterminate = true
+            } else if (this.scenarioCheckedIds.length === this.datasource.data.length){
+                this.$refs.all.indeterminate = false
+                this.isCheckedAllScenario = true
+            } else {
+                this.$refs.all.indeterminate = false
             }
         },
         //点击scenario name
@@ -428,7 +463,7 @@ export default {
             if(this.isCheckedAllScenario) {
                 this.datasource.data.forEach(item => {
                     this.scenarioCheckedIds.push(item.id)
-                    this.scenarioCheckedNames.push(item.name)
+                    this.scenarioCheckedNames.push(item.scenarioName)
                 })
             }
         },
@@ -445,15 +480,15 @@ export default {
             if(v === 'ascending') {
                 // 升序->降序
                 this.ascending = false
-                this.searchData.sort(
+                this.datasource.data.sort(
                     function compareFunction(param1, param2) {
-                        return param1.name.localeCompare(param2.name);
+                        return param1.scenarioName.localeCompare(param2.name);
                     }
                 )
             }else if (v === 'descending') {
                 // 降序->升序
                 this.ascending = true
-                this.searchData.reverse()
+                this.datasource.data.reverse()
             }
         },
         //排序条件下拉框
@@ -546,7 +581,7 @@ export default {
             }
             this.$emit('event', event)
         },
-        createNewScenario(scenario) {
+        createNewScenario(scenario, func) {
             const event = new Event("event")
             event.args = {
                 callback: "createScenario",
@@ -554,12 +589,41 @@ export default {
                 param: {
                     projectId: this.projectId,
                     projectName: this.projectName,
-                    scenario: scenario
+                    scenario: scenario,
+                    callback: (param, payload) => {
+                        const { message, status } = JSON.parse(payload)
+                        const {
+                            cnotification: { error }
+                        } = JSON.parse(message)
+                        if (status == "failed" && error.errorcode == -90) {
+                            Message.error('该Scenario已存在！', { duration: 0, showClose: true })
+                        }else{
+                            Message.error('新建失败', { duration: 0, showClose: true })
+                        }
+                    }
                 }
             }
             this.$emit('event', event)
 			this.showCreateScenarioDialog = false
-        }
+        },
+        // saveNotification(status) {
+        //     if (status == "success" || status == "succeed") {
+        //         Message({
+        //             type: 'success',
+        //             showClose: true,
+        //             duration: 3000,
+        //             message: '修改脚本成功！'
+        //         })
+        //     } else {
+		// 		this.loading = false
+        //         Message({
+        //             type: 'error',
+        //             showClose: true,
+        //             duration: 30000,
+        //             message: '修改脚本失败！'
+        //         })
+        //     }
+        // }
     }
 }
 </script>
@@ -594,7 +658,7 @@ export default {
         // height: 65px;
         border: 1px solid #dddddd;
         background: #fff;
-        z-index: 9999;
+        z-index: 8888;
         cursor: pointer;
         div {
             border-bottom: 1px solid #979797;
@@ -607,6 +671,7 @@ export default {
             }
         }
     }
+    
     .upload_scenario_container {
         width: 100vw;
         height: calc(100vh - 40px);
@@ -910,8 +975,13 @@ export default {
                 }
 
                 .upload_bottom {
-                    height: calc(100vh - 280px);
+                    height: calc(100vh - 160px);
                     overflow: auto;
+                    // border-bottom: 1px solid #ccc;
+                    flex-grow: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-between;
                     .word {
                         width: 100%;
                         height: 618px;
@@ -928,106 +998,124 @@ export default {
                         cursor: pointer;
                     }
 
-                    .data_content {
-                        flex-grow: 1;
+                    .data_block_content{
                         display: flex;
-                        width: 100%;
-                        box-sizing: border-box;
-                        // height: 60px;
-                        border-bottom: 1px solid #dddddd;
-                        padding: 10px 0 10px 10px;
-                        align-items: center;
-                        .data_input {
-                            width: 40px;
-                            height: 40px;
-                            input {
-                                height: 40px;
-                                cursor: pointer;
-                            }
-                        }
-                        .tag_bg:hover::after {
-                            content: attr(data-title);    //取到data-title属性的值
-                            display: inline-block;
-                            padding: 10px 14px;
-                            border: 1px solid #ddd;
-                            border-radius: 5px;
-                            position: absolute;
-                            top: -50px;
-                            left: -30px;
-                        }
-                        .tag_bg {
-                            position: relative;
-                            // top: -8px;
-                            left: 0px;
-                            font-size: 12px;
-                            color: #fff;
-                            height: 16px;
-                            text-align: center;
-                            padding: 0 8px;
-                            border-radius: 10px;
-                            margin-left: 10px;
-                            margin-bottom: 5px;
+                        flex-direction: column;
+                        flex-grow: 1;
+                    
+                        .data_content {
+                            // flex-grow: 1;
                             display: flex;
+                            width: 100%;
+                            box-sizing: border-box;
+                            // height: 60px;
+                            border-bottom: 1px solid #dddddd;
+                            padding: 10px 0 10px 10px;
                             align-items: center;
-                            justify-content: center;
-                            max-width: 120px;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                            padding: 0 10px;
-                        }
-                        .item_list {
-                            display: flex;
-                            flex-grow: 1;
-							align-items: center;
-                        }
-                        .script_icon {
-                            // margin-left: 27px;
-                            width: 30px;
-                            max-width: 30px;
-
-                            img {
-                                width: 24px;
-                                height: 24px;
+                    
+                            .data_input {
+                                width: 40px;
+                                height: 40px;
+                    
+                                input {
+                                    height: 40px;
+                                    cursor: pointer;
+                                }
                             }
-                        }
-                        .data_name {
-                            margin-left: 27px;
-                            font-family: PingFangSC-Medium;
-                            font-size: 14px;
-                            color: #000000;
-                            font-weight: 600;
-                            width: 400px;
-                            min-width: 400px;
-                            height: 40px;
-                            line-height: 40px;
-                            overflow: hidden;
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                        }
-                        .tag_area {
-                            display: flex;
-                            flex-wrap: wrap;
-                            overflow: hidden;
-                            img {
-                                width: 20px;
-                                height: 20px;
+                    
+                            .tag_bg:hover::after {
+                                content: attr(data-title); //取到data-title属性的值
+                                display: inline-block;
+                                padding: 10px 14px;
+                                border: 1px solid #ddd;
+                                border-radius: 5px;
+                                position: absolute;
+                                top: -50px;
+                                left: -30px;
                             }
-                            .more_tags {
-                                display: none;
+                    
+                            .tag_bg {
                                 position: relative;
-                                top: -8px;
+                                // top: -8px;
+                                left: 0px;
+                                font-size: 12px;
+                                color: #fff;
+                                height: 16px;
+                                text-align: center;
+                                padding: 0 8px;
+                                border-radius: 10px;
                                 margin-left: 10px;
+                                margin-bottom: 5px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                max-width: 120px;
+                                overflow: hidden;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                padding: 0 10px;
                             }
-                        }
-                        .scenario-active-switch {
-							display: flex;
-							align-items: center;
-							padding-right: 20px;
-							font-size: 16px;
-							span {
-								padding-right: 10px;
-							}
+                    
+                            .item_list {
+                                display: flex;
+                                flex-grow: 1;
+                                align-items: center;
+                            }
+                    
+                            .script_icon {
+                                // margin-left: 27px;
+                                width: 30px;
+                                max-width: 30px;
+                    
+                                img {
+                                    width: 24px;
+                                    height: 24px;
+                                }
+                            }
+                    
+                            .data_name {
+                                margin-left: 27px;
+                                font-family: PingFangSC-Medium;
+                                font-size: 14px;
+                                color: #000000;
+                                font-weight: 600;
+                                width: 400px;
+                                min-width: 400px;
+                                height: 40px;
+                                line-height: 40px;
+                                overflow: hidden;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                            }
+                    
+                            .tag_area {
+                                display: flex;
+                                flex-wrap: wrap;
+                                overflow: hidden;
+                    
+                                img {
+                                    width: 20px;
+                                    height: 20px;
+                                }
+                    
+                                .more_tags {
+                                    display: none;
+                                    position: relative;
+                                    top: -8px;
+                                    margin-left: 10px;
+                                }
+                            }
+                    
+                            .scenario-active-switch {
+                                display: flex;
+                                align-items: center;
+                                padding-right: 20px;
+                                font-size: 16px;
+                    
+                                span {
+                                    padding-right: 10px;
+                                }
+                            }
                         }
                     }
 
@@ -1038,6 +1126,15 @@ export default {
                         font-weight: 600;
                         // height: 80px;
 
+                    }
+
+                    .block{
+                        color: rgb(28, 30, 36);
+                        font-size: 18px;
+                        cursor: pointer;
+                        text-align: center;
+                        line-height: 60px;
+                        border-bottom: none;
                     }
                 }
             }
@@ -1050,7 +1147,7 @@ export default {
                     font-size: 14px;
                     color: #838383;
                     text-align: center;
-                    line-height: 800px;
+                    line-height: calc(100vh - 40px);
                 }
 
                 .view_content {
@@ -1059,16 +1156,18 @@ export default {
                     border-bottom: 1px solid #dddddd;
 
                     .view_func {
-                        margin-top: 100px;
+                        margin-top: 20px;
                         display: flex;
-                        justify-content: space-between;
-                        padding: 0 30px;
+                        flex-wrap: wrap;
+                        // justify-content: space-between;
+                        // padding: 0 30px;
                         .view_list {
                             display: flex;
                             flex-direction: column;
                             justify-content: center;
                             align-items: center;
                             width: 75px;
+                            margin-bottom: 20px;
                         }
                     }
 
