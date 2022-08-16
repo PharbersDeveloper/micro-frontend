@@ -3,7 +3,7 @@
         "prod": {
             "prefix": "dist",
             "files": [
-                "*.min.js"
+                "*.js"
             ],
             "destinations": [
 				{

@@ -180,7 +180,7 @@ export default {
             ],
             savePopup: false,
             transition: 0,
-            loading: false,
+            loading: false
         }
     },
     props: {
