@@ -314,7 +314,7 @@ export default {
         //         this.tagsColorArray.push(this.color[Math.floor(Math.random() * 10 + Math.random() * 10)])
         //     })
         // },
-        searchValue(newValue, oldValue) {
+        searchValue(newValue) {
             this.searchValue = newValue
             this.state = 'search'
             this.search(this.searchValue)

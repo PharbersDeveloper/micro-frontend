@@ -410,14 +410,8 @@ export default {
                     cat: outputCatNew
                 }
             }
-            
-            if (data.args.param.inputsArray.indexOf(outputNameNew) > -1) {
-                Message.error("input和output不能相同", { duration: 3000} )
-                return false
-            }
 
-
-            let script = {
+			let script = {
                 old: {
                     name: this.allData.jobName,
                     id: this.jobId
@@ -430,20 +424,27 @@ export default {
                 }
             }
             
-            const event = new Event("event")
-            event.args = {
-                callback: "changScriptInputOutput",
-                element: this,
-                param: {
-                    name: "changScriptInputOutput",
-                    projectId: this.projectId,
-                    projectName: this.projectName,
-                    dssOutputs: dssOutputs,
-                    dssInputs: dssInputs,
-                    script: script
-                }
+            if (data.args.param.inputsArray.indexOf(outputNameNew) > -1) {
+                Message.error("input和output不能相同", { duration: 3000} )
+                return false
             }
-            this.$emit('event', event)
+
+            this.datasource.changeInputOutputQuery(this, dssOutputs, dssInputs, script)
+            
+            // const event = new Event("event")
+            // event.args = {
+            //     callback: "changScriptInputOutput",
+            //     element: this,
+            //     param: {
+            //         name: "changScriptInputOutput",
+            //         projectId: this.projectId,
+            //         projectName: this.projectName,
+            //         dssOutputs: dssOutputs,
+            //         dssInputs: dssInputs,
+            //         script: script
+            //     }
+            // }
+            // this.$emit('event', event)
         },
         dealChangeInputOutputQuery(data, func) {
             const event = new Event("event")
