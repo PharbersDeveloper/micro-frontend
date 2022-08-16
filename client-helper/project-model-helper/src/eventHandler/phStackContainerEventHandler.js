@@ -1,5 +1,4 @@
-
-export async function phStackContainerEventHandler(e, route) { 
+export async function phStackContainerEventHandler(e, route) {
 	const params = e.detail[0].args.param
 	let customCallbackFuncs = {}
 	let transition = 0
@@ -54,7 +53,7 @@ export async function phStackContainerEventHandler(e, route) {
 				customCallbackFuncs[params.changeuuid] = params.callback
 				transition = params.transition
 				route.projectId = params.projectId
-    			route.projectName = params.projectName
+				route.projectName = params.projectName
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",
