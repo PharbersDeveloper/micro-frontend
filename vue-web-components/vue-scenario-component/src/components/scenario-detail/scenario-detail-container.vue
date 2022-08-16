@@ -211,5 +211,7 @@ export default {
         flex-direction: column;
         overflow: auto;
         flex-grow: 1;
+        background-color: #f2f2f2;
+        padding-top: 60px;
     }
 </style>

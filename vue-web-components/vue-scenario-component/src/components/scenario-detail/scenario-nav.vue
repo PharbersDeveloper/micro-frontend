@@ -69,9 +69,9 @@ export default {
         flex-direction: row;
 		align-items: center;
         justify-content: space-between;
-		border-bottom: 1px solid #666;
-		margin-bottom: 60px;
-		height: 40px;
+		border-bottom: 1px solid #ccc;
+		// margin-bottom: 60px;
+		height: 60px;
 
 		.scenario-nav-title {
 			padding: 0 10px;
@@ -94,9 +94,9 @@ export default {
         }
 
         .scenario-nav-btns {
-			margin: 0 10px;
+			margin: 5px 10px;
 			.content {
-				margin-right: 10px;
+				margin-right: 40px;
 			}
         }
     }
