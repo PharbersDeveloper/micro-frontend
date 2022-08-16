@@ -79,7 +79,12 @@ export default {
         save() {
             if (this.scenarioName.length > 0) {
                 if(this.scenarioName.length > 30){
-                    Message.error("输入内容过长！", { duration: 0, showClose: true })
+                    Message({
+                        type: 'error',
+                        showClose: true,
+                        duration: 3000,
+                        message: '输入内容过长！'
+                    })
                 } else {
                     let reg = /^[a-zA-Z0-9_^\u4E00-\u9FA5]{1,}$/
                     if (reg.test(this.scenarioName)) {
@@ -99,11 +104,21 @@ export default {
                         this.$emit("createScenario", scenario)
                         this.scenarioName = ''
                     } else {
-                        Message.error("请勿输入特殊字符！", { duration: 0, showClose: true })
+                        Message({
+                            type: 'error',
+                            showClose: true,
+                            duration: 3000,
+                            message: '请勿输入特殊字符！'
+                        })
                     } 
                 }
             } else {
-                Message.error("Scenario名称不能为空", { duration: 0, showClose: true })
+                Message({
+                    type: 'error',
+                    showClose: true,
+                    duration: 3000,
+                    message: 'Scenario名称不能为空'
+                })
             }
         },
         close(){

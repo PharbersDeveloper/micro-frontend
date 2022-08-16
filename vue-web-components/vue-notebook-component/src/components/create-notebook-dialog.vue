@@ -75,20 +75,14 @@ export default {
             this.name = ''
 		},
         confirmCreation() {
-            // const event = new Event("event")
-            // event.args = {
-            //     callback: "createNotebook",
-            //     param: {
-            //         name: this.name,
-            //         type: this.selectCodeeditorType
-            //     }
-            // }
-            // this.$emit("confirm", event)
-
-
             if (this.name.length > 0) {
                 if(this.name.length > 30){
-                    Message.error("输入内容过长！", { duration: 0, showClose: true })
+                    Message({
+                        type: 'error',
+                        showClose: true,
+                        duration: 3000,
+                        message: '输入内容过长！'
+                    })
                 } else {
                     let reg = /^[A-Za-z0-9]+$/
                     if (reg.test(this.name)) {
@@ -103,11 +97,21 @@ export default {
                         this.$emit("confirm", event)
                         this.name = ''
                     } else {
-                        Message.error("请勿输入特殊字符！", { duration: 0, showClose: true })
+                        Message({
+                            type: 'error',
+                            showClose: true,
+                            duration: 3000,
+                            message: '请勿输入特殊字符！'
+                        })
                     } 
                 }
             } else {
-                Message.error("Scenario名称不能为空", { duration: 0, showClose: true })
+                Message({
+                    type: 'error',
+                    showClose: true,
+                    duration: 3000,
+                    message: 'Scenario名称不能为空'
+                })
             }
         }
     },

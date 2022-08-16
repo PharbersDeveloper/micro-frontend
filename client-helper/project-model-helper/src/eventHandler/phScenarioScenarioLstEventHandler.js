@@ -289,8 +289,6 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 			route.router.transitionTo("shell", route.scenarioDetailUri)
 		} else if (status == "failed") {
 			customCallbackFuncs[param.traceId](param, payload)
-			// alert("新建失败")
-			console.log(error)
 		}
 		route.loadingService.loading.style.display = "none"
 	}

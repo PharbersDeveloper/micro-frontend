@@ -596,10 +596,20 @@ export default {
                         const {
                             cnotification: { error }
                         } = JSON.parse(message)
-                        if (status == "failed" && error.errorcode == -90) {
-                            Message.error('该Scenario已存在！', { duration: 0, showClose: true })
-                        }else{
-                            Message.error('新建失败', { duration: 0, showClose: true })
+                        if (status == "failed" && JSON.parse(error).errorcode == -90) {
+                            Message({
+                                type: 'error',
+                                showClose: true,
+                                duration: 3000,
+                                message: '该Scenario已存在！'
+                            })
+                        } else {
+                            Message({
+                                type: 'error',
+                                showClose: true,
+                                duration: 3000,
+                                message: '新建失败'
+                            })
                         }
                     }
                 }
