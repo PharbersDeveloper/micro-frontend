@@ -281,9 +281,6 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 	function createScenarioCallback(param, payload) {
 		console.log(payload)
 		const { message, status } = JSON.parse(payload)
-		const {
-			cnotification: { error }
-		} = JSON.parse(message)
 		if (status == "success") {
 			alert("新建scenario成功！")
 			route.router.transitionTo("shell", route.scenarioDetailUri)
