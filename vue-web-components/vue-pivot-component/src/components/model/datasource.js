@@ -34,7 +34,7 @@ export default class PhDataSource {
         let body = {
             "table": "step",
             "conditions": {
-                // "pjName": ["=", projectId + "_" + jobName]
+				// "id": ["=", [projectId, jobId].join("_")],
                 "id": ["=", projectId + "_" + jobId]
             },
 			"index_name": "id-index-index",
@@ -56,7 +56,7 @@ export default class PhDataSource {
 
     refreshData(projectId, jobName, jobId) {
         const that = this
-        this.buildQuery(projectId, jobName, jobId)
+        this.buildQuery(projectId, jobId)
             .then((response) => response.json())
             .then((response) => {
                 that.currentPageToken = response.meta.start_key
@@ -178,40 +178,81 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    buildSaveQuery(projectId, jobName, param) {
-        const steps = [{
-            pjName: this.step["pj-name"],
-            stepId: this.step["step-id"],
-            ctype: this.step["ctype"],
-            expressions: {
-                "type": "pivot",
-                "code": "pyspark",
-                "params": param
+    buildSaveQuery(param) {
+		const url = `${hostName}/phdydatasource/put_item`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+			"table": "step",
+			"item": {
+				"id": this.step["id"],
+				"pjName": this.step["pj-name"],
+				"stepId": this.step["step-id"],
+				"index": this.step["index"],
+				"ctype": this.step["ctype"],
+				"expressions": JSON.stringify({
+					"type": "topn",
+					"code": "pyspark",
+					"params": param
+				}),
+				"runtime": this.step["runtime"],
+				"groupName": this.step["group-name"],
+				"groupIndex": this.step["group-index"],
+				"expressionsValue": this.step["expressions-value"],
+				"stepName": this.step["step-name"]
+			}
+		}
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
             },
-            expressionsValue: this.step["expressions-value"],
-            groupIndex: this.step["group-index"],
-            groupName: this.step["group-name"],
-            id: this.step["id"],
-            index: this.step["index"],
-            runtime : this.step["runtime"],
-            stepName: this.step["step-name"]
-        }]
-        const event = new Event("event")
-        event.args = {
-            callback: "savePivot",
-            element: this,
-            param: {
-                name: "savePivot",
-                projectId: this.parent.projectId,
-                projectName: this.parent.projectName,
-                stepsArr: steps
-            }
+            body: JSON.stringify(body)
         }
-        this.parent.$emit('event', event)
+        return fetch(url, options)
+        // const steps = [{
+        //     pjName: this.step["pj-name"],
+        //     stepId: this.step["step-id"],
+        //     ctype: this.step["ctype"],
+        //     expressions: {
+        //         "type": "pivot",
+        //         "code": "pyspark",
+        //         "params": param
+        //     },
+        //     expressionsValue: this.step["expressions-value"],
+        //     groupIndex: this.step["group-index"],
+        //     groupName: this.step["group-name"],
+        //     id: this.step["id"],
+        //     index: this.step["index"],
+        //     runtime : this.step["runtime"],
+        //     stepName: this.step["step-name"]
+        // }]
+        // const event = new Event("event")
+        // event.args = {
+        //     callback: "savePivot",
+        //     element: this,
+        //     param: {
+        //         name: "savePivot",
+        //         projectId: this.parent.projectId,
+        //         projectName: this.parent.projectName,
+        //         stepsArr: steps
+        //     }
+        // }
+        // this.parent.$emit('event', event)
     }
 
     saveAndGenCode(projectId, jobName, param) {
-        this.buildSaveQuery(projectId, jobName, param)
+        this.buildSaveQuery(param)
+			.then((response) => response.json())
+			.then((response) => {
+				if (response.data.id) {
+					ele.$refs.changeInputOutput.save()
+				} else {
+					ele.saveNotification("failed")
+				}
+			})
     }
 
     guid() {
