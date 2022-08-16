@@ -11,7 +11,7 @@ export default class PhDataSource {
         this.projectId = ''
         this.batch_size = 20
         this.store = new JsonApiDataStore()
-        this.debugToken = "c2c142d8c67dcd8e7aeb43acb9e86b4b8fe0eaab798dc2d2f86beadb5cb29658"
+        this.debugToken = "0a741ed989acbf5672a6616be1afcfff294aa1bb4658a9c194d9eda3ea3f6a80"
         if (!adapter) {
             this.adapter = this.defaultAdapter
         }
@@ -108,7 +108,7 @@ export default class PhDataSource {
         ele.datasource.buildQuery(ele, key)
             .then((response) => response.json())
             .then((response) => {
-                that.store = new JsonApiDataStore()
+                // that.store = new JsonApiDataStore()
                 that.store.sync(response)
                 that.data = that.jsonapiAdapter(that.store.findAll("scenarios"))
                 // var newData = response.data.map(x=>{

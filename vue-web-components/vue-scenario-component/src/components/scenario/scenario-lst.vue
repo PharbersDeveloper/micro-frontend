@@ -337,8 +337,9 @@ export default {
             let that = this
             this.datasource.appendData(this,this.startKey,()=>{
                 that.startKey = this.datasource.startKey
-                that.AllData = that.AllData.concat(this.datasource.data)
-                this.datasource.data = that.AllData
+                // that.AllData = that.AllData.concat(this.datasource.data)
+                // this.datasource.data = that.AllData
+                that.AllData = this.datasource.data
                 if(that.searchValue.length !== 0){
                     this.state = 'search'
                     this.search(this.searchValue)
