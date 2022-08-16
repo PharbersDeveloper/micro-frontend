@@ -3,9 +3,9 @@
         <h2>运行</h2>
         <el-form :model="scenario" label-width="120px">
             <el-form-item label="自动触发" prop="delivery">
-                <el-switch v-model="scenario.active"></el-switch>
+                <el-switch v-model="scenario.active" class="switch"></el-switch>
             </el-form-item>
-            <el-form-item label="运行用户名">
+            <el-form-item label="运行用户名" class="user">
                 <el-input disabled v-model="scenario['show-name']"></el-input>
             </el-form-item>
         </el-form>
@@ -69,10 +69,25 @@ export default {
     }
 
     .scenario-detail {
-        border: 1px solid #666;
+        // border: 1px solid #666;
         margin: 1px auto;
         padding: 14px 36px;
         width: 800px;
 		margin-bottom: 40px;
+        background-color: #ffffff;
+    }
+
+    .el-form-item__content{
+        position: relative;
+    }
+    .el-switch ,.is-checked{
+        position: absolute;
+        right: 0;
+    }
+    .user{
+        .el-input__inner{
+            width: 100%;
+            min-width: 226px;
+        }
     }
 </style>

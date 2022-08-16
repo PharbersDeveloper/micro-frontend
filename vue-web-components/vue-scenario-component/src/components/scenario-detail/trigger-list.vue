@@ -1,31 +1,19 @@
 <template>
-    <div class="scenario-triggers">
-        <div class="scenario-trigger-create">
-            <h2>Triggers</h2>
-			<select 
-				class="add-trigger-select"
-				ref="addNewTriggerSelect"
-				@change="addNewTrigger"
-				@click="addNewTriggerClick"
-				placeholder="ADD Trigger" 
-				value="ADD Trigger" name="" id="">
-				<option 
-					value="ADD Trigger" 
-					label="ADD Trigger"
-					style="display: none"></option>
-				<option 
-					v-for="item in options"
-					:key="item.index"
-					:label="item.desc"
-					:disabled="item.disable"
+	<div class="scenario-triggers">
+		<div class="scenario-trigger-create">
+			<h2>Triggers</h2>
+			<select class="add-trigger-select" ref="addNewTriggerSelect" @change="addNewTrigger"
+				@click="addNewTriggerClick" placeholder="ADD Trigger" value="ADD Trigger" name="" id="">
+				<option value="ADD Trigger" label="ADD Trigger"></option>
+				<option v-for="item in options" :key="item.index" :label="item.desc" :disabled="item.disable"
 					:value="item.cat">{{item.desc}}</option>
 			</select>
-        </div>
-        <el-collapse >
-            <el-collapse-item v-for="(item, index) in triggers" :key="index" v-show="item.deleted === false">
-                <template slot="title">
-                    <div class="scenario-trigger-item-title">
-						<select 
+		</div>
+		<el-collapse>
+			<el-collapse-item v-for="(item, index) in triggers" :key="index" v-show="item.deleted === false">
+				<template slot="title">
+					<div class="scenario-trigger-item-title">
+						<!-- <select 
 							v-model="item.mode" @change="item.edited = true">
 
 							<option 
@@ -34,44 +22,42 @@
 								:label="iter.desc"
 								:value="iter.cat"
 								:disabled="iter.disable">{{item.desc}}</option>
-						</select>
-                        <el-button class="el-icon-close scenario-trigger-item-delbtn" @click="item.deleted = true"></el-button>
-                    </div>
-                </template>
-                <el-form :model="item" label-width="120px">
-                    <el-form-item label="自动触发">
-                        <el-switch v-model="item.active" @change="item.edited = true"></el-switch>
-                    </el-form-item>
-                    <el-form-item label="重复时间间隔">
-                        <el-col :span="11">
-                            <el-input v-model="item.value" @change="item.edited = true"></el-input>
-                        </el-col>
-                        <el-col class="line" :span="2">-</el-col>
-                        <el-col :span="11">
-							<select 
-								class="time-space"
-								v-model="item.period" 
-								placeholder="时间间隔" 
+						</select> -->
+						<div @click.stop class="input-con">
+							<input v-model="triggerName" class="trigger-input">
+						</div>
+						<div @click.stop style="width:40px;height:20px;position:relative;">
+							<el-switch v-model="item.active" @change="item.edited = true" class="el-switch"></el-switch>
+						</div>
+						<el-button class="el-icon-close scenario-trigger-item-delbtn" @click="item.deleted = true">
+						</el-button>
+					</div>
+				</template>
+				<el-form :model="item" label-width="120px" style="margin-top:20px;" :label-position="labelPosition">
+					<el-form-item label="重复时间间隔" class="date">
+						<el-col :span="6" class="minute">
+							<el-input v-model="item.value" @change="item.edited = true"></el-input>
+						</el-col>
+						<el-col class="line" :span="4">&nbsp;</el-col>
+						<el-col :span="11">
+							<select class="time-space" v-model="item.period" placeholder="时间间隔"
 								@change="item.edited = true">
-								<option 
-									v-for="iter in period"
-									:key="iter.desc"
-									:label="iter.desc"
-									:value="iter.cat"
+								<option v-for="iter in period" :key="iter.desc" :label="iter.desc" :value="iter.cat"
 									:disabled="iter.disable">></option>
 							</select>
-                        </el-col>
-                    </el-form-item>
-                    <el-form-item class="time" label="开始时间">
-						<datetime @change="item.edited = true" format="YYYY-MM-DD H:i:s" width="300px" v-model="item.start"></datetime>
-                    </el-form-item>
-                    <el-form-item label="时区">
-                        <el-input disabled value="北京时间"></el-input>
-                    </el-form-item>
-                </el-form>
-            </el-collapse-item>
-        </el-collapse>
-    </div>
+						</el-col>
+					</el-form-item>
+					<el-form-item class="time" label="开始时间">
+						<datetime @change="item.edited = true" format="YYYY-MM-DD H:i:s"
+							v-model="item.start"></datetime>
+					</el-form-item>
+					<el-form-item label="时区" class="area">
+						<el-input disabled value="北京时间"></el-input>
+					</el-form-item>
+				</el-form>
+			</el-collapse-item>
+		</el-collapse>
+	</div>
 </template>
 
 <script>
@@ -135,7 +121,9 @@ export default {
                     desc: "月",
 					disable: false
                 }
-            ]
+            ],
+			labelPosition: 'left',
+			triggerName:'基于时间自动运行'
         }
     },
     props: {
@@ -168,6 +156,9 @@ export default {
 
     },
     methods: {
+		updateName(value){
+			console.log(value)
+		},
 		addNewTriggerClick() {
 			this.$refs.addNewTriggerSelect.value = "ADD Trigger"
 		},
@@ -229,15 +220,64 @@ export default {
 	}
 
 	input{
-		min-width: 226px;
-		width:100%;
+		// min-width: 226px;
+		// width:100%;
 		height: 30px;
 		padding: 3px;
 		border: 1px solid #ddd;
 	}
-	.datetime-picker{
+	.input-con{
+		width:226px;
+		height:30px;
+		margin-right: 170px;
 		position: relative;
 	}
+	.trigger-input{
+		width: 226px;
+		height: 24px;
+		min-width: none;
+		border-radius: 5px;
+		padding-left: 10px;
+		position: absolute;
+		top:0;
+		left:0;
+	}
+	.minute{
+		.el-input__inner {
+			height: 32px;
+		}
+	}
+	
+
+	// .date{
+	// 	.el-input{
+	// 		.el-input__inner {
+	// 			width: 100px;
+	// 			min-width: none;
+	// 		}
+	// 	}
+		
+	// }
+	.el-switch{
+		height: 30px !important;
+		// margin-left: 170px;
+		line-height: 40px;
+		position: absolute !important;
+		top:0;
+		left:0;
+	}
+	.el-collapse-item__header{
+		position:relative;
+	}
+	.el-collapse-item__arrow{
+		position: absolute;
+		top: 15px;
+		left: 6px;
+		font-size: 18px;
+	}
+	// .datetime-picker{
+	// 	position: relative;
+	// }
 	.calender-div{
 		min-width: 270px;
 		box-shadow: 1px 2px 5px #ccc;
@@ -248,7 +288,7 @@ export default {
 		top: 35px;
 		color: #444;
 		font-size: 14px;
-		padding-bottom: 10px;
+		margin-bottom: 15px;
 		z-index: 100;
 	}
 	.port, .days{
@@ -387,7 +427,8 @@ export default {
 	}
 
     .scenario-triggers {
-		border: 1px solid #666;
+		// border: 1px solid #666;
+		background-color: #fff;
 		margin: 1px auto !important;
 		padding: 14px 36px !important;
 		width: 800px;
@@ -395,20 +436,26 @@ export default {
         display: flex;
         flex-direction: column;
 
-		.line {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
+		// .line {
+		// 	display: flex;
+		// 	align-items: center;
+		// 	justify-content: center;
+		// }
 
 		.time-space {
-			width: 60px;
-			height: 40px;
+			// width: 60px;
+			// height: 40px;
 			border: 1px solid #DCDFE6;
 			color: #666;
+			width: 200px;
+			height: 32px;
+			min-width: none;
+			border-radius: 5px;
+			padding-left: 10px;
 		}
 
         .scenario-trigger-create {
+			height: 60px;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
@@ -423,24 +470,50 @@ export default {
 			.el-form-item__content {
 				display: flex;
 			}
+			.datetime-picker{
+				// margin-left: 200px;
+				position: relative;
+			}
+			#tj-datetime-input{
+				width: 438px;
+				height: 24px;
+				// min-width: none;
+				border-radius: 5px;
+				padding-left: 10px;
+				position: absolute;
+				top:0;
+				left:0;
+			}
 		}
-
+		.area{
+			.el-input__inner{
+				width: 453px;
+				height: 32px;
+				// min-width: none;
+				border-radius: 5px;
+				padding-left: 10px;
+			}
+		}
         .scenario-trigger-item-title {
             display: flex;
             flex-direction: row;
-            justify-content: space-between;
+            // justify-content: space-between;
             flex-grow: 1;
+			padding-left: 234px;
 			height: 30px;
 
             .scenario-trigger-item-delbtn {
                 border: none !important;
+				line-height: 0;
+				margin-left: 14px;
+				padding: 8px;
             }
         }
 
-        .scenario-trigger-item-switch {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+        // .scenario-trigger-item-switch {
+        //     display: flex;
+        //     flex-direction: column;
+        //     justify-content: space-between;
+        // }
      }
 </style>
