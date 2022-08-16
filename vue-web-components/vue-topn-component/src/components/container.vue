@@ -150,7 +150,6 @@ export default {
             active: 3,
             flowVersion: "developer",
             activeName: "Setting",
-            activeNameOld: "",
             datasetArray: [],
             stepsDefs: [
                 {
