@@ -190,8 +190,8 @@ export default {
             this.itemkey = !this.hover
         },
         inputStrChecked(value, ref) {
-            // 只允许输入数字、字母、汉字、下划线
-            let r = /^[a-zA-Z0-9_^\u4E00-\u9FA5]{1,}$/
+            // 只允许输入数字、字母、下划线
+            let r = /^[a-zA-Z0-9_^]{1,}$/
             if (r.test(value)) {
                 if(value.length > 30) {
                     this.$refs[ref].value = ""

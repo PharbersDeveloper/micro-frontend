@@ -329,13 +329,24 @@ export default {
             }
             // this.sort("ascending")
         },
+        arrRemoveRepetition(maxArr, minArr) {
+            let nArr = [];
+            nArr = maxArr.filter(function (item) {
+                let temp = minArr.map(function (v) {
+                    return v.detail.id
+                })
+                return !temp.includes(item.id)
+            })
+            return nArr
+        },
         goUp(){
             let that = this
             this.loading = true
             this.datasource.appendJupyterData(this, this.startKey, ()=>{
                 that.startKey = this.datasource.startKey
-                this.datasource.refreshPlaceholders(this.datasource.dns)
-                const dnsIds = this.datasource.dns.map(x => x.id)
+                let dns = this.arrRemoveRepetition(this.datasource.dns, that.AllData)
+                this.datasource.refreshPlaceholders(dns)
+                const dnsIds = dns.map(x => x.id)
                 this.datasource.refreshStatus(this.datasource.tenantId, dnsIds, ()=>{
                     that.datasource.dns = that.AllData.concat(this.datasource.model)
                     that.AllData = this.datasource.dns
