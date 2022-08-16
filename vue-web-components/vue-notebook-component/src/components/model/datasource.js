@@ -7,7 +7,7 @@ export default class PhDataSource {
     constructor(id, parent) {
         this.id = id
         this.status = {}
-        this.debugToken = "dfdf526d4d9d56b4ef30f4d6b344158aec3726e2dd65b9587e732c7b7efcd8a4"
+        this.debugToken = "0a741ed989acbf5672a6616be1afcfff294aa1bb4658a9c194d9eda3ea3f6a80"
         this.isReady = false
         this.parent = parent
         this.model = []
@@ -105,7 +105,7 @@ export default class PhDataSource {
         ele.datasource.buildQuery(ele, key)
             .then((response) => response.json())
             .then((response) => {
-                that.store = new JsonApiDataStore()
+                // that.store = new JsonApiDataStore()
                 that.store.sync(response)
                 ele.datasource.dns = that.jsonapiAdapter(that.store.findAll("resources"))
                 that.startKey = response.meta.start_key
