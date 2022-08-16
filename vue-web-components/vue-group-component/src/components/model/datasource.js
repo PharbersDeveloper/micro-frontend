@@ -175,7 +175,7 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    buildSaveQuery(projectId, jobName, param) {
+    buildSaveQuery(param) {
 		const url = `${hostName}/phdydatasource/put_item`
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
         let body = {
