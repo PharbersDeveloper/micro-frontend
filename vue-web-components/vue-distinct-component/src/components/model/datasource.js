@@ -28,7 +28,7 @@ export default class PhDataSource {
         else return null
     }
 
-    buildQuery(projectId, jobName, jobId) {
+    buildQuery(projectId, jobId) {
         const url = `${hostName}/phdydatasource/query`
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
         let body = {
@@ -56,7 +56,7 @@ export default class PhDataSource {
 
     refreshData(projectId, jobName, jobId) {
         const that = this
-        this.buildQuery(projectId, jobName, jobId)
+        this.buildQuery(projectId, jobId)
             .then((response) => response.json())
             .then((response) => {
                 that.currentPageToken = response.meta.start_key
@@ -185,7 +185,7 @@ export default class PhDataSource {
 				"index": this.step["index"],
 				"ctype": this.step["ctype"],
 				"expressions": JSON.stringify({
-					"type": "topn",
+					"type": "distinct",
 					"code": "pyspark",
 					"params": param
 				}),
@@ -209,38 +209,6 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    // buildSaveQuery(projectId, jobName, param) {
-	// 	const steps = [{
-	// 		pjName: this.step["pj-name"],
-	// 		stepId: this.step["step-id"],
-	// 		ctype: this.step["ctype"],
-	// 		expressions: {
-	// 			"type": "distinct",
-	// 			"code": "pyspark",
-	// 			"params": param
-	// 		},
-	// 		expressionsValue: this.step["expressions-value"],
-	// 		groupIndex: this.step["group-index"],
-	// 		groupName: this.step["group-name"],
-	// 		id: this.step["id"],
-	// 		index: this.step["index"],
-	// 		runtime : this.step["runtime"],
-	// 		stepName: this.step["step-name"]
-	// 	}]
-	// 	const event = new Event("event")
-	// 	event.args = {
-	// 		callback: "saveDistinct",
-	// 		element: this,
-	// 		param: {
-	// 			name: "saveDistinct",
-	// 			projectId: this.parent.projectId,
-	// 			projectName: this.parent.projectName,
-	// 			stepsArr: steps
-	// 		}
-	// 	}
-	// 	this.parent.$emit('event', event)
-    // }
-
     saveAndGenCode(param, ele) {
         this.buildSaveQuery(param)
 			.then((response) => response.json())
@@ -252,9 +220,6 @@ export default class PhDataSource {
 				}
 			})
     }
-    // saveAndGenCode(projectId, jobName, param) {
-    //     this.buildSaveQuery(projectId, jobName, param)
-    // }
 
     buildRefreshScriptParameter(projectId, jobId) {
 		const url = `${hostName}/phdydatasource/query`
@@ -349,7 +314,6 @@ export default class PhDataSource {
 	saveScriptParams(data, ele) {
 		const param = data.args.param
 		ele.datasource.scriptData.prop = JSON.stringify(param.scriptParamsList)
-		// const that = this
 		ele.datasource.buildSaveScriptParams(ele)
 			.then((response) => response.json())
 			.then((response) => {
@@ -397,7 +361,7 @@ export default class PhDataSource {
 				message: JSON.stringify({
 					optionName: "changeInputOutput",
 					cat: "intermediate",
-					runtime: "topn",
+					runtime: "distinct",
 					actionName: ele.jobShowName
 				}),
 				required: true

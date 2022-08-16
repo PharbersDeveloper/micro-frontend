@@ -294,29 +294,6 @@ export default {
             this.loading = true
             this.transition = transition
             this.$refs.scriptParameters.save()
-			// if (this.activeName === "Setting") {
-
-			// 	this.$refs.prefilter.validate()
-			// 	this.$refs.distinct.validate()
-			// 	this.$refs.postfilter.validate()
-			// 	this.$refs.outputs.validate()
-
-			// 	let errors = this.stepsDefs.filter(it => it.status === "error")
-            //     if(errors.length > 0) {
-            //         Message.error("请修改参数！", { duration: 3000} )
-            //         return false
-            //     }
-
-			// 	const params = {
-			// 		"keys": this.$refs.distinct.datasource.revert2Defs().keys,
-			// 		"preFilter": this.$refs.prefilter.datasource.revert2Defs(),
-			// 		"postFilter": this.$refs.postfilter.datasource.revert2Defs(),
-			// 		"globalCount": this.$refs.distinct.datasource.revert2Defs().globalCount
-			// 	}
-			// 	this.datasource.saveAndGenCode(this.projectId, this.jobName, params)
-			// } else {
-			// 	this.$refs.changeInputOutput.save()
-            // }
         },
 
 		changScriptInputOutput(data) {
@@ -422,7 +399,7 @@ export default {
     },
     watch: {
         active(n) {
-			if (n === 4 || n === 5) {
+			if (n === 4) {
                 this.computedSchema = this.computeSchema()
             }
             this.$refs.prefilter.validate()
