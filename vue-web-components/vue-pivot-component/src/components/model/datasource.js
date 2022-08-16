@@ -213,7 +213,7 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    saveAndGenCode(projectId, jobName, param) {
+    saveAndGenCode(param, ele) {
         this.buildSaveQuery(param)
 			.then((response) => response.json())
 			.then((response) => {
