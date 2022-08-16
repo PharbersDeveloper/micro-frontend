@@ -56,7 +56,7 @@ export default class PhDataSource {
 
     refreshData(projectId, jobName, jobId) {
         const that = this
-        this.buildQuery(projectId, jobName, jobId)
+        this.buildQuery(projectId, jobId)
             .then((response) => response.json())
             .then((response) => {
                 that.currentPageToken = response.meta.start_key
