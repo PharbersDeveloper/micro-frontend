@@ -36,11 +36,12 @@ import ElDialog from "element-ui/packages/dialog/index"
 import ElForm from "element-ui/packages/form/index"
 import ElFormItem from "element-ui/packages/form-item/index"
 import PhDagDefinitions from "./policy/definitions/definitions"
+import { MessageBox, Message } from 'element-ui'
 
 export default {
     data() {
         return {
-            name: "test",
+            name: "",
 			visible: false,
             selectCodeeditorType: "jupyter",
             codeeditors: ["jupyter", "c9"]
@@ -66,22 +67,52 @@ export default {
 
     },
     mounted() {
-        this.name = this.initialName
+        // this.name = this.initialName
     },
     methods: {
 		close() {
 			this.$emit("cancel")
+            this.name = ''
 		},
         confirmCreation() {
-            const event = new Event("event")
-            event.args = {
-                callback: "createNotebook",
-                param: {
-                    name: this.name,
-                    type: this.selectCodeeditorType
+            if (this.name.length > 0) {
+                if(this.name.length > 30){
+                    Message({
+                        type: 'error',
+                        showClose: true,
+                        duration: 3000,
+                        message: '输入内容过长！'
+                    })
+                } else {
+                    let reg = /^[A-Za-z0-9]+$/
+                    if (reg.test(this.name)) {
+                        const event = new Event("event")
+                        event.args = {
+                            callback: "createNotebook",
+                            param: {
+                                name: this.name,
+                                type: this.selectCodeeditorType
+                            }
+                        }
+                        this.$emit("confirm", event)
+                        this.name = ''
+                    } else {
+                        Message({
+                            type: 'error',
+                            showClose: true,
+                            duration: 3000,
+                            message: '请勿输入特殊字符！'
+                        })
+                    } 
                 }
+            } else {
+                Message({
+                    type: 'error',
+                    showClose: true,
+                    duration: 3000,
+                    message: 'Scenario名称不能为空'
+                })
             }
-            this.$emit("confirm", event)
         }
     },
 	watch: {
