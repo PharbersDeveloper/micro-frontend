@@ -28,7 +28,7 @@ export default class PhDataSource {
         else return null
     }
 
-    buildQuery(projectId, jobName, jobId) {
+    buildQuery(projectId, jobId) {
         const url = `${hostName}/phdydatasource/query`
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
         let body = {
@@ -56,7 +56,7 @@ export default class PhDataSource {
 
     refreshData(projectId, jobName, jobId) {
         const that = this
-        this.buildQuery(projectId, jobName, jobId)
+        this.buildQuery(projectId, jobId)
             .then((response) => response.json())
             .then((response) => {
                 that.currentPageToken = response.meta.start_key
