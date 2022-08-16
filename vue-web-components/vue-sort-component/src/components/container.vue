@@ -51,17 +51,7 @@
                 Schema 不对，找产品处理
             </div>
         </div>
-		<div v-show="activeName === 'input/output'">
-			<change-input-output
-				ref="changeInputOutput"
-				:inputs="inputs"	
-				:outputs="outputs"
-				:inArray="inArray"
-				:outArray="outArray"
-				@changScriptInputOutput="changScriptInputOutput"
-				:datasetArray="datasetArray"
-			/>
-        </div>
+		
         <div v-show="activeName === '脚本参数'">
             <script-parameters
                 ref="scriptParameters"
@@ -415,7 +405,7 @@ export default {
     },
     watch: {
         active(n) {
-			if (n === 4 || n === 5) {
+			if (n === 4) {
                 this.computedSchema = this.computeSchema()
             }
 

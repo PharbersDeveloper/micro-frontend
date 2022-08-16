@@ -399,7 +399,7 @@ export default {
     },
     watch: {
         active(n) {
-			if (n === 4 || n === 5) {
+			if (n === 4) {
                 this.computedSchema = this.computeSchema()
             }
             this.$refs.prefilter.validate()
