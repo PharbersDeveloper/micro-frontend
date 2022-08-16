@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import { hostName, actionTableName } from "../config/envConfig"
 
-
 export async function phScenarioScenarioLstEventHandler(e, route) {
 	let customCallbackFuncs = {}
 	let params = e.detail[0].args.param
@@ -281,7 +280,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 
 	function createScenarioCallback(param, payload) {
 		console.log(payload)
-		const { message, status } = JSON.parse(payload)
+		const { status } = JSON.parse(payload)
 		if (status == "success") {
 			alert("新建scenario成功！")
 			route.router.transitionTo("shell", route.scenarioDetailUri)
