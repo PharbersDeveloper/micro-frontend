@@ -66,7 +66,7 @@ export default class PhDataSource {
                 if (data.length === 0) {
                     that.step = {
                         "pj-name": [projectId, jobName].join("_"),
-                        "step-id": 1,
+                        "step-id": "1",
                         ctype: "TopN",
                         expressions: JSON.stringify({
                             "params": {
