@@ -205,7 +205,7 @@ export default {
     },
     methods: {
 		linkToVideos() {
-			window.open("https://www.bilibili.com/video/BV1dN4y1M7MV/")
+			window.open("https://www.bilibili.com/video/BV1st4y137hJ")
 		},
         changeScriptParams(data) {
             this.datasource.saveScriptParams(data, this)

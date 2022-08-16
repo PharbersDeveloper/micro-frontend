@@ -151,7 +151,6 @@ export default class PhDataSource {
         this.buildInOutQuery(projectId, jobName)
             .then((response) => response.json())
             .then((response) => {
-				console.log(response)
 				that.parent.inArray = response.input
 				that.parent.outArray = response.output
             })
