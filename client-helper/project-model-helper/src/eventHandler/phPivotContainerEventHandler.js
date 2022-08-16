@@ -7,6 +7,8 @@ export async function phPivotContainerEventHandler(e, route) {
 	// const accessToken = route.cookies.read("access_token")
 	let pivotData = await route.store.peekRecord("tempdata", "pivot")
 	let scriptsParams = {}
+	let customCallbackFuncs = {}
+	let transition = 0
 	let inputs = []
 	let outputs = []
 	if (pivotData) {

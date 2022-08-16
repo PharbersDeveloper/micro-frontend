@@ -1,4 +1,4 @@
-export async function phDistinctContainerEventHandler(e, route) { 
+export async function phDistinctContainerEventHandler(e, route) {
 	const params = e.detail[0].args.param
 
 	let customCallbackFuncs = {}
@@ -59,7 +59,7 @@ export async function phDistinctContainerEventHandler(e, route) {
 				customCallbackFuncs[params.changeuuid] = params.callback
 				transition = params.transition
 				route.projectId = params.projectId
-    			route.projectName = params.projectName
+				route.projectName = params.projectName
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",
@@ -95,7 +95,6 @@ export async function phDistinctContainerEventHandler(e, route) {
 		}
 	}
 }
-
 
 // import { hostName } from "../config/envConfig"
 
