@@ -20,6 +20,10 @@ export default class ShellRoute extends Route {
 		return ENV.APP.auth
 	}
 
+	get clientName() {
+		return ENV.APP.clientName
+	}
+
 	get environment() {
 		return ENV.environment
 	}
@@ -40,7 +44,6 @@ export default class ShellRoute extends Route {
 		 * 1. 第一步，需要从读取JS模版
 		 */
 		const pages = await this.ms.queryClientPages()
-
 		const pageCount = pages.length
 		let curPage = "" // not found page
 		let parseParams
@@ -57,6 +60,15 @@ export default class ShellRoute extends Route {
 				parseParams = result
 				break
 			}
+		}
+		
+
+		if (curPage === "") {
+			 if (this.clientName === "platform") {
+				 this.transitionTo("shell", "overview")
+			 } else if (this.clientName === "offweb") {
+				this.transitionTo("shell", "home")
+			 }
 		}
 
 		/**
