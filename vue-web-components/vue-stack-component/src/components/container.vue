@@ -613,11 +613,6 @@ export default {
             }
         }
 
-		.dialog-footer {
-            display: flex;
-            flex-direction: row-reverse;
-        }
-
         #loadingio-spinner-double-ring-ho1zizxmctu {
             backdrop-filter: blur(1px);
             /* 毛玻璃特效 */
