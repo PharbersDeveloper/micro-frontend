@@ -48,10 +48,14 @@ export default class PhGroupStep {
     }
 
     revert2Defs() {
+		const commandsArray = this.commands.map(it => {
+			it.isUsed = false
+			return it
+		})
         return {
 			globalCount: this.globalCount,
             keys: this.keys,
-            values: this.commands.filter(x => !this.keys.includes(x.column) && Object.values(x).includes(true)).map(x => x.revert2Defs())
+            values: commandsArray.filter(x => !this.keys.includes(x.column) && (Object.values(x).includes(true))).map(x => x.revert2Defs())
         }
     }
 }

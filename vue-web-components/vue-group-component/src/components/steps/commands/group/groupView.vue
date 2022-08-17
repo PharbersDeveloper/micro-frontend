@@ -1,11 +1,6 @@
 <template>
     <div class="group-container">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <!-- <div class="group-title">
-            <div class="group-title-p">
-                <h2>Group</h2>
-            </div>
-        </div> -->
         <div class="group-keys">
             <div class="group-key-title">
                 <h3>Group Keys</h3>

@@ -9,7 +9,7 @@ export default class PhDataSource {
 		this.parent = parent
         this.store = new JsonApiDataStore()
         this.resetData()
-        this.debugToken = "eacce9388efc85f51de434531e31f1dc8ef188982c298a7b68ad503bb66d6dcd"
+        this.debugToken = "9639484b154324467a836a9bf2f2871a95103e9034f194c9a1d12dc0159aa93a"
     }
 
     resetData() {
@@ -54,9 +54,9 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    refreshData(projectId, jobName, jobId) {
+    async refreshData(projectId, jobName, jobId) {
         const that = this
-        this.buildQuery(projectId, jobId)
+        await this.buildQuery(projectId, jobId)
             .then((response) => response.json())
             .then((response) => {
                 that.currentPageToken = response.meta.start_key
@@ -97,12 +97,13 @@ export default class PhDataSource {
                     that.step = data[0]
                 }
                 that.isReady = true
+				console.log("333")
             })
     }
 
-	refreshDataset(projectId, dsId) {
+	async refreshDataset(projectId, dsId) {
         const that = this
-        this.buildDatasetQuery(projectId)
+        await this.buildDatasetQuery(projectId)
             .then((response) => response.json())
             .then((response) => {
 				console.log(response)
@@ -111,12 +112,12 @@ export default class PhDataSource {
 				that.parent.datasetArray = data
                 that.dataset = data.filter(it => it.id === dsId)[0]
                 that.dataset.schema = JSON.parse(that.dataset["schema"])
-				that.parent.computedSchema = that.parent.computeSchema()
 				if (that.dataset.schema.length === 0) {
                     that.hasNoSchema = true
                 } else {
                     that.isMetaReady = true
                 }
+				console.log("111")
             })
     }
 
@@ -152,6 +153,7 @@ export default class PhDataSource {
             .then((response) => {
 				that.parent.inArray = response.input
 				that.parent.outArray = response.output
+				console.log("222")
             })
     }
 
