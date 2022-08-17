@@ -100,13 +100,18 @@ export default {
 		changeReport(item, index){
 			this.reports[index].name = item.name
 			this.reports[index].destination = item.destination
+            this.reports[index].index = item.index
 		},
         addNewReporterClick() {
 			this.$refs.addNewReporterSelect.value = "添加通知"
 		},
         addNewReporter() {
             const result = {}
-			const idx = this.reports.length > 0 ? 1 + Math.max(...this.reports.map(x => x.index)) : 0
+			// const idx = this.reports.length > 0 ? 1 + Math.max(...this.reports.map(x => x.index)) : 0
+            // consoel.log(Math.max(...this.reports.map(x => x.index)))
+            // consoel.log(Math.max(...this.reports))
+            // consoel.log(Math.max(...this.reports.map(x => Number(x.index))))
+			const idx = Number(this.reports.length) + 1
 			result["name"] = 'report1'
             result["active"] = true
             result["scenarioId"] = this.scenarioId
@@ -116,7 +121,8 @@ export default {
             result["traceId"] = this.genId()
             result["edited"] = true
             result["deleted"] = false
-            result["type"] = "Email"
+            result["type"] = "EMAIL"
+            result["mode"] = "EMAIL"
             result['destination'] = ''
             this.reports.push(result)
 			this.$refs.addNewReporterSelect.value = "添加通知"

@@ -175,6 +175,7 @@ export default {
                 // result["timezone"] = tmp["timezone"]
                 result["mode"] = x["mode"]
                 result["name"] = x["name"]
+                result["index"] = x["index"]
                 // result["active"] = x["active"]
                 result["scenarioId"] = x["scenario-id"]
                 result["id"] = x["id"]
@@ -216,7 +217,7 @@ export default {
                     scenarioId: this.datasource.scenarioId,
 					triggerDisplay: triggerDisplay,
 					stepDisplay: stepDisplay,
-                    reportPolicy: reportDisplay,
+                    reportDisplay: reportDisplay,
 					// triggerDisplayDelete: triggerDisplayDelete,
 					// stepDisplayDelete: stepDisplayDelete,
 					type: type
