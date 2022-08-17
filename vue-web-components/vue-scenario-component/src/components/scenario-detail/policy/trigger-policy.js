@@ -35,7 +35,8 @@ export default class PhScenarioTriggerPolicy {
 				active: trigger.active,
 				detail: detail,
 				mode: trigger.mode,
-				traceId: trigger.traceId
+				traceId: trigger.traceId,
+                name: trigger.name
 			})
 		})
 		return arr

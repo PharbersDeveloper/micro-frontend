@@ -71,7 +71,7 @@ export default {
         justify-content: space-between;
 		border-bottom: 1px solid #ccc;
 		// margin-bottom: 60px;
-		height: 60px;
+		height: 50px;
 
 		.scenario-nav-title {
 			padding: 0 10px;

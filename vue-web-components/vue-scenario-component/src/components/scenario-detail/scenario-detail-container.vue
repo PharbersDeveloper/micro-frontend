@@ -140,6 +140,7 @@ export default {
                 result["value"] = tmp["value"]
                 result["timezone"] = tmp["timezone"]
                 result["mode"] = x["mode"]
+                result["name"] = x["name"]
                 result["active"] = x["active"]
                 result["scenarioId"] = x["scenario-id"]
                 result["id"] = x["id"]
