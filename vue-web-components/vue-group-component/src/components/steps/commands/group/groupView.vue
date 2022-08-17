@@ -1,11 +1,6 @@
 <template>
     <div class="group-container">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <!-- <div class="group-title">
-            <div class="group-title-p">
-                <h2>Group</h2>
-            </div>
-        </div> -->
         <div class="group-keys">
             <div class="group-key-title">
                 <h3>Group Keys</h3>
@@ -35,13 +30,12 @@
             <div class="group-agg-op">
                 <el-table :data="notGroupedCommands"
                           ref="table"
-                          height="calc(100vh - 580px)"
-                          style="width: 100%"
-                          @selection-change="handleSelectionChange">
-                    <el-table-column
+                          height="calc(100vh - 430px)"
+                          style="width: 100%">
+                    <!-- <el-table-column
                             type="selection"
                             width="55">
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column
                             label="列名"
                             prop="column"
@@ -229,15 +223,15 @@ export default {
         changeComputedGroupCount() {
             this.datasource.changeComputedGroupCount(this.computedGroupCount)
         },
-        handleSelectionChange(val) {
-            if (!this.ignoredClearMsg) {
-                this.datasource.commands.forEach(x => {
-                    x.isUsed = val.includes(x);
-                })
-            } else {
-                this.ignoredClearMsg = false
-            }
-        }
+        // handleSelectionChange(val) {
+        //     if (!this.ignoredClearMsg) {
+        //         this.datasource.commands.forEach(x => {
+        //             x.isUsed = val.includes(x);
+        //         })
+        //     } else {
+        //         this.ignoredClearMsg = false
+        //     }
+        // }
     },
     computed: {
 

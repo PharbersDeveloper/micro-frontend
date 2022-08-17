@@ -277,6 +277,7 @@ export default {
             this.stepsDefs[5].status = "success"
         },
         computeSchema() {
+			// that.parent.computedSchema = that.parent.computeSchema()
             const result = []
             for (let idx = 0; idx < this.datasource.dataset.schema.length; ++idx) {
                 result.push({
@@ -287,7 +288,9 @@ export default {
             let addCols = []
             if (this.$refs.computed) {
                 addCols = this.$refs.computed.datasource.revert2Defs()
-            } else {
+            } 
+			
+			if(addCols.length === 0){
                 const computedStep = JSON.parse(this.datasource.step["expressions"])
                 addCols = computedStep["params"]["computedColumns"]
             }
@@ -349,12 +352,13 @@ export default {
 				return false
 			}
 
+			const groupRevert2Defs = this.$refs.group.datasource.revert2Defs()
 			const params = {
-				"globalCount": this.$refs.group.datasource.revert2Defs().globalCount,
+				"globalCount": groupRevert2Defs.globalCount,
 				"preFilter": this.$refs.filter.datasource.revert2Defs(),
 				"computedColumns": this.$refs.computed.datasource.revert2Defs(),
-				"keys": this.$refs.group.datasource.revert2Defs().keys,
-				"values": this.$refs.group.datasource.revert2Defs().values,
+				"keys": groupRevert2Defs.keys,
+				"values": groupRevert2Defs.values,
 				"postFilter": this.$refs.postfilter.datasource.revert2Defs(),
 			}
 
@@ -416,22 +420,6 @@ export default {
             }
 
             this.datasource.changeInputOutputQuery(this, dssOutputs, dssInputs, script)
-
-            
-            // const event = new Event("event")
-            // event.args = {
-            //     callback: "changScriptInputOutput",
-            //     element: this,
-            //     param: {
-            //         name: "changScriptInputOutput",
-            //         projectId: this.projectId,
-            //         projectName: this.projectName,
-            //         dssOutputs: dssOutputs,
-            //         dssInputs: dssInputs,
-            //         script: script
-            //     }
-            // }
-            // this.$emit('event', event)
         },
 		dealChangeInputOutputQuery(data, func) {
             const event = new Event("event")
@@ -468,16 +456,19 @@ export default {
             }
         }
     },
-    mounted() {
+    async mounted() {
         this.projectId = this.getUrlParam("projectId")
         this.projectName = this.getUrlParam("projectName")
         this.jobName = this.getJobName()
         this.jobId = this.getUrlParam("jobId")
         this.datasetId = this.getUrlParam("datasetId")
-        this.datasource.refreshData(this.projectId, this.jobName, this.jobId)
-        this.datasource.refreshInOut(this.projectId, this.jobShowName)
-        this.datasource.refreshDataset(this.projectId, this.datasetId)
-        this.datasource.refreshScriptParameter(this.projectId, this.jobId)
+        const fetch1 = this.datasource.refreshData(this.projectId, this.jobName, this.jobId)
+        const fetch2 = this.datasource.refreshInOut(this.projectId, this.jobShowName)
+        const fetch3 = this.datasource.refreshDataset(this.projectId, this.datasetId)
+        const fetch4 = this.datasource.refreshScriptParameter(this.projectId, this.jobId)
+		await Promise.all([fetch1, fetch2, fetch3, fetch4])
+		this.computedSchema = this.computeSchema()
+		this.$refs.group.renderSchema()
     },
     watch: {
         active(n) {
@@ -488,7 +479,6 @@ export default {
             if (n === 5 || n === 6) {
                 this.outputsSchema = this.genOutputsSchema()
             }
-
             this.$refs.filter.validate()
             this.$refs.computed.validate()
             this.$refs.group.validate()

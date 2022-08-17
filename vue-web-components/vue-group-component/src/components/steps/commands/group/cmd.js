@@ -25,7 +25,7 @@ export default class PhGroupCmd {
         this.concatSeparator = ","
         this.concatDistinct = false
 
-        this.isUsed = false
+        // this.isUsed = false
     }
 
     initWithDefs(defs) {
@@ -47,7 +47,7 @@ export default class PhGroupCmd {
         this.concatSeparator = defs["concatSeparator"]
         this.concatDistinct = defs["concatDistinct"]
 
-        this.isUsed = true
+        // this.isUsed = false
     }
 
     exec() {
