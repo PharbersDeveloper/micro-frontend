@@ -513,11 +513,10 @@ export default {
             this.deletedialogshow = false;
         },
         getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr === document.cookie.match(reg))
-                return (arr[2]);
-            else
-                return null;
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
+            arr = document.cookie.match(reg)
+            if (arr) return (arr[2])
+            else return null
         },
         //关闭清除数据集弹框
         closeClearDialog() {
