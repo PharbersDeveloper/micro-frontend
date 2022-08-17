@@ -355,20 +355,7 @@ export default {
 				return false
 			}
 			
-			const event = new Event("event")
-			event.args = {
-				callback: "changScriptInputOutput",
-				element: this,
-				param: {
-					name: "changScriptInputOutput",
-					projectId: this.projectId,
-					projectName: this.projectName,
-					dssOutputs: dssOutputs,
-					dssInputs: dssInputs,
-					script: script
-				}
-			}
-			this.$emit('event', event)
+			this.datasource.changeInputOutputQuery(this, dssOutputs, dssInputs, script)
         },
         saveNotification(status) {
             if (status == "success" || status == "succeed") {
