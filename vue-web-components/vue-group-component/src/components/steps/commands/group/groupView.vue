@@ -31,12 +31,11 @@
                 <el-table :data="notGroupedCommands"
                           ref="table"
                           height="calc(100vh - 580px)"
-                          style="width: 100%"
-                          @selection-change="handleSelectionChange">
-                    <el-table-column
+                          style="width: 100%">
+                    <!-- <el-table-column
                             type="selection"
                             width="55">
-                    </el-table-column>
+                    </el-table-column> -->
                     <el-table-column
                             label="列名"
                             prop="column"
@@ -224,15 +223,15 @@ export default {
         changeComputedGroupCount() {
             this.datasource.changeComputedGroupCount(this.computedGroupCount)
         },
-        handleSelectionChange(val) {
-            if (!this.ignoredClearMsg) {
-                this.datasource.commands.forEach(x => {
-                    x.isUsed = val.includes(x);
-                })
-            } else {
-                this.ignoredClearMsg = false
-            }
-        }
+        // handleSelectionChange(val) {
+        //     if (!this.ignoredClearMsg) {
+        //         this.datasource.commands.forEach(x => {
+        //             x.isUsed = val.includes(x);
+        //         })
+        //     } else {
+        //         this.ignoredClearMsg = false
+        //     }
+        // }
     },
     computed: {
 
