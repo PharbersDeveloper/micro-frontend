@@ -2,12 +2,16 @@
     <div class="scenario-reports">
         <div class="scenario-reports-create">
             <h2>Reporters</h2>
-            <el-select placeholder="ADD Reporter" value="ADD Reporter" @change="change">
+            <el-select placeholder="ADD Reporter" value="ADD Reporter" ref="addNewReporterSelect"
+				@change="addNewReporter"
+				@click="addNewReporterClick">
                 <el-option
                         v-for="item in options"
                         :key="item.index"
                         :label="item.desc"
-                        :value="item.cat">
+                        :value="item.cat"
+                        :disabled="item.disable"
+                        >{{item.desc}}
                 </el-option>
             </el-select>
         </div>
@@ -33,7 +37,8 @@ export default {
                 {
                     index: 0,
                     cat: "email",
-                    desc: "Email"
+                    desc: "Email",
+                    disable: false
                 }
             ],
             reportsDisplay: []
@@ -80,7 +85,8 @@ export default {
     }
 
     .scenario-reports {
-        border: 1px solid #666;
+        // border: 1px solid #666;
+        background-color: #fff;
         margin: 1px auto;
         padding: 14px 36px;
         width: 800px;

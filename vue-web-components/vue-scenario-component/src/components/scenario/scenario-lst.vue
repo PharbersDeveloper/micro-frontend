@@ -319,7 +319,7 @@ export default {
         //         this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
         //     })
         // },
-        searchValue(newValue, oldValue) {
+        searchValue(newValue) {
             this.searchValue = newValue
             this.state = 'search'
             this.search(this.searchValue)
@@ -582,7 +582,7 @@ export default {
             }
             this.$emit('event', event)
         },
-        createNewScenario(scenario, func) {
+        createNewScenario(scenario) {
             const event = new Event("event")
             event.args = {
                 callback: "createScenario",
@@ -616,25 +616,7 @@ export default {
             }
             this.$emit('event', event)
 			this.showCreateScenarioDialog = false
-        },
-        // saveNotification(status) {
-        //     if (status == "success" || status == "succeed") {
-        //         Message({
-        //             type: 'success',
-        //             showClose: true,
-        //             duration: 3000,
-        //             message: '修改脚本成功！'
-        //         })
-        //     } else {
-		// 		this.loading = false
-        //         Message({
-        //             type: 'error',
-        //             showClose: true,
-        //             duration: 30000,
-        //             message: '修改脚本失败！'
-        //         })
-        //     }
-        // }
+        }
     }
 }
 </script>

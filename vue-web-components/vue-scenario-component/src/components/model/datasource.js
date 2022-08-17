@@ -1,4 +1,4 @@
-import { staticFilePath, hostName } from "../../config/envConfig"
+import { hostName } from "../../config/envConfig"
 import { JsonApiDataStore } from "jsonapi-datastore"
 
 
@@ -17,7 +17,7 @@ export default class PhDataSource {
         }
     }
 
-    defaultAdapter(row, schema) {
+    defaultAdapter(row) {
         let schemas = this
         let arr = []
         schemas.forEach(item => {
@@ -111,13 +111,6 @@ export default class PhDataSource {
                 // that.store = new JsonApiDataStore()
                 that.store.sync(response)
                 that.data = that.jsonapiAdapter(that.store.findAll("scenarios"))
-                // var newData = response.data.map(x=>{
-                //     let attributes = x.attributes
-                //     attributes.id = x.id
-                //     return attributes
-                // })
-                // ele.datasource.data = ele.AllData.concat(newData)
-                ele.datasource.data = that.data
                 that.startKey = response.meta.start_key
                 // ele.cur_page++
                 ele.needRefresh++
