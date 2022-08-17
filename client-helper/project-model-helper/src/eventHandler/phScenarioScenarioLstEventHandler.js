@@ -138,6 +138,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 					},
 					triggers: [],
 					steps: [],
+					reports: [],
 					result: {}
 				}
 

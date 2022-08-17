@@ -1,16 +1,16 @@
 <template>
 	<div class="scenario-triggers">
 		<div class="scenario-trigger-create">
-			<h2>Triggers</h2>
+			<h2>触发条件</h2>
 			<select class="add-trigger-select" ref="addNewTriggerSelect" @change="addNewTrigger"
-				@click="addNewTriggerClick" placeholder="ADD Trigger" value="ADD Trigger" name="" id="">
-				<option value="ADD Trigger" label="ADD Trigger"></option>
+				@click="addNewTriggerClick" placeholder="添加触发条件" value="添加触发条件" name="" id="">
+				<option value="添加触发条件" label="添加触发条件"></option>
 				<option v-for="item in options" :key="item.index" :label="item.desc" :disabled="item.disable"
 					:value="item.cat">{{item.desc}}</option>
 			</select>
 		</div>
 		<el-collapse>
-			<el-collapse-item v-for="(item, index) in triggers" :key="index" v-show="item.deleted === false">
+			<el-collapse-item v-for="(item, index) in triggers" :key="index" v-show="item.deleted === false" @change="changeTrigger(item,index)">
 				<template slot="title">
 					<div class="scenario-trigger-item-title">
 						<!-- <select 
@@ -24,7 +24,7 @@
 								:disabled="iter.disable">{{item.desc}}</option>
 						</select> -->
 						<div @click.stop class="input-con">
-							<input v-model="triggerName" class="trigger-input">
+							<input v-model="item.name" class="trigger-input" @input="changeName(item,index)">
 						</div>
 						<div @click.stop style="width:40px;height:20px;position:relative;">
 							<el-switch v-model="item.active" @change="item.edited = true" class="el-switch"></el-switch>
@@ -36,7 +36,7 @@
 				<el-form :model="item" label-width="120px" style="margin-top:20px;" :label-position="labelPosition">
 					<el-form-item label="重复时间间隔" class="date">
 						<el-col :span="6" class="minute">
-							<el-input v-model="item.value" @change="item.edited = true"></el-input>
+							<el-input v-model="item.value" @change="changeTime(item,index)"></el-input>
 						</el-col>
 						<el-col class="line" :span="4">&nbsp;</el-col>
 						<el-col :span="11">
@@ -70,7 +70,8 @@ import ElInput from "element-ui/packages/input/index"
 import ElCol from "element-ui/packages/col/index"
 import ElButton from "element-ui/packages/button/index"
 import moment from 'moment'
-import datetime from 'vuejs-datetimepicker';
+import datetime from 'vuejs-datetimepicker'
+// import { Message } from 'element-ui'
 
 export default {
     data() {
@@ -123,7 +124,9 @@ export default {
                 }
             ],
 			labelPosition: 'left',
-			triggerName:'基于时间自动运行'
+			// triggerName:'基于时间自动运行',
+			// timeValue: 10,
+			// periodValue: "minute"
         }
     },
     props: {
@@ -153,18 +156,45 @@ export default {
 
     },
     watch: {
-
+		// triggerName(newValue){
+		// 	this.triggerName = newValue
+		// 	console.log(this.triggerName)
+		// 	// let reg = /^[a-zA-Z0-9_^\u4E00-\u9FA5]{1,}$/
+		// 	// if(reg.test(newValue)){
+		// 	// 	this.triggerName = newValue
+		// 	// }else{
+		// 	// 	Message({
+		// 	// 		type: 'error',
+		// 	// 		showClose: true,
+		// 	// 		duration: 3000,
+		// 	// 		message: '请勿输入特殊字符!'
+		// 	// 	})
+		// 	// }
+		// },
+		"triggers":function(){
+			// this.triggers.forEach()
+		}
     },
     methods: {
-		updateName(value){
-			console.log(value)
+		changeName(item,index){
+			this.triggers[index].name = item.name
+		},
+		changeTime(item,index){
+			this.triggers[index].value = item.value
+		},
+		changeTrigger(item, index){
+			this.triggers[index].name = item.name
+			this.triggers[index].value = item.value
+			this.triggers[index].period = item.period
+			this.triggers[index].start = item.start
 		},
 		addNewTriggerClick() {
-			this.$refs.addNewTriggerSelect.value = "ADD Trigger"
+			this.$refs.addNewTriggerSelect.value = "添加触发条件"
 		},
         addNewTrigger() {
             const result = {}
 			const idx = this.triggers.length > 0 ? 1 + Math.max(...this.triggers.map(x => x.index)) : 0
+			result["name"] = '基于时间自动运行'
             result["start"] = moment().format('YYYY-MM-DD HH:m:s')
             result["period"] = "minute"
             result["value"] = 10
@@ -179,7 +209,7 @@ export default {
             result["edited"] = true
             result["deleted"] = false
             this.triggers.push(result)
-			this.$refs.addNewTriggerSelect.value = "ADD Trigger"
+			this.$refs.addNewTriggerSelect.value = "添加触发条件"
         },
         genId(len=16, radix=16) {
             const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
@@ -509,11 +539,5 @@ export default {
 				padding: 8px;
             }
         }
-
-        // .scenario-trigger-item-switch {
-        //     display: flex;
-        //     flex-direction: column;
-        //     justify-content: space-between;
-        // }
      }
 </style>
