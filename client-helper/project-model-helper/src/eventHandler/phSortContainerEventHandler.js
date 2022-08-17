@@ -1,4 +1,4 @@
-export async function phDistinctContainerEventHandler(e, route) {
+export async function phSortContainerEventHandler(e, route) {
 	const params = e.detail[0].args.param
 
 	let customCallbackFuncs = {}
