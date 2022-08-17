@@ -1,7 +1,7 @@
 
 // import { hostName } from "../../../config/envConfig"
 
-export default class PhScenarioTriggerPolicy {
+export default class PhScenarioReportPolicy {
     constructor(id, projectId='ggjpDje0HUC2JW', scenarioName='alfredtest') {
         this.id = id
         this.projectId = projectId
@@ -17,26 +17,26 @@ export default class PhScenarioTriggerPolicy {
             return null;
     }
 
-	dealTriggerDisplay(triggerArray) {
+	dealReportDisplay(reportArray) {
 		let arr = []
-		triggerArray.forEach(trigger => {
+		reportArray.forEach(report => {
 			let detail = {}
 			detail = {
-                "timezone": trigger.timezone,
-                "cron": trigger.cron,
-                "start": trigger.start,
-                "period": trigger.period,
-                "value": trigger.value
+                // "timezone": report.timezone,
+                "type": report.type,
+                // "start": report.start,
+                // "period": report.period,
+                "destination": report.destination
             }
 			arr.push({
-				scenarioId: trigger.scenarioId,
-				id: trigger.id,
-				index: trigger.index,
-				active: trigger.active,
+				scenarioId: report.scenarioId,
+				id: report.id,
+				index: report.index,
+				// active: report.active,
 				detail: detail,
-				mode: trigger.mode,
-				traceId: trigger.traceId,
-                name: trigger.name
+				// mode: report.mode,
+				traceId: report.traceId,
+                name: report.name
 			})
 		})
 		return arr

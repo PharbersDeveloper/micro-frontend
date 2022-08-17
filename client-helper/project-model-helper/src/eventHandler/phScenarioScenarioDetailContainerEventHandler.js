@@ -58,6 +58,7 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 					},
 					triggers: params.triggerDisplay,
 					steps: params.stepDisplay,
+					reports: params.reportDisplay,
 					result: {}
 				}
 

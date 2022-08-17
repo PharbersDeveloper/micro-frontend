@@ -11,7 +11,8 @@
                 <detail-form :scenario="datasource.scenario"></detail-form>
                 <trigger-lst :triggers="triggerDisplay"
 					:scenario-id="datasource.scenario.id" />
-                <report-lst :triggers="[]"></report-lst>
+                <report-lst :reports="reportDisplay"
+                    :scenario-id="datasource.scenario.id"/>
             </div>
             <div v-else class="scenario-container">
                 <scenario-steps :steps="stepDisplay"
@@ -30,6 +31,7 @@ import TriggerLst from "./trigger-list"
 import ReportLst from "./report-lst"
 import ScenarioSteps from "./scenario-steps"
 import TriggerPolicy from "./policy/trigger-policy"
+import ReportPolicy from "./policy/report-policy"
 import StepPolicy from "./policy/step-policy"
 import datasource from "./model/datasource"
 
@@ -39,7 +41,8 @@ export default {
             activeName: "Setting",
             triggerDisplay: [],
             stepDisplay: [],
-			datasetsDisplay: []
+			datasetsDisplay: [],
+            reportDisplay: []
         }
     },
     props: {
@@ -53,6 +56,12 @@ export default {
             type: Object,
             default: () => {
                 return new TriggerPolicy('1')
+            }
+        },
+        reportPolicy: {
+            type: Object,
+            default: () => {
+                return new ReportPolicy('1')
             }
         },
         stepPolicy: {
@@ -90,6 +99,9 @@ export default {
     watch: {
         "datasource.triggers": function() {
             this.triggerAdapter()
+        },
+        "datasource.reports": function() {
+            this.reportAdapter()
         },
         "datasource.steps": function() {
             this.stepAdapter()
@@ -140,6 +152,7 @@ export default {
                 result["value"] = tmp["value"]
                 result["timezone"] = tmp["timezone"]
                 result["mode"] = x["mode"]
+                result["name"] = x["name"]
                 result["active"] = x["active"]
                 result["scenarioId"] = x["scenario-id"]
                 result["id"] = x["id"]
@@ -152,6 +165,28 @@ export default {
                 return result
             })
         },
+        reportAdapter() {
+            this.reportDisplay = this.datasource.reports.map((x) => {
+                const result = {}
+                const tmp = JSON.parse(x["detail"])
+                result["destination"] = tmp["destination"]
+                result["type"] = tmp["type"]
+                // result["value"] = tmp["value"]
+                // result["timezone"] = tmp["timezone"]
+                result["mode"] = x["mode"]
+                result["name"] = x["name"]
+                // result["active"] = x["active"]
+                result["scenarioId"] = x["scenario-id"]
+                result["id"] = x["id"]
+                // result["index"] = x["index"]
+                // result["resourceArn"] = x["resource-arn"]
+                result["traceId"] = x["trace-id"]
+                result["edited"] = false
+                result["deleted"] = false
+				// console.log(result)
+                return result
+            })
+        },
 		trigger() {
 			this.saveAll("trigger")
 		},
@@ -159,9 +194,10 @@ export default {
             let result = true
 			let stepDisplay = []
 			let triggerDisplay = []
+            let reportDisplay = []
 
 			triggerDisplay = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => !it.deleted))
-
+			reportDisplay = this.reportPolicy.dealReportDisplay(this.reportDisplay.filter(it => !it.deleted))
 			stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
 
 			// triggerDisplayDelete = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => it.deleted))
@@ -180,6 +216,7 @@ export default {
                     scenarioId: this.datasource.scenarioId,
 					triggerDisplay: triggerDisplay,
 					stepDisplay: stepDisplay,
+                    reportPolicy: reportDisplay,
 					// triggerDisplayDelete: triggerDisplayDelete,
 					// stepDisplayDelete: stepDisplayDelete,
 					type: type

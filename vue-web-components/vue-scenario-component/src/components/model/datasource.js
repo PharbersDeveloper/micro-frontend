@@ -11,7 +11,7 @@ export default class PhDataSource {
         this.projectId = ''
         this.batch_size = 20
         this.store = new JsonApiDataStore()
-        this.debugToken = "0a741ed989acbf5672a6616be1afcfff294aa1bb4658a9c194d9eda3ea3f6a80"
+        this.debugToken = "1d5470896755c2dfefb220d5e9b7a67d29e4baa95d9c45f7397ee9b33bb1477d"
         if (!adapter) {
             this.adapter = this.defaultAdapter
         }
@@ -66,7 +66,7 @@ export default class PhDataSource {
 
     buildQuery(ele, key){
         const url = `${hostName}/phdydatasource/query`
-        const accessToken = ele.getCookie("access_token") || this.debugToken
+        const accessToken = this.getCookie("access_token") || this.debugToken
         let body = {
             table: "scenario",
             conditions: {
@@ -108,7 +108,6 @@ export default class PhDataSource {
         ele.datasource.buildQuery(ele, key)
             .then((response) => response.json())
             .then((response) => {
-                // that.store = new JsonApiDataStore()
                 that.store.sync(response)
                 that.data = that.jsonapiAdapter(that.store.findAll("scenarios"))
                 that.startKey = response.meta.start_key
