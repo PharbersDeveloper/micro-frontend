@@ -2,22 +2,23 @@
     <div class="scenario-reports">
         <div class="scenario-report-create">
 			<h2>通知</h2>
-			<select class="add-trigger-select" ref="addNewTriggerSelect" @change="addNewReporter"
-				@click="addNewReporterClick" placeholder="添加通知" value="添加通知" name="" id="">
+			<select class="add-trigger-select" ref="addNewReporterSelect" @change="addNewReporter"
+				@click="addNewReporterClick" placeholder="添加通知" value="添加通知" name="" id=""
+                style="width:182px;height:24px;">
 				<option value="添加通知" label="添加通知"></option>
 				<option v-for="item in options" :key="item.index" :label="item.desc" :disabled="item.disable"
 					:value="item.cat">{{item.desc}}</option>
 			</select>
 		</div>
         <el-collapse>
-			<el-collapse-item v-for="(item, index) in result" :key="index">
+			<el-collapse-item v-for="(item, index) in reports" :key="index" v-show="item.deleted === false" @change="changeReport(item,index)">
 				<template slot="title">
 					<div class="scenario-report-item-title">
 						<div @click.stop class="input-con">
-							<input v-model="reportName" class="report-input">
+							<input v-model="item.name" class="report-input" @input="changeName(item,index)">
 						</div>
 						<div @click.stop style="width:40px;height:20px;position:relative;">
-							<el-switch v-model="item.active" @change="item.edited = true" class="el-switch"></el-switch>
+							<el-switch v-model="item.active" @change="item.edited = true"></el-switch>
 						</div>
 						<el-button class="el-icon-close" @click="item.deleted = true">
 						</el-button>
@@ -25,7 +26,7 @@
 				</template>
 				<el-form :model="item" label-width="120px" style="margin-top:20px;" :label-position="labelPosition">
 					<el-form-item label="收件人邮箱" class="area">
-						<el-input value=""></el-input>
+						<el-input value="请输入邮箱" v-model="item.destination" @change="changeEmail(item,index)"></el-input>
 					</el-form-item>
 				</el-form>
 			</el-collapse-item>
@@ -35,14 +36,15 @@
 
 <script>
 // import CreateScenarioDlg from "./create-scenario-dlg"
-// import ElCollapse from "element-ui/packages/collapse/index"
-// import ElCollapseItem from "element-ui/packages/collapse-item/index"
+import ElCollapse from "element-ui/packages/collapse/index"
+import ElCollapseItem from "element-ui/packages/collapse-item/index"
 // import ElSelect from "element-ui/packages/select/index"
 // import ElOption from "element-ui/packages/option/index"
-// import ElSwitch from "element-ui/packages/switch/index"
-// import ElForm from "element-ui/packages/form/index"
-// import ElFormItem from "element-ui/packages/form-item/index"
-// import ElInput from "element-ui/packages/input/index"
+import ElSwitch from "element-ui/packages/switch/index"
+import ElForm from "element-ui/packages/form/index"
+import ElFormItem from "element-ui/packages/form-item/index"
+import ElInput from "element-ui/packages/input/index"
+import ElButton from "element-ui/packages/button/index"
 // import ElCol from "element-ui/packages/col/index"
 
 export default {
@@ -62,53 +64,60 @@ export default {
                     disable: true
                 }
             ],
-            reportsDisplay: []
+            labelPosition: 'left'
         }
     },
     props: {
-        reports: Array
+        reports: Array,
+        scenarioId: String
     },
     components: {
-        // ElCollapse,
-        // ElCollapseItem,
+        ElCollapse,
+        ElCollapseItem,
+        ElButton,
         // ElSelect,
-        // ElOption
-        // ElSwitch,
-        // ElForm,
-        // ElFormItem,
-        // ElInput,
+        // ElOption,
+        ElSwitch,
+        ElForm,
+        ElFormItem,
+        ElInput,
         // ElCol
     },
     computed: {
 
     },
     mounted() {
-        this.reportsDisplay = this.reports
+        // this.reportsDisplay = this.reports
     },
-    watch: {
-        triggers(n) {
-            this.reportsDisplay = n
-        }
-    },
+    watch: { },
     methods: {
+        changeName(item, index){
+			this.reports[index].name = item.name
+		},
+		changeEmail(item, index){
+			this.reports[index].destination = item.destination
+		},
+		changeReport(item, index){
+			this.reports[index].name = item.name
+			this.reports[index].destination = item.destination
+		},
         addNewReporterClick() {
 			this.$refs.addNewReporterSelect.value = "添加通知"
 		},
-        change(d) {
-            console.log(d)
-        },
-        addNewTrigger() {
+        addNewReporter() {
             const result = {}
-			const idx = this.triggers.length > 0 ? 1 + Math.max(...this.triggers.map(x => x.index)) : 0
-			result["name"] = ''
+			const idx = this.reports.length > 0 ? 1 + Math.max(...this.reports.map(x => x.index)) : 0
+			result["name"] = 'report1'
             result["active"] = true
             result["scenarioId"] = this.scenarioId
             result["id"] = this.genId()
             result["index"] = idx
-            result["resourceArn"] = ""
+            // result["resourceArn"] = ""
             result["traceId"] = this.genId()
             result["edited"] = true
             result["deleted"] = false
+            result["type"] = "Email"
+            result['destination'] = ''
             this.reports.push(result)
 			this.$refs.addNewReporterSelect.value = "添加通知"
         },
@@ -151,26 +160,19 @@ export default {
         box-sizing: border-box;
     }
 
-    /deep/.year-month-wrapper{
-		background-color: #409eff !important;
-	}
-
 	input{
-		// min-width: 226px;
-		// width:100%;
 		height: 30px;
 		padding: 3px;
 		border: 1px solid #ddd;
 	}
 	.input-con{
-		width:226px;
-		height:30px;
-		margin-right: 170px;
+		width: 226px;
+		height: 30px;
 		position: relative;
 	}
-	.trigger-input{
-		width: 226px;
-		height: 24px;
+	.report-input{
+		width: 241px;
+		height: 32px;
 		min-width: none;
 		border-radius: 5px;
 		padding-left: 10px;
@@ -178,29 +180,13 @@ export default {
 		top:0;
 		left:0;
 	}
-	.minute{
-		.el-input__inner {
-			height: 32px;
-		}
-	}
 	
-
-	// .date{
-	// 	.el-input{
-	// 		.el-input__inner {
-	// 			width: 100px;
-	// 			min-width: none;
-	// 		}
-	// 	}
-		
-	// }
 	.el-switch{
 		height: 30px !important;
-		// margin-left: 170px;
 		line-height: 40px;
 		position: absolute !important;
-		top:0;
-		left:0;
+		top: 0px;
+		left: 170px;
 	}
 	.el-collapse-item__header{
 		position:relative;
@@ -211,159 +197,8 @@ export default {
 		left: 6px;
 		font-size: 18px;
 	}
-	// .datetime-picker{
-	// 	position: relative;
-	// }
-	.calender-div{
-		min-width: 270px;
-		box-shadow: 1px 2px 5px #ccc;
-		background: #FFF;
-		position: relative !important;
-		display: inline-block;
-		left: 0;
-		top: 35px;
-		color: #444;
-		font-size: 14px;
-		margin-bottom: 15px;
-		z-index: 100;
-	}
-	.port, .days{
-		display: inline-block;
-		width: 30px;
-		height: 30px;
-		padding: 5px 3px;
-		margin: 2px;
-		border-radius: 2px;
-		text-align: center;
-		vertical-align: top;
-		cursor: pointer;
-	}
-	/deep/.days{
-		color: #409eff !important;
-		font-weight: bold;
-	}
-	/deep/.port:hover{
-		color: #409eff !important;
-		font-weight: bold;
-	}
-	/deep/.activePort, .activePort:hover {
-		background-color: #409eff !important;
-		color: white;
-	}
-	.month-setter, .year-setter{
-		margin: 0 1px;
-		width: 48.2%;
-		color: white;
-		font-weight: 900;
-		display: inline-block;
-	}
-	.nav-l:hover, .nav-r:hover {
-		background-color: #dc3c00;
-	}
-	/deep/.nav-l, .nav-r {
-		display: inline-block;
-		width: 25px;
-		background-color: #409eff !important;
-		color: white;
-		font-size: 16px;
-		cursor: pointer;
-		border: 0;
-		padding: 7px;
-		margin:0;
-	}
-	.nav-l:focus, .nav-r:focus{
-		outline: none;
-	}
-	.nav-l{
-		float: left;
-	}
-	.nav-r{
-		float: right;
-	}
-	.month, .year{
-		width: 40px;
-		text-align: right;
-		display: inline-block;
-		color: white;
-		padding: 7px 0;
-	}
-	/* .headers>span{
-
-	} */
-	.hour-selector, .minute-selector{
-		width: 30px;
-		display: inline-block;
-		text-align: center;
-		font-weight: bold;
-		position: relative;
-		cursor: pointer;
-	}
-	.time-separator{
-		display: inline-block;
-		font-weight: bold;
-	}
-	.time-picker{
-		margin: 10px
-	}
-	.nav-t, .nav-d{
-		font-weight: bold;
-		cursor: pointer;
-	}
-	.scroll-hider {
-		display: none;
-		vertical-align:top;
-		overflow:hidden;
-		border:0;
-		position: absolute;
-		top: -40px;
-		left: 0;
-		box-shadow: 0 0 3px #333;
-		background-color: white;
-	}
-	.scroll-hider ul {
-		padding:5px;
-		margin:-5px -13px -5px -5px;
-		list-style-type: none;
-		height: 100px;
-		overflow: auto;
-		width:55px;
-		color: #999;
-		overflow-x: hidden;
-	}
-	.showSelector{
-		display:inline-block;
-	}
-	/deep/li.active{
-		background-color: #409eff !important;
-		color: white;
-	}
-	li{
-		padding: 4px;
-		font-size: 16px;
-		width: 100%;
-		cursor: pointer;
-	}
-	.time-picker{
-		display: inline-block;
-	}
-	.noDisplay{
-		display: none;
-	}
-	/deep/.okButton{
-		color: #409eff !important;
-		font-size: 15px;
-		font-weight: bold;
-		padding: 0;
-		float: right;
-		border: 0;
-		margin-right: 10px;
-		margin-top: 10px;
-		cursor: pointer;
-		background: transparent;
-	}
-
+	
     .scenario-reports {
-		// border: 1px solid #666;
 		background-color: #fff;
 		margin: 1px auto !important;
 		padding: 14px 36px !important;
@@ -385,33 +220,40 @@ export default {
         }
 		
 		.area{
-			.el-input__inner{
-				width: 453px;
-				height: 32px;
-				// min-width: none;
+            height: 30px;
+            .el-input{
+                width: 478px;
+                height:30px;
+            }
+			/deep/.el-input__inner{
+				width: 478px !important;
+				height: 32px !important;
 				border-radius: 5px;
 				padding-left: 10px;
 			}
 		}
-        .scenario-trigger-item-title {
+        .scenario-report-item-title {
             display: flex;
             flex-direction: row;
             // justify-content: space-between;
             flex-grow: 1;
 			padding-left: 234px;
 			height: 30px;
+            position: relative;
 
-            .scenario-trigger-item-delbtn {
+            .el-icon-close {
                 border: none !important;
 				line-height: 0;
 				margin-left: 14px;
 				padding: 8px;
+                position: absolute;
+                top: 8px;
+                right: 19px;
             }
         }
      }
 
     .scenario-reports {
-        // border: 1px solid #666;
         background-color: #fff;
         margin: 1px auto;
         padding: 14px 36px;
@@ -422,12 +264,6 @@ export default {
 
 
         .scenario-reports-create {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-        }
-
-        .scenario-report-item-title {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
