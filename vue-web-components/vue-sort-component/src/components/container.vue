@@ -357,6 +357,22 @@ export default {
 			
 			this.datasource.changeInputOutputQuery(this, dssOutputs, dssInputs, script)
         },
+        dealChangeInputOutputQuery(data, func) {
+            const event = new Event("event")
+            event.args = {
+                callback: "changScriptInputOutput",
+                element: this,
+                param: {
+                    changeuuid: data.changeuuid,
+                    eventName: data.eventName,
+                    projectId: this.projectId,
+                    projectName: this.projectName,
+                    transition: this.transition,
+                    callback: func
+                }
+            }
+            this.$emit('event', event)
+        },
         saveNotification(status) {
             if (status == "success" || status == "succeed") {
                 Message({
