@@ -124,9 +124,6 @@ export default {
                 }
             ],
 			labelPosition: 'left',
-			// triggerName:'基于时间自动运行',
-			// timeValue: 10,
-			// periodValue: "minute"
         }
     },
     props: {
@@ -171,9 +168,7 @@ export default {
 		// 	// 	})
 		// 	// }
 		// },
-		"triggers":function(){
-			// this.triggers.forEach()
-		}
+		
     },
     methods: {
 		changeName(item,index){

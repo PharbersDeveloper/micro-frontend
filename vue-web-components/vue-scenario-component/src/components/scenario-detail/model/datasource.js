@@ -14,6 +14,7 @@ export default class PhScenarioDetailDatasource {
         this.triggers = []
         this.steps = []
 		this.datasets = []
+        this.reports = []
     }
 
 
@@ -43,6 +44,11 @@ export default class PhScenarioDetailDatasource {
         this.store.sync(triggers)
         this.triggers = this.store.findAll("scenario-triggers")
 
+        const reports = await this.buildReportsQuery(this.scenarioId)
+            .then((response) => response.json())
+        this.store.sync(reports)
+        this.reports = this.store.findAll("scenario-reports")
+
         const steps = await this.buildStepsQuery(this.scenarioId)
             .then((response) => response.json())
         this.store.sync(steps)
@@ -54,6 +60,30 @@ export default class PhScenarioDetailDatasource {
         const accessToken = this.getCookie( "access_token" ) || this.debugToken
         let body = {
             "table": "scenario_trigger",
+            "conditions": {
+                "scenarioId": ["=", scenarioId],
+            },
+            "limit": 100,
+            "start_key": {}
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    buildReportsQuery(scenarioId) {
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            "table": "scenario_report",
             "conditions": {
                 "scenarioId": ["=", scenarioId],
             },
