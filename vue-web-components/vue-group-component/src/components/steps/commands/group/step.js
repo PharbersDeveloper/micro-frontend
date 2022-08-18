@@ -4,13 +4,13 @@ import PhGroupCmd from "./cmd"
  * 这个就是我所说的Command
  */
 export default class PhGroupStep {
-    constructor(dbstep, schema) {
+    constructor(dbstep) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
 		this.globalCount = this.expressions["params"]["globalCount"]
         this.keys = this.expressions["params"]["keys"]
         this.defs = this.expressions["params"]["values"].filter(x => !Object.keys(x).includes("customExpr"))
-        this.resetCommands(schema)
+        // this.resetCommands(schema, defs)
     }
 
     addCol2Key(col) {
@@ -18,10 +18,11 @@ export default class PhGroupStep {
     }
 
 	resetCommands(schema) {
-		this.commands = schema.map(x => {
+		console.log(this.commands)
+		const results = schema.map(x => {
             const tmp = new PhGroupCmd()
 			let par = []
-			if (this.defs) {
+			if (!this.commands || this.commands.length === 0) {
 				par = this.defs.filter(it => it["column"] === x.title)
 			} else {
 				par = this.commands.filter(it => it["column"] === x.title) 
@@ -30,6 +31,7 @@ export default class PhGroupStep {
             else tmp.initWithSchema(x.title, x.type)
             return tmp
         })
+		this.commands = results
 	}
 
     // isComputedGroupCount() {
