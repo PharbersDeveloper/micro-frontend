@@ -36,7 +36,8 @@ export default class PhScenarioReportPolicy {
 				detail: detail,
 				// mode: report.mode,
 				traceId: report.traceId,
-                name: report.name
+                name: report.name,
+                mode: report.mode
 			})
 		})
 		return arr
