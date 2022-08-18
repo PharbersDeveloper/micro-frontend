@@ -30,7 +30,7 @@
             <div class="group-agg-op">
                 <el-table :data="notGroupedCommands"
                           ref="table"
-                          height="calc(100vh - 430px)"
+                          height="calc(100vh - 480px)"
                           style="width: 100%">
                     <!-- <el-table-column
                             type="selection"
