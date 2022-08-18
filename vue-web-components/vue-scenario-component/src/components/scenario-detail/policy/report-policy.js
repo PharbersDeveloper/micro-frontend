@@ -22,17 +22,14 @@ export default class PhScenarioReportPolicy {
 		reportArray.forEach(report => {
 			let detail = {}
 			detail = {
-                // "timezone": report.timezone,
                 "type": report.type,
-                // "start": report.start,
-                // "period": report.period,
                 "destination": report.destination
             }
 			arr.push({
 				scenarioId: report.scenarioId,
 				id: report.id,
 				index: report.index,
-				// active: report.active,
+				active: report.active,
 				detail: detail,
 				// mode: report.mode,
 				traceId: report.traceId,
