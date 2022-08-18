@@ -9,7 +9,7 @@ export default class PhDataSource {
 		this.parent = parent
         this.store = new JsonApiDataStore()
         this.resetData()
-        this.debugToken = "9639484b154324467a836a9bf2f2871a95103e9034f194c9a1d12dc0159aa93a"
+        this.debugToken = "b7a9736d9e1245e4d433fe79c850c22ef5c0522b5f847a2f527b493c4c739724"
     }
 
     resetData() {
@@ -71,7 +71,7 @@ export default class PhDataSource {
                             "params": {
 								"globalCount": true,
                                 "preFilter": {
-                                    "distinct": true,
+                                    "distinct": false,
                                     "enabled": true,
                                     "expr": ""
                                 },
@@ -79,7 +79,7 @@ export default class PhDataSource {
                                 "keys": [],
                                 "values": [],
                                 "postFilter": {
-                                    "distinct": true,
+                                    "distinct": false,
                                     "enabled": true,
                                     "expr": ""
                                 }

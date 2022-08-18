@@ -16,7 +16,7 @@
                 <div class="group-key-add-btn" >
                     <select v-model="selectedAdd" @change="addSelectedColToKey">
                         <option label="选中添加" value="选中添加" />
-                        <option v-for="(item, index) in schemaArray" :label="item.title" :key="index" :value="item.title" />
+                        <option v-for="(item, index) in selectedAddArray" :label="item.title" :key="index" :value="item.title" />
                     </select>
                 </div>
             </div>
@@ -129,7 +129,8 @@ export default {
             checkedKeys: [],
             ignoredClearMsg: false,
             schemaArray: [],
-            showOptionPopover: false
+            showOptionPopover: false,
+			selectedAddArray: []
         }
     },
     props: {
@@ -156,9 +157,11 @@ export default {
     mounted() {
         this.datasource = new PhGroupStep(this.step, this.schema)
         this.computedGroupCount = this.datasource.globalCount
-        this.notGroupedCommands = this.resetSelectGroupKeys()
+        // this.notGroupedCommands = this.resetSelectGroupKeys()
         this.ignoredClearMsg = false
-        this.schemaArray = this.schema
+        // this.schemaArray = this.schema
+		// this.selectedAddArray = this.schemaArray.filter(it => !this.datasource.keys.includes(it.title))
+		this.validate()
     },
     methods: {
         showOptionPopoverClick(data) {
@@ -166,11 +169,13 @@ export default {
             this.$refs.table.doLayout()
         },
         renderSchema() {
+			//computed columns的结果
             this.schemaArray = this.$parent.computeSchema()
-
+			this.selectedAddArray = this.schemaArray.filter(it => !this.datasource.keys.includes(it.title))
+			//生成新的command array
             this.datasource.resetCommands(this.schemaArray)
             this.notGroupedCommands = this.resetSelectGroupKeys()
-
+			//当computed columns的列被删除时发生改变
             const columns = this.schemaArray.map(it => it.title)
             this.datasource.keys = this.datasource.keys.filter(it => columns.includes(it))
         },
@@ -183,7 +188,7 @@ export default {
         delSelectCol(item, index) {
             this.datasource.keys.splice(index, 1)
             this.notGroupedCommands = this.resetSelectGroupKeys()
-            this.schemaArray = this.schemaArray.concat(this.schema.filter(it => it.title === item))
+            this.selectedAddArray = this.selectedAddArray.concat(this.schema.filter(it => it.title === item))
         },
         resetSelectGroupKeys() {
             const res = []
@@ -216,7 +221,7 @@ export default {
         },
         addSelectedColToKey() {
             this.datasource.addCol2Key(this.selectedAdd)
-            this.schemaArray = this.schemaArray.filter(it => it.title !== this.selectedAdd)
+            this.selectedAddArray = this.selectedAddArray.filter(it => it.title !== this.selectedAdd)
             this.selectedAdd = "选中添加"
             this.notGroupedCommands = this.resetSelectGroupKeys()
         },
