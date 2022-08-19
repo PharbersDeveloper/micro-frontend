@@ -1,32 +1,20 @@
 <template>
     <div id="app">
-        <ph-codeditor />
+        <router-view/>
     </div>
 </template>
 
-<script>
-import phCodeditor from './components/ph-codeditor-page'
-
-export default {
-    name: 'App',
-    components: {
-        phCodeditor
-    },
-    mounted() {
-        // window. addEventListener ('message', function(event) {
-        //     //event.data获取传过来的数据
-        //     console.log(event.data)
-        // });
-    }
-}
-</script>
-
-<style>
+<style lang="scss">
     #app {
-        font-family: Avenir, Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
-        text-align: center;
         color: #2c3e50;
+        height: 100vh;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: system,-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Segoe UI",Roboto,"Microsoft YaHei","Helvetica Neue",Helvetica,Arial,sans-serif;
+        box-sizing: border-box;
     }
 </style>

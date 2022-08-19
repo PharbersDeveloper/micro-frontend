@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import phCodeditor from './components/ph-codeditor.vue'
+import codeditor from './components/container.vue'
 
 Vue.use(Router)
 
@@ -9,9 +9,9 @@ export default new Router({
     base: process.env.BASE_URL,
     routes: [
         {
-            path: '/phcodeditor',
-            name: 'phcodeditor',
-            component: phCodeditor
+            path: '/codeditor',
+            name: 'codeditor',
+            component: codeditor
         }
     ]
 })
