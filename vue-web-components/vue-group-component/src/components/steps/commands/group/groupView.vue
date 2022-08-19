@@ -157,10 +157,7 @@ export default {
     mounted() {
         this.datasource = new PhGroupStep(this.step, this.schema)
         this.computedGroupCount = this.datasource.globalCount
-        // this.notGroupedCommands = this.resetSelectGroupKeys()
         this.ignoredClearMsg = false
-        // this.schemaArray = this.schema
-		// this.selectedAddArray = this.schemaArray.filter(it => !this.datasource.keys.includes(it.title))
 		this.validate()
     },
     methods: {
