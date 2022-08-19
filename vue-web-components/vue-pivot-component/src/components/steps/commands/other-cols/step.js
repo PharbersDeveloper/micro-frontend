@@ -20,10 +20,25 @@ export default class PhGroupStep {
         })
     }
 
+	resetCommands(schema) {
+		const results = schema.map(x => {
+            const tmp = new PhGroupCmd()
+			let par = []
+			if (!this.commands || this.commands.length === 0) {
+				par = this.defs.filter(it => it["column"] === x.src)
+			} else {
+				par = this.commands.filter(it => it["column"] === x.src) 
+			}
+            if (par.length > 0) tmp.initWithDefs(par[0])
+            else tmp.initWithSchema(x.title, x.type)
+            return tmp
+        })
+		this.commands = results
+	}
+
     refreshCols(keys) {
-		debugger
         this.needRefresh++
-        this.keys = keys
+        this.keys = keys.map(it => it.src)
         // this.commands = this.schema.map(x => {
         //     const tmp = new PhGroupCmd()
         //     const par = this.defs.filter(x => x["column"] === x.src)

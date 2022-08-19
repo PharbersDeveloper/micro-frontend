@@ -108,13 +108,15 @@ export default {
             checkAll: false,
             notGroupedCommands: [],
             checkedKeys: [],
-            ignoredClearMsg: false
+            ignoredClearMsg: false,
+			schemasArray: [],
+			selection: []
         }
     },
     props: {
         step: Object,
         schema: Array,
-        selection: Array,
+        identifiers: Array,
         concretDefs: {
             type: Object,
             default: () => {
@@ -142,9 +144,12 @@ export default {
             this.$refs.table.doLayout()
         },
 		renderSchema() {
-            const selection = this.$parent.computeSchema()
-			this.datasource = new PhGroupStep(this.step, selection, this.schema)
-        	// this.computedGroupCount = this.datasource.isComputedGroupCount()
+            this.schemasArray = this.$parent.computeSchema()
+			this.selection = this.schemasArray.filter(it => !this.identifiers.includes(it))
+
+			this.datasource = new PhGroupStep(this.step, this.selection, this.schemasArray)
+            // this.datasource.resetCommands(this.selection)
+			// this.datasource.refreshCols(this.selection)
             this.notGroupedCommands = this.resetSelectGroupKeys()
 		},
         validate() {
@@ -197,7 +202,6 @@ export default {
     },
     watch: {
         "datasource.needRefresh": function() {
-			debugger
 			this.renderSchema()
         }
     }

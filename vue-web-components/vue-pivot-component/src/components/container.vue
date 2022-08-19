@@ -48,7 +48,7 @@
                 <other-cols v-show="active === 4"
 					ref="other"
 					:step="datasource.step"
-					:selection="selection"
+					:identifiers="identifiers"
 					:schema="computedSchema"
 					@statusChange="otherStatus" />
                 <outputs v-show="active === 5"
@@ -176,11 +176,11 @@ export default {
 			outputs: [],
             inputs: [],
             datasetArray: [],
-            selection: [],
             savePopup: false,
             transition: 0,
             loading: false,
-            computedSchema: []
+            computedSchema: [],
+			identifiers: []
         }
     },
     props: {
@@ -436,20 +436,13 @@ export default {
     },
     watch: {
         active(n) {
-			if(n === 3) {
-				this.computedSchema = this.computeSchema()
+			if (n === 3) {
+				// this.computedSchema = this.computeSchema()
 			}
-
 			if (n === 4) {
-				debugger
-				this.computedSchema = this.computeSchema()
-				this.selection = this.$refs.pivot.schemasArray.filter(it => !this.$refs.pivot.datasource.command.identifiers.includes(it))
-                this.$refs.other.datasource.refreshCols(this.selection)
-            }
-            // if (n === 5) {
-            //     this.outputsSchema = this.genOutputsSchema()
-            // }
-			
+				// this.computedSchema = this.computeSchema()
+				this.identifiers = this.$refs.pivot.datasource.command.identifiers
+			}
             this.$refs.prefilter.validate()
             this.$refs.computed.validate()
             this.$refs.pivot.validate()
