@@ -54,9 +54,9 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    refreshData(projectId, jobName, jobId) {
+    async refreshData(projectId, jobName, jobId) {
         const that = this
-        this.buildQuery(projectId, jobId)
+        await this.buildQuery(projectId, jobId)
             .then((response) => response.json())
             .then((response) => {
                 that.currentPageToken = response.meta.start_key
@@ -103,12 +103,11 @@ export default class PhDataSource {
             })
     }
 
-    refreshDataset(projectId, dsId) {
+    async refreshDataset(projectId, dsId) {
         const that = this
-        this.buildDatasetQuery(projectId)
+        await this.buildDatasetQuery(projectId)
             .then((response) => response.json())
             .then((response) => {
-                console.log(response)
                 that.store.sync(response)
                 const data = that.store.findAll("datasets")
                 that.parent.datasetArray = data

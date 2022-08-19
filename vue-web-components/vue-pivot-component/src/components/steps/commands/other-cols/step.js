@@ -7,7 +7,6 @@ export default class PhGroupStep {
     constructor(dbstep, keys, schema) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
-        // this.keys = this.expressions["params"]["keys"]
         this.schema = schema
         this.defs = this.expressions["params"]["otherColumns"]
         this.refreshCols(keys)
@@ -22,6 +21,7 @@ export default class PhGroupStep {
     }
 
     refreshCols(keys) {
+		debugger
         this.needRefresh++
         this.keys = keys
         // this.commands = this.schema.map(x => {
@@ -37,14 +37,14 @@ export default class PhGroupStep {
         this.keys.push(col)
     }
 
-    isComputedGroupCount() {
-        if (this.commands.length > 0) return this.commands[0].count
-        return false
-    }
+    // isComputedGroupCount() {
+    //     if (this.commands.length > 0) return this.commands[0].count
+    //     return false
+    // }
 
-    changeComputedGroupCount(v) {
-        this.commands.forEach(x => x.count = v)
-    }
+    // changeComputedGroupCount(v) {
+    //     this.commands.forEach(x => x.count = v)
+    // }
 
     exec() {
         // if (this.command.validations())

@@ -107,7 +107,6 @@ export default {
             isIndeterminate: false,
             checkAll: false,
             notGroupedCommands: [],
-            // notGroupedTypes: [],
             checkedKeys: [],
             ignoredClearMsg: false
         }
@@ -124,19 +123,16 @@ export default {
         }
     },
     components: {
-        // ElFormItem,
-        // ElForm,
         ElInput,
         ElButton,
         ElTable,
         ElTableColumn,
         ElCheckbox,
-        ElCheckboxButton,
-        // ElPopover,
+        ElCheckboxButton
     },
     mounted() {
         this.datasource = new PhGroupStep(this.step, this.selection, this.schema)
-        this.computedGroupCount = this.datasource.isComputedGroupCount()
+        // this.computedGroupCount = this.datasource.isComputedGroupCount()
 		// this.notGroupedCommands = this.resetSelectGroupKeys()
 		this.validate()
     },
@@ -145,7 +141,14 @@ export default {
             data.showPopover = !data.showPopover
             this.$refs.table.doLayout()
         },
+		renderSchema() {
+            const selection = this.$parent.computeSchema()
+			this.datasource = new PhGroupStep(this.step, selection, this.schema)
+        	// this.computedGroupCount = this.datasource.isComputedGroupCount()
+            this.notGroupedCommands = this.resetSelectGroupKeys()
+		},
         validate() {
+			this.renderSchema()
             this.$emit('statusChange', true)
         },
         resetSelectGroupKeys() {
@@ -170,15 +173,15 @@ export default {
             })
             return res
         },
-        addSelectedColToKey() {
-            this.datasource.addCol2Key(this.selectedAdd)
-            this.selectedAdd = "选中添加"
+        // addSelectedColToKey() {
+        //     this.datasource.addCol2Key(this.selectedAdd)
+        //     this.selectedAdd = "选中添加"
 
-            this.notGroupedCommands = this.resetSelectGroupKeys()
-        },
-        changeComputedGroupCount() {
-            this.datasource.changeComputedGroupCount(this.computedGroupCount)
-        },
+        //     this.notGroupedCommands = this.resetSelectGroupKeys()
+        // },
+        // changeComputedGroupCount() {
+        //     this.datasource.changeComputedGroupCount(this.computedGroupCount)
+        // },
         handleSelectionChange(val) {
             if (!this.ignoredClearMsg) {
                 this.datasource.commands.forEach(x => {
@@ -194,7 +197,8 @@ export default {
     },
     watch: {
         "datasource.needRefresh": function() {
-            this.notGroupedCommands = this.resetSelectGroupKeys()
+			debugger
+			this.renderSchema()
         }
     }
 }

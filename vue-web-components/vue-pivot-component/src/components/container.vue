@@ -31,30 +31,29 @@
             </div>
             <div class="pivot_right" v-if="datasource.isReady && datasource.isMetaReady">
                 <pre-filter v-show="active === 1"
-                            ref="prefilter"
-                            :step="datasource.step"
-                            :schema="datasource.dataset.schema"
-                            @statusChange="preFilterStatus" />
+					ref="prefilter"
+					:step="datasource.step"
+					:schema="datasource.dataset.schema"
+					@statusChange="preFilterStatus" />
                 <computed v-show="active === 2"
-                              ref="computed"
-                              :step="datasource.step"
-                              :schema="datasource.dataset.schema"
-                              @statusChange="computedStatus" />
+					ref="computed"
+					:step="datasource.step"
+					:schema="datasource.dataset.schema"
+					@statusChange="computedStatus" />
                 <pivot v-show="active === 3"
-                       ref="pivot"
-                       :step="datasource.step"
-                       :schema="datasource.dataset.schema"
-                       @statusChange="pivotStatus" />
+					ref="pivot"
+					:step="datasource.step"
+					:schema="computedSchema"
+					@statusChange="pivotStatus" />
                 <other-cols v-show="active === 4"
-                            ref="other"
-                            :step="datasource.step"
-                            :selection="selection"
-                            :schema="datasource.dataset.schema"
-                            @statusChange="otherStatus" />
+					ref="other"
+					:step="datasource.step"
+					:selection="selection"
+					:schema="computedSchema"
+					@statusChange="otherStatus" />
                 <outputs v-show="active === 5"
-                                ref="outputs"
-                                :schema="outputsSchema"
-                                @statusChange="outputsStatus" />
+					ref="outputs"
+					@statusChange="outputsStatus" />
             </div>
             <div v-if="datasource.hasNoSchema">
                 Schema 不对，找产品处理
@@ -180,7 +179,8 @@ export default {
             selection: [],
             savePopup: false,
             transition: 0,
-            loading: false
+            loading: false,
+            computedSchema: []
         }
     },
     props: {
@@ -204,6 +204,27 @@ export default {
         }
     },
     methods: {
+		computeSchema() {
+            const result = this.datasource.dataset.schema.slice(0)
+			let addCols = []
+            if (this.$refs.computed) {
+                addCols = this.$refs.computed.datasource.revert2Defs()
+            }
+			
+			if(addCols.length === 0){
+                const computedStep = JSON.parse(this.datasource.step["expressions"])
+                addCols = computedStep["params"]["computedColumns"]
+            }
+
+			for (let x = 0; x < addCols.length; ++x) {
+                result.push({
+                    "type": addCols[x]["type"].toLowerCase(),
+                    "src": addCols[x]["name"],
+					"des": addCols[x]["name"]
+                })
+            }
+			return result
+		},
 		linkToVideos() {
 			window.open("https://www.bilibili.com/video/BV1st4y137hJ")
 		},
@@ -405,20 +426,29 @@ export default {
         this.jobName = this.getJobName()
         this.jobId = this.getUrlParam("jobId")
         this.datasetId = this.getUrlParam("datasetId")
-        this.datasource.refreshData(this.projectId, this.jobName, this.jobId)
-        this.datasource.refreshDataset(this.projectId, this.datasetId)
-        this.datasource.refreshInOut(this.projectId, this.jobShowName)
-        this.datasource.refreshScriptParameter(this.projectId, this.jobId)
+        const fetch1 = this.datasource.refreshData(this.projectId, this.jobName, this.jobId)
+        const fetch2 = this.datasource.refreshDataset(this.projectId, this.datasetId)
+        const fetch3 = this.datasource.refreshInOut(this.projectId, this.jobShowName)
+        const fetch4 = this.datasource.refreshScriptParameter(this.projectId, this.jobId)
+		await Promise.all([fetch1, fetch2, fetch3, fetch4])
+		// this.computedSchema = this.computeSchema()
+		this.$refs.pivot.renderSchema()
     },
     watch: {
         active(n) {
+			if(n === 3) {
+				this.computedSchema = this.computeSchema()
+			}
+
 			if (n === 4) {
+				debugger
+				this.computedSchema = this.computeSchema()
 				this.selection = this.$refs.pivot.schemasArray.filter(it => !this.$refs.pivot.datasource.command.identifiers.includes(it))
                 this.$refs.other.datasource.refreshCols(this.selection)
             }
-            if (n === 5) {
-                this.outputsSchema = this.genOutputsSchema()
-            }
+            // if (n === 5) {
+            //     this.outputsSchema = this.genOutputsSchema()
+            // }
 			
             this.$refs.prefilter.validate()
             this.$refs.computed.validate()

@@ -12,7 +12,8 @@
 					<pivot-example></pivot-example>
 				</div>
 				<div class="pivot-pivot-c">
-					<pivot-column :command="datasource.command"
+					<pivot-column 
+						:command="datasource.command"
 						:kc="datasource.command.keyColumns"
 						:selection="datasource.command.selection"
 						:pivoted-column-type="datasource.command.pivotedColumnType"
@@ -21,7 +22,8 @@
 			</div>
 			<div class="pivot-flex-2">
 				<div class="pivot-column-c">
-					<pivot-row :command="datasource.command"
+					<pivot-row 
+						:command="datasource.command"
 						:idf="datasource.command.identifiers"
 						:selection="datasource.command.selection"
 						@selectionChanged="selectionChanged" />
@@ -64,8 +66,6 @@ export default {
         }
     },
     components: {
-        // JoinDatasetCard,
-        // JoinRelationCard
         PivotExample,
         PivotColumn,
         PivotRow,
@@ -77,7 +77,13 @@ export default {
 		this.validate()
     },
     methods: {
+		renderSchema() {
+			this.schemasArray = this.$parent.computeSchema()
+        	this.datasource = new PhPivotStep(this.step, this.schemasArray)
+		},
         validate() {
+            this.renderSchema()
+
             const ErrorVales = this.datasource.command.keyColumns.length === 0 || (this.datasource.command.valueColumns.length === 0 && !this.datasource.command.globalCount)
 			const event = new Event("event")
 			event.args = {
