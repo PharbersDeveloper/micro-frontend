@@ -393,7 +393,7 @@ export default {
                 return false
             }
             data.args.param.projectName = this.allData.projectName,
-                data.args.param.projectId = this.allData.projectId
+            data.args.param.projectId = this.allData.projectId
             data.args.param.maxcat = this.maxcat
             data.args.param.datasetArray = this.allData.dss
             data.args.param.tableName = data.args.param.dsName
@@ -415,7 +415,7 @@ export default {
         // max1.0
         fitMaxEvent(data) {
             data.args.param.projectName = this.allData.projectName,
-                data.args.param.projectId = this.allData.projectId
+            data.args.param.projectId = this.allData.projectId
             data.args.param.maxcat = this.maxcat
             data.args.param.datasetArray = this.allData.dss
             let creatDS = true
@@ -441,7 +441,7 @@ export default {
             data.args.param.selectedDatasets = this.datasetcheckedIds
             data.args.param.datasetArray = this.allData.dss
             data.args.param.projectName = this.allData.projectName,
-                data.args.param.projectId = this.allData.projectId
+            data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.showCreateTagsDialog = false;
         },
@@ -470,7 +470,7 @@ export default {
             data.args.param.selectedDatasets = this.datasetcheckedIds
             data.args.param.datasetArray = this.allData.dss
             data.args.param.projectName = this.allData.projectName,
-                data.args.param.projectId = this.allData.projectId
+            data.args.param.projectId = this.allData.projectId
             this.$emit('event', data)
             this.deletedialogshow = false;
         },
@@ -720,16 +720,16 @@ export default {
         },
         selectDatasetIcon(cat) {
             switch (cat) {
-                case "input_index":
-                    return this.input_index_icon
-                case "output_index":
-                    return this.output_index_icon
-                case "intermediate":
-                    return this.intermediate_icon
-                case "catalog":
-                    return this.catalog_icon
-                default:
-                    return this.dataset_icon
+            case "input_index":
+                return this.input_index_icon
+            case "output_index":
+                return this.output_index_icon
+            case "intermediate":
+                return this.intermediate_icon
+            case "catalog":
+                return this.catalog_icon
+            default:
+                return this.dataset_icon
             }
         }
     }

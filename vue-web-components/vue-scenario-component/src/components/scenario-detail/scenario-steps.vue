@@ -2,17 +2,17 @@
     <div class="scenario-steps-container">
         <div class="scenario-step-lst">
             <ul>
-                <li v-for="(item, index) in steps" :key="index" class="scenario-step-lst-item" v-show="item.deleted === false" @click="selectStep = item">
+                <li v-for="(item, index) in steps" :key="index" :class="{'select':selectStep == item}" v-show="item.deleted === false" @click="selectedStep(item, index)">
                     <!-- <p class="el-icon-s-operation" >{{index}}</p> -->
-                    <span><b>运行</b></span>
-                    <span style="flex-grow: 1"><b>{{item.name}}</b></span>
-                    <el-button class="el-icon-delete-solid border-none" @click.stop="deleteStep" ></el-button>
+                    <span>运行&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <span style="flex-grow: 1">{{item.name}}</span>
+                    <el-button class="el-icon-delete-solid border-none" @click.stop="deleteStep(item, index)" :class="{'select':selectStep == item}"></el-button>
                 </li>
             </ul>
             <el-button
 				class="add_new_step"
 				@click="addNewStep">
-                添加一个新算子
+                添加运行步骤
                 <!-- <img class="add" :src="add_icon" alt="" /> -->
             </el-button>
         </div>
@@ -23,20 +23,23 @@
                     <el-input v-model="selectStep.name" placeholder="step name" @change="selectStep.edited = true"></el-input>
                 </el-form-item>
                 <el-form-item label="数据集">
-                    <div class="scenario-step-ds-item">
+                    <div :class="isDsEmpty() ? 'scenario-step-ds-item stepEmpty' : 'scenario-step-ds-item'" style="width:100%;">
                         <span><b>{{selectStep.ds}}</b></span>
+                        <span class="dsEmpty" v-show="isDsEmpty()">数据集不能为空！</span>
                         <el-button class="el-icon-delete-solid border-none" @click="deleteStepDatasetName" />
                     </div>
                 </el-form-item>
                 <el-form-item label="">
-                    <el-button class="add-ds" type="primary" @click="dialogVisible = true">添加目标数据集</el-button>
+                    <el-button class="add-ds" type="primary" @click="dialogVisible = true">选择目标数据集</el-button>
                 </el-form-item>
 				<el-form-item label="配置参数">
 					<el-input 
 						type="textarea"
 						:rows="4"
 						placeholder="请输入配置参数"
-						v-model="selectStep.confData"></el-input>
+						v-model="selectStep.confData"
+                        :class="isConfEmpty() ? 'stepEmpty' : ''"></el-input>
+                        <span class="confEmpty" v-show="isConfEmpty()">配置参数不能为空！</span>
 				</el-form-item>
                 <el-form-item label="运行模式">
                     <select 
@@ -51,7 +54,7 @@
                     </select>
                 </el-form-item>
                 <el-form-item label="忽略失败">
-                    <el-checkbox v-model="selectStep['ignore-error']" @change="selectStep.edited = true">失败的脚本不会标记Scenario 运行失败</el-checkbox>
+                    <el-checkbox v-model="selectStep.ignoreError" @change="selectStep.edited = true">忽略上一步骤的失败，继续运行</el-checkbox>
                 </el-form-item>
             </el-form>
         </div>
@@ -74,8 +77,8 @@
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="dialogVisible = false">Cancel</el-button>
-                <el-button type="primary" @click="changeDataset">Confirm</el-button>
+                <el-button type="primary" @click="dialogVisible = false" style="padding: 10px;">Cancel</el-button>
+                <el-button type="primary" @click="changeDataset" style="padding: 10px;">Confirm</el-button>
             </span>
         </el-dialog>
     </div>
@@ -111,7 +114,10 @@ export default {
                     cat: true,
                     desc: "递归运行"
                 }
-            ]
+            ],
+            dsNameArr: [],
+            confDataArr: [],
+            stepIndexArr: []
         }
     },
     props: {
@@ -147,11 +153,32 @@ export default {
 
     },
     methods: {
-        deleteStep() {
-            if (this.selectStep) {
-                this.selectStep.deleted = true
-                this.selectStep = {}
+        selectedStep(item, index){
+            this.selectStep = item
+            this.steps[index].name = this.selectStep.name
+            item.name = this.steps[index].name
+            this.steps[index].ds = this.selectStep.ds
+            this.steps[index].confData = this.selectStep.confData
+            this.steps[index].recursive = this.selectStep.recursive
+            this.steps[index].ignoreError = this.selectStep.ignoreError
+        },
+        isConfEmpty(){
+            if (this.selectStep.confData.length == 0) {
+                return true
+            } else {
+                return false
             }
+        },
+        isDsEmpty() {
+            if (this.selectStep.ds.length == 0) {
+                return true
+            } else {
+                return false
+            }
+        },
+        deleteStep(item, index) {
+            item.deleted = true
+            this.steps[index].deleted = true
         },
         deleteStepDatasetName() {
             if (this.selectStep) {
@@ -162,24 +189,22 @@ export default {
         changeDataset() {
             if (this.selectStep && this.dsName) {
                 this.selectStep.ds = this.dsName
+                this.selectStep.name = "ds_" + this.dsName
                 this.selectStep.edited = true
             }
             this.dialogVisible = false
         },
         addNewStep() {
-            // let stepsArr = this.steps.filter(it => it.deleted === false)
-            // if(stepsArr.length > 0) {
-            //     return false
-            // }
             const idx = this.steps.length > 0 ? 1 + Math.max(...this.steps.map(x => x.index)) : 0
             const result = {}
             const num = this.steps.length + 1
             result["recursive"] = false
-            result["ignore-error"] = false
+            result["ignoreError"] = false
             result["type"] = "dataset"
             result["ds"] = ""
             result["mode"] = "dataset"
             result["name"] = "step" + num
+            result["confData"] = ""
             result["scenarioId"] = this.scenarioId
             result["index"] = idx
             result["traceId"] = this.genId()
@@ -187,6 +212,7 @@ export default {
             result["deleted"] = false
             result["id"] = this.genId()
             this.steps.push(result)
+
         },
         genId(len=16, radix=16) {
             const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
@@ -227,15 +253,12 @@ export default {
         box-sizing: border-box;
     }
 
-    .scenario-container{
-        // padding-top: 0px !important;
-    }
     .add_new_step {
         margin: 30px auto;
-        width: 216px;
-        height: 25px;
-        background: #F8D634;
-        box-shadow: 1px 2px 4px 0px rgba(0,0,0,0.5);
+        width: 66.7%;
+        height: 30px;
+        background: #3b99fc;
+        box-shadow: 1px 2px 4px 0px rgba(59, 153, 252, .5);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -250,6 +273,20 @@ export default {
         // }
     }
 
+    .select {
+        background-color: #c4e0fe !important;
+    }
+    .stepEmpty {
+        border:1px solid red !important;
+        // border-radius: 4px;
+    }
+    .el-textarea__inner{
+        border: none;
+    }
+    .el-textarea {
+        border:1px solid #ccc;
+        border-radius: 4px;
+    }
     .scenario-steps-container {
         display: flex;
         flex-direction: row;
@@ -274,7 +311,7 @@ export default {
             flex-direction: column;
             border-right: 1px solid #ccc;
             // flex-grow: 1;
-            // min-width: 200px;
+            min-width: 200px;
             // max-width: 600px;
             width: 25vw;
             padding: 30px;
@@ -283,10 +320,10 @@ export default {
                 // flex-grow: 1;
                 height: calc(100% - 25px);
                 overflow: hidden;
-                overflow-y: scroll;
+                overflow-y: auto;
                 padding: 10px;
 
-                li b{
+                li {
                     padding-left: 10px;
                 }
                 .el-icon-delete-solid{
@@ -294,20 +331,22 @@ export default {
                 }
             }
 
-            .scenario-step-lst-item {
+            li {
                 display: flex;
                 align-items: center;
                 flex-direction: row;
-                border: 1px solid grey;
+                // border: 1px solid grey;
                 margin-bottom: 10px;
                 height: 40px;
+                background-color: #fff;
             }
         }
 
         .scenario-step-detail {
             display: flex;
             justify-content: center;
-            align-items: center;
+            padding: 14px 36px;
+            // align-items: center;
             flex-grow: 3;
             // max-width: 800px;
 
@@ -317,6 +356,7 @@ export default {
                 background-color: #fff;
                 padding: 14px 36px;
                 width: 75%;
+                height:530px;
             }
 
             .el-form-item {
@@ -335,13 +375,37 @@ export default {
                 display: flex;
                 flex-direction: row;
                 border: 1px solid #dcdfe6;
+                border-radius: 4px;
                 height: 40px;
+                position: absolute;
                 span {
                     flex-grow: 1;
+                    b {
+                        padding-left: 10px;
+                    }
+                }
+                .dsEmpty{
+                    font-size: 12px;
+                    color: red;
+                    position: relative;
+                    bottom: -29px;
+                    left: -351px;
                 }
                 .el-icon-delete-solid{
                     margin-right: 10px;
+                    width: 24px;
+                    height: 24px;
+                    position: relative;
+                    top: 8px;
+                    right: 0;
                 }
+            }
+            .confEmpty{
+                font-size: 12px;
+                color: red;
+                position: absolute;
+                bottom: -30px;
+                left: 0;
             }
         }
     }

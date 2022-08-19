@@ -8,7 +8,7 @@
 				@save="saveAll"
 				@trigger="trigger"></scenario-nav>
             <div class="scenario-container" v-if="activeName === 'Setting'">
-            <!-- <div class="scenario-container" v-if="activeName === ''"> -->
+            <!-- <div class="scenario-container" v-if="activeName === ''">  -->
                 <detail-form :scenario="datasource.scenario"></detail-form>
                 <trigger-lst :triggers="triggerDisplay"
 					:scenario-id="datasource.scenario.id" />
@@ -17,7 +17,7 @@
             </div>
             <div v-else class="scenario-container">
                 <scenario-steps :steps="stepDisplay"
-					:datasets="datasetsDisplay"
+					:datasets="datasetsDisplay" 
 					:scenario-id="datasource.scenario.id" />
             </div>
         </div>
@@ -131,8 +131,47 @@ export default {
             let data = paramArr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
         },
+        forStepArray(array) {
+            if (array.length == 0) {
+                return true
+            } else {
+                let value = array.every(item => {
+                    if (item.detail.name !== "" && item.confData !== "") {
+                        return true
+                    } else {
+                        return false
+                    }
+                })
+                return value
+            }
+        },
         activeChange(n) {
-            this.activeName = n
+            if (n == 'Steps') { //跳转steps
+                if (this.isTrue) {
+                    Message({
+                        type: 'error',
+                        showClose: true,
+                        duration: 3000,
+                        message: '请检查邮箱格式！'
+                    })
+                    this.activeName = "Setting"
+                } else {
+                    this.activeName = n
+                }
+            } else {
+                let stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
+                if (this.forStepArray(stepDisplay)) {
+                    this.activeName = n
+                } else {
+                    Message({
+                        type: 'error',
+                        showClose: true,
+                        duration: 3000,
+                        message: '请修改参数！'
+                    })
+                    this.activeName = "Steps"
+                }
+            }
         },
 		datasetsAdapter() {
 			this.datasetsDisplay = this.datasource.datasets.map(x => x)
@@ -142,7 +181,7 @@ export default {
                 const result = {}
                 const tmp = JSON.parse(x["detail"])
                 result["recursive"] = tmp["recursive"]
-                result["ignore-error"] = tmp["ignore-error"]
+                result["ignoreError"] = tmp["ignore-error"]
                 result["type"] = tmp["type"]
                 result["ds"] = tmp["name"]
                 result["mode"] = x["mode"]
@@ -200,43 +239,52 @@ export default {
 		trigger() {
 			this.saveAll("trigger")
 		},
+        forArray(array){
+            for (let i = 0; i < array.length; i++) {
+                array[i].index = i
+            }
+            return array
+        },
         saveAll(type) {
-            if(!this.isTrue){
-                let result = true
-                let stepDisplay = []
-                let triggerDisplay = []
-                let reportDisplay = []
+            let result = true
+            let stepDisplay = []
+            let triggerDisplay = []
+            let reportDisplay = []
 
-                triggerDisplay = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => !it.deleted))
-                reportDisplay = this.reportPolicy.dealReportDisplay(this.reportDisplay.filter(it => !it.deleted))
-                stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
-
-                // triggerDisplayDelete = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => it.deleted))
-
-                // stepDisplayDelete = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => it.deleted))
-
-                const event = new Event("event")
-                event.args = {
-                    callback: "saveScenario",
-                    element: this,
-                    param: {
-                        name: "saveScenario",
-                        projectName: this.allData.projectName,
-                        projectId: this.allData.projectId,
-                        scenarioName: this.datasource.scenarioName,
-                        scenarioId: this.datasource.scenarioId,
-                        triggerDisplay: triggerDisplay,
-                        stepDisplay: stepDisplay,
-                        reportDisplay: reportDisplay,
-                        // triggerDisplayDelete: triggerDisplayDelete,
-                        // stepDisplayDelete: stepDisplayDelete,
-                        type: type
+            triggerDisplay = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => !it.deleted))
+            reportDisplay = this.reportPolicy.dealReportDisplay(this.reportDisplay.filter(it => !it.deleted))
+            stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
+            stepDisplay = this.forArray(stepDisplay)
+            let value = this.forStepArray(stepDisplay)
+            if (!this.isTrue) {
+                if (value) {
+                    const event = new Event("event")
+                    event.args = {
+                        callback: "saveScenario",
+                        element: this,
+                        param: {
+                            name: "saveScenario",
+                            projectName: this.allData.projectName,
+                            projectId: this.allData.projectId,
+                            scenarioName: this.datasource.scenarioName,
+                            scenarioId: this.datasource.scenarioId,
+                            triggerDisplay: triggerDisplay,
+                            stepDisplay: stepDisplay,
+                            reportDisplay: reportDisplay,
+                            type: type
+                        }
                     }
+                    this.$emit('event', event)
+                    return result
+                } else {
+                    Message({
+                        type: 'error',
+                        showClose: true,
+                        duration: 3000,
+                        message: '请修改参数！'
+                    })
                 }
-                // console.log(event)
-                this.$emit('event', event)
-                return result
-            }else{
+            } else {
                 Message({
                     type: 'error',
                     showClose: true,
