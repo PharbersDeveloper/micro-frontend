@@ -361,7 +361,6 @@ export default {
 				"values": groupRevert2Defs.values,
 				"postFilter": this.$refs.postfilter.datasource.revert2Defs(),
 			}
-
 			this.datasource.saveAndGenCode(params, this)
 		},
         save(transition) {

@@ -11,6 +11,7 @@
                 <el-table :data="notGroupedCommands"
                           ref="table"
                           style="width: 100%"
+                          height="calc(100vh - 260px)"
                           @selection-change="handleSelectionChange">
                     <el-table-column
                             type="selection"
@@ -26,7 +27,7 @@
                             prop="type"
                             width="120">
                     </el-table-column>
-                    <el-table-column width="400">
+                    <el-table-column width="700">
                         <template slot-scope="scope">
                             <div class="group-check-box">
                                 <el-checkbox-button v-model="scope.row.countDistinct">Distinct</el-checkbox-button>
@@ -34,42 +35,48 @@
                                 <el-checkbox-button v-model="scope.row.max">Max</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.sum">Sum</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.avg">Avg</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.stddev">Stddev</el-checkbox-button>
+                                <el-checkbox-button v-model="scope.row.count">count</el-checkbox-button>
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column width="400">
+                    <el-table-column width="300">
                         <template slot-scope="scope">
                             <div class="group-check-box">
                                 <el-checkbox-button v-model="scope.row.first">First</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.last">Last</el-checkbox-button>
-                                <el-checkbox-button v-model="scope.row.stddev">Stddev</el-checkbox-button>
                                 <el-checkbox-button v-model="scope.row.concat">Concat</el-checkbox-button>
                             </div>
                         </template>
                     </el-table-column>
                     <el-table-column width="120">
                         <template slot-scope="scope">
+							<div class="popover" v-show="scope.row.showPopover && (scope.row.first || scope.row.last || scope.row.concat)">
+                                <div class="popitem" v-show="scope.row.first || scope.row.last">
+                                    <div class="label">Order first/last by</div>
+                                    <select 
+                                        v-model="scope.row.orderColumn">
+                                        <option v-for="(item, index) in schema" :label="item.src" :key="index" :value="item.src" />
+                                    </select>
+                                </div>
+                                <div class="popitem" v-show="scope.row.first || scope.row.last">
+                                    <div class="label">First/last not null</div>
+                                    <el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
+                                </div>
+                                <div class="popitem" v-show="scope.row.concat">
+                                    <div class="label">Concat separator</div>
+                                    <el-input v-model="scope.row.concatSeparator"></el-input>
+                                </div>
+                                <div class="popitem" v-show="scope.row.concat">
+                                    <div class="label">Concat distinct</div>
+                                    <el-checkbox v-model="scope.row.concatDistinct"></el-checkbox>
+                                </div>
+                            </div>
                             <div class="group-check-box">
-                                <el-popover
-                                        placement="top-start"
-                                        width="500"
-                                        trigger="hover">
-                                    <el-form label-width="200px">
-                                        <el-form-item label="Order first/last by">
-                                            <el-input v-model="scope.row.orderColumn"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="First/last not null">
-                                            <el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
-                                        </el-form-item>
-                                        <el-form-item label="Concat separator">
-                                            <el-input v-model="scope.row.concatSeparator"></el-input>
-                                        </el-form-item>
-                                        <el-form-item label="Concat distinct">
-                                            <el-checkbox v-model="scope.row.concatDistinct"></el-checkbox>
-                                        </el-form-item>
-                                    </el-form>
-                                    <el-button slot="reference">option</el-button>
-                                </el-popover>
+                                <el-button 
+                                    :disabled="!scope.row.first && !scope.row.last && !scope.row.concat"
+                                    @click="showOptionPopoverClick(scope.row)">option
+                                </el-button>
                             </div>
                         </template>
                     </el-table-column>
@@ -82,10 +89,10 @@
 import ElButton from 'element-ui/packages/button/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElCheckboxButton from 'element-ui/packages/checkbox-button/index'
-import ElPopover from 'element-ui/packages/popover/index'
+// import ElPopover from 'element-ui/packages/popover/index'
 import ElInput from 'element-ui/packages/input/index'
-import ElForm from 'element-ui/packages/form/index'
-import ElFormItem from 'element-ui/packages/form-item/index'
+// import ElForm from 'element-ui/packages/form/index'
+// import ElFormItem from 'element-ui/packages/form-item/index'
 import ElTable from 'element-ui/packages/table/index'
 import ElTableColumn from 'element-ui/packages/table-column/index'
 import { PhGroupDefs } from "./defs"
@@ -117,15 +124,15 @@ export default {
         }
     },
     components: {
-        ElFormItem,
-        ElForm,
+        // ElFormItem,
+        // ElForm,
         ElInput,
         ElButton,
         ElTable,
         ElTableColumn,
         ElCheckbox,
         ElCheckboxButton,
-        ElPopover,
+        // ElPopover,
     },
     mounted() {
         this.datasource = new PhGroupStep(this.step, this.selection, this.schema)
@@ -134,6 +141,10 @@ export default {
 		this.validate()
     },
     methods: {
+		showOptionPopoverClick(data) {
+            data.showPopover = !data.showPopover
+            this.$refs.table.doLayout()
+        },
         validate() {
             this.$emit('statusChange', true)
         },
@@ -263,9 +274,35 @@ export default {
 
             .group-agg-op {
                 overflow: auto;
-				height: calc(100vh - 300px);
+				// height: calc(100vh - 300px);
 				width: calc(100vw - 400px);
-                /*flex-grow: 1;*/
+
+				.popover {
+                    position: absolute;
+                    border: 1px solid #aaa;
+                    box-shadow: 0 2px 12px 0  rgba(0, 0, 0, 0.1);
+                    z-index: 1;
+                    background: #fff;
+                    width: 300px;
+                    right: 30px;
+                    top: 60px;
+                    padding: 10px;
+
+                    .popitem {
+                        display: flex;
+                        align-items: center;
+
+                        .label {
+                            width: 150px;
+                            max-width: 150px;
+                            padding-right: 16px;
+                        }
+
+                        /deep/.el-input {
+                            width: 120px;
+                        }
+                    }
+                }
             }
 
 
