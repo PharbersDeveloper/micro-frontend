@@ -1,8 +1,10 @@
 <template>
     <div class="page_container">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css"/>
         <div class="header">
              <div class="title">
-                <img :src="defs.iconsByName(runtime)" class="title_icon" alt="">
+                <img :src="defs.iconsByName(datasource.runtime)" class="title_icon" alt="">
+                <!-- <img :src="defs.iconsByName('pyspark')" class="title_icon" alt=""> -->
                 <span class="name">compute_{{datasource.outputs}}</span>
             </div>
             <div class="coding-title">
@@ -31,14 +33,14 @@
                 </div>
                 <div class="code-block-list code-block-list-last">
                     <div class="ints">
-                        <span class="title">Output1</span>
+                        <span class="title">Output</span>
                         <span class="line"></span>
                     </div>
                     <div class="ds-lst">
                         <div class="ds-item">
-                            <span >{{datasource.outputs}}</span>
+                            <span>{{datasource.outputs}}</span>
                             <div>
-                                 <img :src="defs.iconsByName('codeditor', 'table')" alt="">
+                                <img :src="defs.iconsByName('codeditor', 'table')" alt="">
                                 <img :src="defs.iconsByName('codeditor', 'setting')" alt="">
                             </div>
                         </div>
@@ -48,7 +50,7 @@
 
             <div class="coding-pane">
                 <div class="coding">
-                    <ph-codeditor ref="codeditor" :value="codeBuffer" viewHeight="calc(100vh - 180px)" language="python"/>
+                    <iframe id="scriptCodeEditor" class="executions-iframe" :src="iframeUrl" frameborder="0" style="width: 100%; height: 100%;"></iframe>
                 </div>
             </div>
         </div>
@@ -57,24 +59,23 @@
 
 <script>
 import PhCodeditorDatasource from "./model/datasource"
-import phCodeditor from "./ph-codeditor"
 import PhDagDefinitions from "./policy/definitions/definitions";
 import AWS from "aws-sdk"
-import { staticFilePath, hostName } from "../config/envConfig"
+import { hostName } from "../config/envConfig"
+import { Message } from 'element-ui'
 
 export default {
     name: 'codeditor-page',
     components: {
-        phCodeditor
     },
     props: {
+        iframeUrl: {
+            type: String,
+            default: "http://localhost:8081/phcodeditor/"
+        },
         scriptName: {
             type: String,
             default: "脚本名称"
-        },
-        jobId: {
-            type: String,
-            default: "1qaz4rfv"
         },
         flowVersion: {
             type: String,
@@ -83,8 +84,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhCodeditorDatasource('1',
-                    this.projectId, this.jobId, this.flowVersion, this.jobName)
+                return new PhCodeditorDatasource('1', this.projectId, this.jobId)
             }
         },
         s3: {
@@ -106,34 +106,118 @@ export default {
     },
     data() {
         return {
-            codeBuffer: "",
             downloadCode: 0,
-            jobName: "",
+            codeBuffer: "",
             projectId: "",
-            jobPath: "",
-            runtime: ""
+            jobId: "",
+            // codeEditorContent: ""
         }
     },
-    mounted() {
+    async mounted() {
+        /* TODO : 如何使用 IFrame嵌入 CodeEditor
+            1、初始化: 使用PostMessage 在mounted时发送消息给 CodeEditor (必须要在IFrame加载完毕后初始化)
+                1.1、editorId: 当前CodeEditor的id 唯一标识
+                1.2、value: 当前CodeEditor的内容
+                1.3、language: 当前CodeEditor的语言
+                1.4、viewHeight: 当前CodeEditor的高度
+                1.5、maxLines: 当前CodeEditor的最大行数
+                1.6、theme: 当前CodeEditor的主题
+            2、注册消息 获取Editor的内容
+            3、添加beforeDestroy钩子函数 在销毁时注销以前注册的消息，不然会重复注册
+         */
+
         let href = window.location.href
-        console.log(href)
         let paramArr = href.split("?")[1].split("&")
+        // this.projectName = this.getUrlParam(paramArr, "projectName")
         this.projectId = this.getUrlParam(paramArr, "projectId")
-        this.projectName = this.getUrlParam(paramArr, "projectName")
-        this.jobName = this.getUrlParam(paramArr, "jobName")
-        this.runtime = this.getUrlParam(paramArr, "runtime")
+        this.jobId = this.getUrlParam(paramArr, "jobId")
         //父组件传进来的值
-        this.datasource.jobName = decodeURI(this.jobName)
+        this.datasource.jobId = this.jobId //decodeURI(this.jobName)
         this.datasource.projectId = this.projectId
         this.datasource.refreshData(this)
+        this.initEditor()
     },
     watch: {
-        async downloadCode(n, o) {
+        async downloadCode() {
             let data = await this.queryData()
             this.codeBuffer = data.message.data
+            this.setEditorValue()
         }
     },
     methods: {
+        registerEvent() {
+            // 注册获取Editor内容事件
+            window.addEventListener("message", this.getEditorContentEvent);
+        },
+        unRegisterEvent() {
+            window.removeEventListener("message", this.getEditorContentEvent);
+        },
+        initEditor() {
+            const iframe = document.getElementById("scriptCodeEditor")
+            iframe.onload = function () {
+                iframe.contentWindow.postMessage({
+                    codeEditorParameters: {
+                        editorId: "codeEditor",
+                        // value: this.codeBuffer,
+                        viewHeight: "calc(100vh - 180px)",
+                        language: "python",
+                        maxLines: 5000,
+                        theme: "github"
+                    }
+                }, "*")
+            }
+            this.registerEvent()
+        },
+        setEditorValue() {
+            const iframe = document.getElementById("scriptCodeEditor")
+            iframe.contentWindow.postMessage({
+                codeValue: this.codeBuffer
+            }, "*")
+        },
+        async getEditorContentEvent(event) {
+            if (event.data.editorId === "codeEditor") {
+                console.info(event.data)
+                const codeEditorContent = event.data.content
+                console.info(codeEditorContent)
+                let url = `${hostName}/phupdatejobcode`
+                const accessToken = this.getCookie("access_token") || this.datasource.debugToken
+                let body = {
+                    "bucket": "ph-platform",
+                    "key": this.datasource.codeKey,
+                    "file_name": this.datasource.file_name,
+                    "data": encodeURI(codeEditorContent),
+                    "timespan": new Date().getTime()
+                }
+                let options = {
+                    method: "POST",
+                    headers: {
+                        "Authorization": accessToken,
+                        'Content-Type': 'application/json; charset=UTF-8',
+                        "accept": "application/json"
+                    },
+                    body: JSON.stringify(body)
+                }
+                let result = await fetch(url, options).then(res => res.json())
+                if (result.status === 1) {
+                    debugger
+                    Message({
+                        type: 'success',
+                        showClose: true,
+                        duration: 3000,
+                        message: '脚本保存成功！'
+                    })
+                } else {
+                    Message({
+                        type: 'error',
+                        showClose: true,
+                        duration: 30000,
+                        message: '脚本保存失败！'
+                    })
+                }
+                this.downloadCode++
+            }
+
+        },
         getUrlParam(arr, value) {
             let data = arr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
@@ -142,7 +226,7 @@ export default {
             let url = `${hostName}/phqueryjobcode`
             const accessToken = this.getCookie("access_token") || this.datasource.debugToken
             let body = {
-                "bucket": "ph-platform",
+                "bucket": this.datasource.bucket,
                 "key": this.datasource.codeKey,
                 "file_name": this.datasource.file_name
             }
@@ -160,39 +244,22 @@ export default {
         },
         getCookie(name) {
             let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg))
+            if (arr && arr == document.cookie.match(reg)) { 
                 return (arr[2]);
-            else
-                return null;
-        },
-        async saveCode() {
-            let url = `${hostName}/phupdatejobcode`
-            const accessToken = this.getCookie("access_token") || this.datasource.debugToken
-            let body = {
-                "bucket": "ph-platform",
-                "key": this.datasource.codeKey,
-                "file_name": this.datasource.file_name,
-                "bucket": "ph-platform",
-                "data": encodeURI(this.$refs.codeditor.editor.getValue()),
-                "timespan": new Date().getTime()
-            }
-            let options = {
-                method: "POST",
-                headers: {
-                    "Authorization": accessToken,
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    "accept": "application/json"
-                },
-                body: JSON.stringify(body)
-            }
-            let result = await fetch(url, options).then(res => res.json())
-            if(result.status === 1) {
-                alert("保存成功!")
             } else {
-                alert("保存失败!")
+                return null;
             }
-            this.downloadCode++
+                
+        },
+        saveCode() {
+            const iframe = document.getElementById("scriptCodeEditor")
+            iframe.contentWindow.postMessage({
+                getValue: { editorId: "codeEditor" }
+            }, "*")
         }
+    },
+    beforeDestroy() {
+        this.unRegisterEvent()
     }
 }
 </script>
@@ -268,13 +335,12 @@ export default {
                     margin-right: 3px;
                 }
                 .line {
-                    width: 30px;
+                    width: 140px;
                     border-bottom: 1px solid #ddd;
                     height: 0;
                     display: block;
-                    width: 140px;
+                    
                 }
-
                 .ds-lst {
                     display: flex;
                     flex-direction: column;
@@ -311,6 +377,7 @@ export default {
             flex-direction: column;
             padding: 30px;
             .coding {
+                height: 100%;
                 padding-bottom: 7px;
             }
         }
