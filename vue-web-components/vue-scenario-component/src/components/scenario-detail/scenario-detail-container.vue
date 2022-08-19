@@ -8,10 +8,11 @@
 				@save="saveAll"
 				@trigger="trigger"></scenario-nav>
             <div class="scenario-container" v-if="activeName === 'Setting'">
+            <!-- <div class="scenario-container" v-if="activeName === ''"> -->
                 <detail-form :scenario="datasource.scenario"></detail-form>
                 <trigger-lst :triggers="triggerDisplay"
 					:scenario-id="datasource.scenario.id" />
-                <report-lst :reports="reportDisplay"
+                <report-lst :reports="reportDisplay" @isTrue="getTrue"
                     :scenario-id="datasource.scenario.id"/>
             </div>
             <div v-else class="scenario-container">
@@ -34,6 +35,7 @@ import TriggerPolicy from "./policy/trigger-policy"
 import ReportPolicy from "./policy/report-policy"
 import StepPolicy from "./policy/step-policy"
 import datasource from "./model/datasource"
+import { Message } from 'element-ui'
 
 export default {
     data() {
@@ -42,7 +44,8 @@ export default {
             triggerDisplay: [],
             stepDisplay: [],
 			datasetsDisplay: [],
-            reportDisplay: []
+            reportDisplay: [],
+            isTrue: false
         }
     },
     props: {
@@ -111,6 +114,17 @@ export default {
 		}
     },
     methods: {
+        getTrue(value){
+            if(value.length == 0){
+                this.isTrue  = false
+            } else{
+                if(!value.every(item=>item == false)){
+                    this.isTrue = true
+                }else{
+                    this.isTrue = false
+                }
+            }
+        },
         getUrlParam( value) {
             let href = window.location.href
             let paramArr = href.split("?")[1].split("&")
@@ -171,20 +185,15 @@ export default {
                 const tmp = JSON.parse(x["detail"])
                 result["destination"] = tmp["destination"]
                 result["type"] = tmp["type"]
-                // result["value"] = tmp["value"]
-                // result["timezone"] = tmp["timezone"]
                 result["mode"] = x["mode"]
                 result["name"] = x["name"]
+                result["active"] = x["active"]
                 result["index"] = x["index"]
-                // result["active"] = x["active"]
                 result["scenarioId"] = x["scenario-id"]
                 result["id"] = x["id"]
-                // result["index"] = x["index"]
-                // result["resourceArn"] = x["resource-arn"]
                 result["traceId"] = x["trace-id"]
                 result["edited"] = false
                 result["deleted"] = false
-				// console.log(result)
                 return result
             })
         },
@@ -192,40 +201,49 @@ export default {
 			this.saveAll("trigger")
 		},
         saveAll(type) {
-            let result = true
-			let stepDisplay = []
-			let triggerDisplay = []
-            let reportDisplay = []
+            if(!this.isTrue){
+                let result = true
+                let stepDisplay = []
+                let triggerDisplay = []
+                let reportDisplay = []
 
-			triggerDisplay = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => !it.deleted))
-			reportDisplay = this.reportPolicy.dealReportDisplay(this.reportDisplay.filter(it => !it.deleted))
-			stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
+                triggerDisplay = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => !it.deleted))
+                reportDisplay = this.reportPolicy.dealReportDisplay(this.reportDisplay.filter(it => !it.deleted))
+                stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
 
-			// triggerDisplayDelete = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => it.deleted))
+                // triggerDisplayDelete = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => it.deleted))
 
-			// stepDisplayDelete = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => it.deleted))
+                // stepDisplayDelete = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => it.deleted))
 
-			const event = new Event("event")
-            event.args = {
-                callback: "saveScenario",
-                element: this,
-                param: {
-                    name: "saveScenario",
-                    projectName: this.allData.projectName,
-                    projectId: this.allData.projectId,
-                    scenarioName: this.datasource.scenarioName,
-                    scenarioId: this.datasource.scenarioId,
-					triggerDisplay: triggerDisplay,
-					stepDisplay: stepDisplay,
-                    reportDisplay: reportDisplay,
-					// triggerDisplayDelete: triggerDisplayDelete,
-					// stepDisplayDelete: stepDisplayDelete,
-					type: type
+                const event = new Event("event")
+                event.args = {
+                    callback: "saveScenario",
+                    element: this,
+                    param: {
+                        name: "saveScenario",
+                        projectName: this.allData.projectName,
+                        projectId: this.allData.projectId,
+                        scenarioName: this.datasource.scenarioName,
+                        scenarioId: this.datasource.scenarioId,
+                        triggerDisplay: triggerDisplay,
+                        stepDisplay: stepDisplay,
+                        reportDisplay: reportDisplay,
+                        // triggerDisplayDelete: triggerDisplayDelete,
+                        // stepDisplayDelete: stepDisplayDelete,
+                        type: type
+                    }
                 }
+                // console.log(event)
+                this.$emit('event', event)
+                return result
+            }else{
+                Message({
+                    type: 'error',
+                    showClose: true,
+                    duration: 3000,
+                    message: '请检查邮箱格式！'
+                })
             }
-			console.log(event)
-            this.$emit('event', event)
-            return result
         }
     }
 }
@@ -250,6 +268,6 @@ export default {
         overflow: auto;
         flex-grow: 1;
         background-color: #f2f2f2;
-        padding-top: 60px;
+        // padding-top: 60px;
     }
 </style>

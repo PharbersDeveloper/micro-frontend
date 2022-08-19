@@ -6,17 +6,17 @@
                     <!-- <p class="el-icon-s-operation" >{{index}}</p> -->
                     <span><b>运行</b></span>
                     <span style="flex-grow: 1"><b>{{item.name}}</b></span>
-                    <el-button class="el-icon-delete-solid border-none" @click="deleteStep" ></el-button>
+                    <el-button class="el-icon-delete-solid border-none" @click.stop="deleteStep" ></el-button>
                 </li>
             </ul>
             <el-button
 				class="add_new_step"
 				@click="addNewStep">
-                <img class="add" :src="add_icon" alt="" />
                 添加一个新算子
+                <!-- <img class="add" :src="add_icon" alt="" /> -->
             </el-button>
         </div>
-        <el-divider direction="vertical" class="divider"></el-divider>
+        <!-- <el-divider direction="vertical" class="divider"></el-divider> -->
         <div class="scenario-step-detail" v-if="selectStep.deleted === false">
             <el-form label-width="120px">
                 <el-form-item label="重命名">
@@ -82,19 +82,20 @@
 </template>
 
 <script>
-import { staticFilePath } from '../../config/envConfig'
+// import { staticFilePath } from '../../config/envConfig'
 import ElButton from "element-ui/packages/button/index"
 import ElInput from "element-ui/packages/input/index"
 import ElForm from "element-ui/packages/form/index"
 import ElFormItem from "element-ui/packages/form-item/index"
-import ElDivider from "element-ui/packages/divider/index"
+// import ElDivider from "element-ui/packages/divider/index"
 import ElCheckbox from "element-ui/packages/checkbox/index"
 import ElDialog from "element-ui/packages/dialog/index"
+// import PhDagDefinitions from "./policy/definitions/definitions"
 
 export default {
     data() {
         return {
-            add_icon: `${staticFilePath}` + "/add.svg",
+            // add_icon: `${staticFilePath}` + "/icons/path/normal.svg",
             dialogVisible: false,
             dsName: '',
             selectStep: {},
@@ -116,14 +117,20 @@ export default {
     props: {
         steps: Array,
         scenarioId: String,
-        datasets: Array
+        datasets: Array,
+        // defs: {
+        //     type: Object,
+        //     default: function () {
+        //         return new PhDagDefinitions("1");
+        //     }
+        // },
     },
     components: {
         ElButton,
         ElForm,
         ElFormItem,
         ElInput,
-        ElDivider,
+        // ElDivider,
         ElCheckbox,
         ElDialog
     },
@@ -220,6 +227,9 @@ export default {
         box-sizing: border-box;
     }
 
+    .scenario-container{
+        // padding-top: 0px !important;
+    }
     .add_new_step {
         margin: 30px auto;
         width: 216px;
@@ -231,14 +241,19 @@ export default {
         justify-content: center;
         font-size: 12px;
         color: #000000;
-        .add {
-            height: 12px;
-        }
+        // position: relative;
+        // .add {
+        //     height: 12px;
+        //     transform: rotate(-90deg);
+        //     position: absolute;
+        //     right: 10px;
+        // }
     }
 
     .scenario-steps-container {
         display: flex;
         flex-direction: row;
+        height: calc(100vh - 90px);
 
 		.select-pattern {
 			width: 120px;
@@ -257,10 +272,27 @@ export default {
         .scenario-step-lst {
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
-            min-width: 200px;
-            max-width: 600px;
+            border-right: 1px solid #ccc;
+            // flex-grow: 1;
+            // min-width: 200px;
+            // max-width: 600px;
+            width: 25vw;
             padding: 30px;
+
+            ul{
+                // flex-grow: 1;
+                height: calc(100% - 25px);
+                overflow: hidden;
+                overflow-y: scroll;
+                padding: 10px;
+
+                li b{
+                    padding-left: 10px;
+                }
+                .el-icon-delete-solid{
+                    margin-right: 10px;
+                }
+            }
 
             .scenario-step-lst-item {
                 display: flex;
@@ -274,10 +306,18 @@ export default {
 
         .scenario-step-detail {
             display: flex;
-            flex-direction: column;
-            flex-grow: 2;
-            padding: 14px 36px;
-            max-width: 800px;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 3;
+            // max-width: 800px;
+
+            .el-form{
+                display: flex;
+                flex-direction: column;
+                background-color: #fff;
+                padding: 14px 36px;
+                width: 75%;
+            }
 
             .el-form-item {
                 margin-top: 20px;
@@ -298,6 +338,9 @@ export default {
                 height: 40px;
                 span {
                     flex-grow: 1;
+                }
+                .el-icon-delete-solid{
+                    margin-right: 10px;
                 }
             }
         }
