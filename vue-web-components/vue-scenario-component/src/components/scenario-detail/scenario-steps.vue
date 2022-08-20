@@ -2,7 +2,17 @@
     <div class="scenario-steps-container">
         <div class="scenario-step-lst">
             <ul>
-                <li v-for="(item, index) in steps" :key="index" :class="{'select':selectStep == item}" v-show="item.deleted === false" @click="selectedStep(item, index)">
+                <li v-for="(item, index) in steps" 
+                :key="index" 
+                :class="{'select':selectStep == item}" 
+                v-show="item.deleted === false" 
+                @click="selectedStep(item, index)" 
+                draggable="true"
+                @dragstart="handleDragStart($event, item)"
+                @dragover.prevent="handleDragOver($event, item)"
+                @dragenter="handleDragEnter($event, item)"
+                @dragend="handleDragEnd($event, item)"
+                >
                     <!-- <p class="el-icon-s-operation" >{{index}}</p> -->
                     <span>运行&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <span style="flex-grow: 1">{{item.name}}</span>
@@ -117,7 +127,9 @@ export default {
             ],
             dsNameArr: [],
             confDataArr: [],
-            stepIndexArr: []
+            stepIndexArr: [],
+            dragging: null, //正在拖拽的 元素
+            handleDragNewItemsDst: 0,
         }
     },
     props: {
@@ -241,7 +253,47 @@ export default {
             }
 
             return uuid.join('');
-        }
+        },
+
+        /** 拖拽 **/
+
+        // 进行拖拽的元素
+        handleDragStart(e,item){
+            this.dragging = item;
+        },
+        //首先把div变成可以放置的元素，即重写dragenter/dragover
+        handleDragOver(e) {
+            //在dragenter中针对放置目标来设置
+            e.dataTransfer.dropEffect = 'move'
+        },
+        handleDragEnter(e,item){
+            // for (let index = 0; index < this.steps.length; ++index) {
+            //     const item = this.steps[index]
+            //     // item.expressions = JSON.stringify(item.callback.command.revert2Defs())
+            // }
+            //为需要移动的元素设置dragstart事件
+            e.dataTransfer.effectAllowed = "move"
+            if(item === this.dragging) {
+                return
+            }
+            let newItems = [...this.steps]
+            const src = newItems.indexOf(this.dragging) //被拖拽元素的index
+            const dst = newItems.indexOf(item) //被挤开元素的index
+            this.handleDragNewItemsDst = dst
+            newItems.splice(dst, 0, ...newItems.splice(src, 1))
+            this.steps = newItems
+        },
+        handleDragEnd(){
+            let that = this
+            //更改index流程
+            this.steps.forEach((item, index) => {
+                if(index >= that.handleDragNewItemsDst) {
+                    if(index < 1) index = 1
+                    item["index"] = parseFloat(that.steps[index - 1]["index"]) + 1
+                }
+            })
+            this.dragging = null
+        },
     }
 }
 </script>
