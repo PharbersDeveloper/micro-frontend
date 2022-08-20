@@ -5,8 +5,16 @@
             "files": [],
             "destinations": [
 				{
-					"bucket": "components.pharbers.com",
-					"key": "prod/deploy/"
+					"bucket": "www.pharbers.com",
+					"key": ""
+				},
+				{
+					"bucket": "general.pharbers.com",
+					"key": ""
+				},
+				{
+					"bucket": "deploy.pharbers.com",
+					"key": ""
 				}
 			],
             "resolve":  "",
@@ -14,13 +22,19 @@
 		},
 		"dev": {
             "prefix": "dist",
-            "files": [
-				"*.js"
-			],
+            "files": [],
             "destinations": [
 				{
-					"bucket": "components.pharbers.com",
-					"key": "dev/deploy/"
+					"bucket": "www.pharbers.com",
+					"key": ""
+				},
+				{
+					"bucket": "general.pharbers.com",
+					"key": ""
+				},
+				{
+					"bucket": "deploy.pharbers.com",
+					"key": ""
 				}
 			],
             "resolve":  "",
