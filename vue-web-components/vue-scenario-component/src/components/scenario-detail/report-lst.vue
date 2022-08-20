@@ -2,7 +2,7 @@
     <div class="scenario-reports">
         <div class="scenario-report-create">
 			<h2>通知</h2>
-			<select class="add-trigger-select" ref="addNewReporterSelect" @change="addNewReporter"
+			<select ref="addNewReporterSelect" @change="addNewReporter"
 				@click="addNewReporterClick" placeholder="添加通知" value="添加通知" name="" id=""
                 style="width:182px;height:24px;">
 				<option value="添加通知" label="添加通知"></option>
@@ -26,7 +26,9 @@
 				</template>
 				<el-form :model="item" label-width="120px" style="margin-top:20px;" :label-position="labelPosition">
 					<el-form-item label="收件人邮箱" class="area">
-						<el-input value="请输入邮箱" v-model="item.destination" @change="changeEmail(item,index)"></el-input>
+						<el-input value="请输入邮箱"
+                        :class="{'isTrue':isNotTrue(item, index)}" v-model="item.destination" @input="changeEmail(item,index)"></el-input>
+                        <span v-show="isNotTrue(item,index)">请输入正确的邮箱格式！</span>
 					</el-form-item>
 				</el-form>
 			</el-collapse-item>
@@ -64,7 +66,10 @@ export default {
                     disable: true
                 }
             ],
-            labelPosition: 'left'
+            labelPosition: 'left',
+            isTrue: false,
+            EmailArr: [],
+            EmailId: []
         }
     },
     props: {
@@ -89,13 +94,47 @@ export default {
     mounted() {
         // this.reportsDisplay = this.reports
     },
-    watch: { },
+    watch: {
+        // "item.destination": function(newValue){
+        //     if(newValue == ''){
+        //         this.isTrue = false
+        //     }
+        // }
+     },
     methods: {
+        isNotTrue(item){
+            const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+            if (reg.test(item.destination)) {
+                return false
+            } else if (item.destination == ''){
+                return false
+            } else {
+                return true
+            }
+        },
         changeName(item, index){
-			this.reports[index].name = item.name
+            this.reports[index].name = item.name
 		},
 		changeEmail(item, index){
-			this.reports[index].destination = item.destination
+            const reg = /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+            if (reg.test(item.destination)) {
+                this.isTrue = this.isNotTrue(item)
+                this.reports[index].destination = item.destination
+            } else if (item.destination == ''){
+                 this.isTrue = this.isNotTrue(item)
+            } else {
+                 this.isTrue = this.isNotTrue(item)
+            }
+            
+            let indexId = this.EmailId.indexOf(index)
+            if (indexId >= 0){
+                this.EmailId.splice(indexId, 1, index)
+                this.EmailArr.splice(indexId, 1, this.isTrue)
+            } else {
+                this.EmailArr.push(this.isTrue)
+                this.EmailId.push(index)
+            }
+            this.$emit('isTrue',this.EmailArr)
 		},
 		changeReport(item, index){
 			this.reports[index].name = item.name
@@ -112,13 +151,14 @@ export default {
             result["scenarioId"] = this.scenarioId
             result["id"] = this.genId()
             result["index"] = idx
-            // result["resourceArn"] = ""
             result["traceId"] = this.genId()
             result["edited"] = true
             result["deleted"] = false
-            result["type"] = "Email"
+            result["type"] = "EMAIL"
+            result["mode"] = "EMAIL"
             result['destination'] = ''
             this.reports.push(result)
+            console.log(result,222222)
 			this.$refs.addNewReporterSelect.value = "添加通知"
         },
         genId(len=16, radix=16) {
@@ -198,6 +238,9 @@ export default {
 		font-size: 18px;
 	}
 	
+    .isTrue{
+        border: 1px solid red !important;
+    }
     .scenario-reports {
 		background-color: #fff;
 		margin: 1px auto !important;
@@ -221,16 +264,33 @@ export default {
 		
 		.area{
             height: 30px;
+            .el-form-item__content{
+                position: relative;
+            }
             .el-input{
                 width: 478px;
-                height:30px;
+                height:32px;
+                position: relative;
+                border-radius: 5px;
+                border: 1px solid #ccc;
             }
 			/deep/.el-input__inner{
-				width: 478px !important;
-				height: 32px !important;
+				width: 476px !important;
+				height: 30px !important;
 				border-radius: 5px;
 				padding-left: 10px;
+                border: none;
+                position: absolute;
+                top: 0;
+                left: 0;
 			}
+            span{
+                font-size: 12px;
+                color: red;
+                position: absolute;
+                top: 28px;
+                left: 0;
+            }
 		}
         .scenario-report-item-title {
             display: flex;

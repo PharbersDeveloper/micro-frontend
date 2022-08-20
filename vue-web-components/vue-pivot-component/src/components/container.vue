@@ -283,7 +283,6 @@ export default {
 				this.loading = false
 				return false
 			}
-			
 			const params = {
 				"preFilter": this.$refs.prefilter.datasource.revert2Defs(),
 				"computedColumns": this.$refs.computed.datasource.revert2Defs(),
@@ -364,21 +363,6 @@ export default {
 			}
 
             this.datasource.changeInputOutputQuery(this, dssOutputs, dssInputs, script)
-
-			// const event = new Event("event")
-			// event.args = {
-			// 	callback: "changScriptInputOutput",
-			// 	element: this,
-			// 	param: {
-			// 		name: "changScriptInputOutput",
-			// 		projectId: this.projectId,
-			// 		projectName: this.projectName,
-			// 		dssOutputs: dssOutputs,
-			// 		dssInputs: dssInputs,
-			// 		script: script
-			// 	}
-			// }
-			// this.$emit('event', event)
 		},
 		dealChangeInputOutputQuery(data, func) {
             const event = new Event("event")

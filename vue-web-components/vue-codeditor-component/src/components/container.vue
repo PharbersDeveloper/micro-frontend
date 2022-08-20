@@ -71,7 +71,7 @@ export default {
     props: {
         iframeUrl: {
             type: String,
-            default: "http://localhost:8081/phcodeditor/"
+            default: "https://codeditor.pharbers.com/index.html"
         },
         scriptName: {
             type: String,

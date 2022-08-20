@@ -60,7 +60,7 @@ export default class PhPivotCmd {
             "firstLastNotNull": false,
             "last": false,
             "max": false,
-            "min": true,
+            "min": false,
             "orderColumn": "",
             "stddev": false,
             "sum": false
