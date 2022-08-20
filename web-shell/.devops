@@ -5,8 +5,8 @@
             "files": [],
             "destinations": [
 				{
-					"bucket": "components.pharbers.com",
-					"key": "prod/deploy/"
+					"bucket": "general.pharbers.com",
+					"key": ""
 				}
 			],
             "resolve":  "",
@@ -14,13 +14,11 @@
 		},
 		"dev": {
             "prefix": "dist",
-            "files": [
-				"*.js"
-			],
+            "files": [],
             "destinations": [
 				{
-					"bucket": "components.pharbers.com",
-					"key": "dev/deploy/"
+					"bucket": "general.pharbers.com",
+					"key": ""
 				}
 			],
             "resolve":  "",
