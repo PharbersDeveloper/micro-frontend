@@ -4,6 +4,7 @@
         <div class="scenario">
             <scenario-nav 
 				:scenario="datasource.scenario"
+                :activeTrue="activeIsTrue"
 				@active="activeChange" 
 				@save="saveAll"
 				@trigger="trigger"></scenario-nav>
@@ -45,7 +46,8 @@ export default {
             stepDisplay: [],
 			datasetsDisplay: [],
             reportDisplay: [],
-            isTrue: false
+            isTrue: false,
+            activeIsTrue: {active: false}
         }
     },
     props: {
@@ -111,7 +113,13 @@ export default {
         },
 		"datasource.datasets": function() {
 			this.datasetsAdapter()
-		}
+		},
+        activeIsTrue:{
+            handler(newValue){
+                this.activeIsTrue.active = newValue.active
+            },
+            deep:true
+        }
     },
     methods: {
         getTrue(value){
@@ -155,13 +163,17 @@ export default {
                         message: '请检查邮箱格式！'
                     })
                     this.activeName = "Setting"
+                    this.activeIsTrue.active  = false
+                    console.log(this.activeIsTrue.active,44444)
                 } else {
                     this.activeName = n
+                    this.activeIsTrue.active  = true
                 }
             } else {
                 let stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
                 if (this.forStepArray(stepDisplay)) {
                     this.activeName = n
+                    this.activeIsTrue.active = true
                 } else {
                     Message({
                         type: 'error',
@@ -170,6 +182,7 @@ export default {
                         message: '请修改参数！'
                     })
                     this.activeName = "Steps"
+                    this.activeIsTrue.active = false
                 }
             }
         },
