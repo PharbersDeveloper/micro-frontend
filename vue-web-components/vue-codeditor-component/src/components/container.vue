@@ -261,7 +261,7 @@ export default {
                 
         },
         saveCode() {
-            const iframe = document.getElementById("scriptCodeEditor")
+            const iframe = this.$refs.scriptCodeEditor
             iframe.contentWindow.postMessage({
                 getValue: { editorId: "codeEditor" }
             }, "*")
