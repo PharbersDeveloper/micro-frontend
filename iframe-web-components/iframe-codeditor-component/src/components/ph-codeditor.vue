@@ -9,30 +9,9 @@
 </template>
 
 <script>
-// 引入全局实例
-import ace from 'ace-builds'
-// 主题风格，引入主题后还需要在 options 中指定主题才会生效
-import 'ace-builds/src-min-noconflict/theme-monokai'
-import 'ace-builds/src-min-noconflict/theme-dracula'
-// 支持代码格式， 需要引入具体的语法高亮库才会有对应的语法高亮效果
-import 'ace-builds/src-min-noconflict/mode-javascript'
-import 'ace-builds/src-min-noconflict/mode-python'
-import 'ace-builds/src-min-noconflict/mode-json'
-import 'ace-builds/src-min-noconflict/mode-css'
-import 'ace-builds/src-min-noconflict/ext-language_tools'
-import jsWorkerUrl from 'file-loader!ace-builds/src-noconflict/worker-javascript'
-import jsonWorkerUrl from 'file-loader!ace-builds/src-noconflict/worker-json'
-import cssWorkerUrl from 'file-loader!ace-builds/src-noconflict/worker-css'
-ace.config.setModuleUrl('ace/mode/javascript_worker', jsWorkerUrl)
-ace.config.setModuleUrl('ace/mode/json_worker', jsonWorkerUrl)
-ace.config.setModuleUrl('ace/mode/css_worker', cssWorkerUrl)
-ace.config.setModuleUrl(
-    'ace/snippets/javascript',
-    require('file-loader!ace-builds/src-noconflict/snippets/javascript.js')
-)
-ace.config.setModuleUrl('ace/snippets/css', require('file-loader!ace-builds/src-noconflict/snippets/css.js'))
-
 // import { cloneDeep } from 'utils/tools'
+
+import PhCodeEditorHandler from './handler/codeeditorhandler'
 
 export default {
     name: 'ph-codeditor',
@@ -48,96 +27,109 @@ export default {
             return "height: " + viewHeight
         }
     },
-    props: {
-        viewHeight: {
-            type: String,
-            default: "600px"
-        },
-        // 编辑器内容
-        value: {
-            type: String,
-            default: '12345'
-        },
-        // 默认语言
-        language: {
-            type: String,
-            default: 'python'
-        },
-        // 主题，对应主题库 JS 需要提前引入
-        theme: {
-            type: String,
-            default: 'monokai'
-        },
-        // 是否只读
-        readonly: {
-            type: Boolean,
-            default: false
-        },
-        // 最大行数
-        maxLines: {
-            type: Number,
-            default: 100
-        },
-        // 是否显示全屏按钮
-        withFullscreenBtn: {
-            type: Boolean,
-            default: false
-        },
-        withFooterBtns: {
-            type: Boolean,
-            default: false
-        }
-    },
+    props: { },
     data() {
         return {
-            editor: null,
+            editorInstance: null,
             isVisible: false,
-            dialogValue: ''
+            dialogValue: "",
+            editorId: "ace-editor",
+            viewHeight: "600px",
+            withFullscreenBtn: false, // 是否显示全屏按钮
+            withFooterBtns: false
         }
     },
     mounted() {
-        // 初始化
-        this.initEditor()
+        this.registerEvent()
     },
     watch: {
-        value(val) {
-            if (this.editor.getValue() !== val) {
-                this.editor.setValue(val)
-                this.editor.clearSelection()
-            }
-        }
+        // watch value干啥？我去掉了
+        // value(val) {
+        //     if (this.editorInstance.getValue() !== val) {
+        //         this.editorInstance.setValue(val)
+        //         this.editorInstance.clearSelection()
+        //     }
+        // }
     },
     methods: {
-        // 初始化
-        initEditor() {
-            // 创建实例
-            this.editor = ace.edit(this.$refs.ace, {
-                mode: `ace/mode/${this.language}`,
-                theme: `ace/theme/${this.theme}`,
-                fontSize: 12,
-                tabSize: 4,
-                value: this.value,
-                selectionStyle: 'text',
-                maxLines: this.maxLines,
-                readOnly: this.readonly
-            })
-            // 设置属性等，具体需要可根据官方参数自行设置
-            this.editor.setOptions({
-                enableBasicAutocompletion: true,
-                enableSnippets: true,
-                enableLiveAutocompletion: true,
-                wrap: true,
-                setShowPrintMargin: false
-            })
-            document.domain = "pharbers.com"
-            // 设置值改变监听
-            this.editor.on('change', () => {
-                this.$emit('change', this.editor.getValue())
-            })
+        registerEvent() {
+            // 注册初始化Editor事件
+            window.addEventListener("message", this.initEditor);
+            // 注册返回编辑器内容事件
+            window.addEventListener("message", this.returnContent);
+            // 注册设置编辑器内容事件
+            window.addEventListener("message", this.setValue);
+            // window.addEventListener("message", this.destroy);
+        },
+        unRegisterEvent() {
+            window.removeEventListener("message", this.initEditor);
+            window.removeEventListener("message", this.returnContent);
+            window.addEventListener("message", this.setValue);
+            // window.removeEventListener("message", this.destroy);
+        },
+        initEditor(event) {
+            if (event.data.codeEditorParameters) {
+                const {
+                    editorId,
+                    // value,
+                    viewHeight,
+                    language,
+                    maxLines,
+                    theme
+                } = event.data.codeEditorParameters
+
+                this.viewHeight = viewHeight
+                this.editorId = editorId
+                console.debug(`register editorId: ${editorId}`)
+
+                this.editorInstance = new PhCodeEditorHandler(
+                    this.$refs.ace,
+                    theme,
+                    language,
+                    maxLines
+                )
+
+                this.editorInstance.setEditorOptions({
+                    // value: value,
+                    fontSize: 14,
+                    tabSize: 4,
+                    readOnly: false,
+                    selectionStyle: "text",
+                    enableBasicAutocompletion: true,
+                    enableSnippets: true,
+                    enableLiveAutocompletion: true,
+                    wrap: true,
+                    autoScrollEditorIntoView: true,
+                    setShowPrintMargin: false
+                })
+
+                window.parent.postMessage({
+                    editorStaus: "complete"
+                }, '*')
+            }
+        },
+        setValue(event) {
+            // debugger
+            if (this.editorInstance && event.data.codeValue) {
+                this.editorInstance.setEditorOptions({
+                    value: event.data.codeValue
+                })
+            }
+        },
+        returnContent(event) {
+            if (event.data.getValue) {
+                const value = this.editorInstance.outContent()
+                window.parent.postMessage({
+                    editorId: this.editorId,
+                    content: value
+                }, '*')
+            }
         },
         // 实例方法，高亮某一行
         gotoLine(lineNumber) {
-            this.editor.gotoLine(lineNumber)
+            if (this.editorInstance) {
+                this.editorInstance.gotoLine(lineNumber)
+            }
         },
         // 全屏编辑
         fullscreen() {
@@ -145,21 +137,24 @@ export default {
             // this.isVisible = true
         },
         closeEditCode() {
-            this.editor.setValue(this.dialogValue)
-            this.editor.clearSelection()
+            this.editorInstance.setValue(this.dialogValue)
+            this.editorInstance.clearSelection()
         },
         // resize编辑器
         resize() {
-            this.editor.resize(true)
+            this.editorInstance.resize(true)
         },
         destroy() {
-            if (this.editor) {
-                this.editor.destroy()
-                this.editor = null
+            if (this.editorInstance !== null) {
+                this.unRegisterEvent()
+                console.info("destroy")
+                this.editorInstance.destroy()
+                this.editorInstance = null
             }
         }
     },
     beforeDestroy() {
+        // TODO: 销毁这边可能有问题,第一版出来我在想想
         this.destroy()
     }
 }
@@ -171,9 +166,8 @@ export default {
 
     .ace-editor {
         position: absolute;
-        inset: 7px 0px 0px;
+        inset: 7px 0 0;
 		min-height: 100%;
-        // height: 100% !important;
     }
 
 }

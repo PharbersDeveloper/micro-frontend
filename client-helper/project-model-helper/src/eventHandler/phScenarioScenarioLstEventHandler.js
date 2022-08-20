@@ -225,6 +225,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 					},
 					scenario: scenarios,
 					triggers: [],
+					reports: [],
 					steps: [],
 					notification: {
 						required: true

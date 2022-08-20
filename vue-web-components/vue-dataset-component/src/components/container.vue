@@ -384,8 +384,8 @@ export default {
                     this.search(this.searchValue)
                 }
                 if (this.datasetcheckedIds.length < this.datasource.data.length && this.datasetcheckedIds.length !== 0) {
-                        this.$refs.all.indeterminate = true
-                    }
+                    this.$refs.all.indeterminate = true
+                }
                 this.loading = false
             })
         },
