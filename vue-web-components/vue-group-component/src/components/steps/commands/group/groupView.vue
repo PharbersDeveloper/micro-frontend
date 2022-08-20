@@ -71,13 +71,13 @@
                     <el-table-column width="120">
                         <template slot-scope="scope">
                             <div class="popover" v-show="scope.row.showPopover && (scope.row.first || scope.row.last || scope.row.concat)">
-                                <div class="popitem" v-show="scope.row.first || scope.row.last">
+                                <!-- <div class="popitem" v-show="scope.row.first || scope.row.last">
                                     <div class="label">Order first/last by</div>
                                     <select 
                                         v-model="scope.row.orderColumn">
                                         <option v-for="(item, index) in schemaDafault" :label="item.src" :key="index" :value="item.src" />
                                     </select>
-                                </div>
+                                </div> -->
                                 <div class="popitem" v-show="scope.row.first || scope.row.last">
                                     <div class="label">First/last not null</div>
                                     <el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>

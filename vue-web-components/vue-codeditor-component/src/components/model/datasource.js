@@ -1,8 +1,9 @@
 
 import { hostName } from "../../config/envConfig"
+import { Message } from 'element-ui'
 
 export default class PhCodeditorDatasource {
-    constructor(id, projectId, jobId) {
+    constructor(id, projectId, jobId, parent) {
         this.id = id
         this.debugToken = 'ef562efd648f5474246ed66a7f1094508ec3cc5fae355e2f7c090355daf62bec'
 
@@ -18,6 +19,7 @@ export default class PhCodeditorDatasource {
         this.runtime = ""
         this.file_name = ""
         this.codeKey = ""
+		this.parent = parent
     }
 
     defaultAdapter(row) {
@@ -71,4 +73,54 @@ export default class PhCodeditorDatasource {
                 ele.downloadCode++
             })
     }
+
+	iframeComplete(event) {
+		if(event.data.editorStaus === "complete") {
+			this.datasource.refreshData(this.datasource.parent)
+		}
+	}
+
+	async getEditorContentEvent(event) {
+		if (event.data.editorId === "codeEditor") {
+			console.info(event.data)
+			const codeEditorContent = event.data.content
+			console.info(codeEditorContent)
+			let url = `${hostName}/phupdatejobcode`
+			const accessToken = this.datasource.parent.getCookie("access_token") || this.datasource.debugToken
+			let body = {
+				"bucket": "ph-platform",
+				"key": this.datasource.codeKey,
+				"file_name": this.datasource.file_name,
+				"data": encodeURI(codeEditorContent),
+				"timespan": new Date().getTime()
+			}
+			let options = {
+				method: "POST",
+				headers: {
+					"Authorization": accessToken,
+					'Content-Type': 'application/json; charset=UTF-8',
+					"accept": "application/json"
+				},
+				body: JSON.stringify(body)
+			}
+			let result = await fetch(url, options).then(res => res.json())
+			if (result.status === 1) {
+				Message({
+					type: 'success',
+					showClose: true,
+					duration: 3000,
+					message: '脚本保存成功！'
+				})
+			} else {
+				Message({
+					type: 'error',
+					showClose: true,
+					duration: 30000,
+					message: '脚本保存失败！'
+				})
+			}
+			this.downloadCode++
+		}
+
+	}
 }
