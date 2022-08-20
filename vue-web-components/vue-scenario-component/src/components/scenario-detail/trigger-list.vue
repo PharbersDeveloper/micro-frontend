@@ -36,7 +36,8 @@
 				<el-form :model="item" label-width="120px" style="margin-top:20px;" :label-position="labelPosition">
 					<el-form-item label="重复时间间隔" class="date">
 						<el-col :span="6" class="minute">
-							<el-input v-model="item.value" @change="changeTime(item,index)"></el-input>
+							<el-input v-model="item.value" @change="changeTime(item,index)" :class="isNotTrue(item) ? 'isEmpty' : ''"></el-input>
+							<span v-show="isNotTrue(item)">请输入参数！</span>
 						</el-col>
 						<el-col class="line" :span="4">&nbsp;</el-col>
 						<el-col :span="11">
@@ -124,6 +125,9 @@ export default {
                 }
             ],
 			labelPosition: 'left',
+			isEmpty: false,
+			triggerId: [],
+			triggerArr: []
         }
     },
     props: {
@@ -175,8 +179,30 @@ export default {
 			this.triggers[index].name = item.name
 		},
 		changeTime(item,index){
-			this.triggers[index].value = item.value
+			if(this.isNotTrue(item)){
+				this.isEmpty = true
+			}else{
+				this.isEmpty = false
+				this.triggers[index].value = item.value
+			}
+
+			let indexId = this.triggerId.indexOf(index)
+            if (indexId >= 0){
+                this.triggerId.splice(indexId, 1, index)
+                this.triggerArr.splice(indexId, 1, this.isEmpty)
+            } else {
+                this.triggerArr.push(this.isEmpty)
+                this.triggerId.push(index)
+            }
+            this.$emit('isTriggerTrue',this.triggerArr)
 		},
+		isNotTrue(item){
+			if (item.value.length == 0){
+                return true
+            } else {
+                return false
+            }
+        },
 		changeTrigger(item, index){
 			this.triggers[index].name = item.name
 			this.triggers[index].value = item.value
@@ -268,9 +294,23 @@ export default {
 		left:0;
 	}
 	.minute{
+		position: relative;
 		.el-input__inner {
 			height: 32px;
 		}
+		span{
+			color: red;
+			font-size: 12px;
+			position: absolute;
+			top: 26px;
+			left: 0;
+		}
+	}
+	.isEmpty{
+		height: 32px;
+		line-height: 32px;
+		border: 1px solid red;
+		border-radius: 4px;
 	}
 	
 

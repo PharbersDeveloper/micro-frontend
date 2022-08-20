@@ -11,14 +11,14 @@
             <div class="scenario-container" v-if="activeName === 'Setting'">
             <!-- <div class="scenario-container" v-if="activeName === ''">  -->
                 <detail-form :scenario="datasource.scenario"></detail-form>
-                <trigger-lst :triggers="triggerDisplay"
+                <trigger-lst :triggers="triggerDisplay" @isTriggerTrue="getTriggerTrue"
 					:scenario-id="datasource.scenario.id" />
                 <report-lst :reports="reportDisplay" @isTrue="getTrue"
                     :scenario-id="datasource.scenario.id"/>
             </div>
             <div v-else class="scenario-container">
                 <scenario-steps :steps="stepDisplay"
-					:datasets="datasetsDisplay" 
+					:datasets="datasetsDisplay" @isStepTrue="getSteptrue"
 					:scenario-id="datasource.scenario.id" />
             </div>
         </div>
@@ -47,6 +47,8 @@ export default {
 			datasetsDisplay: [],
             reportDisplay: [],
             isTrue: false,
+            isTriggerTrue: false,
+            isStepTrue: false,
             activeIsTrue: {active: false}
         }
     },
@@ -122,6 +124,17 @@ export default {
         }
     },
     methods: {
+        getTriggerTrue(value){
+            if (value.length == 0) {
+                this.isTriggerTrue = false
+            } else {
+                if (value.every(item => item == false)) {
+                    this.isTriggerTrue = true
+                } else {
+                    this.isTriggerTrue = false
+                }
+            }
+        },
         getTrue(value){
             if(value.length == 0){
                 this.isTrue  = false
@@ -131,6 +144,13 @@ export default {
                 }else{
                     this.isTrue = false
                 }
+            }
+        },
+        getSteptrue(value){
+            if (value) {
+                this.isStepTrue = false
+            } else {
+                this.isStepTrue = true
             }
         },
         getUrlParam( value) {
@@ -155,12 +175,12 @@ export default {
         },
         activeChange(n) {
             if (n == 'Steps') { //跳转steps
-                if (this.isTrue) {
+                if (this.isTrue && !this.getTriggerTrue) {
                     Message({
                         type: 'error',
                         showClose: true,
                         duration: 3000,
-                        message: '请检查邮箱格式！'
+                        message: '请输入正确的参数！'
                     })
                     this.activeName = "Setting"
                     this.activeIsTrue.active  = false
@@ -171,7 +191,7 @@ export default {
                 }
             } else {
                 let stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
-                if (this.forStepArray(stepDisplay)) {
+                if (this.forStepArray(stepDisplay) && this.isStepTrue) {
                     this.activeName = n
                     this.activeIsTrue.active = true
                 } else {
@@ -269,7 +289,7 @@ export default {
             stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
             stepDisplay = this.forArray(stepDisplay)
             let value = this.forStepArray(stepDisplay)
-            if (!this.isTrue) {
+            if (!this.isTrue && this.isTriggerTrue) {
                 if (value) {
                     const event = new Event("event")
                     event.args = {
@@ -302,7 +322,7 @@ export default {
                     type: 'error',
                     showClose: true,
                     duration: 3000,
-                    message: '请检查邮箱格式！'
+                    message: '请输入正确的参数！'
                 })
             }
         }
