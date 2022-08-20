@@ -174,7 +174,8 @@ export default {
                 "sync": "sync",
                 "join": "join",
                 "stack": "stack",
-                "group": "group"
+                "group": "group",
+				"pivot": "pivot"
             },
             singleInputRuntime: ["group", "sync", "topn", "sort", "distinct", "prepare"]
         }

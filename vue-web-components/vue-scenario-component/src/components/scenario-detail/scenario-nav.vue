@@ -48,6 +48,9 @@ export default {
     watch: {
         activeName(n) {
             this.$emit("active", n)
+        },
+        active(n){
+            this.activeName =  n
         }
     },
     methods: {

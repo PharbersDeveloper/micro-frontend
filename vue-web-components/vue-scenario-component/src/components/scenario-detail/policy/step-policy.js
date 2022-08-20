@@ -42,24 +42,39 @@ export default class PhScenarioStepPolicy {
             detail = {
                 "type": step.type,
                 "recursive": step.recursive,
-                "ignore-error": step["ignore-error"],
+                "ignore-error": step.ignoreError,
                 "name": step.ds
             }
-            step.confData = step.confData ? step.confData : "{}"
+            // step.confData = step.confData ? step.confData : "{}"
+            // step.confData = step.confData 
             let isJSON = this.isJSON_test(step.confData, "配置参数")
             if(!isJSON) {
                 throw new Error("配置参数错误")
             }
-            arr.push({
-                confData: JSON.stringify(JSON.parse(step.confData)),
-                scenarioId: step.scenarioId,
-                index: step.index,
-                detail: detail,
-                traceId: step.traceId,
-                mode: step.mode,
-                name: step.name,
-                id: step.id
-            })
+            if (step.confData) {
+                arr.push({
+                    confData: JSON.stringify(JSON.parse(step.confData)),
+                    scenarioId: step.scenarioId,
+                    index: step.index,
+                    detail: detail,
+                    traceId: step.traceId,
+                    mode: step.mode,
+                    name: step.name,
+                    id: step.id
+                })
+            } else {
+                arr.push({
+                    confData: step.confData,
+                    scenarioId: step.scenarioId,
+                    index: step.index,
+                    detail: detail,
+                    traceId: step.traceId,
+                    mode: step.mode,
+                    name: step.name,
+                    id: step.id
+                })
+            }
+            
         })
         return arr
     }

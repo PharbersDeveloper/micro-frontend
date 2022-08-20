@@ -22,7 +22,7 @@ export default class PhPostFilterStep {
     revert2Defs() {
         const result = this.enabled ? this.command.revert2Defs() : ""
         return {
-            "distinct": this.distinct,
+            // "distinct": this.distinct,
             "enabled": this.enabled,
             "expr": result
         }
