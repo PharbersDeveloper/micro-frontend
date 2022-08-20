@@ -50,7 +50,7 @@
 
             <div class="coding-pane">
                 <div class="coding">
-                    <iframe id="scriptCodeEditor" class="executions-iframe" :src="iframeUrl" frameborder="0" style="width: 100%; height: 100%;"></iframe>
+                    <iframe ref="scriptCodeEditor" id="scriptCodeEditor" class="executions-iframe" :src="iframeUrl" frameborder="0" style="width: 100%; height: 100%;"></iframe>
                 </div>
             </div>
         </div>
@@ -125,7 +125,7 @@ export default {
             2、注册消息 获取Editor的内容
             3、添加beforeDestroy钩子函数 在销毁时注销以前注册的消息，不然会重复注册
          */
-
+        this.initEditor()
         let href = window.location.href
         let paramArr = href.split("?")[1].split("&")
         // this.projectName = this.getUrlParam(paramArr, "projectName")
@@ -134,8 +134,7 @@ export default {
         //父组件传进来的值
         this.datasource.jobId = this.jobId //decodeURI(this.jobName)
         this.datasource.projectId = this.projectId
-        this.datasource.refreshData(this)
-        this.initEditor()
+        
     },
     watch: {
         async downloadCode() {
@@ -148,12 +147,14 @@ export default {
         registerEvent() {
             // 注册获取Editor内容事件
             window.addEventListener("message", this.getEditorContentEvent);
+            window.addEventListener("message", this.iframeComplete);
         },
         unRegisterEvent() {
             window.removeEventListener("message", this.getEditorContentEvent);
         },
         initEditor() {
-            const iframe = document.getElementById("scriptCodeEditor")
+            // const iframe = document.getElementById("scriptCodeEditor")
+            const iframe = this.$refs.scriptCodeEditor
             iframe.onload = function () {
                 iframe.contentWindow.postMessage({
                     codeEditorParameters: {
@@ -168,11 +169,18 @@ export default {
             }
             this.registerEvent()
         },
+        iframeComplete(event) {
+            if(event.data.editorStaus === "complete") {
+                this.datasource.refreshData(this)
+            }
+        },
         setEditorValue() {
-            const iframe = document.getElementById("scriptCodeEditor")
+            // const iframe = document.getElementById("scriptCodeEditor")
+            const iframe = this.$refs.scriptCodeEditor
             iframe.contentWindow.postMessage({
                 codeValue: this.codeBuffer
             }, "*")
+            
         },
         async getEditorContentEvent(event) {
             if (event.data.editorId === "codeEditor") {
