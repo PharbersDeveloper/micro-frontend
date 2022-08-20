@@ -5,15 +5,7 @@
             "files": [],
             "destinations": [
 				{
-					"bucket": "www.pharbers.com",
-					"key": ""
-				},
-				{
 					"bucket": "general.pharbers.com",
-					"key": ""
-				},
-				{
-					"bucket": "deploy.pharbers.com",
 					"key": ""
 				}
 			],
@@ -25,15 +17,7 @@
             "files": [],
             "destinations": [
 				{
-					"bucket": "www.pharbers.com",
-					"key": ""
-				},
-				{
 					"bucket": "general.pharbers.com",
-					"key": ""
-				},
-				{
-					"bucket": "deploy.pharbers.com",
 					"key": ""
 				}
 			],
