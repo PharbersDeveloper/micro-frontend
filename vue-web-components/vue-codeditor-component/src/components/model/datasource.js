@@ -4,7 +4,7 @@ import { hostName } from "../../config/envConfig"
 export default class PhCodeditorDatasource {
     constructor(id, projectId, jobId) {
         this.id = id
-        this.debugToken = 'cd3ef5d896c3dc558b3fbf6ff0864fb0516e445a06d30817447e9bc4512b8a30'
+        this.debugToken = 'ef562efd648f5474246ed66a7f1094508ec3cc5fae355e2f7c090355daf62bec'
 
         this.adapter = this.defaultAdapter
         this.projectId = projectId

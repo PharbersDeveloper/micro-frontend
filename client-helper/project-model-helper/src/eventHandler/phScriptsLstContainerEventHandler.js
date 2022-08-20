@@ -458,12 +458,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					params.projectName +
 					"&projectId=" +
 					params.projectId +
-					"&jobName=" +
-					params.recipt.jobName +
-					"&jobPath=" +
-					params.recipt.jobPath +
-					"&runtime=" +
-					params.recipt.runtime
+					"&jobId=" +
+					params.recipt.jobId
 			} else if (params.name === "flow") {
 				uri =
 					"flow?projectName=" +

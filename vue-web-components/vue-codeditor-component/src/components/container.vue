@@ -71,7 +71,8 @@ export default {
     props: {
         iframeUrl: {
             type: String,
-            default: "https://codeditor.pharbers.com/index.html"
+            // default: "http://localhost:8081/phcodeditor/"
+            default: "https://codeditor.pharbers.com/phcodeditor"
         },
         scriptName: {
             type: String,
@@ -125,7 +126,6 @@ export default {
             2、注册消息 获取Editor的内容
             3、添加beforeDestroy钩子函数 在销毁时注销以前注册的消息，不然会重复注册
          */
-        this.initEditor()
         let href = window.location.href
         let paramArr = href.split("?")[1].split("&")
         // this.projectName = this.getUrlParam(paramArr, "projectName")
@@ -134,6 +134,7 @@ export default {
         //父组件传进来的值
         this.datasource.jobId = this.jobId //decodeURI(this.jobName)
         this.datasource.projectId = this.projectId
+        this.initEditor()
         
     },
     watch: {
