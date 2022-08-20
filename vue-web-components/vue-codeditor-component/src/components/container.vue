@@ -85,7 +85,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhCodeditorDatasource('1', this.projectId, this.jobId)
+                return new PhCodeditorDatasource('1', this.projectId, this.jobId, this)
             }
         },
         s3: {
@@ -128,12 +128,13 @@ export default {
          */
         let href = window.location.href
         let paramArr = href.split("?")[1].split("&")
-        // this.projectName = this.getUrlParam(paramArr, "projectName")
         this.projectId = this.getUrlParam(paramArr, "projectId")
         this.jobId = this.getUrlParam(paramArr, "jobId")
         //父组件传进来的值
         this.datasource.jobId = this.jobId //decodeURI(this.jobName)
         this.datasource.projectId = this.projectId
+		// 将datasource注册到window中，iframe传递消息this指向为window
+		window["datasource"] = this.datasource
         this.initEditor()
         
     },
@@ -146,12 +147,14 @@ export default {
     },
     methods: {
         registerEvent() {
+			this.unRegisterEvent()
             // 注册获取Editor内容事件
-            window.addEventListener("message", this.getEditorContentEvent);
-            window.addEventListener("message", this.iframeComplete);
+            window.addEventListener("message", this.datasource.getEditorContentEvent);
+            window.addEventListener("message", this.datasource.iframeComplete);
         },
         unRegisterEvent() {
-            window.removeEventListener("message", this.getEditorContentEvent);
+            window.removeEventListener("message", this.datasource.getEditorContentEvent);
+            window.removeEventListener("message", this.datasource.iframeComplete);
         },
         initEditor() {
             // const iframe = document.getElementById("scriptCodeEditor")
