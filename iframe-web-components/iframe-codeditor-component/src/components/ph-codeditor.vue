@@ -64,6 +64,7 @@ export default {
         unRegisterEvent() {
             window.removeEventListener("message", this.initEditor);
             window.removeEventListener("message", this.returnContent);
+            window.addEventListener("message", this.setValue);
             // window.removeEventListener("message", this.destroy);
         },
         initEditor(event) {
@@ -101,10 +102,14 @@ export default {
                     autoScrollEditorIntoView: true,
                     setShowPrintMargin: false
                 })
+
+                window.parent.postMessage({
+                    editorStaus: "complete"
+                }, '*')
             }
         },
         setValue(event) {
-            
+            // debugger
             if (this.editorInstance && event.data.codeValue) {
                 this.editorInstance.setEditorOptions({
                     value: event.data.codeValue
