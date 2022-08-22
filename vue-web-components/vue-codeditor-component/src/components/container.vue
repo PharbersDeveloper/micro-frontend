@@ -136,7 +136,7 @@ export default {
 		// 将datasource注册到window中，iframe传递消息this指向为window
 		window["datasource"] = this.datasource
         this.initEditor()
-        
+
     },
     watch: {
         async downloadCode() {
@@ -184,7 +184,7 @@ export default {
             iframe.contentWindow.postMessage({
                 codeValue: this.codeBuffer
             }, "*")
-            
+
         },
         async getEditorContentEvent(event) {
             if (event.data.editorId === "codeEditor") {
@@ -254,13 +254,10 @@ export default {
             return result
         },
         getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr && arr == document.cookie.match(reg)) { 
-                return (arr[2]);
-            } else {
-                return null;
-            }
-                
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
+            arr = document.cookie.match(reg)
+            if (arr) return (arr[2])
+            else return null
         },
         saveCode() {
             const iframe = this.$refs.scriptCodeEditor
@@ -350,7 +347,7 @@ export default {
                     border-bottom: 1px solid #ddd;
                     height: 0;
                     display: block;
-                    
+
                 }
                 .ds-lst {
                     display: flex;
