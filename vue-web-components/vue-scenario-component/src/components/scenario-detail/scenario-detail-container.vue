@@ -10,7 +10,7 @@
 				@trigger="trigger"></scenario-nav>
             <div class="scenario-container" v-if="activeName === 'Setting'">
             <!-- <div class="scenario-container" v-if="activeName === ''">  -->
-                <detail-form :scenario="datasource.scenario"></detail-form>
+                <detail-form :scenario="datasource.scenario" @activeChange="scenarioActiveChange"></detail-form>
                 <trigger-lst :triggers="triggerDisplay" @isTriggerTrue="getTriggerTrue"
 					:scenario-id="datasource.scenario.id" />
                 <report-lst :reports="reportDisplay" @isTrue="getTrue"
@@ -125,6 +125,19 @@ export default {
         }
     },
     methods: {
+        scenarioActiveChange(value){
+            const event = new Event("event")
+            event.args = {
+                callback: "resetScenario",
+                element: this,
+                param: {
+                    projectId: value.projectId,
+                    projectName: value.projectName,
+                    scenario: value.scenario,
+                }
+            }
+            this.$emit('event', event)
+        },
         getTriggerTrue(value){
             if (value.length == 0) {
                 this.isTriggerTrue = true
