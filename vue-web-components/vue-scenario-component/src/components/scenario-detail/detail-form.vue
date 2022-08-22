@@ -61,12 +61,6 @@ export default {
             return data ? decodeURI(data).split("=")[1] : undefined
         },
         ActiveChange(scenario) {
-            console.log(scenario,22222222)
-                // const value = {}
-                // value["active"] = scenario["active"]
-                // value["id"] = scenario["id"]
-                // value["index"] = scenario["index"]
-                // value["label"] = scenario["label"]
                 scenario["scenarioName"] = scenario["scenario-name"]
                 scenario["traceId"] = scenario["trace-id"]
                const param = {

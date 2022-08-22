@@ -15,7 +15,6 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 			break
 		case "resetScenario":
 			if (params) {
-				console.log(params, 33333)
 				const targetscenario = params.scenario //需要更新的scenario
 				console.log(targetscenario, targetscenario.scenarioName)
 				const url = `${hostName}/phdydatasource/put_item`
