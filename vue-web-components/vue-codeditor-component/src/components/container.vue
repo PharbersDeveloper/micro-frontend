@@ -211,7 +211,6 @@ export default {
                 }
                 let result = await fetch(url, options).then(res => res.json())
                 if (result.status === 1) {
-                    debugger
                     Message({
                         type: 'success',
                         showClose: true,
