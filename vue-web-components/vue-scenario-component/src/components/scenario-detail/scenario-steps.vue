@@ -152,7 +152,6 @@ export default {
             this.steps[index].confData = this.selectStep.confData
             this.steps[index].recursive = this.selectStep.recursive
             this.steps[index].ignoreError = this.selectStep.ignoreError
-            this.$emit('isStepTrue',this.isAll())
         },
         isConfEmpty() {
             if (this.selectStep.confData.length == 0) {

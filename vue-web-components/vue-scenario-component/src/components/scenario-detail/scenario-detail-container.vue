@@ -18,8 +18,9 @@
             </div>
             <div v-else class="scenario-container">
                 <scenario-steps :steps="stepDisplay"
-					:datasets="datasetsDisplay" @isStepTrue="getSteptrue"
+					:datasets="datasetsDisplay" 
 					:scenario-id="datasource.scenario.id" />
+                    <!-- @isStepTrue="getSteptrue" -->
             </div>
         </div>
     </div>
@@ -46,8 +47,8 @@ export default {
             stepDisplay: [],
 			datasetsDisplay: [],
             reportDisplay: [],
-            isTrue: false,
-            isTriggerTrue: false,
+            isTrue: true,
+            isTriggerTrue: true,
             isStepTrue: false,
             activeIsTrue: {active: false}
         }
@@ -126,7 +127,7 @@ export default {
     methods: {
         getTriggerTrue(value){
             if (value.length == 0) {
-                this.isTriggerTrue = false
+                this.isTriggerTrue = true
             } else {
                 if (value.every(item => item == false)) {
                     this.isTriggerTrue = true
@@ -136,21 +137,14 @@ export default {
             }
         },
         getTrue(value){
-            if(value.length == 0){
-                this.isTrue  = false
-            } else{
-                if(!value.every(item=>item == false)){
+            if (value.length == 0) {
+                this.isTrue = true
+            } else {
+                if (value.every(item => item == false)) {
                     this.isTrue = true
-                }else{
+                } else {
                     this.isTrue = false
                 }
-            }
-        },
-        getSteptrue(value){
-            if (value) {
-                this.isStepTrue = false
-            } else {
-                this.isStepTrue = true
             }
         },
         getUrlParam( value) {
@@ -159,12 +153,24 @@ export default {
             let data = paramArr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
         },
+        isJSON_test(value) {
+            try {
+                var obj = JSON.parse(value);
+                if (Object.prototype.toString.call(obj) == '[object Object]' && obj) {
+                    return false
+                } else {
+                    return true
+                }
+            } catch (e) {
+                return true
+            }
+        },
         forStepArray(array) {
             if (array.length == 0) {
                 return true
             } else {
                 let value = array.every(item => {
-                    if (item.detail.name !== "" && item.confData !== "") {
+                    if (item.detail.name !== "" && item.confData !== "" && !this.isJSON_test(item.confData)) {
                         return true
                     } else {
                         return false
@@ -175,23 +181,22 @@ export default {
         },
         activeChange(n) {
             if (n == 'Steps') { //跳转steps
-                if (this.isTrue && !this.getTriggerTrue) {
+                if (this.isTrue && this.isTriggerTrue) {
+                    this.activeName = n
+                    this.activeIsTrue.active  = true
+                } else {
                     Message({
                         type: 'error',
                         showClose: true,
                         duration: 3000,
-                        message: '请输入正确的参数！'
+                        message: '请输入正确的setting参数！'
                     })
                     this.activeName = "Setting"
                     this.activeIsTrue.active  = false
-                    console.log(this.activeIsTrue.active,44444)
-                } else {
-                    this.activeName = n
-                    this.activeIsTrue.active  = true
                 }
             } else {
                 let stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
-                if (this.forStepArray(stepDisplay) && this.isStepTrue) {
+                if (this.forStepArray(stepDisplay)) {
                     this.activeName = n
                     this.activeIsTrue.active = true
                 } else {
@@ -199,7 +204,7 @@ export default {
                         type: 'error',
                         showClose: true,
                         duration: 3000,
-                        message: '请修改参数！'
+                        message: '请修改step参数！'
                     })
                     this.activeName = "Steps"
                     this.activeIsTrue.active = false
@@ -289,7 +294,7 @@ export default {
             stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
             stepDisplay = this.forArray(stepDisplay)
             let value = this.forStepArray(stepDisplay)
-            if (!this.isTrue && this.isTriggerTrue) {
+            if (this.isTrue && this.isTriggerTrue) {
                 if (value) {
                     const event = new Event("event")
                     event.args = {
@@ -314,7 +319,7 @@ export default {
                         type: 'error',
                         showClose: true,
                         duration: 3000,
-                        message: '请修改参数！'
+                        message: '请修改step参数！'
                     })
                 }
             } else {
@@ -322,7 +327,7 @@ export default {
                     type: 'error',
                     showClose: true,
                     duration: 3000,
-                    message: '请输入正确的参数！'
+                    message: '请输入正确的setting参数！'
                 })
             }
         }

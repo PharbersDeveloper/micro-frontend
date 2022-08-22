@@ -27,7 +27,7 @@
 							<input v-model="item.name" class="trigger-input" @input="changeName(item,index)">
 						</div>
 						<div @click.stop style="width:40px;height:20px;position:relative;">
-							<el-switch v-model="item.active" @change="item.edited = true" class="el-switch"></el-switch>
+							<el-switch v-model="item.active" disabled @change="item.edited = true" class="el-switch"></el-switch>
 						</div>
 						<el-button class="el-icon-close scenario-trigger-item-delbtn" @click="item.deleted = true">
 						</el-button>
@@ -221,7 +221,7 @@ export default {
             result["value"] = 10
             result["timezone"] = "中国北京"
             result["mode"] = "timer"
-            result["active"] = true
+            result["active"] = false
             result["scenarioId"] = this.scenarioId
             result["id"] = this.genId()
             result["index"] = idx
