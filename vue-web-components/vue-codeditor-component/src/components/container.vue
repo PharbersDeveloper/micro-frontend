@@ -85,7 +85,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhCodeditorDatasource('1', this.projectId, this.jobId)
+                return new PhCodeditorDatasource('1', this.projectId, this.jobId, this)
             }
         },
         s3: {
@@ -128,14 +128,15 @@ export default {
          */
         let href = window.location.href
         let paramArr = href.split("?")[1].split("&")
-        // this.projectName = this.getUrlParam(paramArr, "projectName")
         this.projectId = this.getUrlParam(paramArr, "projectId")
         this.jobId = this.getUrlParam(paramArr, "jobId")
         //父组件传进来的值
         this.datasource.jobId = this.jobId //decodeURI(this.jobName)
         this.datasource.projectId = this.projectId
+		// 将datasource注册到window中，iframe传递消息this指向为window
+		window["datasource"] = this.datasource
         this.initEditor()
-        
+
     },
     watch: {
         async downloadCode() {
@@ -146,12 +147,14 @@ export default {
     },
     methods: {
         registerEvent() {
+			this.unRegisterEvent()
             // 注册获取Editor内容事件
-            window.addEventListener("message", this.getEditorContentEvent);
-            window.addEventListener("message", this.iframeComplete);
+            window.addEventListener("message", this.datasource.getEditorContentEvent);
+            window.addEventListener("message", this.datasource.iframeComplete);
         },
         unRegisterEvent() {
-            window.removeEventListener("message", this.getEditorContentEvent);
+            window.removeEventListener("message", this.datasource.getEditorContentEvent);
+            window.removeEventListener("message", this.datasource.iframeComplete);
         },
         initEditor() {
             // const iframe = document.getElementById("scriptCodeEditor")
@@ -181,7 +184,7 @@ export default {
             iframe.contentWindow.postMessage({
                 codeValue: this.codeBuffer
             }, "*")
-            
+
         },
         async getEditorContentEvent(event) {
             if (event.data.editorId === "codeEditor") {
@@ -208,7 +211,6 @@ export default {
                 }
                 let result = await fetch(url, options).then(res => res.json())
                 if (result.status === 1) {
-                    debugger
                     Message({
                         type: 'success',
                         showClose: true,
@@ -252,16 +254,13 @@ export default {
             return result
         },
         getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr && arr == document.cookie.match(reg)) { 
-                return (arr[2]);
-            } else {
-                return null;
-            }
-                
+            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
+            arr = document.cookie.match(reg)
+            if (arr) return (arr[2])
+            else return null
         },
         saveCode() {
-            const iframe = document.getElementById("scriptCodeEditor")
+            const iframe = this.$refs.scriptCodeEditor
             iframe.contentWindow.postMessage({
                 getValue: { editorId: "codeEditor" }
             }, "*")
@@ -348,7 +347,7 @@ export default {
                     border-bottom: 1px solid #ddd;
                     height: 0;
                     display: block;
-                    
+
                 }
                 .ds-lst {
                     display: flex;
