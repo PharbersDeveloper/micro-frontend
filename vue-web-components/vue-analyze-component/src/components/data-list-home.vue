@@ -86,7 +86,7 @@
 										</div>
 										<div>
 											<!-- <p class="number">{{allData.numShow.dashBoard}}</p> -->
-											<p>0</p>
+											<p class="number">0</p>
 											<p class="dashboard">数据看板</p>
 										</div>
 									</div>
@@ -95,7 +95,7 @@
                             <div class="flow flow_four">
                                 <p class="flow_word">维基</p>
                                 <div class="flow_item">
-									<div class="flow_item_cell" @click="linkToPage('slide')">
+									<div class="flow_item_cell">
 										<div>
 											<img :src="article_icon" alt="">
 										</div>
