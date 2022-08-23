@@ -13,7 +13,7 @@
                             <li @click="linkToPage('flow')">数据流程</li>
                             <li @click="linkToPage('datasets')">数据集</li>
                             <li @click="linkToPage('scripts')">脚本</li>
-                            <li @click="linkToPage('dashboards')">数据看板</li>
+                            <li>数据看板</li>
                         </ul>
                     </nav>
                 </div>
