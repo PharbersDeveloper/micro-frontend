@@ -458,12 +458,8 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 					params.projectName +
 					"&projectId=" +
 					params.projectId +
-					"&jobName=" +
-					params.recipt.jobName +
-					"&jobPath=" +
-					params.recipt.jobPath +
-					"&runtime=" +
-					params.recipt.runtime
+					"&jobId=" +
+					params.recipt.jobId
 			} else if (params.name === "flow") {
 				uri =
 					"flow?projectName=" +
@@ -921,7 +917,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: {
-				data: { jobName, runtime, jobId },
+				data: { runtime, jobId },
 				error
 			}
 		} = JSON.parse(message)
@@ -933,7 +929,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 			alert("新建脚本成功！")
 			route.router.transitionTo(
 				"shell",
-				`codeditor?projectName=${route.projectName}&projectId=${route.projectId}&jobName=${jobName}&runtime=${runtime}`
+				`codeditor?projectName=${route.projectName}&projectId=${route.projectId}&jobId=${jobId}`
 			)
 		} else if (status == "failed") {
 			console.log(error)

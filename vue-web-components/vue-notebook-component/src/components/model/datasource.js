@@ -23,8 +23,8 @@ export default class PhDataSource {
         const dashToHump = function (value) {
             const textArr = value.split("-");
             return textArr.map((item, index) => {
-			  if (index === 0) return item.toLowerCase();
-			  return item.slice(0, 1).toUpperCase() + item.slice(1);
+                if (index === 0) return item.toLowerCase();
+                return item.slice(0, 1).toUpperCase() + item.slice(1);
             }).join("");
         }
         data.map(item => {

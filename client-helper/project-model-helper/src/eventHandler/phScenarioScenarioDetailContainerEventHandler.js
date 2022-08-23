@@ -13,6 +13,43 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 			}
 			route.router.transitionTo("shell", uri)
 			break
+		case "resetScenario":
+			if (params) {
+				const targetscenario = params.scenario //需要更新的scenario
+				console.log(targetscenario, targetscenario.scenarioName)
+				const url = `${hostName}/phdydatasource/put_item`
+				let body = {
+					table: "scenario",
+					item: {
+						id: targetscenario.id,
+						projectId: params.projectId,
+						projectName: params.projectName,
+						scenarioName: targetscenario.scenarioName,
+						label: targetscenario.label,
+						args: targetscenario.args,
+						owner: targetscenario.owner,
+						active: targetscenario.active,
+						index: targetscenario.index,
+						traceId: targetscenario.traceId,
+						showName: decodeURI(
+							route.cookies.read("user_name_show")
+						)
+					}
+				}
+
+				let options = {
+					method: "POST",
+					headers: {
+						Authorization: accessToken,
+						"Content-Type":
+							"application/x-www-form-urlencoded; charset=UTF-8",
+						accept: "application/json"
+					},
+					body: JSON.stringify(body)
+				}
+				await fetch(url, options)
+			}
+			break
 		case "saveScenario":
 			if (params) {
 				// const targetscenario = params.scenario //需要更新的scenario

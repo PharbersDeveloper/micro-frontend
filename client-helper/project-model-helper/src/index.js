@@ -60,6 +60,7 @@ import { phGroupContainerRouteModel } from "./routeModel/phGroupContainerRouteMo
 import { phPivotContainerRouteModel } from "./routeModel/phPivotContainerRouteModel"
 import { phGroupContainerEventHandler } from "./eventHandler/phGroupContainerEventHandler"
 import { phPivotContainerEventHandler } from "./eventHandler/phPivotContainerEventHandler"
+import { phCodeditorContainerRouteModel } from "./routeModel/phCodeditorContainerRouteModel"
 
 export {
 	phAnalyzeUploadDatasetRouteModel,
@@ -123,5 +124,6 @@ export {
 	phGroupContainerRouteModel,
 	phGroupContainerEventHandler,
 	phPivotContainerRouteModel,
-	phPivotContainerEventHandler
+	phPivotContainerEventHandler,
+	phCodeditorContainerRouteModel
 }

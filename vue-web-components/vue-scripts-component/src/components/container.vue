@@ -619,7 +619,7 @@ export default {
                 this.script_icon_show  = `${staticFilePath}` + "/icons/all_script.svg"
                 this.datasource.dcs.forEach(item => {
                     this.reciptcheckedIds.push(item.id)
-                    this.reciptcheckedNames.push(item.name)
+                    this.reciptcheckedNames.push(item.jobShowName)
                 })
             }
         },
@@ -711,6 +711,10 @@ export default {
         },
         //打开删除脚本弹框
         deletedialogopen() {
+            if (this.reciptcheckedIds.length > 10) {
+                Message.error("超出数量上限,单次最多同时删除10个脚本!", { duration: 0, showClose: true })
+                return
+            }
             this.deletedialogshow = true;
         },
         //关闭清除脚本弹框

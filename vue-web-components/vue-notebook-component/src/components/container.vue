@@ -408,11 +408,13 @@ export default {
             if(idIndex >= 0) {
                 this.notebookscheckedIds.splice(idIndex, 1)
                 this.notebookscheckedNames.splice(idIndex, 1)
+                this.notebookscheckedOwners.splice(idIndex, 1)
                 this.$refs.data[index].checked = false
             } else {
                 this.$refs.data[index].checked = true
                 this.notebookscheckedIds.push(notebook.detail.id)
                 this.notebookscheckedNames.push(notebook.detail.name)
+                this.notebookscheckedOwners.push(notebook.detail.owner)
             }
             if (this.notebookscheckedIds.length == 1) {
                 this.script_icon_show = this.defs.iconsByName(notebook.detail.ctype)
@@ -560,11 +562,11 @@ export default {
                 return item === _that.owner
             })
             if (!result) {
-                Message.error("无法删除其他用户的Jupyter!", { duration: 0, showClose: true })
+                Message.error("无法删除其他用户的编译器!", { duration: 0, showClose: true })
                 return
             }
             if (this.isStopStatus !== true) {
-                Message.error("请先关闭Jupyter资源!", { duration: 0, showClose: true })
+                Message.error("请先启动/关闭编辑器资源!", { duration: 0, showClose: true })
                 return
             }
             // this.deletedialogshow = true;

@@ -33,13 +33,14 @@
             <ul class="computed-schema-list">
                 <li v-for="(item, index) in schema" :key="index" @click="itemClicked(item.src)">{{item.src}}</li>
             </ul>
-            <el-input class="computed-expression-expr"
+            <!-- <el-input class="computed-expression-expr"
 				:class="[{'el-input-error': currentExpr === ''}]"
 				type="textarea"
 				:rows="10"
 				@change="currentExprChange"
 				v-model="currentExpr"
-				placeholder="Please input" />
+				placeholder="Please input" /> -->
+			<iframe ref="scriptCodeEditor" id="scriptCodeEditor" class="executions-iframe" :src="iframeUrl" frameborder="0" style="width: 100%; height: 100%;"></iframe>
         </div>
 
         <div class="computed-add-button">
@@ -70,7 +71,12 @@ export default {
             default: () => {
                 return PhComputedDefs
             }
-        }
+        },
+		iframeUrl: {
+            type: String,
+            // default: "http://localhost:8081/phcodeditor/"
+            default: "https://codeditor.pharbers.com/phcodeditor"
+        },
     },
     components: {
         ElInput,
@@ -82,8 +88,26 @@ export default {
             this.currentExpr = this.datasource.command.computedCols[0]["expr"]
         }
         this.validate()
+        this.initEditor()
     },
     methods: {
+		initEditor() {
+            // const iframe = document.getElementById("scriptCodeEditor")
+            const iframe = this.$refs.scriptCodeEditor
+            iframe.onload = function () {
+                iframe.contentWindow.postMessage({
+                    codeEditorParameters: {
+                        editorId: "codeEditor",
+                        // value: this.codeBuffer,
+                        viewHeight: "calc(100vh - 180px)",
+                        language: "python",
+                        maxLines: 5000,
+                        theme: "github"
+                    }
+                }, "*")
+            }
+            this.registerEvent()
+        },
         addComputedColumns() {
             this.datasource.command.insertComputedCol()
             const len = this.datasource.command.computedCols.length - 1

@@ -5,7 +5,7 @@
             <p>{{scenario["scenario-name"]}}</p>
         </div>
         <div class="scenario-nav-btns">
-            <el-radio-group v-model="activeName" class="content">
+            <el-radio-group v-model="activeName" @change="clickTab" class="content">
                 <el-radio-button label="Setting"></el-radio-button>
                 <el-radio-button label="Steps"></el-radio-button>
             </el-radio-group>
@@ -19,7 +19,7 @@
 import ElButton from "element-ui/packages/button/index"
 import ElRadioGroup from "element-ui/packages/radio-group/index"
 import ElRadioButton from "element-ui/packages/radio-button/index"
-import PhDagDefinitions from "../policy/definitions/definitions";
+import PhDagDefinitions from "../policy/definitions/definitions"
 
 export default {
     components: {
@@ -33,6 +33,7 @@ export default {
         }
     },
     props: {
+        activeTrue: Object,
         scenario: Object,
         defs: {
             type: Object,
@@ -46,12 +47,23 @@ export default {
     },
     mounted() { },
     watch: {
-        activeName(n) {
-            this.$emit("active", n)
+        activeName(n){
+            this.activeName  = n
         }
     },
     methods: {
-
+        clickTab(name){
+            this.$emit("active", name)
+            if (this.activeTrue.active) {
+                this.activeName = name
+            } else {
+                if (name == 'Setting') {
+                    this.activeName = 'Steps'
+                } else {
+                    this.activeName = "Setting"
+                }
+            }
+        }
     }
 }
 </script>

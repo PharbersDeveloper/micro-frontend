@@ -2,11 +2,13 @@
     "devops": {
         "prod": {
             "prefix": "dist",
-            "files": [],
+            "files": [
+				"*.min.js"
+			],
             "destinations": [
 				{
-					"bucket": "general.pharbers.com",
-					"key": ""
+					"bucket": "components.pharbers.com",
+					"key": "prod/deploy/"
 				}
 			],
             "resolve":  "",
@@ -14,11 +16,13 @@
 		},
 		"dev": {
             "prefix": "dist",
-            "files": [],
+            "files": [
+				"*.js"
+			],
             "destinations": [
 				{
-					"bucket": "general.pharbers.com",
-					"key": ""
+					"bucket": "components.pharbers.com",
+					"key": "dev/deploy/"
 				}
 			],
             "resolve":  "",
