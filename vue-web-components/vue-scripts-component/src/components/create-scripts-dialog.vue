@@ -170,12 +170,12 @@ export default {
                 "prepare": "Prepare",
                 "distinct": "Distinct",
                 "sort": "Sort",
-                "topn": "topn",
-                "sync": "sync",
-                "join": "join",
-                "stack": "stack",
-                "group": "group",
-				"pivot": "pivot"
+                "topn": "Topn",
+                "sync": "Sync",
+                "join": "Join",
+                "stack": "Stack",
+                "group": "Group",
+				"pivot": "Pivot"
             },
             singleInputRuntime: ["group", "sync", "topn", "sort", "distinct", "prepare"]
         }
