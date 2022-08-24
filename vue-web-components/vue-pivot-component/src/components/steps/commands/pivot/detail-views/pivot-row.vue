@@ -14,12 +14,12 @@
                 </div>
             </div>
 			<span class="warning-msg" v-show="idf.length === 0">若无行定义，结果数据将为单行数据!</span>
-            <div>
-                <select class="sel" v-model="selectValue" @change="selectInsertIdfColumn">
-                    <option label="选择添加" value="选择添加" ></option>
-                    <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
-                </select>
-            </div>
+        </div>
+        <div>
+            <select class="sel" v-model="selectValue" @change="selectInsertIdfColumn">
+                <option label="选择添加" value="选择添加" ></option>
+                <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
+            </select>
         </div>
     </div>
 </template>
@@ -84,7 +84,8 @@ export default {
     .pivot-row-content {
         display: flex;
         flex-direction: column;
-        overflow: auto;
+        height: calc(50vh - 270px);
+        overflow-y: auto;
         flex-grow: 1;
     }
 
@@ -102,17 +103,17 @@ export default {
 
     .pivot-row-lst {
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
 
 		.pivot-column-item {
 			display: flex;
 			flex-direction: row;
-			width: 220px;
+			width: 210px;
 			justify-content: space-between;
 			align-items: center;
 			background: #c4e0fe;
 			margin-bottom: 10px;
-			margin-right: 20px;
+			margin-right: 10px;
 			font-size: 14px;
 			height: 26px;
 			padding: 0 20px;

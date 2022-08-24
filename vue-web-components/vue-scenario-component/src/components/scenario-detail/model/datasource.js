@@ -8,12 +8,13 @@ export default class PhScenarioDetailDatasource {
         this.projectId = projectId
         this.scenarioId = scenarioId
 		this.scenarioName = ""
-        this.debugToken = "dae3d1540184499768c8efc58713565349ed36735db0f4566d824604c6b07e20"
+        this.debugToken = "9c373a8780e3ede9eb9e9bfa304cb9c22a0b7d98372f017609dbc6364ac01218"
         this.store = new JsonApiDataStore()
         this.scenario = {}
         this.triggers = []
         this.steps = []
 		this.datasets = []
+        this.datasetsAll = []
         this.reports = []
     }
 
@@ -30,8 +31,8 @@ export default class PhScenarioDetailDatasource {
 
 		const datasets = await this.buildDatasetQuery().then((response) => response.json())
         this.store.sync(datasets)
-        this.datasets = this.store.findAll("datasets")
-        this.datasets = this.datasets.filter(
+        this.datasetsAll = this.store.findAll("datasets")
+        this.datasets = this.datasetsAll.filter(
             (it) => it.cat === "intermediate"
         )
 

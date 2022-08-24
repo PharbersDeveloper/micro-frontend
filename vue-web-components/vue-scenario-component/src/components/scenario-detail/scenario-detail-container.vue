@@ -2,25 +2,19 @@
     <div>
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="scenario">
-            <scenario-nav 
-				:scenario="datasource.scenario"
-                :activeTrue="activeIsTrue"
-				@active="activeChange" 
-				@save="saveAll"
-				@trigger="trigger"></scenario-nav>
+            <scenario-nav :scenario="datasource.scenario" :activeTrue="activeIsTrue" @active="activeChange"
+                @save="saveAll" @trigger="trigger"></scenario-nav>
             <div class="scenario-container" v-if="activeName === 'Setting'">
-            <!-- <div class="scenario-container" v-if="activeName === ''">  -->
+                <!-- <div class="scenario-container" v-if="activeName === ''">  -->
                 <detail-form :scenario="datasource.scenario" @activeChange="scenarioActiveChange"></detail-form>
-                <trigger-lst :triggers="triggerDisplay" @isTriggerTrue="getTriggerTrue"
-					:scenario-id="datasource.scenario.id" />
-                <report-lst :reports="reportDisplay" @isTrue="getTrue"
-                    :scenario-id="datasource.scenario.id"/>
+                <trigger-lst :triggers="triggerDisplay" :datasetsAll="datasetsAllDisplay"
+                    @isTriggerTrue="getTriggerTrue" :scenario-id="datasource.scenario.id" />
+                <report-lst :reports="reportDisplay" @isTrue="getTrue" :scenario-id="datasource.scenario.id" />
             </div>
             <div v-else class="scenario-container">
-                <scenario-steps :steps="stepDisplay"
-					:datasets="datasetsDisplay" 
-					:scenario-id="datasource.scenario.id" />
-                    <!-- @isStepTrue="getSteptrue" -->
+                <scenario-steps :steps="stepDisplay" :datasets="datasetsDisplay"
+                    :scenario-id="datasource.scenario.id" />
+                <!-- @isStepTrue="getSteptrue" -->
             </div>
         </div>
     </div>
@@ -46,6 +40,7 @@ export default {
             triggerDisplay: [],
             stepDisplay: [],
 			datasetsDisplay: [],
+            datasetsAllDisplay: [],
             reportDisplay: [],
             isTrue: true,
             isTriggerTrue: true,
@@ -116,6 +111,9 @@ export default {
         },
 		"datasource.datasets": function() {
 			this.datasetsAdapter()
+		},
+        "datasource.datasetsAll": function() {
+			this.datasetsAllAdapter()
 		},
         activeIsTrue:{
             handler(newValue){
@@ -227,6 +225,9 @@ export default {
 		datasetsAdapter() {
 			this.datasetsDisplay = this.datasource.datasets.map(x => x)
 		},
+        datasetsAllAdapter() {
+			this.datasetsAllDisplay = this.datasource.datasetsAll.map(x => x)
+		},
         stepAdapter() {
             this.stepDisplay = this.datasource.steps.map((x) => {
                 const result = {}
@@ -251,21 +252,34 @@ export default {
             this.triggerDisplay = this.datasource.triggers.map((x) => {
                 const result = {}
                 const tmp = JSON.parse(x["detail"])
-                result["start"] = tmp["start"]
-                result["period"] = tmp["period"]
-                result["value"] = tmp["value"]
-                result["timezone"] = tmp["timezone"]
-                result["mode"] = x["mode"]
-                result["name"] = x["name"]
-                result["active"] = x["active"]
-                result["scenarioId"] = x["scenario-id"]
-                result["id"] = x["id"]
-                result["index"] = x["index"]
-                result["resourceArn"] = x["resource-arn"]
-                result["traceId"] = x["trace-id"]
-                result["edited"] = false
-                result["deleted"] = false
-				console.log(result)
+                if(x.mode == 'timer'){
+                    result["start"] = tmp["start"]
+                    result["period"] = tmp["period"]
+                    result["value"] = tmp["value"]
+                    result["timezone"] = tmp["timezone"]
+                    result["mode"] = x["mode"]
+                    result["name"] = x["name"]
+                    result["active"] = x["active"]
+                    result["scenarioId"] = x["scenario-id"]
+                    result["id"] = x["id"]
+                    result["index"] = x["index"]
+                    result["resourceArn"] = x["resource-arn"]
+                    result["traceId"] = x["trace-id"]
+                    result["edited"] = false
+                    result["deleted"] = false
+                }else if(x.mode == 'dataset'){
+                    result["dsNames"] = tmp["dsNames"]
+                    result["mode"] = x["mode"]
+                    result["name"] = x["name"]
+                    result["active"] = x["active"]
+                    result["scenarioId"] = x["scenario-id"]
+                    result["id"] = x["id"]
+                    result["index"] = x["index"]
+                    result["resourceArn"] = x["resource-arn"]
+                    result["traceId"] = x["trace-id"]
+                    result["edited"] = false
+                    result["deleted"] = false
+                }
                 return result
             })
         },

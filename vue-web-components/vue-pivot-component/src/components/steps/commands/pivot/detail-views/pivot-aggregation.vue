@@ -14,10 +14,10 @@
 						<el-button type="text" @click="selectRemoveValueColumn(index)">删除</el-button>
 					</div>
                 </div>
+                <span class="error-msg" v-show="valueColumns.length === 0 && !command.globalCount">
+                    需要添加至少一个聚合条件!
+                </span>
             </div>
-			<span class="error-msg" v-show="valueColumns.length === 0 && !command.globalCount">
-				需要添加至少一个聚合条件!
-			</span>
             <div>
                 <select class="sel" v-model="selectValue" @change="selectInsertValueColumn">
                     <option label="选择添加" value="选择添加" ></option>
@@ -207,7 +207,9 @@ export default {
 
     .pivot-agg-lst {
         display: flex;
-        flex-direction: column;
+		flex-wrap: wrap;
+        height: calc(50vh - 320px);
+        overflow-y: auto;
 
 		.pivot-column-item {
 			display: flex;
