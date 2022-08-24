@@ -2,15 +2,17 @@
 	<div class="scenario-triggers">
 		<div class="scenario-trigger-create">
 			<h2>触发条件</h2>
-			<select class="add-trigger-select" ref="addNewTriggerSelect" @change="addNewTrigger"
-				@click="addNewTriggerClick" placeholder="添加触发条件" value="添加触发条件" name="" id="">
+			<select class="add-trigger-select" ref="addNewTriggerSelect" @click="addNewTriggerClick"
+				@change="addNewTrigger(triggerTimeData)" placeholder="添加触发条件" value="添加触发条件" name="" id=""
+				v-model="triggerTimeData">
 				<option value="添加触发条件" label="添加触发条件"></option>
 				<option v-for="item in options" :key="item.index" :label="item.desc" :disabled="item.disable"
 					:value="item.cat">{{item.desc}}</option>
 			</select>
 		</div>
 		<el-collapse>
-			<el-collapse-item v-for="(item, index) in triggers" :key="index" v-show="item.deleted === false" @change="changeTrigger(item,index)">
+			<el-collapse-item v-for="(item, index) in triggers" :key="index" v-show="item.deleted === false"
+				@change="changeTrigger(item,index)">
 				<template slot="title">
 					<div class="scenario-trigger-item-title">
 						<!-- <select 
@@ -27,17 +29,20 @@
 							<input v-model="item.name" class="trigger-input" @input="changeName(item,index)">
 						</div>
 						<div @click.stop style="width:40px;height:20px;position:relative;">
-							<el-switch v-model="item.active" disabled @change="item.edited = true" class="el-switch"></el-switch>
+							<el-switch v-model="item.active" disabled @change="item.edited = true" class="el-switch">
+							</el-switch>
 						</div>
 						<el-button class="el-icon-close scenario-trigger-item-delbtn" @click="item.deleted = true">
 						</el-button>
 					</div>
 				</template>
-				<el-form :model="item" label-width="120px" style="margin-top:20px;" :label-position="labelPosition">
+				<el-form :model="item" v-if="item.mode == 'timer'" label-width="120px" style="margin-top:20px;"
+					:label-position="labelPosition">
 					<el-form-item label="重复时间间隔" class="date">
 						<el-col :span="6" class="minute">
-							<el-input v-model="item.value" @change="changeTime(item,index)" :class="isNotTrue(item) ? 'isEmpty' : ''"></el-input>
-							<span v-show="isNotTrue(item)">请输入参数！</span>
+							<el-input v-model="item.value" @change="changeTime(item,index)"
+								:class="isNotTrue(item.value) ? 'isEmpty' : ''"></el-input>
+							<span v-show="isNotTrue(item.value)">请输入参数！</span>
 						</el-col>
 						<el-col class="line" :span="4">&nbsp;</el-col>
 						<el-col :span="11">
@@ -49,11 +54,32 @@
 						</el-col>
 					</el-form-item>
 					<el-form-item class="time" label="开始时间">
-						<datetime @change="item.edited = true" format="YYYY-MM-DD H:i:s"
-							v-model="item.start"></datetime>
+						<datetime @change="item.edited = true" format="YYYY-MM-DD H:i:s" v-model="item.start">
+						</datetime>
 					</el-form-item>
 					<el-form-item label="时区" class="area">
 						<el-input disabled value="北京时间"></el-input>
+					</el-form-item>
+				</el-form>
+				<el-form :model="item" v-else-if="item.mode == 'dataset'" label-width="120px" style="margin-top:20px;"
+					:label-position="labelPosition">
+					<el-form-item label="数据集">
+						<div v-for="(a,i) in item.dsNames" :key="a" style="display:flex;flex-direction: row;">
+							<select v-model="obj[a]" @change="changeData(a,item,i)" style="height: 30px;border-radius: 4px;width: 451px;margin-bottom:10px;">
+								<option v-for="(iter, index) in datasetsAll" :key="iter.name + index" :label="iter.name"
+									:value="iter.name" >
+								</option>
+							</select>
+							<img :src="del_icon" @click="item.dsNames.splice(value,1)" v-if="i !== 0" class="del_icon"
+								alt="" style="width:30px;height: 30px;">
+						</div>
+					</el-form-item>
+					<el-form-item label="">
+						<el-button class="add-ds" type="primary" @click="addDataset(item)">增加数据集</el-button>
+					</el-form-item>
+					<el-form-item label="数据集完成更新" class="datasetTime">
+						<el-input disabled value=""></el-input>
+						<span>分钟后，开始运行</span>
 					</el-form-item>
 				</el-form>
 			</el-collapse-item>
@@ -72,6 +98,7 @@ import ElCol from "element-ui/packages/col/index"
 import ElButton from "element-ui/packages/button/index"
 import moment from 'moment'
 import datetime from 'vuejs-datetimepicker'
+import { staticFilePath } from '../../config/envConfig'
 // import { Message } from 'element-ui'
 
 export default {
@@ -127,11 +154,40 @@ export default {
 			labelPosition: 'left',
 			isEmpty: false,
 			triggerId: [],
-			triggerArr: []
+			triggerArr: [],
+            dialogVisible: false,
+			dsName: '',
+			del_icon: `${staticFilePath}/delete_r.svg`,
+			triggerTimeData: '添加触发条件',
+			datasetName: '',
+			// selectData: '请选择'
+			// obj:{}
         }
     },
     props: {
-        triggers: Array,
+        triggers: {
+			type: Array,
+			default: function(){
+				[
+					{
+						"dsNames": [
+							"胖胖胖1",
+							"vcb"
+						],
+						"mode": "dataset",
+						"name": "基于数据集更新的自动运行",
+						"active": false,
+						"scenarioId": "ggjpDje0HUC2JW_4c584129d9f6415aa8b5bcfcfba085d4",
+						"id": "92186975BCF468B6",
+						"index": 0,
+						"traceId": "9c82603c7ecc4e0ebf46023541a23fbc",
+						"edited": false,
+						"deleted": false
+					}
+				]
+			}
+		},
+		datasetsAll: Array,
         scenarioId: String
     },
     components: {
@@ -154,32 +210,36 @@ export default {
 
     },
     mounted() {
-
+		// this.getDataObj()
     },
     watch: {
-		// triggerName(newValue){
-		// 	this.triggerName = newValue
-		// 	console.log(this.triggerName)
-		// 	// let reg = /^[a-zA-Z0-9_^\u4E00-\u9FA5]{1,}$/
-		// 	// if(reg.test(newValue)){
-		// 	// 	this.triggerName = newValue
-		// 	// }else{
-		// 	// 	Message({
-		// 	// 		type: 'error',
-		// 	// 		showClose: true,
-		// 	// 		duration: 3000,
-		// 	// 		message: '请勿输入特殊字符!'
-		// 	// 	})
-		// 	// }
-		// },
 		
     },
     methods: {
+		getDataObj(){
+            let Data = this.triggers.filter(it => it.mode == 'dataset')
+			if(Data.length !== 0){
+				Data.forEach((value)=>{
+					value.dsNames.forEach(i=>{
+						this.obj[i] = i
+					})
+				})
+			}
+			
+		},
+		addDataset(item){
+			item.dsNames.push('')
+			// this.obj = {}
+			// this.getDataObj()
+		},
+		changeData(a,item,i){
+			item.dsNames.splice(i, 1, a)
+		},
 		changeName(item,index){
 			this.triggers[index].name = item.name
 		},
 		changeTime(item,index){
-			if(this.isNotTrue(item)){
+			if(this.isNotTrue(item.value)){
 				this.isEmpty = true
 			}else{
 				this.isEmpty = false
@@ -197,7 +257,7 @@ export default {
             this.$emit('isTriggerTrue',this.triggerArr)
 		},
 		isNotTrue(item){
-			if (item.value.length == 0){
+			if (item.length == 0){
                 return true
             } else {
                 return false
@@ -211,26 +271,43 @@ export default {
 		},
 		addNewTriggerClick() {
 			this.$refs.addNewTriggerSelect.value = "添加触发条件"
+			this.triggerTimeData = '添加触发条件'
 		},
-        addNewTrigger() {
+        addNewTrigger(value) {
             const result = {}
 			const idx = this.triggers.length > 0 ? 1 + Math.max(...this.triggers.map(x => x.index)) : 0
-			result["name"] = '基于时间自动运行'
-            result["start"] = moment().format('YYYY-MM-DD HH:m:s')
-            result["period"] = "minute"
-            result["value"] = 10
-            result["timezone"] = "中国北京"
-            result["mode"] = "timer"
-            result["active"] = false
-            result["scenarioId"] = this.scenarioId
-            result["id"] = this.genId()
-            result["index"] = idx
-            result["resourceArn"] = ""
-            result["traceId"] = this.genId()
-            result["edited"] = true
-            result["deleted"] = false
-            this.triggers.push(result)
+			if (value == 'timer') {
+				result["name"] = '基于时间自动运行'
+				result["start"] = moment().format('YYYY-MM-DD HH:m:s')
+				result["period"] = "minute"
+				result["value"] = 10
+				result["timezone"] = "中国北京"
+				result["mode"] = "timer"
+				result["active"] = false
+				result["scenarioId"] = this.scenarioId
+				result["id"] = this.genId()
+				result["index"] = idx
+				result["resourceArn"] = ""
+				result["traceId"] = this.genId()
+				result["edited"] = true
+				result["deleted"] = false
+				this.triggers.push(result)
+			} else {
+				result["name"] = '基于数据集更新的自动运行'
+				result["mode"] = "dataset"
+				result["active"] = false
+				result["scenarioId"] = this.scenarioId
+				result["id"] = this.genId()
+				result["index"] = idx
+				result["resourceArn"] = ""
+				result["dsNames"] = ['']
+				result["traceId"] = this.genId()
+				result["edited"] = true
+				result["deleted"] = false
+				this.triggers.push(result)
+			}
 			this.$refs.addNewTriggerSelect.value = "添加触发条件"
+			this.triggerTimeData = '添加触发条件'
         },
         genId(len=16, radix=16) {
             const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
@@ -313,16 +390,21 @@ export default {
 		border-radius: 4px;
 	}
 	
-
-	// .date{
-	// 	.el-input{
-	// 		.el-input__inner {
-	// 			width: 100px;
-	// 			min-width: none;
-	// 		}
-	// 	}
-		
-	// }
+	.datasetTime{
+		.el-form-item__content{
+			display: flex;
+			flex-direction: row;
+		}
+		.el-input {
+			width: 40px;
+			margin-right: 10px;
+			height: 30px;
+		}
+		.el-input__inner{
+			width: 40px;
+			height: 30px;
+		}
+	}
 	.el-switch{
 		height: 30px !important;
 		// margin-left: 170px;
@@ -340,9 +422,6 @@ export default {
 		left: 6px;
 		font-size: 18px;
 	}
-	// .datetime-picker{
-	// 	position: relative;
-	// }
 	.calender-div{
 		min-width: 270px;
 		box-shadow: 1px 2px 5px #ccc;
