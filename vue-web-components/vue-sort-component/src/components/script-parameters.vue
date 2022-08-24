@@ -191,7 +191,8 @@ export default {
         },
         inputStrChecked(value, ref) {
             // 只允许输入数字、字母、下划线
-            let r = /^[a-zA-Z0-9_^]{1,}$/
+            // let r = /^[a-zA-Z0-9_^]{1,}$/
+			let r = /([a-z])([a-z1-9])*(_([a-z1-9]+))*/
             if (r.test(value)) {
                 if(value.length > 30) {
                     this.$refs[ref].value = ""
