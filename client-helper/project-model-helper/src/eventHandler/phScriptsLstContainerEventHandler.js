@@ -917,7 +917,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 		const { message, status } = JSON.parse(payload)
 		const {
 			cnotification: {
-				data: { jobName, runtime, jobId },
+				data: { runtime, jobId },
 				error
 			}
 		} = JSON.parse(message)
@@ -929,7 +929,7 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 			alert("新建脚本成功！")
 			route.router.transitionTo(
 				"shell",
-				`codeditor?projectName=${route.projectName}&projectId=${route.projectId}&jobName=${jobName}&runtime=${runtime}`
+				`codeditor?projectName=${route.projectName}&projectId=${route.projectId}&jobId=${jobId}`
 			)
 		} else if (status == "failed") {
 			console.log(error)

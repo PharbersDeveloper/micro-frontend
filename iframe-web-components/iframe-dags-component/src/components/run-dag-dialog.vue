@@ -27,12 +27,13 @@
                         </table>
                     </div>
                 </div>
-                <div class="prompt" v-show="steps === 1">
+                <!-- <div class="prompt" v-show="steps === 1">
                     <span>低代码脚本参数</span>
                     <textarea name="runJson" disabled id="" cols="30" rows="10" class="run_json" v-model="scriptsConf"></textarea>
-                </div>
-                <div class="prompt" v-show="steps === 2">
+                </div> -->
+                <div class="prompt" v-show="steps === 1">
                     <span>用户配置参数</span>
+                    <span class="link-to" @click="linkToVideos">视频教程</span>
                     <textarea name="runJson" id="" cols="30" rows="10" class="run_json" v-model="userConf"></textarea>
                 </div>
                 <div class="btn">
@@ -45,8 +46,8 @@
                     <div class="">
                         <button class="cancel" @click="close">取消</button>
                         <button class="save btn-margin" v-show="steps !== 0" @click="back">上一步</button>
-                        <button class="save btn-margin" @click="next" v-show="steps !== 2">下一步</button>
-                        <button class="save btn-margin" @click="save"  v-show="steps === 2">确定</button>
+                        <button class="save btn-margin" @click="next" v-show="steps !== 1">下一步</button>
+                        <button class="save btn-margin" @click="save"  v-show="steps === 1">确定</button>
                     </div>
               </div>
             </div>
@@ -128,6 +129,9 @@ export default {
     },
     watch: {},
     methods: {
+        linkToVideos() {
+            window.open("https://www.bilibili.com/video/BV16g411r7Ni")
+        },
         handlerJSON(str) {
             if (typeof str == 'string') {
                 try {
@@ -181,7 +185,7 @@ export default {
         },
         save() {
             this.jsonValue = {}
-            if(this.steps === 2) {
+            if(this.steps === 1) {
                 let scriptsTest = this.testJSON(this.scriptsConf)
                 let userConfTest = this.testJSON(this.userConf)
                 if(scriptsTest && userConfTest) {
@@ -279,6 +283,14 @@ export default {
     padding-left: 40px;
     padding-top: 20px;
     box-sizing: border-box;
+    .link-to {
+        color: #0073bb;
+        font-size: 14px;
+        margin-left: 20px;
+        font-weight: bold;
+        margin-top: 4px;
+        cursor: pointer;
+    }
     .data_version {
         width: 520px;
         height: 350px;

@@ -4,13 +4,14 @@
         <div class="scenario">
             <scenario-nav 
 				:scenario="datasource.scenario"
+                :activeTrue="activeIsTrue"
 				@active="activeChange" 
 				@save="saveAll"
 				@trigger="trigger"></scenario-nav>
             <div class="scenario-container" v-if="activeName === 'Setting'">
             <!-- <div class="scenario-container" v-if="activeName === ''">  -->
-                <detail-form :scenario="datasource.scenario"></detail-form>
-                <trigger-lst :triggers="triggerDisplay"
+                <detail-form :scenario="datasource.scenario" @activeChange="scenarioActiveChange"></detail-form>
+                <trigger-lst :triggers="triggerDisplay" @isTriggerTrue="getTriggerTrue"
 					:scenario-id="datasource.scenario.id" />
                 <report-lst :reports="reportDisplay" @isTrue="getTrue"
                     :scenario-id="datasource.scenario.id"/>
@@ -19,6 +20,7 @@
                 <scenario-steps :steps="stepDisplay"
 					:datasets="datasetsDisplay" 
 					:scenario-id="datasource.scenario.id" />
+                    <!-- @isStepTrue="getSteptrue" -->
             </div>
         </div>
     </div>
@@ -45,7 +47,10 @@ export default {
             stepDisplay: [],
 			datasetsDisplay: [],
             reportDisplay: [],
-            isTrue: false
+            isTrue: true,
+            isTriggerTrue: true,
+            isStepTrue: false,
+            activeIsTrue: {active: false}
         }
     },
     props: {
@@ -111,16 +116,46 @@ export default {
         },
 		"datasource.datasets": function() {
 			this.datasetsAdapter()
-		}
+		},
+        activeIsTrue:{
+            handler(newValue){
+                this.activeIsTrue.active = newValue.active
+            },
+            deep:true
+        }
     },
     methods: {
+        scenarioActiveChange(value){
+            const event = new Event("event")
+            event.args = {
+                callback: "resetScenario",
+                element: this,
+                param: {
+                    projectId: value.projectId,
+                    projectName: value.projectName,
+                    scenario: value.scenario,
+                }
+            }
+            this.$emit('event', event)
+        },
+        getTriggerTrue(value){
+            if (value.length == 0) {
+                this.isTriggerTrue = true
+            } else {
+                if (value.every(item => item == false)) {
+                    this.isTriggerTrue = true
+                } else {
+                    this.isTriggerTrue = false
+                }
+            }
+        },
         getTrue(value){
-            if(value.length == 0){
-                this.isTrue  = false
-            } else{
-                if(!value.every(item=>item == false)){
+            if (value.length == 0) {
+                this.isTrue = true
+            } else {
+                if (value.every(item => item == false)) {
                     this.isTrue = true
-                }else{
+                } else {
                     this.isTrue = false
                 }
             }
@@ -131,12 +166,24 @@ export default {
             let data = paramArr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
         },
+        isJSON_test(value) {
+            try {
+                var obj = JSON.parse(value);
+                if (Object.prototype.toString.call(obj) == '[object Object]' && obj) {
+                    return false
+                } else {
+                    return true
+                }
+            } catch (e) {
+                return true
+            }
+        },
         forStepArray(array) {
             if (array.length == 0) {
                 return true
             } else {
                 let value = array.every(item => {
-                    if (item.detail.name !== "" && item.confData !== "") {
+                    if (item.detail.name !== "" && item.confData !== "" && !this.isJSON_test(item.confData)) {
                         return true
                     } else {
                         return false
@@ -147,29 +194,33 @@ export default {
         },
         activeChange(n) {
             if (n == 'Steps') { //跳转steps
-                if (this.isTrue) {
+                if (this.isTrue && this.isTriggerTrue) {
+                    this.activeName = n
+                    this.activeIsTrue.active  = true
+                } else {
                     Message({
                         type: 'error',
                         showClose: true,
                         duration: 3000,
-                        message: '请检查邮箱格式！'
+                        message: '请输入正确的setting参数！'
                     })
                     this.activeName = "Setting"
-                } else {
-                    this.activeName = n
+                    this.activeIsTrue.active  = false
                 }
             } else {
                 let stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
                 if (this.forStepArray(stepDisplay)) {
                     this.activeName = n
+                    this.activeIsTrue.active = true
                 } else {
                     Message({
                         type: 'error',
                         showClose: true,
                         duration: 3000,
-                        message: '请修改参数！'
+                        message: '请修改step参数！'
                     })
                     this.activeName = "Steps"
+                    this.activeIsTrue.active = false
                 }
             }
         },
@@ -256,7 +307,7 @@ export default {
             stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
             stepDisplay = this.forArray(stepDisplay)
             let value = this.forStepArray(stepDisplay)
-            if (!this.isTrue) {
+            if (this.isTrue && this.isTriggerTrue) {
                 if (value) {
                     const event = new Event("event")
                     event.args = {
@@ -281,7 +332,7 @@ export default {
                         type: 'error',
                         showClose: true,
                         duration: 3000,
-                        message: '请修改参数！'
+                        message: '请修改step参数！'
                     })
                 }
             } else {
@@ -289,7 +340,7 @@ export default {
                     type: 'error',
                     showClose: true,
                     duration: 3000,
-                    message: '请检查邮箱格式！'
+                    message: '请输入正确的setting参数！'
                 })
             }
         }

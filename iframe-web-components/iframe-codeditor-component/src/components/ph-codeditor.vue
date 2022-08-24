@@ -27,7 +27,72 @@ export default {
             return "height: " + viewHeight
         }
     },
-    props: { },
+    props: {
+        funcObj: {
+            type: Object,
+            default: function() {
+                return {
+                    initEditor: (event)=> {
+                        if (event.data.codeEditorParameters) {
+                            const {
+                                editorId,
+                                // value,
+                                viewHeight,
+                                language,
+                                maxLines,
+                                theme
+                            } = event.data.codeEditorParameters
+
+                            this.viewHeight = viewHeight
+                            this.editorId = editorId
+                            console.debug(`register editorId: ${editorId}`)
+
+                            this.editorInstance = new PhCodeEditorHandler(
+                                this.$refs.ace,
+                                theme,
+                                language,
+                                maxLines
+                            )
+
+                            this.editorInstance.setEditorOptions({
+                                // value: value,
+                                fontSize: 14,
+                                tabSize: 4,
+                                readOnly: false,
+                                selectionStyle: "text",
+                                enableBasicAutocompletion: true,
+                                enableSnippets: true,
+                                enableLiveAutocompletion: true,
+                                wrap: true,
+                                autoScrollEditorIntoView: true,
+                                setShowPrintMargin: false
+                            })
+
+                            window.parent.postMessage({
+                                editorStaus: "complete"
+                            }, '*')
+                        }
+                    },
+                    returnContent: ()=> {
+                        if (event.data.getValue) {
+                            const value = this.editorInstance.outContent()
+                            window.parent.postMessage({
+                                editorId: this.editorId,
+                                content: value
+                            }, '*')
+                        }
+                    },
+                    setValue: ()=> {
+                        if (this.editorInstance && event.data.codeValue) {
+                            this.editorInstance.setEditorOptions({
+                                value: event.data.codeValue
+                            })
+                        }
+                    }
+                }
+            }
+        }
+    },
     data() {
         return {
             editorInstance: null,
@@ -53,18 +118,19 @@ export default {
     },
     methods: {
         registerEvent() {
+            this.unRegisterEvent()
             // 注册初始化Editor事件
-            window.addEventListener("message", this.initEditor);
+            window.addEventListener("message", this.funcObj.initEditor);
             // 注册返回编辑器内容事件
-            window.addEventListener("message", this.returnContent);
+            window.addEventListener("message", this.funcObj.returnContent);
             // 注册设置编辑器内容事件
-            window.addEventListener("message", this.setValue);
+            window.addEventListener("message", this.funcObj.setValue);
             // window.addEventListener("message", this.destroy);
         },
         unRegisterEvent() {
-            window.removeEventListener("message", this.initEditor);
-            window.removeEventListener("message", this.returnContent);
-            window.addEventListener("message", this.setValue);
+            window.removeEventListener("message", this.funcObj.initEditor, true);
+            window.removeEventListener("message", this.funcObj.returnContent, true);
+            window.removeEventListener("message", this.funcObj.setValue, true);
             // window.removeEventListener("message", this.destroy);
         },
         initEditor(event) {
@@ -109,7 +175,6 @@ export default {
             }
         },
         setValue(event) {
-            // debugger
             if (this.editorInstance && event.data.codeValue) {
                 this.editorInstance.setEditorOptions({
                     value: event.data.codeValue
@@ -145,13 +210,20 @@ export default {
             this.editorInstance.resize(true)
         },
         destroy() {
-            if (this.editorInstance !== null) {
-                this.unRegisterEvent()
-                console.info("destroy")
-                this.editorInstance.destroy()
-                this.editorInstance = null
-            }
+            // if (this.editorInstance !== null) {
+            //     this.unRegisterEvent()
+            //     console.info("destroy")
+            //     this.editorInstance.destroy()
+            //     this.editorInstance = null
+            // }
+            this.unRegisterEvent()
+            console.info("destroy")
+            this.editorInstance.destroy()
+            this.editorInstance = null
         }
+    },
+    destroyed() {
+        this.destroy()
     },
     beforeDestroy() {
         // TODO: 销毁这边可能有问题,第一版出来我在想想
@@ -167,7 +239,7 @@ export default {
     .ace-editor {
         position: absolute;
         inset: 7px 0 0;
-		min-height: 100%;
+        min-height: 100%;
     }
 
 }

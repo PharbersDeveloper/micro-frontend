@@ -40,7 +40,7 @@ module.exports = function (environment) {
 			clientName: "project",
 			/* 发布 */
 			// clientId: "replaceClientId",
-			// clientName: "replceClientName",
+			// clientName: "replaceClientName",
 			auth: true, //需要登录（目前只有官网不需要登录）
 			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone", "layout", "article"],
 			clientSecret:
