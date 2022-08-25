@@ -80,7 +80,7 @@ export default class PhCodeditorDatasource {
 		}
 	}
 
-	this.queryEditorContent(codeEditorContent) {
+	async saveEditorContent(codeEditorContent) {
 		let url = `${hostName}/phupdatejobcode`
 		const accessToken = this.datasource.parent.getCookie("access_token") || this.datasource.debugToken
 		let body = {
@@ -120,7 +120,7 @@ export default class PhCodeditorDatasource {
 	async getEditorContentEvent(event) {
 		if (event.data.editorId === "codeEditor") {
 			const codeEditorContent = event.data.content
-			this.queryEditorContent()
+			await this.saveEditorContent(codeEditorContent)
 			this.downloadCode++
 		}
 
