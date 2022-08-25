@@ -4,23 +4,24 @@ export default class PhDagTriggerPolicy {
     constructor(id, parent) {
         this.id = id
         this.parent = parent
+        this.runnerId = ""
     }
 
     // 停止运行
     async stopDag() {
         let sel = confirm("确认停止当前dag？")
+        const that = this.parent
         if(sel) {
             const stopUri = `${hostName}/phstatemachinestop`
-            const runnerId = this.parent.runId
             const body = {
                 common: {
-                    traceId: runnerId,
-                    runnerId: runnerId,
-                    projectId: this.parent.projectId,
-                    projectName: this.parent.projectName,
-                    owner: this.parent.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082",
-                    showName: this.parent.getCookie("user_name_show") ? decodeURI(decodeURI(this.parent.getCookie("user_name_show"))) : "dev环境",
-                    tenantId: this.parent.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
+                    traceId: this.runnerId,
+                    runnerId: this.runnerId,
+                    projectId: that.projectId,
+                    projectName: that.projectName,
+                    owner: that.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082",
+                    showName: that.getCookie("user_name_show") ? decodeURI(decodeURI(that.getCookie("user_name_show"))) : "dev环境",
+                    tenantId: that.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
                 },
                 action: {
                     cat: "stopDag",
@@ -29,7 +30,7 @@ export default class PhDagTriggerPolicy {
                     message: JSON.stringify({
                         optionName: "stop_dag",
                         cat: "intermediate",
-                        actionName: this.parent.datasource.cal.calculate.name + ` (${runnerId})`
+                        actionName: that.datasource.cal.calculate.name + ` (${this.runnerId})`
                     }),
                     required: true
                 }
@@ -107,11 +108,11 @@ export default class PhDagTriggerPolicy {
         confData.ownerId = this.parent.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
         confData.showName = this.parent.getCookie("user_name_show") ? decodeURI(decodeURI(this.parent.getCookie("user_name_show"))) : "dev环境"
         confData.jobDesc = this.parent.registerJobEventName
-        const runnerId = this.genRunnerId(this.parent.projectName)
+        this.runnerId = this.genRunnerId(this.parent.projectName)
         const body = {
             common: {
-                traceId: runnerId,
-                runnerId: runnerId,
+                traceId: this.runnerId,
+                runnerId: this.runnerId,
                 projectId: this.parent.projectId,
                 projectName: this.parent.projectName,
                 owner: confData.ownerId,
@@ -125,7 +126,7 @@ export default class PhDagTriggerPolicy {
                 message: JSON.stringify({
                     optionName: "run_dag",
                     cat: "intermediate",
-                    actionName: this.parent.datasource.cal.calculate.name + ` (${runnerId})`
+                    actionName: this.parent.datasource.cal.calculate.name + ` (${this.runnerId})`
                 }),
                 required: true
             },
@@ -157,11 +158,11 @@ export default class PhDagTriggerPolicy {
                 notification: {
                     eventName: this.parent.registerJobEventName,
                     projectId: this.parent.projectId,
-                    id: runnerId
+                    id: this.runnerId
 
                 },
                 executionStatus: {
-                    id: runnerId,
+                    id: this.runnerId,
                     eventName: "executionStatus"
                 }
             }
