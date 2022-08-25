@@ -18,12 +18,12 @@
                     需要添加至少一个聚合条件!
                 </span>
             </div>
-            <div>
-                <select class="sel" v-model="selectValue" @change="selectInsertValueColumn">
-                    <option label="选择添加" value="选择添加" ></option>
-                    <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
-                </select>
-            </div>
+        </div>
+        <div>
+            <select class="sel" v-model="selectValue" @change="selectInsertValueColumn">
+                <option label="选择添加" value="选择添加" ></option>
+                <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
+            </select>
         </div>
         <el-dialog
                 title="Aggregation"
@@ -181,6 +181,7 @@ export default {
     .pivot-agg-content {
         display: flex;
         flex-direction: column;
+        height: calc(50vh - 320px);
         overflow: auto;
         flex-grow: 1;
 		margin-top: 20px;
@@ -208,8 +209,7 @@ export default {
     .pivot-agg-lst {
         display: flex;
 		flex-wrap: wrap;
-        height: calc(50vh - 320px);
-        overflow-y: auto;
+        // overflow-y: auto;
 
 		.pivot-column-item {
 			display: flex;

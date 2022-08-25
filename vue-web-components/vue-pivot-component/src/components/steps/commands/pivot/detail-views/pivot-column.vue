@@ -1,23 +1,25 @@
 <template>
     <div class="pivot-column">
-        <div class="pivot-column-title" >
+        <div class="pivot-column-title">
             <h3>列定义</h3>
         </div>
-        <div class="pivot-column-content" >
+        <div class="pivot-column-content">
             <div class="pivot-column-lst">
                 <div v-for="(item, index) in kc" :key="index" class="pivot-column-item">
                     <span>{{item}}</span>
                     &nbsp;
                     <el-button type="text" @click="selectDeleteDeyColumn(index)">删除</el-button>
                 </div>
-				<span class="error-msg" v-show="kc.length === 0">需要添加至少一个列定义!</span>
+                <span class="error-msg" v-show="kc.length === 0">需要添加至少一个列定义!</span>
             </div>
+        </div>
+        <div>
             <select class="sel" v-model="selectValue" @change="selectAddKeyColumn">
-                <option label="选择添加" value="选择添加" ></option>
+                <option label="选择添加" value="选择添加"></option>
                 <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
             </select>
         </div>
-        <div class="pivot-column-op" >
+        <div class="pivot-column-op">
             <span style="height:26px;">Pivot Values: &nbsp;</span>
             <select class="sel" v-model="pivotedColumnType" disabled>
                 <option v-for="(item, index) in defs.pivotTypes" :key="index" :label="item.desc" :value="item.cal" />
@@ -88,6 +90,7 @@ export default {
     .pivot-column-content {
         display: flex;
         flex-direction: column;
+        height: calc(50vh - 320px);
         overflow: auto;
         flex-grow: 1;
     }
@@ -103,8 +106,7 @@ export default {
     .pivot-column-lst {
         display: flex;
 		flex-wrap: wrap;
-        height: calc(50vh - 320px);
-        overflow-y: auto;
+        // overflow-y: auto;
 
 		.error-msg {
 			font-size: 13px;
