@@ -23,4 +23,20 @@ export default class PhComputedStep {
     revert2Defs() {
         return this.command.revert2Defs()
     }
+
+	iframeComplete(event) {
+		if(event.data.editorStaus === "complete") {
+			// this.datasource.refreshData(this.datasource.parent)
+		}
+	}
+
+	async getEditorContentEvent(event) {
+		if (event.data.editorId === "codeEditor") {
+			debugger
+			const codeEditorContent = event.data.content
+			this.queryEditorContent(codeEditorContent)
+			this.downloadCode++
+		}
+
+	}
 }

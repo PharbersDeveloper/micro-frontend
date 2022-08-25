@@ -82,7 +82,7 @@
 						<option v-for="(op, opi) in datasetArray" :key="opi+'addds'" :value="op.name" :label="op.name" />
 					</select>
 				</div>
-				<span slot="footer" class="dialog-footer">
+				<span slot="footer" class="dialog-footer starkButton">
 					<el-button @click="showAddDialog = false">Cancel</el-button>
 					<el-button type="primary" @click="addDatasetConfirm">Confirm</el-button>
 				</span>
@@ -523,6 +523,9 @@ export default {
 }
 </script>
 <style lang="scss">
+    .starkButton{
+        margin-left: 330px;
+    }
     .stack {
         box-sizing: border-box;
         display: flex;

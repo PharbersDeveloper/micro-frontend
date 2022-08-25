@@ -64,7 +64,7 @@
                 </div>
             </div>
 			<el-button class="add-ds-input" type="primary" @click="$emit('addDataset')">
-				+ ADD INPUT
+				+ 添加数据集
 			</el-button>
         </div>
     </div>

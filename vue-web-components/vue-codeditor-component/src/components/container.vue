@@ -8,9 +8,9 @@
                 <span class="name">compute_{{datasource.outputs}}</span>
             </div>
             <div class="coding-title">
-                <button class="button btn-fir">运行</button>
-                <button class="button btn-fir">操作</button>
-                <button class="button" @click="saveCode">保存</button>
+                <el-button class="button btn-fir" @click="runCode">运行</el-button>
+                <!-- <button class="button btn-fir">操作</button> -->
+                <el-button class="button" @click="saveCode">保存</el-button>
             </div>
         </div>
         <div class="codeditor-container">
@@ -60,6 +60,7 @@
 <script>
 import PhCodeditorDatasource from "./model/datasource"
 import PhDagDefinitions from "./policy/definitions/definitions";
+import ElButton from 'element-ui/packages/button/index'
 import AWS from "aws-sdk"
 import { hostName } from "../config/envConfig"
 import { Message } from 'element-ui'
@@ -67,6 +68,7 @@ import { Message } from 'element-ui'
 export default {
     name: 'codeditor-page',
     components: {
+        ElButton,
     },
     props: {
         iframeUrl: {
@@ -259,11 +261,23 @@ export default {
             if (arr) return (arr[2])
             else return null
         },
-        saveCode() {
+        saveCode(event) {
+            let target = event.target;
+            if (target.nodeName == "SPAN") {
+                target = event.target.parentNode;
+            }
+            target.blur();
             const iframe = this.$refs.scriptCodeEditor
             iframe.contentWindow.postMessage({
                 getValue: { editorId: "codeEditor" }
             }, "*")
+        },
+        runCode(event){
+            let target = event.target;
+            if (target.nodeName == "SPAN") {
+                target = event.target.parentNode;
+            }
+            target.blur();
         }
     },
     beforeDestroy() {
@@ -281,9 +295,9 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: 40px;
+        height: 50px;
         padding: 0 20px;
-        border-bottom: 1px solid #979797;
+        border-bottom: 1px solid #ccc;
         .title_icon {
             height: 30px;
             width: 30px;
@@ -299,9 +313,10 @@ export default {
             display: flex;
             flex-direction: row-reverse;
             .button {
-                width: 87px;
-                height: 26px;
-                border: 1px solid #57565F;
+                width: 70px;
+                height: 40px;
+                line-height: 8px;
+                border: 1px solid #DCDFE6;
                 border-radius: 2px;
                 background: #fff;
                 cursor: pointer;
