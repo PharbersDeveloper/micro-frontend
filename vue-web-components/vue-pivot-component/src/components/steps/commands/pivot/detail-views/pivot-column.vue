@@ -90,7 +90,7 @@ export default {
     .pivot-column-content {
         display: flex;
         flex-direction: column;
-        height: calc(50vh - 320px);
+        height: calc(50vh - 312px);
         overflow: auto;
         flex-grow: 1;
     }
@@ -100,7 +100,7 @@ export default {
 		align-items: center;
 		font-size: 14px;
 		color: #666;
-		margin-top: 20px;
+		margin-top: 12px;
     }
 
     .pivot-column-lst {
