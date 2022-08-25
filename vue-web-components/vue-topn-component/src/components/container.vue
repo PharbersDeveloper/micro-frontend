@@ -623,6 +623,7 @@ export default {
             position: absolute;
             top: 0;
             left: 0;
+            z-index: 9999;
         }
 
         /* 	使用transform: translateZ(0)加快动画和过渡的速度
