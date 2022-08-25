@@ -27,72 +27,6 @@ export default {
             return "height: " + viewHeight
         }
     },
-    props: {
-        funcObj: {
-            type: Object,
-            default: function() {
-                return {
-                    initEditor: (event)=> {
-                        if (event.data.codeEditorParameters) {
-                            const {
-                                editorId,
-                                // value,
-                                viewHeight,
-                                language,
-                                maxLines,
-                                theme
-                            } = event.data.codeEditorParameters
-
-                            this.viewHeight = viewHeight
-                            this.editorId = editorId
-                            console.debug(`register editorId: ${editorId}`)
-
-                            this.editorInstance = new PhCodeEditorHandler(
-                                this.$refs.ace,
-                                theme,
-                                language,
-                                maxLines
-                            )
-
-                            this.editorInstance.setEditorOptions({
-                                // value: value,
-                                fontSize: 14,
-                                tabSize: 4,
-                                readOnly: false,
-                                selectionStyle: "text",
-                                enableBasicAutocompletion: true,
-                                enableSnippets: true,
-                                enableLiveAutocompletion: true,
-                                wrap: true,
-                                autoScrollEditorIntoView: true,
-                                setShowPrintMargin: false
-                            })
-
-                            window.parent.postMessage({
-                                editorStaus: "complete"
-                            }, '*')
-                        }
-                    },
-                    returnContent: ()=> {
-                        if (event.data.getValue) {
-                            const value = this.editorInstance.outContent()
-                            window.parent.postMessage({
-                                editorId: this.editorId,
-                                content: value
-                            }, '*')
-                        }
-                    },
-                    setValue: ()=> {
-                        if (this.editorInstance && event.data.codeValue) {
-                            this.editorInstance.setEditorOptions({
-                                value: event.data.codeValue
-                            })
-                        }
-                    }
-                }
-            }
-        }
-    },
     data() {
         return {
             editorInstance: null,
@@ -108,29 +42,22 @@ export default {
         this.registerEvent()
     },
     watch: {
-        // watch value干啥？我去掉了
-        // value(val) {
-        //     if (this.editorInstance.getValue() !== val) {
-        //         this.editorInstance.setValue(val)
-        //         this.editorInstance.clearSelection()
-        //     }
-        // }
     },
     methods: {
         registerEvent() {
             this.unRegisterEvent()
             // 注册初始化Editor事件
-            window.addEventListener("message", this.funcObj.initEditor);
+            window.addEventListener("message", this.initEditor);
             // 注册返回编辑器内容事件
-            window.addEventListener("message", this.funcObj.returnContent);
+            window.addEventListener("message", this.returnContent);
             // 注册设置编辑器内容事件
-            window.addEventListener("message", this.funcObj.setValue);
+            window.addEventListener("message", this.setValue);
             // window.addEventListener("message", this.destroy);
         },
         unRegisterEvent() {
-            window.removeEventListener("message", this.funcObj.initEditor, true);
-            window.removeEventListener("message", this.funcObj.returnContent, true);
-            window.removeEventListener("message", this.funcObj.setValue, true);
+            window.removeEventListener("message", this.initEditor);
+            window.removeEventListener("message", this.returnContent);
+            window.removeEventListener("message", this.setValue);
             // window.removeEventListener("message", this.destroy);
         },
         initEditor(event) {

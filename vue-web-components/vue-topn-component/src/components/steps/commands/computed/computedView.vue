@@ -40,7 +40,9 @@
 				@change="currentExprChange"
 				v-model="currentExpr"
 				placeholder="Please input" /> -->
-			<iframe ref="scriptCodeEditor" id="scriptCodeEditor" class="executions-iframe" :src="iframeUrl" frameborder="0" style="width: 100%; height: 100%;"></iframe>
+			<div class="iframe-area">
+				<iframe ref="scriptCodeEditor" id="scriptCodeEditor" class="executions-iframe" :src="iframeUrl" frameborder="0" style="width: 100%; height: 100%;"></iframe>
+			</div>
         </div>
 
         <div class="computed-add-button">
@@ -74,8 +76,8 @@ export default {
         },
 		iframeUrl: {
             type: String,
-            // default: "http://localhost:8081/phcodeditor/"
-            default: "https://codeditor.pharbers.com/phcodeditor"
+            default: "http://localhost:8081/phcodeditor/"
+            // default: "https://codeditor.pharbers.com/phcodeditor"
         },
     },
     components: {
@@ -88,9 +90,24 @@ export default {
             this.currentExpr = this.datasource.command.computedCols[0]["expr"]
         }
         this.validate()
-        this.initEditor()
+        this.$nextTick(() => {
+			// 将datasource注册到window中，iframe传递消息this指向为window
+			window["datasource"] = this.datasource
+			this.initEditor()
+			this.setEditorValue()
+        });
     },
     methods: {
+		registerEvent() {
+			this.unRegisterEvent()
+            // 注册获取Editor内容事件
+            window.addEventListener("message", this.datasource.getEditorContentEvent);
+            window.addEventListener("message", this.datasource.iframeComplete);
+        },
+        unRegisterEvent() {
+            window.removeEventListener("message", this.datasource.getEditorContentEvent);
+            window.removeEventListener("message", this.datasource.iframeComplete);
+        },
 		initEditor() {
             // const iframe = document.getElementById("scriptCodeEditor")
             const iframe = this.$refs.scriptCodeEditor
@@ -99,14 +116,22 @@ export default {
                     codeEditorParameters: {
                         editorId: "codeEditor",
                         // value: this.codeBuffer,
-                        viewHeight: "calc(100vh - 180px)",
-                        language: "python",
-                        maxLines: 5000,
+                        viewHeight: "calc(100vh - 8px)",
+                        language: "sql",
+                        maxLines: 100,
                         theme: "github"
                     }
                 }, "*")
             }
             this.registerEvent()
+        },
+		setEditorValue() {
+            // const iframe = document.getElementById("scriptCodeEditor")
+            const iframe = this.$refs.scriptCodeEditor
+            iframe.contentWindow.postMessage({
+                codeValue: this.currentExpr
+            }, "*")
+
         },
         addComputedColumns() {
             this.datasource.command.insertComputedCol()
@@ -122,6 +147,7 @@ export default {
         itemClicked(v) {
             this.currentExpr += "`" + v + "`"
             this.datasource.command.computedCols[this.currentIdx]["expr"] = this.currentExpr
+			this.setEditorValue()
         },
 		currentExprChange(n) {
             this.datasource.command.computedCols[this.currentIdx]["expr"] = n
@@ -250,6 +276,12 @@ export default {
                     cursor: pointer;
                 }
             }
+
+			.iframe-area {
+				padding-top: 10px;
+				padding-left: 10px;
+				height: 500px;
+			}
 
             .computed-expression-expr {
                 margin: 30px 0 0 20px;
