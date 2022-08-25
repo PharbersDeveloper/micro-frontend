@@ -108,7 +108,6 @@ export default {
             window.removeEventListener("message", this.datasource.iframeComplete);
         },
         initEditor() {
-            // const iframe = document.getElementById("scriptCodeEditor")
             const iframe = this.$refs.scriptCodeEditor
             iframe.onload = function () {
                 iframe.contentWindow.postMessage({
@@ -126,12 +125,10 @@ export default {
         },
         setEditorValue() {
             const that = this
-            // const iframe = document.getElementById("scriptCodeEditor")
             const iframe = this.$refs.scriptCodeEditor
             iframe.contentWindow.postMessage({
                 codeValue: that.currentExpr
             }, "*")
-
         },
         addComputedColumns() {
             this.datasource.command.insertComputedCol()
