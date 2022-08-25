@@ -110,12 +110,13 @@ export default {
         box-sizing: border-box;
     }
     .pivot-container {
-        margin-top: 4px;
+        // margin-top: 4px;
         padding: 4px;
         display: flex;
         flex-direction: column;
         height: fit-content;
         padding: 20px;
+        padding-top: 0px;
 		width: 100%;
 
         .pivot-title {
@@ -148,29 +149,30 @@ export default {
         .pivot-example-c {
             flex: 0 0 50%;
 			flex-grow: 1;
-            height: calc( 50vh - 100px);
+            height: calc( 50vh - 130px);
             // background-color: red;
             margin: 10px;
 			padding: 10px;
-			height: 400px;
+			// height: 400px;
 			max-width: 500px;
 			border: 1px solid #ccc;
+            overflow-y: auto;
         }
 
         .pivot-pivot-c {
             flex: 0 0 50%;
 			flex-grow: 1;
-            height: calc( 50vh - 100px);
+            height: calc( 50vh - 130px);
             background-color: #fff;
             margin: 10px;
 			padding: 10px;
 			border: 1px solid #ccc;
-			height: 400px;
+			// height: 400px;
         }
 
         .pivot-column-c {
 			flex: 0 0 50%;
-			height: calc(50vh - 100px);
+			height: calc(50vh - 130px);
 			background-color: #fff;
 			margin: 10px;
 			padding: 10px;
@@ -180,7 +182,7 @@ export default {
 
         .pivot-aggregation-c {
 			flex: 0 0 50%;
-			height: calc(50vh - 100px);
+			height: calc(50vh - 130px);
 			background-color: #fff;
 			margin: 10px;
 			padding: 10px;

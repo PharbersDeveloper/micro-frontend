@@ -19,15 +19,23 @@ export default class PhScenarioTriggerPolicy {
 
 	dealTriggerDisplay(triggerArray) {
 		let arr = []
-		triggerArray.forEach(trigger => {
+		triggerArray.forEach(trigger => { 
 			let detail = {}
-			detail = {
-                "timezone": trigger.timezone,
-                "cron": trigger.cron,
-                "start": trigger.start,
-                "period": trigger.period,
-                "value": trigger.value
+            if(trigger.mode == 'timer'){
+                detail = {
+                    "timezone": trigger.timezone,
+                    "cron": trigger.cron,
+                    "start": trigger.start,
+                    "period": trigger.period,
+                    "value": trigger.value
+                }
+            }else{
+                detail = {
+                    "projectId": this.projectId,
+                    "dsNames": trigger.dsNames
+                }
             }
+			
 			arr.push({
 				scenarioId: trigger.scenarioId,
 				id: trigger.id,

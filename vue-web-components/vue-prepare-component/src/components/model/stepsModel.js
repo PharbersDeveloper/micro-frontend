@@ -121,7 +121,6 @@ export default class PhStepsDyModel {
 					that.parent.sampleVisible = response.error.indexOf("exist") > 0
                     console.log(response)
                     // eslint-disable-next-line no-debugger
-                    // debugger
                 }
             })
     }

@@ -5,7 +5,7 @@
             "files": [],
             "destinations": [
 				{
-					"bucket": "general.pharbers.com",
+					"bucket": "replaceBucket",
 					"key": ""
 				}
 			],
@@ -17,7 +17,7 @@
             "files": [],
             "destinations": [
 				{
-					"bucket": "general.pharbers.com",
+					"bucket": "replaceBucket",
 					"key": ""
 				}
 			],

@@ -207,6 +207,8 @@ export default {
     }
     .pivot-example {
         /*margin-top: 4px;*/
+        height: 100%;
+        overflow-y: auto;
     }
     
     .pivot-example-content {
