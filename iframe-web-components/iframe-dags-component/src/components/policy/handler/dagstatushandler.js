@@ -40,11 +40,14 @@ export default class PhDagHandler {
                 if (jobShowName === it.attributes.name) {
                     if(status === "success") {
                         it.status = "succeed"
+                        that.isRunning = false
                     } else if(status === "failed") {
                         it.status = "failed"
                         represent_id = it.representId
+                        that.isRunning = false
                     } else if(status === "running") {
                         it.status = "running"
+                        that.isRunning = true
                     }
                 }
                 _this.refreshNodeStatus(it)
