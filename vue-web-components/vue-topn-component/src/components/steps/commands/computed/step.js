@@ -31,10 +31,9 @@ export default class PhComputedStep {
 	}
 
 	async getEditorContentEvent(event) {
-		if (event.data.editorId === "codeEditor") {
-			debugger
-			const codeEditorContent = event.data.content
-			this.queryEditorContent(codeEditorContent)
+		if (event.data.editorId === "topnEditor") {
+			// const codeEditorContent = event.data.content
+			// this.queryEditorContent(codeEditorContent)
 			this.downloadCode++
 		}
 
