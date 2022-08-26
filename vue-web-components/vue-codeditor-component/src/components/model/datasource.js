@@ -5,7 +5,7 @@ import { Message } from 'element-ui'
 export default class PhCodeditorDatasource {
     constructor(id, projectId, jobId, parent) {
         this.id = id
-        this.debugToken = 'ef562efd648f5474246ed66a7f1094508ec3cc5fae355e2f7c090355daf62bec'
+        this.debugToken = '2cf3f6db81e7c979805383f76a04cde61d6e41db2f35903c513f651e271392fa'
 
         this.adapter = this.defaultAdapter
         this.projectId = projectId
@@ -82,11 +82,11 @@ export default class PhCodeditorDatasource {
 
 	async saveEditorContent(codeEditorContent) {
 		let url = `${hostName}/phupdatejobcode`
-		const accessToken = this.datasource.parent.getCookie("access_token") || this.datasource.debugToken
+		const accessToken = this.parent.getCookie("access_token") || this.debugToken
 		let body = {
 			"bucket": "ph-platform",
-			"key": this.datasource.codeKey,
-			"file_name": this.datasource.file_name,
+			"key": this.codeKey,
+			"file_name": this.file_name,
 			"data": encodeURI(codeEditorContent),
 			"timespan": new Date().getTime()
 		}
@@ -120,7 +120,7 @@ export default class PhCodeditorDatasource {
 	async getEditorContentEvent(event) {
 		if (event.data.editorId === "codeEditor") {
 			const codeEditorContent = event.data.content
-			await this.saveEditorContent(codeEditorContent)
+			await this.datasource.saveEditorContent(codeEditorContent)
 			this.downloadCode++
 		}
 

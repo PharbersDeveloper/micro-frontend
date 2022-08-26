@@ -175,7 +175,7 @@ export default {
                 "join": "Join",
                 "stack": "Stack",
                 "group": "Group",
-				"pivot": "Pivot"
+                "pivot": "Pivot"
             },
             singleInputRuntime: ["group", "sync", "topn", "sort", "distinct", "prepare"]
         }

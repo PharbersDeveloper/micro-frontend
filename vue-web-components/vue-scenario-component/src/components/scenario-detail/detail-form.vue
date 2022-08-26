@@ -3,7 +3,7 @@
         <h2>运行</h2>
         <el-form :model="scenario"  :label-position="labelPosition">
             <el-form-item label="自动触发" prop="delivery">
-                <el-switch v-model="scenario.active" class="switch" @change="ActiveChange(scenario)"></el-switch>
+                <el-switch v-model="scenario.active" class="switch"></el-switch>
             </el-form-item>
             <el-form-item label="运行用户名" class="user">
                 <el-input disabled v-model="scenario['show-name']"></el-input>
@@ -59,16 +59,6 @@ export default {
             let paramArr = href.split("?")[1].split("&")
             let data = paramArr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
-        },
-        ActiveChange(scenario) {
-                scenario["scenarioName"] = scenario["scenario-name"]
-                scenario["traceId"] = scenario["trace-id"]
-               const param = {
-                    projectId: this.projectId,
-                    projectName: this.projectName,
-                    scenario: scenario
-                }
-            this.$emit('activeChange', param)
         },
         saveScenario() {
             const result = this.policy.createOrUpdateScenarioIndex(this.scenario)

@@ -29,9 +29,9 @@
                     <div :class="isDsEmpty() ? 'scenario-step-ds-item stepEmpty' : 'scenario-step-ds-item'"
                         style="width:100%;">
                         <span><b>{{ selectStep.ds }}</b></span>
-                        <span class="dsEmpty" v-show="isDsEmpty()">数据集不能为空！</span>
                         <el-button class="el-icon-delete-solid border-none" @click="deleteStepDatasetName" />
                     </div>
+                    <span class="dsEmpty" v-show="isDsEmpty()">数据集不能为空！</span>
                 </el-form-item>
                 <el-form-item label="">
                     <el-button class="add-ds" type="primary" @click="dialogVisible = true">选择目标数据集</el-button>
@@ -442,14 +442,6 @@ export default {
                 }
             }
 
-            .dsEmpty {
-                font-size: 12px;
-                color: red;
-                position: relative;
-                bottom: -29px;
-                left: -351px;
-            }
-
             .el-icon-delete-solid {
                 margin-right: 10px;
                 width: 24px;
@@ -458,6 +450,14 @@ export default {
                 top: 8px;
                 right: 0;
             }
+        }
+
+        .dsEmpty {
+            font-size: 12px;
+            color: red;
+            position: relative;
+            bottom: -29px;
+            left: 0px;
         }
 
         .confEmpty {
