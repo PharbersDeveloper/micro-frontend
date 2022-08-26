@@ -8,9 +8,9 @@
                 <span class="name">compute_{{datasource.outputs}}</span>
             </div>
             <div class="coding-title">
-                <el-button class="button btn-fir" @click="runCode">运行</el-button>
                 <!-- <button class="button btn-fir">操作</button> -->
                 <el-button class="button" @click="saveCode">保存</el-button>
+                <el-button class="button btn-fir">运行</el-button>
             </div>
         </div>
         <div class="codeditor-container">
@@ -261,23 +261,16 @@ export default {
             if (arr) return (arr[2])
             else return null
         },
-        saveCode(event) {
-            let target = event.target;
-            if (target.nodeName == "SPAN") {
-                target = event.target.parentNode;
-            }
-            target.blur();
+        saveCode() {
+            // let target = event.target;
+            // if (target.nodeName == "SPAN") {
+            //     target = event.target.parentNode;
+            // }
+            // target.blur();
             const iframe = this.$refs.scriptCodeEditor
             iframe.contentWindow.postMessage({
                 getValue: { editorId: "codeEditor" }
             }, "*")
-        },
-        runCode(event){
-            let target = event.target;
-            if (target.nodeName == "SPAN") {
-                target = event.target.parentNode;
-            }
-            target.blur();
         }
     },
     beforeDestroy() {
@@ -311,7 +304,6 @@ export default {
         }
         .coding-title {
             display: flex;
-            flex-direction: row-reverse;
             .button {
                 width: 70px;
                 height: 40px;
