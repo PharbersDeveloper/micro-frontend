@@ -41,7 +41,7 @@ module.exports = function (environment) {
 			/* 发布 */
 			// clientId: "replaceClientId",
 			// clientName: "replaceClientName",
-			auth: true, //需要登录（目前只有官网不需要登录）
+			auth: false, //需要登录（目前只有官网不需要登录）
 			typeArray: ["activity", "cooperation", "event", "image", "page", "participant", "report", "zone", "layout", "article"],
 			clientSecret:
 				"961ed4ad842147a5c9a1cbc633693438e1f4a8ebb71050d9d9f7c43dbadf9b72",
