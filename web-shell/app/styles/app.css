@@ -155,14 +155,14 @@ body {
 }
 
 /* general iframe */
-.mainIframe {
+/* .mainIframe {
     width: 100vw;
     height: calc(100vh - 50px);
-}
+} */
 
 /* offweb iframe */
-/* .mainIframe {
+.mainIframe {
     width: 100vw;
 	height: calc( 100vh - 80px );
 	margin-top: 80px;
-} */
+}

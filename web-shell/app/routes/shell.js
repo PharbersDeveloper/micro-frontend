@@ -36,9 +36,9 @@ export default class ShellRoute extends Route {
 	}
 
 	async model(params) {
-		if (Object.keys(params).length === 0) {
-			params["path"] = "home"
-		}
+		// if (Object.keys(params).length === 0) {
+		// 	params["path"] = "home"
+		// }
 
 		/**
 		 * 1. 第一步，需要从读取JS模版
@@ -64,6 +64,7 @@ export default class ShellRoute extends Route {
 		
 
 		if (curPage === "") {
+			debugger
 			 if (this.clientName === "platform") {
 				 this.transitionTo("shell", "overview")
 			 } else if (this.clientName === "offweb") {
@@ -84,16 +85,16 @@ export default class ShellRoute extends Route {
 			curPage
 		)
 
-		let tmp = {}
-		if (data) {
-			tmp = this.deepCopy(data)
-		}
+		// let tmp = {}
+		// if (data) {
+		// 	tmp = this.deepCopy(data)
+		// }
 
 		// console.log(tmp)
 		return RSVP.hash({
 			page: curPage,
-			data: tmp,
-			// data: data,
+			// data: tmp,
+			data: data,
 			_isVue: true
 		})
 	}
