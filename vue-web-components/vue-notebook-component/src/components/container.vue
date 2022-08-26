@@ -469,7 +469,7 @@ export default {
                 Message.error("抱歉,您没有权限操作当前Jupyter!", { duration: 0, showClose: true })
                 return
             } else if (notebook.status !== 2) {
-                Message.error("请先启动资源!", { duration: 0, showClose: true })
+                Message.error("请先启动编译器资源!", { duration: 0, showClose: true })
                 return
             }
 
@@ -566,7 +566,7 @@ export default {
                 return
             }
             if (this.isStopStatus !== true) {
-                Message.error("请先启动/关闭编辑器资源!", { duration: 0, showClose: true })
+                Message.error("请先关闭编辑器资源!", { duration: 0, showClose: true })
                 return
             }
             // this.deletedialogshow = true;
