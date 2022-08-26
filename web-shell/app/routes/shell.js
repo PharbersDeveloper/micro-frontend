@@ -85,16 +85,16 @@ export default class ShellRoute extends Route {
 			curPage
 		)
 
-		// let tmp = {}
-		// if (data) {
-		// 	tmp = this.deepCopy(data)
-		// }
+		let tmp = {}
+		if (data) {
+			tmp = this.deepCopy(data)
+		}
 
 		// console.log(tmp)
 		return RSVP.hash({
 			page: curPage,
-			// data: tmp,
-			data: data,
+			data: tmp,
+			// data: data,
 			_isVue: true
 		})
 	}
