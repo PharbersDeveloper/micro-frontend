@@ -185,18 +185,20 @@
         <create-scenario-dlg :dialog-visible="showCreateScenarioDialog" :project-name="projectName"
             :index="nextIndexValue" owner="alfred" @cancelCreateScenario="showCreateScenarioDialog = false"
             @createScenario="createNewScenario" />
-        <el-dialog title="数据样本配置" :visible.sync="deleteScenarioDialog" width="800px">
-            <div>确定删除以下scenario吗？</div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="deleteScenarioDialog = false">取消</el-button>
-                <el-button type="primary" @click="on_clickDeleteScenarioDialog">确认</el-button>
-            </span>
-        </el-dialog>
+            <!-- 删除scenario -->
+        <clear-delete
+            v-if="deleteScenarioDialog"
+            :scenarioCheckedIds="scenarioCheckedIds"
+            :scenarioCheckedNames="scenarioCheckedNames"
+            @deleteScenarioEvent="on_clickDeleteScenarioDialog"
+            @closeDeleteScenario="deleteScenarioDialog = false">
+        </clear-delete>
     </div>
 
 </template>
 
 <script>
+import clearDelete from './delete-dialog-scenario.vue'
 import createTagsDialog from './create-tags-dialog.vue'
 import deleteTagsDialog from './delete-tags-dialog.vue'
 import bpSelectVue from '../../../node_modules/vue-components/src/components/bp-select-vue.vue'
@@ -205,8 +207,8 @@ import { staticFilePath } from '../../config/envConfig'
 import ElSwitch from "element-ui/packages/switch/index"
 import CreateScenarioDlg from "./create-scenario-dlg"
 import PhDagDefinitions from "../policy/definitions/definitions";
-import ElDialog from 'element-ui/packages/dialog/src/component'
-import ElButton from 'element-ui/packages/button/index'
+// import ElDialog from 'element-ui/packages/dialog/src/component'
+// import ElButton from 'element-ui/packages/button/index'
 import PhDataSource from '../model/datasource'
 import { Message } from 'element-ui'
 
@@ -284,14 +286,15 @@ export default {
         }
     },
     components: {
+        clearDelete,
         createTagsDialog,
         deleteTagsDialog,
         bpSelectVue,
         bpOptionVue,
         ElSwitch,
         CreateScenarioDlg,
-        ElButton,
-        ElDialog
+        // ElButton,
+        // ElDialog
     },
     computed: {
         nextIndexValue() {
