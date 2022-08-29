@@ -255,7 +255,9 @@ export default {
                     result["edited"] = false
                     result["deleted"] = false
                 }else if(x.mode == 'dataset'){
-                    result["dsNames"] = tmp["dsNames"]
+                    result["dsNames"] = tmp["dsNames"].map(it => {
+						return { "name": it }
+					})
                     result["mode"] = x["mode"]
                     result["name"] = x["name"]
                     result["active"] = x["active"]
@@ -327,6 +329,7 @@ export default {
                             type: type
                         }
                     }
+					console.log(event)
                     this.$emit('event', event)
                     return result
                 } else {
@@ -369,6 +372,6 @@ export default {
         overflow: auto;
         flex-grow: 1;
         background-color: #f2f2f2;
-        // padding-top: 60px;
+        padding-top: 10px;
     }
 </style>
