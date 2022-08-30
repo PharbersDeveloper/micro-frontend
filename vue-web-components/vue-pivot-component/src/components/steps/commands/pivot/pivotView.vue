@@ -1,5 +1,5 @@
 <template>
-    <div class="pivot-container">
+    <div class="pivot-container1">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="pivot-title">
             <div class="pivot-title-p">
@@ -103,7 +103,7 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .pivot-container {
+    .pivot-container1 {
         // margin-top: 4px;
         padding: 4px;
         display: flex;
