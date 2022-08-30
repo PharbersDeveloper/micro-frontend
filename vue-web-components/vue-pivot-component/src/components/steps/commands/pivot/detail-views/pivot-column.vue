@@ -1,5 +1,5 @@
 <template>
-    <div class="pivot-column">
+    <div class="pivot-column1">
         <div class="pivot-column-title">
             <h3>列定义</h3>
         </div>
@@ -13,8 +13,8 @@
                 <span class="error-msg" v-show="kc.length === 0">需要添加至少一个列定义!</span>
             </div>
         </div>
-        <div>
-            <select class="sel" v-model="selectValue" @change="selectAddKeyColumn">
+        <div style="height:87px;">
+            <select class="sel" v-model="selectValue" @change="selectAddKeyColumn" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                 <option label="选择添加" value="选择添加"></option>
                 <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
             </select>
@@ -81,7 +81,7 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .pivot-column {
+    .pivot-column1 {
         /*margin-top: 4px;*/
         display: flex;
         flex-direction: column;
@@ -90,7 +90,7 @@ export default {
     .pivot-column-content {
         display: flex;
         flex-direction: column;
-        height: calc(50vh - 312px);
+        height: calc(50vh - 340px);
         overflow: auto;
         flex-grow: 1;
     }
@@ -100,7 +100,7 @@ export default {
 		align-items: center;
 		font-size: 14px;
 		color: #666;
-		margin-top: 12px;
+		margin-top: -10px;
     }
 
     .pivot-column-lst {
@@ -132,7 +132,7 @@ export default {
 
 	.sel {
 		width: 220px;
-		height: 26px;
+		min-height: 26px;
 		border: 1px solid #ccc;
 		color: #666;
 		margin-right: 2px;

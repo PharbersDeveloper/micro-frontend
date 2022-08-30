@@ -39,13 +39,13 @@
                 <div>
                     <div class="add-ds-content">
                         <span>dataset</span>
-                        <select v-model="newDsName">
+                        <select v-model="newDsName" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                             <option v-for="(op, opi) in datasetArray" :key="opi+'addds'" :value="op.name" :label="op.name" />
                         </select>
                     </div>
                     <div class="add-ds-content" v-show="datasource.datasets.length === 0">
                         <span>dataset</span>
-                        <select v-model="newDsNameSecond">
+                        <select v-model="newDsNameSecond" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                             <option v-for="(op, opi) in datasetArray" :key="opi+'addds'" :value="op.name" :label="op.name" />
                         </select>
                     </div>
@@ -287,8 +287,15 @@ export default {
 
         .add-ds-content {
             margin-bottom: 40px;
+            position: relative;
             span {
                 margin-right: 40px;
+            }
+            select {
+                position: absolute;
+                top: 0;
+                left: 83px;
+                min-height: 26px;
             }
         }
         .dialog-footer {
