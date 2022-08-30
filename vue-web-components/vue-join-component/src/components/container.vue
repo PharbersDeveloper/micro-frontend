@@ -217,6 +217,7 @@ export default {
             savePopup: false,
             transition: 0,
             loading: false,
+			computedColumns: []
         }
     },
     props: {
@@ -241,7 +242,7 @@ export default {
     },
     methods: {
 		linkToVideos() {
-			window.open("https://www.bilibili.com/video/BV1gG411p729?share_source=copy_web&vd_source=f9fa90b0e7f405eadac872bd04ff335f")
+			window.open("https://www.bilibili.com/video/BV1gG411p729")
 		},
 		changeScriptParams(data) {
             this.datasource.saveScriptParams(data, this)
@@ -394,6 +395,9 @@ export default {
                 this.stepsDefs[6].status = "error"
             }
         },
+		computeColumns() {
+
+		},
         computeSchema() {
             const result = []
             const selectCols = this.$refs.select.datasource.revert2Defs()
@@ -543,6 +547,10 @@ export default {
             this.$refs.postcomputed.validate()
             this.$refs.postfilter.validate()
             this.$refs.outputs.validate()
+
+			if (n === 3) {
+				this.computedColumns = this.computeColumns()
+			}
 
             if (n === 5) {
                 this.computedSchema = this.computeSchema()
