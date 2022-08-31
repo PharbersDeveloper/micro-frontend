@@ -36,17 +36,17 @@
                             </div>
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
-                                <div class="list" @mouseenter="showVisual" @mouseleave="hide" >
+                                <div class="list" ref="classVisual" @mouseenter="showVisual" @mouseleave="hide" >
                                     <img :src="defs.iconsByName('visual')" alt="">
                                     <p class="">Visual</p>
                                     <img :src="defs.iconsByName('path')" class="path" ref="pathVisual" alt="">
                                 </div>
-                                <div class="list" @mouseenter="showCode" @mouseleave="hide">
+                                <div class="list" ref="classCode" @mouseenter="showCode" @mouseleave="hide">
                                     <img :src="defs.iconsByName('code')" alt="">
                                     <p class="">Code</p>
                                     <img :src="defs.iconsByName('path')" class="path" ref="pathCode" alt="">
                                 </div>
-                                <div class="list" @mouseenter="showSpark" @mouseleave="hide">
+                                <div class="list" ref="classSpark" @mouseenter="showSpark" @mouseleave="hide">
                                     <img :src="defs.iconsByName('spark')" alt="">
                                     <p class="">Hadoop&Spark</p>
                                     <img :src="defs.iconsByName('path')" class="path" ref="pathSpark" alt="">
@@ -66,7 +66,7 @@
                                     v-show="showVisualAll"
                                     v-for="script in scriptList.slice(0,9)"
                                     :key="script.name+'script'"
-                                    @mouseenter="showVisual"
+                                    @mouseenter="showVisualList"
                                     @mouseleave="hide"
                                     @click="selectScripts(script.scriptName)">
                                     <img :src="defs.iconsByName(script.iconName)" alt="">
@@ -79,7 +79,7 @@
                                     v-show="showCodeAll"
                                     v-for="script in scriptList.slice(9,11)"
                                     :key="script.name+'script'"
-                                    @mouseenter="showCode"
+                                    @mouseenter="showCodeList"
                                     @mouseleave="hide"
                                     @click="selectScripts(script.scriptName)">
                                     <img :src="defs.iconsByName(script.iconName)" alt="">
@@ -92,7 +92,7 @@
                                     v-show="showSparkAll"
                                     v-for="script in scriptList.slice(11,13)"
                                     :key="script.name+'script'"
-                                    @mouseenter="showSpark"
+                                    @mouseenter="showSparkList"
                                     @mouseleave="hide"
                                     @click="selectScripts(script.scriptName)">
                                     <img :src="defs.iconsByName(script.iconName)" alt="">
@@ -774,6 +774,10 @@ export default {
             this.$refs.pathCode.src = this.defs.iconsByName('path')
             this.$refs.pathSpark.src = this.defs.iconsByName('path')
         },
+        showVisualList(e){
+            this.$refs.classVisual.className = 'list active'
+            this.showVisual(e)
+        },
         hide(e){
             this.showVisualAll = false
             this.showCodeAll = false
@@ -790,6 +794,10 @@ export default {
             this.$refs.pathVisual.src = this.defs.iconsByName('path')
             this.$refs.pathSpark.src = this.defs.iconsByName('path')
         },
+        showCodeList(e){
+            this.$refs.classCode.className = 'list active'
+            this.showCode(e)
+        },
         // 显示spark详情
         showSpark(e){
             this.showSparkAll = true
@@ -797,6 +805,10 @@ export default {
             this.$refs.pathSpark.src = this.defs.iconsByName('pathHide')
             this.$refs.pathVisual.src = this.defs.iconsByName('path')
             this.$refs.pathCode.src = this.defs.iconsByName('path')
+        },
+        showSparkList(e){
+            this.$refs.classSpark.className = 'list active'
+            this.showSpark(e)
         },
         selectScriptIcon(runtime) {
             switch (runtime) {
