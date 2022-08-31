@@ -55,8 +55,7 @@
                 <select-cols v-show="active === 4"
                     ref="select"
                     :step="datasource.step"
-                    :schema="datasource.schema"
-					:datasetArray="datasetArray"
+                    :schema="computedColumns"
                     @statusChange="selectStatus" />
                 <post-computed v-show="active === 5"
                     ref="postcomputed"
@@ -396,7 +395,23 @@ export default {
             }
         },
 		computeColumns() {
-
+			const result = JSON.parse(JSON.stringify(this.datasource.schema))
+			const preJoinColumns = this.$refs.percomputed.datasource.commands
+			const keys = Object.keys(result)
+			keys.forEach(item => {
+				const preJoinCol = preJoinColumns.filter(it => it.meta.name === item)
+				if (preJoinCol.length > 0) {
+					const preJoinSchema = preJoinCol[0].detail.computedCols.map(col => {
+						return {
+							des: col.name,
+							src: col.name,
+							type: col.type
+						}
+					})
+					result[item] = result[item].concat(preJoinSchema)
+				}
+			})
+			return result
 		},
         computeSchema() {
             const result = []
@@ -548,7 +563,7 @@ export default {
             this.$refs.postfilter.validate()
             this.$refs.outputs.validate()
 
-			if (n === 3) {
+			if (n === 4) {
 				this.computedColumns = this.computeColumns()
 			}
 

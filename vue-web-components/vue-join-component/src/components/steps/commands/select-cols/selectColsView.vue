@@ -9,8 +9,12 @@
             </div>
         </div>
         <div class="retrieved-lst" v-if="datasource">
-            <selected-card v-for="(item, index) in datasource.commands" :key="index"
-				:index="index" :command="item" :schema="schema[item.ds]" />
+            <selected-card 
+				v-for="(item, index) in datasource.commands" 
+				:key="index"
+				:index="index" 
+				:command="item" 
+				:schema="schema[item.ds]" />
         </div>
     </div>
 </template>
