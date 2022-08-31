@@ -1,5 +1,5 @@
 <template>
-    <div class="pivot-example">
+    <div class="pivot-example1">
         <div class="pivot-example-content" >
             <div class="pivot-example-sample">
                 <el-table
@@ -205,7 +205,7 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .pivot-example {
+    .pivot-example1 {
         /*margin-top: 4px;*/
         height: 100%;
         overflow-y: auto;

@@ -348,6 +348,7 @@ export default {
             let errors = this.stepsDefs.filter(it => it.status === "error")
             if(errors.length > 0) {
                 Message.error("请修改参数！", { duration: 3000} )
+				this.loading = false
                 return false
             }
 

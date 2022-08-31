@@ -6,7 +6,7 @@
                 @save="saveAll" @trigger="trigger"></scenario-nav>
             <div class="scenario-container" v-if="activeName === 'Setting'">
                 <!-- <div class="scenario-container" v-if="activeName === ''">  -->
-                <detail-form :scenario="datasource.scenario" @activeChange="scenarioActiveChange"></detail-form>
+                <detail-form :scenario="datasource.scenario"></detail-form>
                 <trigger-lst :triggers="triggerDisplay" :datasetsAll="datasetsAllDisplay"
                     @isTriggerTrue="getTriggerTrue" :scenario-id="datasource.scenario.id" />
                 <report-lst :reports="reportDisplay" @isTrue="getTrue" :scenario-id="datasource.scenario.id" />
@@ -123,19 +123,6 @@ export default {
         }
     },
     methods: {
-        scenarioActiveChange(value){
-            const event = new Event("event")
-            event.args = {
-                callback: "resetScenario",
-                element: this,
-                param: {
-                    projectId: value.projectId,
-                    projectName: value.projectName,
-                    scenario: value.scenario,
-                }
-            }
-            this.$emit('event', event)
-        },
         getTriggerTrue(value){
             if (value.length == 0) {
                 this.isTriggerTrue = true
@@ -268,7 +255,9 @@ export default {
                     result["edited"] = false
                     result["deleted"] = false
                 }else if(x.mode == 'dataset'){
-                    result["dsNames"] = tmp["dsNames"]
+                    result["dsNames"] = tmp["dsNames"].map(it => {
+						return { "name": it }
+					})
                     result["mode"] = x["mode"]
                     result["name"] = x["name"]
                     result["active"] = x["active"]
@@ -333,12 +322,14 @@ export default {
                             projectId: this.allData.projectId,
                             scenarioName: this.datasource.scenarioName,
                             scenarioId: this.datasource.scenarioId,
+                            active: this.datasource.scenario.active,
                             triggerDisplay: triggerDisplay,
                             stepDisplay: stepDisplay,
                             reportDisplay: reportDisplay,
                             type: type
                         }
                     }
+					console.log(event)
                     this.$emit('event', event)
                     return result
                 } else {
@@ -381,6 +372,6 @@ export default {
         overflow: auto;
         flex-grow: 1;
         background-color: #f2f2f2;
-        // padding-top: 60px;
+        padding-top: 10px;
     }
 </style>

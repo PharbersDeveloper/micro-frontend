@@ -1,5 +1,5 @@
 <template>
-    <div class="pivot-agg">
+    <div class="pivot-agg1">
         <div class="pivot-agg-title" >
             <h3>聚合</h3>
         </div>
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div>
-            <select class="sel" v-model="selectValue" @change="selectInsertValueColumn">
+            <select class="sel" v-model="selectValue" @change="selectInsertValueColumn" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                 <option label="选择添加" value="选择添加" ></option>
                 <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
             </select>
@@ -172,7 +172,7 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .pivot-agg {
+    .pivot-agg1 {
         /*margin-top: 4px;*/
         display: flex;
         flex-direction: column;
@@ -181,7 +181,7 @@ export default {
     .pivot-agg-content {
         display: flex;
         flex-direction: column;
-        height: calc(50vh - 312px);
+        height: calc(50vh - 352px);
         overflow: auto;
         flex-grow: 1;
 		margin-top: 20px;
@@ -194,7 +194,7 @@ export default {
 
 	.sel {
 		width: 220px;
-		height: 26px;
+		min-height: 26px;
 		border: 1px solid #ccc;
 		color: #666;
 		margin-right: 2px;

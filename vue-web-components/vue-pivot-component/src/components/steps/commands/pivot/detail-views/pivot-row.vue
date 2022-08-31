@@ -1,5 +1,5 @@
 <template>
-    <div class="pivot-row">
+    <div class="pivot-row1">
         <div class="pivot-row-title" >
             <h3>行定义</h3>
         </div>
@@ -16,7 +16,7 @@
 			<span class="warning-msg" v-show="idf.length === 0">若无行定义，结果数据将为单行数据!</span>
         </div>
         <div>
-            <select class="sel" v-model="selectValue" @change="selectInsertIdfColumn">
+            <select class="sel" v-model="selectValue" @change="selectInsertIdfColumn" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                 <option label="选择添加" value="选择添加" ></option>
                 <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
             </select>
@@ -75,7 +75,7 @@ export default {
         line-height: 1.6;
         box-sizing: border-box;
     }
-    .pivot-row {
+    .pivot-row1 {
         /*margin-top: 4px;*/
         display: flex;
         flex-direction: column;
@@ -84,7 +84,7 @@ export default {
     .pivot-row-content {
         display: flex;
         flex-direction: column;
-        height: calc(50vh - 270px);
+        height: calc(50vh - 310px);
         overflow-y: auto;
         flex-grow: 1;
     }
@@ -128,7 +128,7 @@ export default {
 
 	.sel {
 		width: 220px;
-		height: 26px;
+		min-height: 26px;
 		border: 1px solid #ccc;
 		color: #666;
 		margin-right: 2px;

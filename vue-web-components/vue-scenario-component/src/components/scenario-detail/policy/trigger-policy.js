@@ -31,8 +31,7 @@ export default class PhScenarioTriggerPolicy {
                 }
             }else{
                 detail = {
-                    "projectId": this.projectId,
-                    "dsNames": trigger.dsNames
+                    "dsNames": trigger.dsNames.map(it => it.name)
                 }
             }
 			
