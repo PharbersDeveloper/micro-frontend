@@ -13,7 +13,7 @@
                 <span class="error-msg" v-show="kc.length === 0">需要添加至少一个列定义!</span>
             </div>
         </div>
-        <div style="height:87px;">
+        <div class="pivot-column-select">
             <select class="sel" v-model="selectValue" @change="selectAddKeyColumn" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                 <option label="选择添加" value="选择添加"></option>
                 <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
@@ -85,12 +85,20 @@ export default {
         /*margin-top: 4px;*/
         display: flex;
         flex-direction: column;
+        position: relative;
+    }
+    .pivot-column-select {
+        height: 87px;
+        position: absolute;
+        bottom: -99px;
+        left: 0;
+        z-index: 10;
     }
 
     .pivot-column-content {
         display: flex;
         flex-direction: column;
-        height: calc(50vh - 340px);
+        height: calc(50vh - 310px);
         overflow: auto;
         flex-grow: 1;
     }
@@ -100,7 +108,10 @@ export default {
 		align-items: center;
 		font-size: 14px;
 		color: #666;
-		margin-top: -10px;
+		// margin-top: -10px;
+        position: absolute;
+        left: 0;
+        bottom: -87px;
     }
 
     .pivot-column-lst {
