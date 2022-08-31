@@ -76,6 +76,8 @@ import JoinRelationCard from './detail-views/relation-card'
 import { PhJoinDefs } from "./defs"
 import PhJoinStep from "./step"
 import PhJoinCmd from "./cmd"
+import ElButton from 'element-ui/packages/button/index'
+import ElDialog from 'element-ui/packages/dialog/src/component'
 
 export default {
     data() {
@@ -102,7 +104,9 @@ export default {
     },
     components: {
         JoinDatasetCard,
-        JoinRelationCard
+        JoinRelationCard,
+		ElButton,
+		ElDialog
     },
     mounted() {
         this.datasource = new PhJoinStep(this.step)

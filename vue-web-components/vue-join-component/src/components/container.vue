@@ -216,7 +216,7 @@ export default {
             savePopup: false,
             transition: 0,
             loading: false,
-			computedColumns: []
+			computedColumns: {}
         }
     },
     props: {
