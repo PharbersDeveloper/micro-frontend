@@ -67,7 +67,7 @@
                                     v-for="script in scriptList.slice(0,9)"
                                     :key="script.name+'script'"
                                     @mouseenter="showVisualList"
-                                    @mouseleave="hide"
+                                    @mouseleave="hideVisual"
                                     @click="selectScripts(script.scriptName)">
                                     <img :src="defs.iconsByName(script.iconName)" alt="">
                                     <p class="">{{script.name}}</p>
@@ -80,7 +80,7 @@
                                     v-for="script in scriptList.slice(9,11)"
                                     :key="script.name+'script'"
                                     @mouseenter="showCodeList"
-                                    @mouseleave="hide"
+                                    @mouseleave="hideCode"
                                     @click="selectScripts(script.scriptName)">
                                     <img :src="defs.iconsByName(script.iconName)" alt="">
                                     <p class="">{{script.name}}</p>
@@ -93,7 +93,7 @@
                                     v-for="script in scriptList.slice(11,13)"
                                     :key="script.name+'script'"
                                     @mouseenter="showSparkList"
-                                    @mouseleave="hide"
+                                    @mouseleave="hideSpark"
                                     @click="selectScripts(script.scriptName)">
                                     <img :src="defs.iconsByName(script.iconName)" alt="">
                                     <p class="">{{script.name}}</p>
@@ -778,6 +778,10 @@ export default {
             this.$refs.classVisual.className = 'list active'
             this.showVisual(e)
         },
+        hideVisual(e){
+            this.$refs.classVisual.className = 'list'
+            this.hide(e)
+        },
         hide(e){
             this.showVisualAll = false
             this.showCodeAll = false
@@ -794,6 +798,10 @@ export default {
             this.$refs.pathVisual.src = this.defs.iconsByName('path')
             this.$refs.pathSpark.src = this.defs.iconsByName('path')
         },
+        hideCode(e){
+            this.$refs.classCode.className = 'list'
+            this.hide(e)
+        },
         showCodeList(e){
             this.$refs.classCode.className = 'list active'
             this.showCode(e)
@@ -805,6 +813,10 @@ export default {
             this.$refs.pathSpark.src = this.defs.iconsByName('pathHide')
             this.$refs.pathVisual.src = this.defs.iconsByName('path')
             this.$refs.pathCode.src = this.defs.iconsByName('path')
+        },
+        hideSpark(e){
+            this.$refs.classSpark.className = 'list'
+            this.hide(e)
         },
         showSparkList(e){
             this.$refs.classSpark.className = 'list active'
