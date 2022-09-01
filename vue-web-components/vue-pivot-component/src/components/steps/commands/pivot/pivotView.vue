@@ -12,7 +12,6 @@
                     <pivot-example></pivot-example>
                 </div>
                 <div class="pivot-pivot-c">
-                    {{datasource.command.keyColumns}}
                     <pivot-column 
                         :command="datasource.command"
                         :kc="datasource.command.keyColumns"
@@ -23,7 +22,6 @@
             </div>
             <div class="pivot-flex-2">
                 <div class="pivot-column-c">
-                    {{datasource.command.identifiers}}
                     <pivot-row 
                         :command="datasource.command"
                         :idf="datasource.command.identifiers"
@@ -31,7 +29,6 @@
                         @selectionChanged="selectionChanged" />
                 </div>
                 <div class="pivot-aggregation-c">
-                    {{datasource.command.valueColumns}}
                     <pivot-aggregation 
                         :command="datasource.command"
                         :schemasArray="schemasArray"

@@ -95,13 +95,12 @@ export default {
             checkedKeys: [],
             ignoredClearMsg: false,
             schemasArray: [],
-            selection: []
+            selection: [],
+            identifiers: []
         }
     },
     props: {
         step: Object,
-        schema: Array,
-        identifiers: Array,
         concretDefs: {
             type: Object,
             default: () => {
@@ -118,7 +117,7 @@ export default {
         ElCheckboxButton
     },
     mounted() {
-        this.datasource = new PhGroupStep(this.step, this.schema)
+        this.datasource = new PhGroupStep(this.step)
         this.validate()
     },
     methods: {
@@ -128,7 +127,8 @@ export default {
         },
         renderSchema() {
             this.schemasArray = this.$parent.computeSchema()
-            this.selection = this.schemasArray.filter(it => !this.identifiers.includes(it))
+            this.identifiers = this.$parent.$refs.pivot.datasource.command.identifiers
+            this.selection = this.schemasArray.filter(it => !this.identifiers.includes(it.src))
             this.datasource.refreshDatasource(this.selection)
             this.notGroupedCommands = this.resetSelectGroupKeys()
         },

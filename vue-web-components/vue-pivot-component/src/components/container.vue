@@ -438,9 +438,9 @@ export default {
         active(n) {
 
 			if (n === 4) {
-				this.identifiers = this.$refs.pivot.datasource.command.identifiers
+				// this.identifiers = this.$refs.pivot.datasource.command.identifiers
 			}
-			
+
             this.$refs.prefilter.validate()
             this.$refs.computed.validate()
             this.$refs.pivot.validate()
