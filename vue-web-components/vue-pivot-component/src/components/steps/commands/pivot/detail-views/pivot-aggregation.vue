@@ -181,7 +181,7 @@ export default {
     .pivot-agg-content {
         display: flex;
         flex-direction: column;
-        height: calc(50vh - 352px);
+        height: calc(50vh - 342px);
         overflow: auto;
         flex-grow: 1;
 		margin-top: 20px;

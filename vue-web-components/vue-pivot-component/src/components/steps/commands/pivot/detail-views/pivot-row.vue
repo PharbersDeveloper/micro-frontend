@@ -84,7 +84,7 @@ export default {
     .pivot-row-content {
         display: flex;
         flex-direction: column;
-        height: calc(50vh - 310px);
+        height: calc(50vh - 300px);
         overflow-y: auto;
         flex-grow: 1;
     }
