@@ -316,7 +316,7 @@ export default {
 				width: 300px;
 				min-height: 26px;
 				border: 1px solid #ccc;
-				color: #ccc;
+				color: #666;
 			}
         }
 

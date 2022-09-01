@@ -160,7 +160,7 @@ export default {
 		width: 200px;
 		min-height: 26px;
 		border: 1px solid #ccc;
-		color: #ccc;
+		color: #666;
 		}
 	}
 
