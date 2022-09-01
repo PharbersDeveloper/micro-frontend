@@ -228,7 +228,8 @@ export default {
         inputStrChecked(value, ref, name) {
             // let r = /[(|)|（|）| 【|】| @ # $ % & * ^ \ - = ——\[|\] ]/;、
             // 只允许输入数字、字母、下划线
-            let r = /^[a-zA-Z0-9_^]{1,}$/
+            // let r = /^[a-zA-Z0-9_^]{1,}$/
+            let r = /^(?![0-9]+$)[A-Za-z_][A-Za-z_0-9]{0,}$/
             if (r.test(value) || value === "") {
                 if(value.length > 30) {
                     this[name] = ""

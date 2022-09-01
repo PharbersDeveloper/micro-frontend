@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="group-key-add-btn" >
-                    <select v-model="selectedAdd" @change="addSelectedColToKey">
+                    <select v-model="selectedAdd" @change="addSelectedColToKey" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                         <option label="选中添加" value="选中添加" />
                         <option v-for="(item, index) in selectedAddArray" :label="item.title" :key="index" :value="item.title" />
                     </select>
@@ -157,10 +157,7 @@ export default {
     mounted() {
         this.datasource = new PhGroupStep(this.step, this.schema)
         this.computedGroupCount = this.datasource.globalCount
-        // this.notGroupedCommands = this.resetSelectGroupKeys()
         this.ignoredClearMsg = false
-        // this.schemaArray = this.schema
-		// this.selectedAddArray = this.schemaArray.filter(it => !this.datasource.keys.includes(it.title))
 		this.validate()
     },
     methods: {
@@ -285,6 +282,9 @@ export default {
                 display: flex;
                 flex-direction: column;
                 padding: 10px;
+                position: relative;
+                height:90px;
+                margin-bottom: 20px;
 
                 .warning-msg {
                     font-size: 13px;
@@ -315,15 +315,24 @@ export default {
             }
 
             .group-key-add-btn {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-around;
+                // display: flex;
+                // flex-direction: row;
+                // justify-content: space-around;
                 margin-top: 10px;
+                height: 80px;
+                position: absolute;
+                bottom: -74px;
+                left: calc(50vw - 313px);
+
+                select {
+                    min-height: 26px;
+                    width: 220px;
+                }
             }
         }
 
         .group-agg-container {
-            margin-top: 30px;
+            margin-top: 10px;
             display: flex;
             flex-direction: column;
 

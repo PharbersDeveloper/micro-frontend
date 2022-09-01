@@ -55,8 +55,7 @@
                 <select-cols v-show="active === 4"
                     ref="select"
                     :step="datasource.step"
-                    :schema="datasource.schema"
-					:datasetArray="datasetArray"
+                    :schema="computedColumns"
                     @statusChange="selectStatus" />
                 <post-computed v-show="active === 5"
                     ref="postcomputed"
@@ -217,6 +216,7 @@ export default {
             savePopup: false,
             transition: 0,
             loading: false,
+			computedColumns: {}
         }
     },
     props: {
@@ -241,7 +241,7 @@ export default {
     },
     methods: {
 		linkToVideos() {
-			window.open("https://www.bilibili.com/video/BV1gG411p729?share_source=copy_web&vd_source=f9fa90b0e7f405eadac872bd04ff335f")
+			window.open("https://www.bilibili.com/video/BV1gG411p729")
 		},
 		changeScriptParams(data) {
             this.datasource.saveScriptParams(data, this)
@@ -394,6 +394,25 @@ export default {
                 this.stepsDefs[6].status = "error"
             }
         },
+		computeColumns() {
+			const result = JSON.parse(JSON.stringify(this.datasource.schema))
+			const preJoinColumns = this.$refs.percomputed.datasource.commands
+			const keys = Object.keys(result)
+			keys.forEach(item => {
+				const preJoinCol = preJoinColumns.filter(it => it.meta.name === item)
+				if (preJoinCol.length > 0) {
+					const preJoinSchema = preJoinCol[0].detail.computedCols.map(col => {
+						return {
+							des: col.name,
+							src: col.name,
+							type: col.type
+						}
+					})
+					result[item] = result[item].concat(preJoinSchema)
+				}
+			})
+			return result
+		},
         computeSchema() {
             const result = []
             const selectCols = this.$refs.select.datasource.revert2Defs()
@@ -543,6 +562,10 @@ export default {
             this.$refs.postcomputed.validate()
             this.$refs.postfilter.validate()
             this.$refs.outputs.validate()
+
+			if (n === 4) {
+				this.computedColumns = this.computeColumns()
+			}
 
             if (n === 5) {
                 this.computedSchema = this.computeSchema()

@@ -9,7 +9,7 @@ export default class PhDataSource {
 		this.parent = parent
         this.store = new JsonApiDataStore()
         this.resetData()
-        this.debugToken = "b7a9736d9e1245e4d433fe79c850c22ef5c0522b5f847a2f527b493c4c739724"
+        this.debugToken = "bb88505a0dc9ba9bff4eb609c760454749aeeb3c3703c7eedc1f4997aa0e5f68"
     }
 
     resetData() {
@@ -106,7 +106,6 @@ export default class PhDataSource {
         await this.buildDatasetQuery(projectId)
             .then((response) => response.json())
             .then((response) => {
-				console.log(response)
 				that.store.sync(response)
                 const data = that.store.findAll("datasets")
 				that.parent.datasetArray = data
