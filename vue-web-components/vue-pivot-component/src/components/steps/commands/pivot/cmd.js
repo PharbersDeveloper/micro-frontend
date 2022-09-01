@@ -4,24 +4,26 @@
 export default class PhPivotCmd {
     constructor(defs, identifiers, schema) {
         this.identifiers = identifiers //行定义
-        this.globalCount = defs["globalCount"]
         this.keyColumns = defs["keyColumns"] //列定义
+        this.valueColumns = defs["valueColumns"] //聚合
+
+        this.globalCount = defs["globalCount"]
         this.pivotedColumnType = defs["pivotedColumnType"]
         this.topnLimit = defs["topnLimit"]
         this.minOccLimit = defs["minOccLimit"]
         this.explicitValues = defs["explicitValues"]
-        this.valueColumns = defs["valueColumns"] //聚合
 
         this.schema = schema
         this.resetCandiSelection()
     }
 
-    resetCandiSelection() {
+    resetCandiSelection(schemasArray) {
+		const schema = schemasArray ? schemasArray : this.schema
         this.selection = []
         const vcs = this.valueColumns.map(x => x.column) //聚合-列名
         // const vcods = this.valueColumns.map(x => x.orderColumn) //聚合方法-orderby
-        for (let idx = 0; idx < this.schema.length; ++idx) {
-            const tmp = this.schema[idx].src
+        for (let idx = 0; idx < schema.length; ++idx) {
+            const tmp = schema[idx].src
             if (!this.identifiers.includes(tmp)
                 && !this.keyColumns.includes(tmp)
                 && !vcs.includes(tmp)) {

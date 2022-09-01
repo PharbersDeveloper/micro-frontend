@@ -11,12 +11,7 @@
                 <el-table :data="notGroupedCommands"
                           ref="table"
                           style="width: 100%"
-                          height="calc(100vh - 260px)"
-                          @selection-change="handleSelectionChange">
-                    <el-table-column
-                            type="selection"
-                            width="55">
-                    </el-table-column>
+                          height="calc(100vh - 260px)">
                     <el-table-column
                             label="列名"
                             prop="column"
@@ -51,14 +46,7 @@
                     </el-table-column>
                     <el-table-column width="120">
                         <template slot-scope="scope">
-							<div class="popover" v-show="scope.row.showPopover && (scope.row.first || scope.row.last || scope.row.concat)">
-                                <!-- <div class="popitem" v-show="scope.row.first || scope.row.last">
-                                    <div class="label">Order first/last by</div>
-                                    <select 
-                                        v-model="scope.row.orderColumn">
-                                        <option v-for="(item, index) in schema" :label="item.src" :key="index" :value="item.src" />
-                                    </select>
-                                </div> -->
+                            <div class="popover" v-show="scope.row.showPopover && (scope.row.first || scope.row.last || scope.row.concat)">
                                 <div class="popitem" v-show="scope.row.first || scope.row.last">
                                     <div class="label">First/last not null</div>
                                     <el-checkbox v-model="scope.row.firstLastNotNull"></el-checkbox>
@@ -89,10 +77,7 @@
 import ElButton from 'element-ui/packages/button/index'
 import ElCheckbox from 'element-ui/packages/checkbox/index'
 import ElCheckboxButton from 'element-ui/packages/checkbox-button/index'
-// import ElPopover from 'element-ui/packages/popover/index'
 import ElInput from 'element-ui/packages/input/index'
-// import ElForm from 'element-ui/packages/form/index'
-// import ElFormItem from 'element-ui/packages/form-item/index'
 import ElTable from 'element-ui/packages/table/index'
 import ElTableColumn from 'element-ui/packages/table-column/index'
 import { PhGroupDefs } from "./defs"
@@ -109,8 +94,8 @@ export default {
             notGroupedCommands: [],
             checkedKeys: [],
             ignoredClearMsg: false,
-			schemasArray: [],
-			selection: []
+            schemasArray: [],
+            selection: []
         }
     },
     props: {
@@ -133,27 +118,22 @@ export default {
         ElCheckboxButton
     },
     mounted() {
-        this.datasource = new PhGroupStep(this.step, this.selection, this.schema)
-        // this.computedGroupCount = this.datasource.isComputedGroupCount()
-		// this.notGroupedCommands = this.resetSelectGroupKeys()
-		this.validate()
+        this.datasource = new PhGroupStep(this.step, this.schema)
+        this.validate()
     },
     methods: {
-		showOptionPopoverClick(data) {
+        showOptionPopoverClick(data) {
             data.showPopover = !data.showPopover
             this.$refs.table.doLayout()
         },
-		renderSchema() {
+        renderSchema() {
             this.schemasArray = this.$parent.computeSchema()
-			this.selection = this.schemasArray.filter(it => !this.identifiers.includes(it))
-
-			this.datasource = new PhGroupStep(this.step, this.selection, this.schemasArray)
-            // this.datasource.resetCommands(this.selection)
-			// this.datasource.refreshCols(this.selection)
+            this.selection = this.schemasArray.filter(it => !this.identifiers.includes(it))
+            this.datasource.refreshDatasource(this.selection)
             this.notGroupedCommands = this.resetSelectGroupKeys()
-		},
+        },
         validate() {
-			this.renderSchema()
+            this.renderSchema()
             this.$emit('statusChange', true)
         },
         resetSelectGroupKeys() {
@@ -178,15 +158,6 @@ export default {
             })
             return res
         },
-        // addSelectedColToKey() {
-        //     this.datasource.addCol2Key(this.selectedAdd)
-        //     this.selectedAdd = "选中添加"
-
-        //     this.notGroupedCommands = this.resetSelectGroupKeys()
-        // },
-        // changeComputedGroupCount() {
-        //     this.datasource.changeComputedGroupCount(this.computedGroupCount)
-        // },
         handleSelectionChange(val) {
             if (!this.ignoredClearMsg) {
                 this.datasource.commands.forEach(x => {
@@ -195,15 +166,15 @@ export default {
             } else {
                 this.ignoredClearMsg = false
             }
-        },
+        }
     },
     computed: {
 
     },
     watch: {
-        "datasource.needRefresh": function() {
-			this.renderSchema()
-        }
+        // "datasource.needRefresh": function() {
+        //     this.renderSchema()
+        // }
     }
 }
 </script>
@@ -282,10 +253,11 @@ export default {
 
             .group-agg-op {
                 overflow: auto;
-				// height: calc(100vh - 300px);
-				width: calc(100vw - 400px);
+                background: #fff;
+                padding: 10px;
+                width: calc(100vw - 400px);
 
-				.popover {
+                .popover {
                     position: absolute;
                     border: 1px solid #aaa;
                     box-shadow: 0 2px 12px 0  rgba(0, 0, 0, 0.1);

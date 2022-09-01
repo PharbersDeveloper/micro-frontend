@@ -436,13 +436,11 @@ export default {
     },
     watch: {
         active(n) {
-			if (n === 3) {
-				// this.computedSchema = this.computeSchema()
-			}
+
 			if (n === 4) {
-				// this.computedSchema = this.computeSchema()
 				this.identifiers = this.$refs.pivot.datasource.command.identifiers
 			}
+			
             this.$refs.prefilter.validate()
             this.$refs.computed.validate()
             this.$refs.pivot.validate()
