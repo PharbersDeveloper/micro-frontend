@@ -42,7 +42,7 @@
                 <div class="order" v-if="aggMethod === 'first' || aggMethod === 'last'">
                     <h3>Order by</h3>
                     <select v-model="orderColumn" >
-                        <option v-for="(item, index) in schemasArray" :key="index" :label="item" :value="item" />
+                        <option v-for="(item, index) in schemasArray" :key="index" :label="item.src" :value="item.src" />
                     </select>
                 </div>
                 <div class="concat" v-if="aggMethod === 'concat'">

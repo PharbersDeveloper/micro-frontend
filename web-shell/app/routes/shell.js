@@ -64,7 +64,6 @@ export default class ShellRoute extends Route {
 		
 
 		if (curPage === "") {
-			debugger
 			 if (this.clientName === "platform") {
 				 this.transitionTo("shell", "overview")
 			 } else if (this.clientName === "offweb") {
