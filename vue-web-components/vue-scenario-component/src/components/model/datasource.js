@@ -11,7 +11,7 @@ export default class PhDataSource {
         this.projectId = ''
         this.batch_size = 20
         this.store = new JsonApiDataStore()
-        this.debugToken = "1d5470896755c2dfefb220d5e9b7a67d29e4baa95d9c45f7397ee9b33bb1477d"
+        this.debugToken = "bbf8629c751ae13401721a2d9dbeedc7e72ffd3e397c8fb7ead9bd35e1411922"
         if (!adapter) {
             this.adapter = this.defaultAdapter
         }
