@@ -1,5 +1,6 @@
 <template>
     <div class="page_container">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css"/>
         <div class="show_area">
             <div class="show_header">
                 <div class="show_header_left">
@@ -22,6 +23,7 @@
             </div>
             <div class="opt_icon_area">
                 <div class="fir_icon_row">
+                    <button type="button" @click="refdag">刷新dag进行重绘</button>
                     <img
                         v-if="!isRunning"
                         :src="defs.iconsByName('run')"
@@ -55,30 +57,115 @@
             </div>
         </div>
 
+        <run-dag-dialog
+            v-if="showRunJson"
+            :selectRecursive="selectRecursive"
+            :textConf="textConf"
+            :projectId="projectId"
+            @confirmeRunDag="confirmeRunDag"
+            @closeRunDagDialog="closeRunDagDialog"
+        ></run-dag-dialog>
 
+        <progress-bar
+            v-if="showProgress"
+            @closeProgress="closeProgress"
+            :progressOver="progressOver"
+        >
+        </progress-bar>
+
+        <div class="job_status_area">
+            <div
+                class="job_status"
+                v-for="(item, index) in failedLogs"
+                :key="index"
+            >
+                <div class="job_notice">
+                    <div class="item title">Job failed</div>
+                    <div class="item">
+                        {{ item.jobShowName }}
+                    </div>
+                </div>
+                <button @click="logsPolicy.showLogs(item)">
+                    Logs
+                </button>
+            </div>
+        </div>
+
+        <el-dialog
+            :title="getSelectItemName()"
+            :visible.sync="runDagSelectVisible"
+            width="800px">
+            <div class="run-dag-select-dialog">
+                <div class="select-area">
+                    <div class="select-item"
+                        @click="selectRecursive = 'nonRecursive'"
+                        :class="[{'run-dag-active': selectRecursive === 'nonRecursive'}]">
+                        <div class="title">Non recursive</div>
+                        <div class="desc">只运行当前脚本</div>
+                    </div>
+                    <div class="select-item"
+                        @click="selectRecursive = 'recursive'"
+                        :class="[{'run-dag-active': selectRecursive === 'recursive'}]">
+                        <div class="title">Recursive</div>
+                        <div class="desc">运行上游所有脚本</div>
+                    </div>
+                </div>
+                <div class="img">
+                    <img 
+                        v-if="selectRecursive === 'nonRecursive'" 
+                        :src="defs.iconsByName('runDag', 'nonRecursive')" alt="">
+                    <img 
+                        v-if="selectRecursive === 'recursive'"
+                        :src="defs.iconsByName('runDag', 'recursive')" alt="">
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="runDagSelectVisible = false">取消</el-button>
+                <el-button type="primary"  @click="triggerPolicy.dagRunPreparing()">确认</el-button>
+            </span>
+        </el-dialog>
         
+        <div v-if="loading">
+            <div id="loadingio-spinner-double-ring-ho1zizxmctu">
+                <div class="ldio-400lpppmiue">
+                    <div></div>
+                    <div></div>
+                    <div><div></div></div>
+                    <div><div></div></div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import PhCodeditorDatasource from "./model/datasource"
+import PhDagDatasource from "./model/datasource"
 import PhDagDefinitions from "./policy/definitions/definitions";
-
+import PhAlfredPolicy from "./policy/trigger/sm-trigger-policy";
+import PhLogsPolicy from "./policy/logs/log-policy";
+import ElDialog from 'element-ui/packages/dialog/src/component'
+import ElButton from 'element-ui/packages/button/index'
+import runDagDialog from "./run-dag-dialog.vue";
+import progressBar from "./progress-bar-type.vue";
 
 export default {
     name: 'dag-page',
     components: {
+        runDagDialog,
+        ElDialog,
+        ElButton,
+        progressBar
     },
     props: {
         iframeUrl: {
             type: String,
-            default: "http://localhost:8081/graph/"
+            default: "http://localhost:8080/graph/"
             // default: "https://codeditor.pharbers.com/phcodeditor"
         },
         datasource: {
             type: Object,
             default: function() {
-                return new PhCodeditorDatasource('1', this.projectId, this.jobId, this)
+                return new PhDagDatasource('1', this.projectId, this)
             }
         },
         defs: {
@@ -92,17 +179,37 @@ export default {
             default: function () {
                 return ["python", "pyspark", "sparkr", "r", "prepare", "sort", "distinct", "sync", "topn", "join", "stack", "group"]
             }
-        }
+        },
+        triggerPolicy: {
+            type: Object,
+            default: function () {
+                return new PhAlfredPolicy("1", this);
+            }
+        },
+        logsPolicy: {
+            type: Object,
+            default: function () {
+                return new PhLogsPolicy("1", this);
+            }
+        },
     },
     data() {
         return {
             isRunning: false, //stop按钮是否可以点击
+            runDagSelectVisible: false, //是否显示选择运行策略的弹窗
+            showRunJson: false, //是否显示运行的jsons
+            textConf: {}, //运行弹框textarea的默认值
+            showProgress: false, //进度条弹窗是否显示
+            progressOver: false, //进度条是否停止
+            failedLogs: [],
+            loading: false,
             downloadCode: 0,
             projectId: "",
             flowVersion: "",
             projectName: "",
             icon_header: "",
-            selectItemName: ""
+            selectItemName: "",
+            selectRecursive: "recursive"
         }
     },
     mounted() {
@@ -114,9 +221,11 @@ export default {
         // this.datasource.jobId = this.jobId //decodeURI(this.jobName)
         // this.datasource.projectId = this.projectId
         // 将datasource注册到window中，iframe传递消息this指向为window
+        this.projectId = "ggjpDje0HUC2JW"
+        this.projectName = "demo"
+        this.flowVersion = "developer"
         window["datasource"] = this.datasource
-        this.initGraphDag("ggjpDje0HUC2JW", "developer", "demo")
-
+        this.initGraphDag(this.projectId, this.flowVersion, this.projectName)
         
     },
     watch: {
@@ -156,6 +265,30 @@ export default {
             if (arr) return (arr[2])
             else return null
         },
+        getSelectItemName() {
+            return "构建" + this.selectItemName
+        },
+        //关闭进度条
+        closeProgress() {
+            this.showProgress = false;
+        },
+        closeRunDagDialog() {
+            this.showRunJson = false;
+        },
+        confirmeRunDag(data) {
+            this.triggerPolicy.runDag(data);
+        },
+        clearDag() {
+            this.progressOver = false
+            this.showProgress = true
+            this.failedLogs = []
+        },
+        refdag() { 
+            const iframe = this.$refs.dag
+            iframe.contentWindow.postMessage({
+                refreshDag: "refresh"
+            }, "*")
+        }
     },
     beforeDestroy() {
         this.unRegisterEvent()
@@ -277,5 +410,221 @@ export default {
         width: calc(100vw - 300px);
         height: calc(100vh - 80px);
     }
+
+    .run-dag-select-dialog {
+        display: flex;
+        flex-direction: column;
+        .select-area {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            .run-dag-active {
+                border: 1px solid #7163C5 !important;
+            }
+            .select-item {
+                width: 260px;
+                height: 65px;
+                border: 1px solid #eee;
+                margin: 0 5px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                .title {
+                    font-size: 16px;
+                    margin-bottom: 5px;
+                    color: #000;
+                }
+                .desc {
+                    font-size: 12px;
+                }
+            }
+        }
+
+        .img {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+    }
+
+    .job_status_area {
+        position: absolute;
+        bottom: 60px;
+        right: 15px;
+        .job_status {
+            box-sizing: border-box;
+            width: 240px;
+            height: 70px;
+            background: #ffffff;
+            border: 1px solid #979797;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            font-size: 20px;
+            margin-bottom: 10px;
+            .item {
+                width: 120px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                cursor: pointer;
+            }
+            .title {
+                color: red;
+            }
+            button {
+                width: 59px;
+                height: 32px;
+                border: 1px solid #eeedf7;
+                border-radius: 2px;
+                font-size: 14px;
+                color: #7163c5;
+                letter-spacing: 0;
+                text-align: center;
+                line-height: 20px;
+                font-weight: 500;
+                cursor: pointer;
+            }
+        }
+    }
+
+}
+//界面未加载loading
+@keyframes ldio-400lpppmiue {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.ldio-400lpppmiue div {
+    box-sizing: border-box !important;
+}
+
+.ldio-400lpppmiue > div {
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    top: 16px;
+    left: 16px;
+    border-radius: 50%;
+    border: 4px solid #000;
+    border-color: #f5c924 transparent #f5c924 transparent;
+    animation: ldio-400lpppmiue 1s linear infinite;
+}
+
+.ldio-400lpppmiue > div:nth-child(2),
+.ldio-400lpppmiue > div:nth-child(4) {
+    width: 58px;
+    height: 58px;
+    top: 21px;
+    left: 21px;
+    animation: ldio-400lpppmiue 1s linear infinite reverse;
+}
+
+.ldio-400lpppmiue > div:nth-child(2) {
+    border-color: transparent #747789 transparent #747789;
+}
+
+.ldio-400lpppmiue > div:nth-child(3) {
+    border-color: transparent;
+}
+
+.ldio-400lpppmiue > div:nth-child(3) div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
+
+.ldio-400lpppmiue > div:nth-child(3) div:before,
+.ldio-400lpppmiue > div:nth-child(3) div:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    top: -4px;
+    left: 28px;
+    background: #f5c924;
+    border-radius: 0%;
+    box-shadow: 0 64px 0 0 #f5c924;
+}
+
+.ldio-400lpppmiue > div:nth-child(3) div:after {
+    left: -4px;
+    top: 28px;
+    box-shadow: 64px 0 0 0 #f5c924;
+}
+
+.ldio-400lpppmiue > div:nth-child(4) {
+    border-color: transparent;
+}
+
+.ldio-400lpppmiue > div:nth-child(4) div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotate(45deg);
+}
+
+.ldio-400lpppmiue > div:nth-child(4) div:before,
+.ldio-400lpppmiue > div:nth-child(4) div:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    top: -4px;
+    left: 23px;
+    background: #747789;
+    border-radius: 0%;
+    box-shadow: 0 54px 0 0 #747789;
+}
+
+.ldio-400lpppmiue > div:nth-child(4) div:after {
+    left: -4px;
+    top: 23px;
+    box-shadow: 54px 0 0 0 #747789;
+}
+
+#loadingio-spinner-double-ring-ho1zizxmctu {
+    backdrop-filter: blur(1px);
+    background: rgba(200, 0, 0, 0.05);
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    overflow: hidden;
+    /* background: none; */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.ldio-400lpppmiue {
+    /* width: 100%;
+    height: 100%; */
+    position: relative;
+    transform: translateZ(0) scale(0.8);
+    backface-visibility: hidden;
+    transform-origin: 0 0;
+    /* see note above */
+}
+
+.ldio-400lpppmiue div {
+    box-sizing: content-box;
 }
 </style>

@@ -12,10 +12,6 @@
 import PhDagDatasource from "./model/datasourcev2";
 import PhRenderPolicy from "./policy/render/dag-render-policy";
 import PhDagDefinitions from "./policy/definitions/definitions";
-import PhLogsPolicy from "./policy/logs/log-policy";
-import PhStatusPolicy from "./policy/handler/dagstatushandler";
-import PhAirflowPolicy from "./policy/trigger/airflow-trigger-policy";
-import PhAlfredPolicy from "./policy/trigger/sm-trigger-policy";
 
 export default {
     data: () => {
@@ -74,51 +70,10 @@ export default {
             default: function () {
                 return new PhDagDefinitions("1");
             }
-        },
-        logsPolicy: {
-            type: Object,
-            default: function () {
-                return new PhLogsPolicy("1", this);
-            }
-        },
-        eventPolicy: {
-            type: Object,
-            default: function () {
-                return new PhStatusPolicy("1", this);
-            }
-        },
-        triggerPolicy: {
-            type: Object,
-            default: function () {
-                if (this.schedulerPolicyName === "airflow") {
-                    return new PhAirflowPolicy("1", this);
-                } else {
-                    return new PhAlfredPolicy("1", this);
-                }
-            }
-        },
-        scriptIconArray: {
-            type: Array,
-            default: function () {
-                return ["python", "pyspark", "sparkr", "r", "prepare", "sort", "distinct", "sync", "topn", "join", "stack", "group"]
-            }
         }
     },
     mounted() {
-        // let href = window.location.href;
-        // console.log(href);
-        // let paramArr = [] //href.split("?")[1].split("&");
-        // this.projectId = "ggjpDje0HUC2JW";
-        // this.projectName = "demo";
-        // this.flowVersion = "developer";
-        // // 判断环境
-        // this.datasource.projectId = this.projectId;
-        // this.initChart();
-        // // window.addEventListener('message', this.eventPolicy.handleForwardMessage)
-        // window.addEventListener("message", this.handleForwardMessage);
-        // this.registerJobEventName = "runDag" + new Date().getTime().toString();
         this.registerEvent();
-        // this.initChart();
     },
     methods: {
         registerEvent() {
@@ -127,14 +82,14 @@ export default {
             window.addEventListener("message", this.initDag)
             // 更改dag node的状态
             window.addEventListener("message", this.changeDagNodeStatus);
-            // 触发运行Dag
-            window.addEventListener("message", this.triggerRunDag);
+            // 刷新Dag
+            window.addEventListener("message", this.refreshDag);
         },
         unRegisterEvent() { 
             console.debug("取消注册事件");
             window.removeEventListener("message", this.initDag);
             window.removeEventListener("message", this.changeDagNodeStatus);
-            window.removeEventListener("message", this.triggerRunDag);
+            window.removeEventListener("message", this.refreshDag);
         },
         async initDag(event) { 
             // 目前只设置 ProjectID  ProjectName FlowVersion
@@ -153,8 +108,11 @@ export default {
 
                 await this.datasource.refreshData(this);
                 window.parent.postMessage({
-                    dagId: this.dagId,
-                    dagStatus: "complete"
+                    dagIsComplete: {
+                        dagId: this.dagId,
+                        status: "complete",
+                        data: JSON.stringify(this.datasource.data)
+                    }
                 }, '*')
                 // 发布前解注
                 // document.domain = "pharbers.com"
@@ -179,37 +137,11 @@ export default {
                 dagSelectItem: JSON.stringify(item)
             }, '*')
         },
-        triggerRunDag(event) { 
-            // 触发运行Dag
-            console.debug(event)
+        async refreshDag(event) {
+            if (event.data.refreshDag) {
+                await this.datasource.refreshData(this);
+            }
         },
-        // getSelectItemName() {
-        //     return "构建" + this.selectItemName
-        // },	
-        // handleForwardMessage(event) {
-        //     const that = this;
-        //     if (event.data.message) {
-        //         if (event.data.message.cmd === "render_dag") {
-        //             that.eventPolicy.runDagCallback(event.data.message);
-        //         }
-        //         if (event.data.message.cmd === "finish_dag") {
-        //             that.eventPolicy.runDagFinishCallback(event.data.message);
-        //         }
-        //     }
-        // },
-        // getUrlParam(arr, value) {
-        //     let data = arr.find((item) => item.indexOf(value) > -1);
-        //     return data ? decodeURI(data).split("=")[1] : undefined;
-        // },
-        // closeRunDagDialog() {
-        //     this.showRunJson = false;
-        // },
-        // async initChart() {
-        //     // 初始化echarts实例
-        //     await this.datasource.refreshData(this);
-        //     // 发布前解注
-        //     // document.domain = "pharbers.com"
-        // },
         // 监听屏幕大小改变
         bindChangeWindow() {
             window.onresize = () => {
@@ -253,22 +185,25 @@ export default {
         needRefresh(n, o) {
             this.renderDag();
         },
-        selectItem(n, o) {
+        async selectItem(n, o) {
             this.selectItemName = n.attributes.name;
             this.icon_header = this.defs.iconsByName(n.category);
             this.offsetLeft = this.$refs.viewport.scrollLeft
             this.offsetTop = this.$refs.viewport.scrollTop
             this.isFirstRendering = false
+            
+            this.$nextTick(await this.datasource.selectOneElement(this));
             const obj = {
                 selectItemName: this.selectItemName,
                 icon_header: this.icon_header,
                 offsetLeft: this.offsetLeft,
                 offsetTop: this.offsetTop,
                 isFirstRendering: this.isFirstRendering,
-                item: n
+                item: n,
+                cal: this.datasource.cal
             }
+            
             this.returnSelectItem(obj);
-            this.$nextTick(this.datasource.selectOneElement(this));
         }
     }
 };
