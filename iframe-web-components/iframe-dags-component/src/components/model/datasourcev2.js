@@ -8,7 +8,7 @@ export default class PhDagDatasource {
         this.name = "demo"
         this.projectId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = '2b29d0370f338e83d1636fbefa642d70d2701c4c784237344d675dc9ab891ddb'
+        this.debugToken = 'b2b7c31a591c8d44e7f9fc9ba42861e1b7712a8dc59fe69fa26ba06f219c52e8'
         this.sizeHit = [0, 0]
         // this.hitWidthStep = 300
         // this.hitHeightStep = 500
