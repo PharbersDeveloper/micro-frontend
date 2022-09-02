@@ -87,10 +87,6 @@ export default class PhCodeditorDatasource {
             console.debug(event.data.dagId)
             console.debug(event.data.dagSelectItem)
             const { selectItemName, icon_header } = JSON.parse(event.data.dagSelectItem)
-            console.debug(selectItemName)
-            console.debug(icon_header)
-            console.debug(this)
-            console.debug(this.datasource.parent.selectItemName)
             this.datasource.parent.selectItemName = selectItemName
             this.datasource.parent.icon_header = icon_header
         }

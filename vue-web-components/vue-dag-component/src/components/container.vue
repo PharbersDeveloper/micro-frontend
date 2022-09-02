@@ -86,16 +86,23 @@ export default {
             default: function () {
                 return new PhDagDefinitions("1");
             }
+        },
+        scriptIconArray: {
+            type: Array,
+            default: function () {
+                return ["python", "pyspark", "sparkr", "r", "prepare", "sort", "distinct", "sync", "topn", "join", "stack", "group"]
+            }
         }
     },
     data() {
         return {
+            isRunning: false, //stop按钮是否可以点击
             downloadCode: 0,
             projectId: "",
             flowVersion: "",
             projectName: "",
-            icon_header: "https://components.pharbers.com/prod/deploy/public/icons/DSuploaded/normal.svg",
-            selectItemName: "B"
+            icon_header: "",
+            selectItemName: ""
         }
     },
     mounted() {

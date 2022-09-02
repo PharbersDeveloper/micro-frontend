@@ -127,10 +127,14 @@ export default {
             window.addEventListener("message", this.initDag)
             // 更改dag node的状态
             window.addEventListener("message", this.changeDagNodeStatus);
+            // 触发运行Dag
+            window.addEventListener("message", this.triggerRunDag);
         },
         unRegisterEvent() { 
             console.debug("取消注册事件");
             window.removeEventListener("message", this.initDag);
+            window.removeEventListener("message", this.changeDagNodeStatus);
+            window.removeEventListener("message", this.triggerRunDag);
         },
         async initDag(event) { 
             // 目前只设置 ProjectID  ProjectName FlowVersion
@@ -169,10 +173,15 @@ export default {
             }
         },
         returnSelectItem(item) {
+            // 返回选中的dag的信息 如坐标 类型 图片等
             window.parent.postMessage({
                 dagId: this.dagId,
                 dagSelectItem: JSON.stringify(item)
             }, '*')
+        },
+        triggerRunDag(event) { 
+            // 触发运行Dag
+            console.debug(event)
         },
         // getSelectItemName() {
         //     return "构建" + this.selectItemName
