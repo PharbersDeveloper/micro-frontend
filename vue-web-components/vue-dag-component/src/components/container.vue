@@ -72,7 +72,7 @@ export default {
     props: {
         iframeUrl: {
             type: String,
-            default: "http://localhost:8080/graph/"
+            default: "http://localhost:8081/graph/"
             // default: "https://codeditor.pharbers.com/phcodeditor"
         },
         datasource: {
@@ -113,8 +113,8 @@ export default {
         // //父组件传进来的值
         // this.datasource.jobId = this.jobId //decodeURI(this.jobName)
         // this.datasource.projectId = this.projectId
-		// 将datasource注册到window中，iframe传递消息this指向为window
-		window["datasource"] = this.datasource
+        // 将datasource注册到window中，iframe传递消息this指向为window
+        window["datasource"] = this.datasource
         this.initGraphDag("ggjpDje0HUC2JW", "developer", "demo")
 
         
@@ -123,7 +123,7 @@ export default {
     },
     methods: {
         registerEvent() {
-			this.unRegisterEvent()
+            this.unRegisterEvent()
             // 注册获取 Dag 点击 Node 的事件
             window.addEventListener("message", this.datasource.getClickNodeEvent);
             window.addEventListener("message", this.datasource.iframeComplete);
@@ -166,13 +166,14 @@ export default {
 <style lang='scss' scoped>
 .page_container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     box-sizing: border-box;
+    background: #f7f7f7;
     
     .show_area {
-        width: 100%;
-        height: 100%;
+        width: calc(100vw - 320px);
         padding: 10px;
+        
         .show_header {
             display: flex;
             justify-content: space-between;
@@ -273,8 +274,8 @@ export default {
     }
 
     .main_iframe {
-        width: 100vw;
-        height: calc(100vh - 50px);
+        width: calc(100vw - 300px);
+        height: calc(100vh - 80px);
     }
 }
 </style>
