@@ -245,12 +245,20 @@ export default {
             this.renderDag();
         },
         selectItem(n, o) {
-            this.returnSelectItem(n);
             this.selectItemName = n.attributes.name;
             this.icon_header = this.defs.iconsByName(n.category);
             this.offsetLeft = this.$refs.viewport.scrollLeft
             this.offsetTop = this.$refs.viewport.scrollTop
             this.isFirstRendering = false
+            const obj = {
+                selectItemName: this.selectItemName,
+                icon_header: this.icon_header,
+                offsetLeft: this.offsetLeft,
+                offsetTop: this.offsetTop,
+                isFirstRendering: this.isFirstRendering,
+                item: n
+            }
+            this.returnSelectItem(obj);
             this.$nextTick(this.datasource.selectOneElement(this));
         }
     }

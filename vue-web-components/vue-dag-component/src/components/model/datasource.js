@@ -1,6 +1,6 @@
 
 import { hostName } from "../../config/envConfig"
-import { Message } from 'element-ui'
+// import { Message } from 'element-ui'
 
 export default class PhCodeditorDatasource {
     constructor(id, projectId, jobId, parent) {
@@ -19,7 +19,7 @@ export default class PhCodeditorDatasource {
         this.runtime = ""
         this.file_name = ""
         this.codeKey = ""
-		this.parent = parent
+        this.parent = parent
     }
 
     defaultAdapter(row) {
@@ -86,52 +86,59 @@ export default class PhCodeditorDatasource {
             console.debug("click node")
             console.debug(event.data.dagId)
             console.debug(event.data.dagSelectItem)
+            const { selectItemName, icon_header } = JSON.parse(event.data.dagSelectItem)
+            console.debug(selectItemName)
+            console.debug(icon_header)
+            console.debug(this)
+            console.debug(this.datasource.parent.selectItemName)
+            this.datasource.parent.selectItemName = selectItemName
+            this.datasource.parent.icon_header = icon_header
         }
     }
 
-	async saveEditorContent(codeEditorContent) {
-		let url = `${hostName}/phupdatejobcode`
-		const accessToken = this.parent.getCookie("access_token") || this.debugToken
-		let body = {
-			"bucket": "ph-platform",
-			"key": this.codeKey,
-			"file_name": this.file_name,
-			"data": encodeURI(codeEditorContent),
-			"timespan": new Date().getTime()
-		}
-		let options = {
-			method: "POST",
-			headers: {
-				"Authorization": accessToken,
-				'Content-Type': 'application/json; charset=UTF-8',
-				"accept": "application/json"
-			},
-			body: JSON.stringify(body)
-		}
-		let result = await fetch(url, options).then(res => res.json())
-		if (result.status === 1) {
-			Message({
-				type: 'success',
-				showClose: true,
-				duration: 3000,
-				message: '脚本保存成功！'
-			})
-		} else {
-			Message({
-				type: 'error',
-				showClose: true,
-				duration: 30000,
-				message: '脚本保存失败！'
-			})
-		}
-	}
+	// async saveEditorContent(codeEditorContent) {
+	// 	let url = `${hostName}/phupdatejobcode`
+	// 	const accessToken = this.parent.getCookie("access_token") || this.debugToken
+	// 	let body = {
+	// 		"bucket": "ph-platform",
+	// 		"key": this.codeKey,
+	// 		"file_name": this.file_name,
+	// 		"data": encodeURI(codeEditorContent),
+	// 		"timespan": new Date().getTime()
+	// 	}
+	// 	let options = {
+	// 		method: "POST",
+	// 		headers: {
+	// 			"Authorization": accessToken,
+	// 			'Content-Type': 'application/json; charset=UTF-8',
+	// 			"accept": "application/json"
+	// 		},
+	// 		body: JSON.stringify(body)
+	// 	}
+	// 	let result = await fetch(url, options).then(res => res.json())
+	// 	if (result.status === 1) {
+	// 		Message({
+	// 			type: 'success',
+	// 			showClose: true,
+	// 			duration: 3000,
+	// 			message: '脚本保存成功！'
+	// 		})
+	// 	} else {
+	// 		Message({
+	// 			type: 'error',
+	// 			showClose: true,
+	// 			duration: 30000,
+	// 			message: '脚本保存失败！'
+	// 		})
+	// 	}
+	// }
 
-	async getEditorContentEvent(event) {
-		if (event.data.editorId === "codeEditor") {
-			const codeEditorContent = event.data.content
-			await this.datasource.saveEditorContent(codeEditorContent)
-			this.downloadCode++
-		}
+	// async getEditorContentEvent(event) {
+	// 	if (event.data.editorId === "codeEditor") {
+	// 		const codeEditorContent = event.data.content
+	// 		await this.datasource.saveEditorContent(codeEditorContent)
+	// 		this.downloadCode++
+	// 	}
 
-	}
+	// }
 }

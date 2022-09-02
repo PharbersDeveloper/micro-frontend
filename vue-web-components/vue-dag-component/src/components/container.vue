@@ -12,9 +12,7 @@
                     <button>数据集</button>
                 </div>
             </div>
-            <div class="viewport" ref="viewport">
-                <iframe ref="dag" id="dag" class="main_iframe" :src="iframeUrl" frameborder="0"></iframe>
-            </div>
+            <iframe ref="dag" id="dag" class="main_iframe" :src="iframeUrl" frameborder="0"></iframe>
         </div>
 
         <div class="opt_area">
@@ -95,7 +93,9 @@ export default {
             downloadCode: 0,
             projectId: "",
             flowVersion: "",
-            projectName: ""
+            projectName: "",
+            icon_header: "https://components.pharbers.com/prod/deploy/public/icons/DSuploaded/normal.svg",
+            selectItemName: "B"
         }
     },
     mounted() {
