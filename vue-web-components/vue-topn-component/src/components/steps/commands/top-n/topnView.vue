@@ -42,7 +42,7 @@
                     </div>
                 </div>
                 <div class="topn-add-btn">
-                    <select v-model="placeholderSort" @change="sortInserted" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
+                    <select v-model="placeholderSort" @change="sortInserted" onfocus="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                         <option value="选择列" label="选择列" />
                         <option v-for="(item, index) in schemaArray" :value="item.title" :key="index" :label="item.title" />
                     </select>
@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <div class="topn-add-btn">
-                        <select v-model="placeholderKey" @change="keyInserted" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
+                        <select v-model="placeholderKey" @change="keyInserted" onfocus="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                             <option value="选择列" label="选择列" />
                             <option v-for="(item, index) in schemaArray" :value="item.title" :key="index" :label="item.title" />
                         </select>

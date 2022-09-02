@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="group-key-add-btn" >
-                    <select v-model="selectedAdd" @change="addSelectedColToKey" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
+                    <select v-model="selectedAdd" @change="addSelectedColToKey" onfocus="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                         <option label="选中添加" value="选中添加" />
                         <option v-for="(item, index) in selectedAddArray" :label="item.title" :key="index" :value="item.title" />
                     </select>
