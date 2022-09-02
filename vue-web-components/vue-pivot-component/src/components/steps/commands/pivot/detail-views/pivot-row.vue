@@ -16,7 +16,7 @@
 			<span class="warning-msg" v-show="idf.length === 0">若无行定义，结果数据将为单行数据!</span>
         </div>
         <div>
-            <select class="sel" v-model="selectValue" @change="selectInsertIdfColumn" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
+            <select class="sel" v-model="selectValue" @change="selectInsertIdfColumn" onfocus="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                 <option label="选择添加" value="选择添加" ></option>
                 <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
             </select>
