@@ -39,13 +39,13 @@
                 <div>
                     <div class="add-ds-content">
                         <span>dataset</span>
-                        <select v-model="newDsName">
+                        <select v-model="newDsName" onfocus="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                             <option v-for="(op, opi) in datasetArray" :key="opi+'addds'" :value="op.name" :label="op.name" />
                         </select>
                     </div>
                     <div class="add-ds-content" v-show="datasource.datasets.length === 0">
                         <span>dataset</span>
-                        <select v-model="newDsNameSecond">
+                        <select v-model="newDsNameSecond" onfocus="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                             <option v-for="(op, opi) in datasetArray" :key="opi+'addds'" :value="op.name" :label="op.name" />
                         </select>
                     </div>
@@ -76,6 +76,8 @@ import JoinRelationCard from './detail-views/relation-card'
 import { PhJoinDefs } from "./defs"
 import PhJoinStep from "./step"
 import PhJoinCmd from "./cmd"
+import ElButton from 'element-ui/packages/button/index'
+import ElDialog from 'element-ui/packages/dialog/src/component'
 
 export default {
     data() {
@@ -102,7 +104,9 @@ export default {
     },
     components: {
         JoinDatasetCard,
-        JoinRelationCard
+        JoinRelationCard,
+		ElButton,
+		ElDialog
     },
     mounted() {
         this.datasource = new PhJoinStep(this.step)
@@ -287,8 +291,15 @@ export default {
 
         .add-ds-content {
             margin-bottom: 40px;
+            position: relative;
             span {
                 margin-right: 40px;
+            }
+            select {
+                position: absolute;
+                top: 0;
+                left: 83px;
+                min-height: 26px;
             }
         }
         .dialog-footer {
