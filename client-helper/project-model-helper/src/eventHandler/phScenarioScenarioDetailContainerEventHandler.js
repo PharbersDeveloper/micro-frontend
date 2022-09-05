@@ -54,8 +54,8 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 						active: params.active,
 						scenarioName: params.scenarioName,
 						deletion: false,
-						index: 0,
-						args: params.args
+						index: 0
+						// args: params.args
 					},
 					triggers: params.triggerDisplay,
 					steps: params.stepDisplay,
@@ -143,8 +143,8 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 			},
 			scenario: {
 				scenarioId: params.scenarioId,
-				runtime: "manual",
-				codeFree: params.codeFree
+				runtime: "manual"
+				// codeFree: params.codeFree
 			}
 		}
 		let options = {
