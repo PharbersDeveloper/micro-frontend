@@ -283,12 +283,14 @@ export default {
             this.showProgress = true
             this.failedLogs = []
         },
+        // 刷新dag数据
         refdag() { 
             const iframe = this.$refs.dag
             iframe.contentWindow.postMessage({
                 refreshDag: "refresh"
             }, "*")
         },
+        // 发送获取dag状态的请求
         dealRunDag(data, funcs) {
             const event = new Event("event")
             event.args = {
@@ -302,6 +304,7 @@ export default {
             }
             this.$emit('event', event)
         },
+        // dag 状态回调
         runDagCallBack(param, payload) {
             console.debug("Alex runDagCallBack", param, payload)
             const iframe = this.$refs.dag
