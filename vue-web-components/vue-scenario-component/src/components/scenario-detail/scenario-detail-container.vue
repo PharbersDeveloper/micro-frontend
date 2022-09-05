@@ -17,7 +17,9 @@
                 <!-- @isStepTrue="getSteptrue" -->
             </div>
 			<div v-show="activeName === '脚本参数'">
-				<script-parameters></script-parameters>
+				<script-parameters 
+					:scriptParamsData="datasource.scenarioParams"
+					ref="scriptparameters"></script-parameters>
 			</div>
         </div>
     </div>
@@ -308,7 +310,6 @@ export default {
             let stepDisplay = []
             let triggerDisplay = []
             let reportDisplay = []
-
             triggerDisplay = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => !it.deleted))
             reportDisplay = this.reportPolicy.dealReportDisplay(this.reportDisplay.filter(it => !it.deleted))
             stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
@@ -330,7 +331,8 @@ export default {
                             triggerDisplay: triggerDisplay,
                             stepDisplay: stepDisplay,
                             reportDisplay: reportDisplay,
-                            type: type
+                            type: type,
+							args: JSON.stringify(this.$refs.scriptparameters.scriptParamsList)
                         }
                     }
 					console.log(event)
