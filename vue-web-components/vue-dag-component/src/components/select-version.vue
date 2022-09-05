@@ -32,8 +32,8 @@
     </div>
 </template>
 <script>
-import PhDagDatasource from './model/datasourcev2'
-import { staticFilePath, hostName } from "../config/envConfig"
+import PhDagDatasource from './model/datasource'
+import { staticFilePath } from "../config/envConfig"
 
 export default {
     data() {
@@ -50,7 +50,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhDagDatasource('1')
+                return new PhDagDatasource('1', this.projectId, this)
             }
         },
         datasetName: String,
@@ -64,7 +64,7 @@ export default {
         let that = this
         this.selectVersionTags = this.dsVersion
         this.datasource.name = this.datasetName
-        this.datasource.projectId = this.projectId
+        // this.datasource.projectId = this.projectId
         this.datasource.queryDlgDistinctCol(this, this.representId, this.cat, this.datasetName).then((data) => {
             //完整的显示行列表数据
             that.versionArr = data.filter(it => that.selectVersionTags.indexOf(it) === -1)
@@ -91,11 +91,10 @@ export default {
             this.versionArrShow.push(data)
         },
         getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg))
-                return (arr[2]);
-            else
-                return null;
+            let arr,
+                reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if ((arr = document.cookie.match(reg))) return arr[2];
+            else return null;
         },
         save() {
             const event = new Event("event")
@@ -134,8 +133,6 @@ export default {
     top: 0;
     right: 0;
     z-index: 9999;
-    justify-content: center;
-    align-items: center;
     background: rgba(0,0,0,0.31);
 }
 .dialog_area {

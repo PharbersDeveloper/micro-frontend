@@ -67,7 +67,7 @@
 
 <script>
 import selectVersion from "./select-version.vue"
-import { staticFilePath, hostName } from "../config/envConfig"
+import { staticFilePath } from "../config/envConfig"
 
 
 export default {
@@ -217,9 +217,11 @@ export default {
         testJSON (str) {
             if (typeof str == 'string') {
                 try {
-                    var obj=JSON.parse(str);
+                    // var obj=JSON.parse(str);
+                    JSON.parse(str);
                     return true;
                 } catch(e) {
+                    console.error(e);
                     return false;
                 }
             } else {
@@ -248,8 +250,6 @@ export default {
     top: 0;
     right: 0;
     z-index: 9999;
-    justify-content: center;
-    align-items: center;
     background: rgba(0,0,0,0.31);
 }
 .dialog_area {

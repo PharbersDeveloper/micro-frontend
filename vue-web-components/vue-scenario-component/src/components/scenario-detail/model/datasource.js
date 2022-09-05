@@ -8,7 +8,7 @@ export default class PhScenarioDetailDatasource {
         this.projectId = projectId
         this.scenarioId = scenarioId
 		this.scenarioName = ""
-        this.debugToken = "9c373a8780e3ede9eb9e9bfa304cb9c22a0b7d98372f017609dbc6364ac01218"
+        this.debugToken = "eab8d11b79ebf042a4289654ac620b7abbb67f291bfdbde7c1322b716b24b842"
         this.store = new JsonApiDataStore()
         this.scenario = {}
         this.triggers = []
@@ -39,6 +39,11 @@ export default class PhScenarioDetailDatasource {
         const scenarios = await this.buildScenarioQuery().then((response) => response.json())
         this.store.sync(scenarios)
         this.scenario = this.store.findAll("scenarios")[0]
+		if (this.scenario && this.scenario.args !== "") {
+			this.scenarioParams = JSON.parse(this.scenario.args)
+		} else {
+			this.scenarioParams = []
+		}
 
         const triggers = await this.buildTriggersQuery(this.scenarioId)
             .then((response) => response.json())
