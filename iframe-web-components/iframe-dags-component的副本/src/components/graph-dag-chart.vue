@@ -1,6 +1,6 @@
 <template>
-    <div class="page_container">
-        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css"/>
+    <div class="graphWrap">
+        <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="show_area">
             <div class="show_header">
                 <div class="show_header_left">
@@ -13,7 +13,9 @@
                     <button>数据集</button>
                 </div>
             </div>
-            <iframe ref="dag" id="dag" class="main_iframe" :src="iframeUrl" frameborder="0"></iframe>
+            <div class="viewport" ref="viewport">
+                <div ref="chart" class="chart"></div>
+            </div>
         </div>
 
         <div class="opt_area">
@@ -23,7 +25,6 @@
             </div>
             <div class="opt_icon_area">
                 <div class="fir_icon_row">
-                    <button type="button" @click="refdag">刷新dag进行重绘</button>
                     <img
                         v-if="!isRunning"
                         :src="defs.iconsByName('run')"
@@ -66,13 +67,6 @@
             @closeRunDagDialog="closeRunDagDialog"
         ></run-dag-dialog>
 
-        <progress-bar
-            v-if="showProgress"
-            @closeProgress="closeProgress"
-            :progressOver="progressOver"
-        >
-        </progress-bar>
-
         <div class="job_status_area">
             <div
                 class="job_status"
@@ -81,7 +75,7 @@
             >
                 <div class="job_notice">
                     <div class="item title">Job failed</div>
-                    <div class="item">
+                    <div class="item" :title="jobShowName">
                         {{ item.jobShowName }}
                     </div>
                 </div>
@@ -90,6 +84,24 @@
                 </button>
             </div>
         </div>
+
+        <div v-if="loading">
+            <div id="loadingio-spinner-double-ring-ho1zizxmctu">
+                <div class="ldio-400lpppmiue">
+                    <div></div>
+                    <div></div>
+                    <div><div></div></div>
+                    <div><div></div></div>
+                </div>
+            </div>
+        </div>
+
+        <progress-bar
+            v-if="showProgress"
+            @closeProgress="closeProgress"
+            :progressOver="progressOver"
+        >
+        </progress-bar>
 
         <el-dialog
             :title="getSelectItemName()"
@@ -124,48 +136,76 @@
                 <el-button type="primary"  @click="triggerPolicy.dagRunPreparing()">确认</el-button>
             </span>
         </el-dialog>
-        
-        <div v-if="loading">
-            <div id="loadingio-spinner-double-ring-ho1zizxmctu">
-                <div class="ldio-400lpppmiue">
-                    <div></div>
-                    <div></div>
-                    <div><div></div></div>
-                    <div><div></div></div>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
-
 <script>
-import PhDagDatasource from "./model/datasource"
+import PhDagDatasource from "./model/datasourcev2";
+import PhRenderPolicy from "./policy/render/dag-render-policy";
 import PhDagDefinitions from "./policy/definitions/definitions";
-import PhAlfredPolicy from "./policy/trigger/sm-trigger-policy";
 import PhLogsPolicy from "./policy/logs/log-policy";
+import PhStatusPolicy from "./policy/handler/dagstatushandler";
+import PhAirflowPolicy from "./policy/trigger/airflow-trigger-policy";
+import PhAlfredPolicy from "./policy/trigger/sm-trigger-policy";
+import runDagDialog from "./run-dag-dialog.vue";
+// import dagLogsDialog from "./dag-log-dialog.vue";
+import progressBar from "./progress-bar-type.vue";
 import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
-import runDagDialog from "./run-dag-dialog.vue";
-import progressBar from "./progress-bar-type.vue";
 
 export default {
-    name: 'dag-page',
+    data: () => {
+        return {
+            name: "dag",
+            needRefresh: 0,
+            projectId: "",
+            flowVersion: "",
+            icon_header: null,
+            selectItem: null,
+            showRunJson: false,
+            runId: "",
+            representId: "",
+            failedLogs: [],
+            projectName: "ETL_Iterator",
+            loading: false,
+            jobShowName: "",
+            selectItemName: "", //单击的dag的名字
+            responseArr: [],
+            showProgress: false, //进度条弹窗是否显示
+            textConf: {}, //运行弹框textarea的默认值
+            progressOver: false, //进度条是否停止
+            registerJobEventName: "",
+            retryButtonShow: false,
+            showDagLogs: false,
+            isRunning: false, //stop按钮是否可以点击
+            isFirstRendering: true,
+            offsetLeft: 0,
+            offsetTop: 0,
+            runDagSelectVisible: false,
+            selectRecursive: "recursive"
+        };
+    },
     components: {
         runDagDialog,
+        // dagLogsDialog,
+        progressBar,
         ElDialog,
-        ElButton,
-        progressBar
+        ElButton
     },
     props: {
-        iframeUrl: {
+        schedulerPolicyName: {
             type: String,
-            // default: "http://localhost:8080/graph/"
-            default: "http://dagv2.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/graph/"
+            default: "sm"
         },
         datasource: {
             type: Object,
-            default: function() {
-                return new PhDagDatasource('1', this.projectId, this)
+            default: function () {
+                return new PhDagDatasource("1");
+            }
+        },
+        renderPolicy: {
+            type: Object,
+            default: function () {
+                return new PhRenderPolicy("1", this);
             }
         },
         defs: {
@@ -174,102 +214,71 @@ export default {
                 return new PhDagDefinitions("1");
             }
         },
-        scriptIconArray: {
-            type: Array,
-            default: function () {
-                return ["python", "pyspark", "sparkr", "r", "prepare", "sort", "distinct", "sync", "topn", "join", "stack", "group"]
-            }
-        },
-        triggerPolicy: {
-            type: Object,
-            default: function () {
-                return new PhAlfredPolicy("1", this);
-            }
-        },
         logsPolicy: {
             type: Object,
             default: function () {
                 return new PhLogsPolicy("1", this);
             }
         },
-    },
-    data() {
-        return {
-            isRunning: false, //stop按钮是否可以点击
-            runDagSelectVisible: false, //是否显示选择运行策略的弹窗
-            showRunJson: false, //是否显示运行的jsons
-            textConf: {}, //运行弹框textarea的默认值
-            showProgress: false, //进度条弹窗是否显示
-            progressOver: false, //进度条是否停止
-            failedLogs: [],
-            loading: false,
-            retryButtonShow: false,
-            downloadCode: 0,
-            registerJobEventName: "",
-            projectId: "",
-            flowVersion: "",
-            projectName: "",
-            icon_header: "",
-            selectItemName: "",
-            selectRecursive: "recursive"
+        eventPolicy: {
+            type: Object,
+            default: function () {
+                return new PhStatusPolicy("1", this);
+            }
+        },
+        triggerPolicy: {
+            type: Object,
+            default: function () {
+                if (this.schedulerPolicyName === "airflow") {
+                    return new PhAirflowPolicy("1", this);
+                } else {
+                    return new PhAlfredPolicy("1", this);
+                }
+            }
+        },
+        scriptIconArray: {
+            type: Array,
+            default: function () {
+                return ["python", "pyspark", "sparkr", "r", "prepare", "sort", "distinct", "sync", "topn", "join", "stack", "group"]
+            }
         }
     },
     mounted() {
-        let href = window.location.href
-        let paramArr = href.split("?")[1].split("&")
-        this.projectId = this.getUrlParam(paramArr, "projectId")
-        this.projectName = this.getUrlParam(paramArr, "projectName")
-        this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
-        // this.projectId = "ggjpDje0HUC2JW"
-        // this.projectName = "demo"
-        // this.flowVersion = "developer"
+        let href = window.location.href;
+        console.log(href);
+        let paramArr = href.split("?")[1].split("&");
+        this.projectId = this.getUrlParam(paramArr, "projectId");
+        this.projectName = this.getUrlParam(paramArr, "projectName");
+        this.flowVersion = this.getUrlParam(paramArr, "flowVersion");
+        // 判断环境
+        this.datasource.projectId = this.projectId;
+        this.initChart();
+        // window.addEventListener('message', this.eventPolicy.handleForwardMessage)
+        window.addEventListener("message", this.handleForwardMessage);
         this.registerJobEventName = "runDag" + new Date().getTime().toString();
-        // 将datasource注册到window中，iframe传递消息this指向为window
-        window["datasource"] = this.datasource
-        this.initGraphDag(this.projectId, this.flowVersion, this.projectName)
-        
     },
-    watch: {
+    destroyed() {
+        // 移除监听
+        window.removeEventListener("message", this.handleForwardMessage);
     },
     methods: {
-        registerEvent() {
-            this.unRegisterEvent()
-            // 注册获取 Dag 点击 Node 的事件
-            window.addEventListener("message", this.datasource.getClickNodeEvent);
-            window.addEventListener("message", this.datasource.iframeComplete);
-            window.addEventListener("message", this.datasource.runningStatusCallback);
-        },
-        unRegisterEvent() {
-            window.removeEventListener("message", this.datasource.getClickNodeEvent);
-            window.removeEventListener("message", this.datasource.iframeComplete);
-            window.removeEventListener("message", this.datasource.runningStatusCallback);
-        },
-        initGraphDag(projectId, flowVersion, projectName) {
-            const iframe = this.$refs.dag
-            iframe.onload = function () {
-                iframe.contentWindow.postMessage({
-                    dagParameters: {
-                        dagId: "dagId",
-                        projectId,
-                        flowVersion,
-                        projectName
-                    }
-                }, "*")
-            }
-            this.registerEvent()
-        },
-        getUrlParam(arr, value) {
-            let data = arr.find(item => item.indexOf(value) > -1)
-            return data ? decodeURI(data).split("=")[1] : undefined
-        },
-        getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)")
-            arr = document.cookie.match(reg)
-            if (arr) return (arr[2])
-            else return null
-        },
         getSelectItemName() {
             return "构建" + this.selectItemName
+        },	
+        handleForwardMessage(event) {
+            const that = this;
+            if (event.data.message) {
+                if (event.data.message.cmd === "render_dag") {
+                    that.eventPolicy.runDagCallback(event.data.message);
+                }
+                if (event.data.message.cmd === "finish_dag") {
+                    that.eventPolicy.runDagFinishCallback(event.data.message);
+                }
+            }
+        },
+        getUrlParam(arr, value) {
+            let data = arr.find((item) => item.indexOf(value) > -1);
+            return data ? decodeURI(data).split("=")[1] : undefined;
         },
         //关闭进度条
         closeProgress() {
@@ -278,82 +287,164 @@ export default {
         closeRunDagDialog() {
             this.showRunJson = false;
         },
+        async initChart() {
+            // 初始化echarts实例
+            await this.datasource.refreshData(this);
+            // 发布前解注
+            document.domain = "pharbers.com"
+        },
+        // 监听屏幕大小改变
+        bindChangeWindow() {
+            window.onresize = () => {
+                if (this.timer) return;
+
+                this.timer = setTimeout(() => {
+                    this.dag.resize();
+                    this.timer = null;
+                }, 100);
+            };
+        },
+        getCookie(name) {
+            let arr,
+                reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if ((arr = document.cookie.match(reg))) return arr[2];
+            else return null;
+        },
+        renderDag(data) {
+            const that = this
+            this.renderPolicy.renderDag(data, (width, height) => {
+                if (that.isFirstRendering) {
+                    that.isFirstRendering = false
+                    const windowHeight = that.$refs.chart.offsetHeight
+                    // const height = Math.max(that.datasource.sizeHit[0], windowHeight)
+                    const step = Math.round(height / windowHeight)
+                    const adjust = height / step / 2
+                    that.offsetLeft = 0
+                    that.offsetTop = height / 2 - adjust
+                }
+                that.$refs.viewport.scroll({
+                    top: that.offsetTop,
+                    left: that.offsetLeft,
+                    behavior: "instant"
+                })
+            });
+        },
         confirmeRunDag(data) {
             this.triggerPolicy.runDag(data);
-        },
-        clearDag() {
-            this.progressOver = false
-            this.retryButtonShow = false
-            this.showProgress = true
-            this.failedLogs = []
-
-            const iframe = this.$refs.dag
-            iframe.contentWindow.postMessage({
-                clearDag: "clearDag"
-            }, "*")
-        },
-        // 刷新dag数据
-        refdag() { 
-            const iframe = this.$refs.dag
-            iframe.contentWindow.postMessage({
-                refreshDag: "refresh"
-            }, "*")
-        },
-        // 发送获取dag状态的请求
-        dealRunDag(data, funcs) {
-            const event = new Event("event")
-            event.args = {
-                callback: "runDagStatus",
-                element: this,
-                param: {
-                    eventName: data.eventName,
-                    projectId: this.projectId,
-                    callbacks: funcs
-                }
-            }
-            this.$emit('event', event)
-        },
-        // dag 状态回调
-        runDagCallBack(param, payload) {
-            console.debug("Alex runDagCallBack", param, payload)
-            const iframe = this.$refs.dag
-            iframe.contentWindow.postMessage({
-                message: {
-                    param,
-                    payload,
-                    cmd: "render_dag"
-                }
-            }, "*")
-        },
-        executionStatusCallback(param, payload) {
-            console.debug("Alex execution", param, payload)
-            const iframe = this.$refs.dag
-            iframe.contentWindow.postMessage({
-                message: {
-                    param,
-                    payload,
-                    cmd: "finish_dag"
-                }
-            }, "*")
-        },
+        }
     },
-    beforeDestroy() {
-        this.unRegisterEvent()
+    watch: {
+        needRefresh(n, o) {
+            this.renderDag();
+        },
+        selectItem(n, o) {
+            this.selectItemName = n.attributes.name;
+            this.icon_header = this.defs.iconsByName(n.category);
+            this.offsetLeft = this.$refs.viewport.scrollLeft
+            this.offsetTop = this.$refs.viewport.scrollTop
+            this.isFirstRendering = false
+            this.$nextTick(this.datasource.selectOneElement(this));
+        }
     }
-}
+};
 </script>
 
-<style lang='scss' scoped>
-.page_container {
+<style scoped lang="scss">
+
+.viewport {
+    overflow: auto;
+}
+
+.graphWrap {
     display: flex;
-    flex-direction: row;
-    box-sizing: border-box;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    // height: calc(100vh - 40px);
     background: #f7f7f7;
-    
+    box-sizing: border-box;
+    .run-dag-select-dialog {
+        display: flex;
+        flex-direction: column;
+        .select-area {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            .run-dag-active {
+                border: 1px solid #7163C5 !important;
+            }
+            .select-item {
+                width: 260px;
+                height: 65px;
+                border: 1px solid #eee;
+                margin: 0 5px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                .title {
+                    font-size: 16px;
+                    margin-bottom: 5px;
+                    color: #000;
+                }
+                .desc {
+                    font-size: 12px;
+                }
+            }
+        }
+        .img {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+    }
+    .job_status_area {
+        position: absolute;
+        bottom: 60px;
+        right: 15px;
+        .job_status {
+            box-sizing: border-box;
+            width: 240px;
+            height: 70px;
+            background: #ffffff;
+            border: 1px solid #979797;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            font-size: 20px;
+            margin-bottom: 10px;
+            .item {
+                width: 120px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                cursor: pointer;
+            }
+            .title {
+                color: red;
+            }
+            button {
+                width: 59px;
+                height: 32px;
+                border: 1px solid #eeedf7;
+                border-radius: 2px;
+                font-size: 14px;
+                color: #7163c5;
+                letter-spacing: 0;
+                text-align: center;
+                line-height: 20px;
+                font-weight: 500;
+                cursor: pointer;
+            }
+        }
+    }
+
     .show_area {
-        width: calc(100vw - 320px);
+        width: 100%;
+        height: 100%;
         padding: 10px;
-        
         .show_header {
             display: flex;
             justify-content: space-between;
@@ -364,7 +455,13 @@ export default {
             }
         }
     }
-
+    .chart {
+        width: calc(100vw - 320px);
+        height: calc(100vh - 90px);
+        /*background-color: black;*/
+        // height: 100%;
+        // padding: 10px;
+    }
     .opt_area {
         width: 300px;
         height: calc(100vh - 40px);
@@ -452,92 +549,6 @@ export default {
             }
         }
     }
-
-    .main_iframe {
-        width: calc(100vw - 300px);
-        height: calc(100vh - 80px);
-    }
-
-    .run-dag-select-dialog {
-        display: flex;
-        flex-direction: column;
-        .select-area {
-            display: flex;
-            width: 100%;
-            justify-content: center;
-            .run-dag-active {
-                border: 1px solid #7163C5 !important;
-            }
-            .select-item {
-                width: 260px;
-                height: 65px;
-                border: 1px solid #eee;
-                margin: 0 5px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                .title {
-                    font-size: 16px;
-                    margin-bottom: 5px;
-                    color: #000;
-                }
-                .desc {
-                    font-size: 12px;
-                }
-            }
-        }
-
-        .img {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-        }
-    }
-
-    .job_status_area {
-        position: absolute;
-        bottom: 60px;
-        right: 15px;
-        .job_status {
-            box-sizing: border-box;
-            width: 240px;
-            height: 70px;
-            background: #ffffff;
-            border: 1px solid #979797;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px;
-            font-size: 20px;
-            margin-bottom: 10px;
-            .item {
-                width: 120px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                cursor: pointer;
-            }
-            .title {
-                color: red;
-            }
-            button {
-                width: 59px;
-                height: 32px;
-                border: 1px solid #eeedf7;
-                border-radius: 2px;
-                font-size: 14px;
-                color: #7163c5;
-                letter-spacing: 0;
-                text-align: center;
-                line-height: 20px;
-                font-weight: 500;
-                cursor: pointer;
-            }
-        }
-    }
-
 }
 //界面未加载loading
 @keyframes ldio-400lpppmiue {
