@@ -149,6 +149,14 @@ export default class PhDagTriggerPolicy {
         }
         console.debug(options, url)
         
+        let results = await fetch(url, options).then(res => res.json())
+        if(results.status === "failed") {
+            alert("启动出错，请重新运行！")
+            this.parent.loading = false
+            return false
+        }
+
+        // 触发状态请求
         this.parent.dealRunDag({
             eventName: "runDagStatus",
             projectId: this.parent.projectId
@@ -164,32 +172,7 @@ export default class PhDagTriggerPolicy {
                 func: this.executionStatusCallback
             }
         })
-        // TODO 先不发请求
-        // let results = await fetch(url, options).then(res => res.json())
-        // if(results.status === "failed") {
-        //     alert("启动出错，请重新运行！")
-        //     this.parent.loading = false
-        //     return false
-        // }
 
-        // const tmpMsg = {
-        //     message: {
-        //         notification: {
-        //             eventName: this.parent.registerJobEventName,
-        //             projectId: this.parent.projectId,
-        //             id: this.runnerId
-
-        //         },
-        //         executionStatus: {
-        //             id: this.runnerId,
-        //             eventName: "executionStatus"
-        //         }
-        //     }
-        // }
-
-        // TODO 触发状态请求
-        // this.parent.eventPolicy.forwardMessageToParent(tmpMsg)
-        
         this.parent.showRunJson = false
         this.parent.loading = false
         this.parent.clearDag()
