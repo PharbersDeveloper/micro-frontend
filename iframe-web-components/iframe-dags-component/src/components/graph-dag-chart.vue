@@ -122,7 +122,7 @@ export default {
                     }
                 }, '*')
                 // 发布前解注
-                // document.domain = "pharbers.com"
+                document.domain = "pharbers.com"
 
             }
         },
