@@ -124,16 +124,16 @@ export default {
         }
     },
     mounted() {
-        // this.inputsArray = this.inputs 
-        // this.outputsArray = this.outputs
+        this.inputsArray = this.inputs 
+        this.outputsArray = this.outputs
     },
     watch: {
-        "inputs": function(n) {
-            this.inputsArray = n
-        },
-		"outputs": function(n) {
-            this.outputsArray = n
-		}
+        // "inputs": function(n) {
+        //     this.inputsArray = n
+        // },
+		// "outputs": function(n) {
+        //     this.outputsArray = n
+		// }
     }
 }
 </script>
