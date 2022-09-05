@@ -220,6 +220,7 @@ export default {
         this.projectId = "ggjpDje0HUC2JW"
         this.projectName = "demo"
         this.flowVersion = "developer"
+        this.registerJobEventName = "runDag" + new Date().getTime().toString();
         // 将datasource注册到window中，iframe传递消息this指向为window
         window["datasource"] = this.datasource
         this.initGraphDag(this.projectId, this.flowVersion, this.projectName)
