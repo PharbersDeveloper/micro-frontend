@@ -159,8 +159,8 @@ export default {
     props: {
         iframeUrl: {
             type: String,
-            default: "http://localhost:8080/graph/"
-            // default: "https://codeditor.pharbers.com/phcodeditor"
+            // default: "http://localhost:8080/graph/"
+            default: "http://dagv2.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/graph/"
         },
         datasource: {
             type: Object,
@@ -204,6 +204,7 @@ export default {
             failedLogs: [],
             loading: false,
             downloadCode: 0,
+            registerJobEventName: "",
             projectId: "",
             flowVersion: "",
             projectName: "",
@@ -219,6 +220,7 @@ export default {
         this.projectId = "ggjpDje0HUC2JW"
         this.projectName = "demo"
         this.flowVersion = "developer"
+        this.registerJobEventName = "runDag" + new Date().getTime().toString();
         // 将datasource注册到window中，iframe传递消息this指向为window
         window["datasource"] = this.datasource
         this.initGraphDag(this.projectId, this.flowVersion, this.projectName)
@@ -284,7 +286,20 @@ export default {
             iframe.contentWindow.postMessage({
                 refreshDag: "refresh"
             }, "*")
-        }
+        },
+        dealRunDag(data, funcs) {
+            const event = new Event("event")
+            event.args = {
+                callback: "runDagStatus",
+                element: this,
+                param: {
+                    eventName: data.eventName,
+                    projectId: this.projectId,
+                    callbacks: funcs
+                }
+            }
+            this.$emit('event', event)
+        },
     },
     beforeDestroy() {
         this.unRegisterEvent()

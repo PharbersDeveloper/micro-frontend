@@ -5,7 +5,7 @@ import { hostName } from "../../config/envConfig"
 export default class PhDagDatasource {
     constructor(id, projectId, parent) {
         this.id = id
-        this.debugToken = 'b2b7c31a591c8d44e7f9fc9ba42861e1b7712a8dc59fe69fa26ba06f219c52e8'
+        this.debugToken = '34814cb23df681ed0d3a1ba7cc74a3148f9f673c91921e384920914970865111'
 
         this.adapter = this.defaultAdapter
         this.projectId = projectId
