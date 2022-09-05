@@ -9,7 +9,7 @@ export default class PhDataSource {
         this.store = new JsonApiDataStore()
         this.resetData()
         this.parent = parent
-        this.debugToken = "bb88505a0dc9ba9bff4eb609c760454749aeeb3c3703c7eedc1f4997aa0e5f68"
+        this.debugToken = "09e74570f8646e53c76c9dcc1a4321a176caf2ba0488efe15731682f03e1b7d1"
     }
 
     resetData() {
@@ -54,9 +54,9 @@ export default class PhDataSource {
         return fetch(url, options)
     }
 
-    refreshData(projectId, jobName, jobId) {
+    async refreshData(projectId, jobName, jobId) {
         const that = this
-        this.buildQuery(projectId, jobId)
+        await this.buildQuery(projectId, jobId)
             .then((response) => response.json())
             .then((response) => {
                 that.currentPageToken = response.meta.start_key
@@ -103,12 +103,11 @@ export default class PhDataSource {
             })
     }
 
-    refreshDataset(projectId, dsId) {
+    async refreshDataset(projectId, dsId) {
         const that = this
-        this.buildDatasetQuery(projectId)
+        await this.buildDatasetQuery(projectId)
             .then((response) => response.json())
             .then((response) => {
-                console.log(response)
                 that.store.sync(response)
                 const data = that.store.findAll("datasets")
                 that.parent.datasetArray = data

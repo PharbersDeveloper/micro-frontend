@@ -420,6 +420,7 @@ export default {
         //select catalog
         on_click_catalog() {
             this.selectCatalogVisible = true
+            this.showDialog = !this.showDialog
         },
         // max1.0
         fitMaxEvent(data) {
@@ -700,6 +701,7 @@ export default {
         },
         //本地上传文件
         upload() {
+            this.showDialog = !this.showDialog
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
@@ -715,6 +717,7 @@ export default {
         },
         //s3上传文件
         s3Upload() {
+            this.showDialog = !this.showDialog
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",

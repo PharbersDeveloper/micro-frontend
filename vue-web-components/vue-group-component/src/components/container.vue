@@ -277,7 +277,6 @@ export default {
             this.stepsDefs[5].status = "success"
         },
         computeSchema() {
-			// that.parent.computedSchema = that.parent.computeSchema()
             const result = []
             for (let idx = 0; idx < this.datasource.dataset.schema.length; ++idx) {
                 result.push({
@@ -301,7 +300,6 @@ export default {
                     "title": addCols[x]["name"]
                 })
             }
-
             return result
         },
         genOutputsSchema() {

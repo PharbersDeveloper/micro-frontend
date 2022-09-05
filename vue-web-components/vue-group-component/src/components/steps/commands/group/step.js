@@ -18,7 +18,6 @@ export default class PhGroupStep {
     }
 
 	resetCommands(schema) {
-		console.log(this.commands)
 		const results = schema.map(x => {
             const tmp = new PhGroupCmd()
 			let par = []

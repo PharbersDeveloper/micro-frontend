@@ -22,9 +22,9 @@
                 </div>
             </div>
             <div class="sort-add-btn">
-                <select v-model="placeholderSort" @change="sortInserted">
-                    <option v-for="(item, index) in schemaArray" :value="item.src" :key="index" :label="item.src" />
+                <select v-model="placeholderSort" @change="sortInserted" onfocus="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                     <option value="选择列" label="选择列" />
+                    <option v-for="(item, index) in schemaArray" :value="item.src" :key="index" :label="item.src" />
                 </select>
             </div>
         </div>
@@ -158,9 +158,9 @@ export default {
 
 		select {
 		width: 200px;
-		height: 26px;
+		min-height: 26px;
 		border: 1px solid #ccc;
-		color: #ccc;
+		color: #666;
 		}
 	}
 

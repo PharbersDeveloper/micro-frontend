@@ -4,24 +4,28 @@
         <div class="scenario">
             <scenario-nav :scenario="datasource.scenario" :activeTrue="activeIsTrue" @active="activeChange"
                 @save="saveAll" @trigger="trigger"></scenario-nav>
-            <div class="scenario-container" v-if="activeName === 'Setting'">
+            <div class="scenario-container" v-show="activeName === 'Setting'">
                 <!-- <div class="scenario-container" v-if="activeName === ''">  -->
                 <detail-form :scenario="datasource.scenario"></detail-form>
                 <trigger-lst :triggers="triggerDisplay" :datasetsAll="datasetsAllDisplay"
                     @isTriggerTrue="getTriggerTrue" :scenario-id="datasource.scenario.id" />
                 <report-lst :reports="reportDisplay" @isTrue="getTrue" :scenario-id="datasource.scenario.id" />
             </div>
-            <div v-else class="scenario-container">
+            <div v-show="activeName === 'Steps'" class="scenario-container">
                 <scenario-steps :steps="stepDisplay" :datasets="datasetsDisplay"
                     :scenario-id="datasource.scenario.id" />
                 <!-- @isStepTrue="getSteptrue" -->
             </div>
+			<div v-show="activeName === '脚本参数'">
+				<script-parameters 
+					:scriptParamsData="datasource.scenarioParams"
+					ref="scriptparameters"></script-parameters>
+			</div>
         </div>
     </div>
 </template>
 
 <script>
-// import { staticFilePath } from '../../config/envConfig'
 import DetailForm from "./detail-form"
 import ScenarioNav from "./scenario-nav"
 import TriggerLst from "./trigger-list"
@@ -31,6 +35,7 @@ import TriggerPolicy from "./policy/trigger-policy"
 import ReportPolicy from "./policy/report-policy"
 import StepPolicy from "./policy/step-policy"
 import datasource from "./model/datasource"
+import scriptParameters from "./script-parameters"
 import { Message } from 'element-ui'
 
 export default {
@@ -88,7 +93,8 @@ export default {
         ScenarioNav,
         TriggerLst,
         ReportLst,
-        ScenarioSteps
+        ScenarioSteps,
+		scriptParameters
     },
     computed: {
 
@@ -304,7 +310,6 @@ export default {
             let stepDisplay = []
             let triggerDisplay = []
             let reportDisplay = []
-
             triggerDisplay = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => !it.deleted))
             reportDisplay = this.reportPolicy.dealReportDisplay(this.reportDisplay.filter(it => !it.deleted))
             stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
@@ -326,7 +331,8 @@ export default {
                             triggerDisplay: triggerDisplay,
                             stepDisplay: stepDisplay,
                             reportDisplay: reportDisplay,
-                            type: type
+                            type: type,
+							args: JSON.stringify(this.$refs.scriptparameters.scriptParamsList)
                         }
                     }
 					console.log(event)
