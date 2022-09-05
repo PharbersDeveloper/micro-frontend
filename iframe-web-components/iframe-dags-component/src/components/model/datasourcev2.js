@@ -21,7 +21,7 @@ export default class PhDagDatasource {
         let body = {
             "table": "dag",
             "conditions": {
-                "projectId": ["=", this.projectId],
+                "projectId": ["=", ele.projectId],
                 "sortVersion": ["begins_with", "developer_"]
             },
             "limit": 200,
