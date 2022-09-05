@@ -143,7 +143,8 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 			},
 			scenario: {
 				scenarioId: params.scenarioId,
-				runtime: "manual"
+				runtime: "manual",
+				codeFree: params.codeFree
 			}
 		}
 		let options = {
