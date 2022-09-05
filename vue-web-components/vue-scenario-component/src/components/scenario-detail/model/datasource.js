@@ -42,16 +42,7 @@ export default class PhScenarioDetailDatasource {
 		if (this.scenario && this.scenario.args !== "") {
 			this.scenarioParams = JSON.parse(this.scenario.args)
 		} else {
-			this.scenarioParams = [
-				{
-					"name": "sdfa",
-					"default": "sdf",
-					"type": "String",
-					"des": "fsd",
-					"level": 1,
-					"index": 1
-				}
-			]
+			this.scenarioParams = []
 		}
 
         const triggers = await this.buildTriggersQuery(this.scenarioId)
