@@ -148,6 +148,22 @@ export default class PhDagTriggerPolicy {
             body: JSON.stringify(body)
         }
         console.debug(options, url)
+        
+        this.parent.dealRunDag({
+            eventName: "runDagStatus",
+            projectId: this.parent.projectId
+        }, {
+            notification: {
+                runnerId: this.runnerId,
+                eventName: this.parent.registerJobEventName,
+                func: this.runDagCallBack
+            },
+            executionStatus: {
+                runnerId: this.runnerId,
+                eventName: "executionStatus",
+                func: this.executionStatusCallback
+            }
+        })
         // TODO 先不发请求
         // let results = await fetch(url, options).then(res => res.json())
         // if(results.status === "failed") {
@@ -195,5 +211,14 @@ export default class PhDagTriggerPolicy {
         const i = d.indexOf(".")
         d = d.substring(0, i) + "+00:00"
         return [projectName, projectName, flowVersion, d].join("_")
+    }
+
+    
+    runDagCallBack(param, payload) {
+        console.debug("Alex runDagCallBack", param, payload)
+    }
+
+    executionStatusCallback(param, payload) {
+        console.debug("Alex execution", param, payload)
     }
 }
