@@ -214,12 +214,14 @@ export default {
         }
     },
     mounted() {
-        // let href = window.location.href
-        // let paramArr = href.split("?")[1].split("&")
-        // this.projectId = this.getUrlParam(paramArr, "projectId")
-        this.projectId = "ggjpDje0HUC2JW"
-        this.projectName = "demo"
-        this.flowVersion = "developer"
+        let href = window.location.href
+        let paramArr = href.split("?")[1].split("&")
+        this.projectId = this.getUrlParam(paramArr, "projectId")
+        this.projectName = this.getUrlParam(paramArr, "projectName")
+        this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
+        // this.projectId = "ggjpDje0HUC2JW"
+        // this.projectName = "demo"
+        // this.flowVersion = "developer"
         this.registerJobEventName = "runDag" + new Date().getTime().toString();
         // 将datasource注册到window中，iframe传递消息this指向为window
         window["datasource"] = this.datasource
@@ -281,12 +283,14 @@ export default {
             this.showProgress = true
             this.failedLogs = []
         },
+        // 刷新dag数据
         refdag() { 
             const iframe = this.$refs.dag
             iframe.contentWindow.postMessage({
                 refreshDag: "refresh"
             }, "*")
         },
+        // 发送获取dag状态的请求
         dealRunDag(data, funcs) {
             const event = new Event("event")
             event.args = {
@@ -300,6 +304,29 @@ export default {
             }
             this.$emit('event', event)
         },
+        // dag 状态回调
+        runDagCallBack(param, payload) {
+            console.debug("Alex runDagCallBack", param, payload)
+            const iframe = this.$refs.dag
+            iframe.contentWindow.postMessage({
+                message: {
+                    param,
+                    payload,
+                    cmd: "render_dag"
+                }
+            }, "*")
+        },
+        executionStatusCallback(param, payload) {
+            console.debug("Alex execution", param, payload)
+            const iframe = this.$refs.dag
+            iframe.contentWindow.postMessage({
+                message: {
+                    param,
+                    payload,
+                    cmd: "finish_dag"
+                }
+            }, "*")
+        }
     },
     beforeDestroy() {
         this.unRegisterEvent()
