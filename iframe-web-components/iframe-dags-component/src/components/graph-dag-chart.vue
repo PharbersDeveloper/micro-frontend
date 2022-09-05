@@ -91,12 +91,15 @@ export default {
             window.addEventListener("message", this.changeDagNodeStatus);
             // 刷新Dag
             window.addEventListener("message", this.refreshDag);
+            // 清空内部状态  这里面的状态没全部提出来 先出来一般  后面我来重写逻辑
+            window.addEventListener("message", this.clearDag);
         },
         unRegisterEvent() { 
             console.debug("取消注册事件");
             window.removeEventListener("message", this.initDag);
             window.removeEventListener("message", this.changeDagNodeStatus);
             window.removeEventListener("message", this.refreshDag);
+            window.removeEventListener("message", this.clearDag);
         },
         async initDag(event) { 
             // 目前只设置 ProjectID  ProjectName FlowVersion
@@ -184,8 +187,25 @@ export default {
                 })
             });
         },
-        confirmeRunDag(data) {
-            this.triggerPolicy.runDag(data);
+        returnRunDagStatus() {
+            // 返回dag运行状态
+            window.parent.postMessage({
+                dagId: this.dagId,
+                toVueDagRunStatus: {
+                    isRunning: this.isRunning,
+                    failedLogs: JSON.stringify(this.failedLogs),
+                    progressOver: this.progressOver,
+                    retryButtonShow: this.retryButtonShow
+                }
+            }, '*')
+        },
+        clearDag(event) { 
+            if (event.data.clearDag) {
+                this.isRunning = false;
+                this.failedLogs = [];
+                this.progressOver = false;
+                this.retryButtonShow = false;
+            }
         }
     },
     watch: {

@@ -68,6 +68,7 @@ export default class PhDagHandler {
                 }
             }
             console.log("failedLogs", that.failedLogs)
+            that.returnRunDagStatus()
         })
     }
 
@@ -89,6 +90,7 @@ export default class PhDagHandler {
             that.runId = cnotification.runId
             that.isRunning = true
         }
+        that.returnRunDagStatus()
     }
 
     //更新节点状态
