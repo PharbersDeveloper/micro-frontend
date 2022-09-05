@@ -216,14 +216,10 @@ export default {
         // let href = window.location.href
         // let paramArr = href.split("?")[1].split("&")
         // this.projectId = this.getUrlParam(paramArr, "projectId")
-        // this.jobId = this.getUrlParam(paramArr, "jobId")
-        // //父组件传进来的值
-        // this.datasource.jobId = this.jobId //decodeURI(this.jobName)
-        // this.datasource.projectId = this.projectId
-        // 将datasource注册到window中，iframe传递消息this指向为window
         this.projectId = "ggjpDje0HUC2JW"
         this.projectName = "demo"
         this.flowVersion = "developer"
+        // 将datasource注册到window中，iframe传递消息this指向为window
         window["datasource"] = this.datasource
         this.initGraphDag(this.projectId, this.flowVersion, this.projectName)
         
