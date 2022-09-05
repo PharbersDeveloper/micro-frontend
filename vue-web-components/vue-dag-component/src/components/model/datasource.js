@@ -78,4 +78,20 @@ export default class PhDagDatasource {
                 return response.data.map(x => x["attributes"]["name"])
             })
     }
+
+    // 返回是否运行和错误信息的回调  用于嵌套外侧的使用
+    runningStatusCallback(event) {
+        if (event.data.toVueDagRunStatus) { 
+            const {
+                isRunning, failedLogs,
+                progressOver, retryButtonShow
+            } = event.data.toVueDagRunStatus
+            console.debug("progressOver", progressOver)
+            this.datasource.parent.isRunning = isRunning
+            this.datasource.parent.failedLogs = JSON.parse(failedLogs)
+            this.datasource.parent.progressOver = progressOver
+            this.datasource.parent.retryButtonShow = retryButtonShow
+
+        }
+    }
 }
