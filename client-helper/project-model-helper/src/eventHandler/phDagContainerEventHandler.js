@@ -33,10 +33,12 @@ export async function phDagContainerEventHandler(e, route) {
 	}
 
 	function runDagCallBack(param, payload) {
-		console.debug("run dag callback", param, payload)
+		console.debug("run dag callback")
+		callbacks["notification"]["func"](param, payload)
 	}
 
 	function executionStatusCallback(param, payload) {
-		console.debug("execution status callback", param, payload)
+		console.debug("execution status callback")
+		callbacks["executionStatus"]["func"](param, payload)
 	}
 }
