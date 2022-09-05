@@ -12,6 +12,7 @@
 import PhDagDatasource from "./model/datasourcev2";
 import PhRenderPolicy from "./policy/render/dag-render-policy";
 import PhDagDefinitions from "./policy/definitions/definitions";
+import PhStatusPolicy from "./policy/handler/dagstatushandler";
 
 export default {
     data: () => {
@@ -57,6 +58,12 @@ export default {
             type: Object,
             default: function () {
                 return new PhDagDatasource("1");
+            }
+        },
+        eventPolicy: {
+            type: Object,
+            default: function () {
+                return new PhStatusPolicy("1", this);
             }
         },
         renderPolicy: {

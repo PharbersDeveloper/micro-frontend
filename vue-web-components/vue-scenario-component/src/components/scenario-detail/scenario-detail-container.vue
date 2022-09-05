@@ -22,6 +22,19 @@
 					ref="scriptparameters"></script-parameters>
 			</div>
         </div>
+		<el-dialog title="输入参数" :visible.sync="dialogVisible" width="30%">
+			<el-input 
+				type="textarea" 
+				:rows="4" 
+				placeholder="请输入参数" 
+				:class="isAll() ? 'error-border' : ''"
+				v-model="codeFreeParams"></el-input>
+			<span v-show="isAll()" class="error-msg">请输入正确参数!</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogVisible = false" style="padding: 10px;">Cancel</el-button>
+                <el-button type="primary" @click="triggerConfirm" style="padding: 10px;">Confirm</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -36,6 +49,9 @@ import ReportPolicy from "./policy/report-policy"
 import StepPolicy from "./policy/step-policy"
 import datasource from "./model/datasource"
 import scriptParameters from "./script-parameters"
+import ElDialog from "element-ui/packages/dialog/index"
+import ElButton from "element-ui/packages/button/index"
+import ElInput from "element-ui/packages/input/index"
 import { Message } from 'element-ui'
 
 export default {
@@ -50,7 +66,11 @@ export default {
             isTrue: true,
             isTriggerTrue: true,
             isStepTrue: false,
-            activeIsTrue: {active: false}
+            activeIsTrue: {active: false},
+			dialogVisible: false,
+			codeFreeParams: JSON.stringify({
+				"CodeFree": {}
+			})
         }
     },
     props: {
@@ -94,7 +114,10 @@ export default {
         TriggerLst,
         ReportLst,
         ScenarioSteps,
-		scriptParameters
+		scriptParameters,
+        ElDialog,
+		ElButton,
+		ElInput
     },
     computed: {
 
@@ -156,6 +179,32 @@ export default {
             let paramArr = href.split("?")[1].split("&")
             let data = paramArr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
+        },
+		isConfEmpty() {
+            if (this.codeFreeParams.length == 0) {
+                return true
+            } else {
+                return false
+            }
+        },
+        isAll() {
+            if (!this.isConfEmpty() && !this.isJSON_codeFreeParams()) {
+                return false
+            } else {
+                return true
+            }
+        },
+		isJSON_codeFreeParams() {
+            try {
+                var obj = JSON.parse(this.codeFreeParams);
+                if (Object.prototype.toString.call(obj) == '[object Object]' && obj) {
+                    return false
+                } else {
+                    return true
+                }
+            } catch (e) {
+                return true
+            }
         },
         isJSON_test(value) {
             try {
@@ -297,7 +346,21 @@ export default {
             })
         },
 		trigger() {
-			this.saveAll("trigger")
+			this.dialogVisible = true
+		},
+		triggerConfirm() {
+			if (!this.isAll()) {
+				this.saveAll("trigger")
+				this.dialogVisible = false
+			} else {
+				Message({
+					type: 'error',
+					showClose: true,
+					duration: 3000,
+					message: '请输入正确的参数！'
+				})
+				this.dialogVisible = true
+			}
 		},
         forArray(array){
             for (let i = 0; i < array.length; i++) {
@@ -332,7 +395,8 @@ export default {
                             stepDisplay: stepDisplay,
                             reportDisplay: reportDisplay,
                             type: type,
-							args: JSON.stringify(this.$refs.scriptparameters.scriptParamsList)
+							args: JSON.stringify(this.$refs.scriptparameters.scriptParamsList),
+							codeFree: JSON.parse(this.codeFreeParams).CodeFree
                         }
                     }
 					console.log(event)
@@ -365,6 +429,14 @@ export default {
         margin: 0;
         box-sizing: border-box;
     }
+
+	.error-border {
+		border: 1px solid red !important;
+	}
+
+	.error-msg {
+		color: red;
+	}
 
     .scenario {
         display: flex;

@@ -164,12 +164,12 @@ export default class PhDagTriggerPolicy {
             notification: {
                 runnerId: this.runnerId,
                 eventName: this.parent.registerJobEventName,
-                func: this.runDagCallBack
+                func: this.parent.runDagCallBack
             },
             executionStatus: {
                 runnerId: this.runnerId,
                 eventName: "executionStatus",
-                func: this.executionStatusCallback
+                func: this.parent.executionStatusCallback
             }
         })
 
@@ -196,12 +196,4 @@ export default class PhDagTriggerPolicy {
         return [projectName, projectName, flowVersion, d].join("_")
     }
 
-    
-    runDagCallBack(param, payload) {
-        console.debug("Alex runDagCallBack", param, payload)
-    }
-
-    executionStatusCallback(param, payload) {
-        console.debug("Alex execution", param, payload)
-    }
 }
