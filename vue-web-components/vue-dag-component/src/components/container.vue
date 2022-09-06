@@ -195,8 +195,8 @@ export default {
     props: {
         iframeUrl: {
             type: String,
-            default: "http://localhost:8081/graph/"
-            // default: "http://dagv2.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/graph/"
+            // default: "http://localhost:8081/graph/"
+            default: "http://dagv2.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/graph/"
             // default: "https://dag.pharbers.com/graph/"
         },
         datasource: {

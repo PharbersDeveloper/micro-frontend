@@ -6,7 +6,7 @@ export async function phDagContainerEventHandler(e, route) {
 
 	if (e.detail[0].args.callback === "runDagStatus") {
 		if (params) {
-			runDagStatusCallbacks = params.runDagStatusCallbacks
+			runDagStatusCallbacks = params.callbacks
 			const notification = runDagStatusCallbacks["notification"]
 			const executionStatus = runDagStatusCallbacks["executionStatus"]
 			route.projectId = params.projectId
