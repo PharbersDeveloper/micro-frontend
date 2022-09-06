@@ -545,6 +545,10 @@ export default {
         },
         //点击dataset name
         clickDatasetName(dataset) {
+            const arr = ["uploaded", "catalog", "intermediate"]
+            if (!arr.includes(dataset.cat)) {
+                return false
+            }
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
@@ -757,6 +761,10 @@ export default {
                 return this.intermediate_icon
             case "catalog":
                 return this.catalog_icon
+            case "download":
+                return this.defs.iconsByName("DSdownload")
+            case "shared":
+                return this.defs.iconsByName("DSshared")
             default:
                 return this.dataset_icon
             }

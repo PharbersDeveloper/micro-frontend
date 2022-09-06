@@ -8,7 +8,7 @@ export default class PhDagDatasource {
         this.name = "demo"
         this.projectId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = '34814cb23df681ed0d3a1ba7cc74a3148f9f673c91921e384920914970865111'
+        this.debugToken = '58cf26a7920e8ab6681293be92e7fe240039e28efc94e56bb6d28bbb954378f1'
         this.sizeHit = [0, 0]
         // this.hitWidthStep = 300
         // this.hitHeightStep = 500
@@ -70,6 +70,10 @@ export default class PhDagDatasource {
                 result = "max-out"
             } else if (cat === "dataset" && runtime === "catalog") {
                 result = "catalog"
+            } else if (cat === "dataset" && runtime === "shared") {
+                result = "DSshared"
+            } else if (cat === "dataset" && runtime === "download") {
+                result = "DSdownload"
             } else if (cat === "job" && runtime === "python3") {
                 result = "python"
             } else if (cat === "job" && runtime === "pyspark") {
@@ -96,7 +100,11 @@ export default class PhDagDatasource {
                 result = "group"
             } else if (cat === "job" && runtime === "pivot"){
                 result = "pivot"
-            } else if (cat === "dataset") {
+            } else if (cat === "job" && runtime === "shared"){
+                result = "shared"
+            } else if (cat === "job" && runtime === "download"){
+                result = "download"
+            }else if (cat === "dataset") {
                 result = "dataset"
             } else if (cat === "job") {
                 result = "job"

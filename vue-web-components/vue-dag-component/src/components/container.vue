@@ -23,7 +23,7 @@
             </div>
             <div class="opt_icon_area">
                 <div class="fir_icon_row">
-                    <button type="button" @click="refdag">刷新dag进行重绘</button>
+                    <!-- <button type="button" @click="refdag">刷新dag进行重绘</button> -->
                     <img
                         v-if="!isRunning"
                         :src="defs.iconsByName('run')"
@@ -50,7 +50,18 @@
                 <div class="script_title">脚本</div>
                 <div class="scripts">
                     <img 
+                        @click="newScript(scriptIcon)"
                         v-for="scriptIcon in scriptIconArray"
+                        :key="scriptIcon+'icon'"
+                        :src="defs.iconsByName(scriptIcon)" alt="" />
+                </div>
+            </div>
+            <div class="others">
+                <div class="script_title">其他脚本</div>
+                <div class="others_scripts">
+                    <img 
+                        @click="newOtherScript(scriptIcon)"
+                        v-for="scriptIcon in otherScriptIconArray"
                         :key="scriptIcon+'icon'"
                         :src="defs.iconsByName(scriptIcon)" alt="" />
                 </div>
@@ -124,6 +135,26 @@
                 <el-button type="primary"  @click="triggerPolicy.dagRunPreparing()">确认</el-button>
             </span>
         </el-dialog>
+
+        <!-- 新建脚本 -->
+        <create-scripts-dialog
+            v-if="showAddScriptDialog"
+            :datasets="datasource.dss"
+            :runtime="runtime"
+            @createScripts="createScripts"
+            @closeCreateDialog="closeScriptDialog">
+        </create-scripts-dialog>
+
+        <!-- 新建其他脚本 -->
+        <create-other-scripts-dialog
+			ref="createOtherScript"
+            v-if="showAddOtherScriptDialog"
+            :datasets="datasource.dss"
+			:versionArr="datasource.versionArr"
+            :runtime="runtime"
+            @createScripts="createOtherScripts"
+            @closeCreateDialog="closeScriptDialog">
+        </create-other-scripts-dialog>
         
         <div v-if="loading">
             <div id="loadingio-spinner-double-ring-ho1zizxmctu">
@@ -147,6 +178,9 @@ import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
 import runDagDialog from "./run-dag-dialog.vue";
 import progressBar from "./progress-bar-type.vue";
+import createScriptsDialog from './create-scripts-dialog.vue'
+import createOtherScriptsDialog from './create-other-scripts-dialog.vue'
+import { Message } from 'element-ui'
 
 export default {
     name: 'dag-page',
@@ -154,14 +188,16 @@ export default {
         runDagDialog,
         ElDialog,
         ElButton,
-        progressBar
+        progressBar,
+        createScriptsDialog,
+        createOtherScriptsDialog
     },
     props: {
         iframeUrl: {
             type: String,
-            // default: "http://localhost:8080/graph/"
+            default: "http://localhost:8081/graph/"
             // default: "http://dagv2.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/graph/"
-			default: "https://dag.pharbers.com/graph/"
+            // default: "https://dag.pharbers.com/graph/"
         },
         datasource: {
             type: Object,
@@ -179,6 +215,12 @@ export default {
             type: Array,
             default: function () {
                 return ["python", "pyspark", "sparkr", "r", "prepare", "sort", "distinct", "sync", "topn", "join", "stack", "group"]
+            }
+        },
+        otherScriptIconArray: {
+            type: Array,
+            default: function() {
+                return ["shared", "download"]
             }
         },
         triggerPolicy: {
@@ -212,7 +254,10 @@ export default {
             projectName: "",
             icon_header: "",
             selectItemName: "",
-            selectRecursive: "recursive"
+            selectRecursive: "recursive",
+            showAddScriptDialog: false,
+            runtime: "",
+            showAddOtherScriptDialog: false
         }
     },
     mounted() {
@@ -221,9 +266,6 @@ export default {
         this.projectId = this.getUrlParam(paramArr, "projectId")
         this.projectName = this.getUrlParam(paramArr, "projectName")
         this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
-        // this.projectId = "ggjpDje0HUC2JW"
-        // this.projectName = "demo"
-        // this.flowVersion = "developer"
         this.registerJobEventName = "runDag" + new Date().getTime().toString();
         // 将datasource注册到window中，iframe传递消息this指向为window
         window["datasource"] = this.datasource
@@ -233,6 +275,87 @@ export default {
     watch: {
     },
     methods: {
+		dealCreateOtherScript(data, func) {
+			const event = new Event("event")
+            event.args = {
+                callback: "createOtherScript",
+                element: this,
+                param: {
+                    uuid: data.uuid,
+                    eventName: data.eventName,
+                    projectId: this.projectId,
+                    projectName: this.projectName,
+                    callback: func
+                }
+            }
+            this.$emit('event', event)
+			this.showAddOtherScriptDialog = false
+		},
+		saveNotification(status) {
+            if (status == "success" || status == "succeed") {
+                Message({
+                    type: 'success',
+                    showClose: true,
+                    duration: 3000,
+                    message: '新建脚本成功！'
+                })
+				this.refdag()
+            } else {
+                Message({
+                    type: 'error',
+                    showClose: true,
+                    duration: 30000,
+                    message: '新建脚本失败！'
+                })
+            }
+        },
+        //增加其他脚本
+        createOtherScripts(data) {
+            data.args.param.projectName = this.projectName
+            data.args.param.projectId = this.projectId
+            data.args.param.runtime = this.runtime
+            this.datasource.createScripts(this, data)		
+        },
+        //增加scripts
+        createScripts(data) {
+            let multiInputs = ["join", "stack"]
+            if (
+                data.args.param.inputs.length != 2 &&
+                multiInputs.includes(this.runtime)
+            ) {
+                Message({
+                    type: 'error',
+                    showClose: true,
+                    duration: 3000,
+                    message: '请选择两个输入数据'
+                })
+                return false
+            }
+
+            data.args.param.projectName = this.projectName
+            data.args.param.projectId = this.projectId
+            data.args.param.runtime = this.runtime			
+            this.$emit('event', data)
+            this.showCreateScriptsDialog = false
+        },
+		//关闭scripts弹框
+        closeScriptDialog() {
+            this.showAddScriptDialog = false
+            this.showAddOtherScriptDialog = false
+        },
+        async newScript(name) {
+            this.runtime = name
+            await this.datasource.refreshData1(this)
+            this.showAddScriptDialog = true
+        },
+        async newOtherScript(name) {
+            this.runtime = name
+            await this.datasource.refreshData1(this)
+			if (name === "shared") {
+				await this.datasource.queryCatalog(this)
+			}
+            this.showAddOtherScriptDialog = true
+        },
         registerEvent() {
             this.unRegisterEvent()
             // 注册获取 Dag 点击 Node 的事件
@@ -449,6 +572,32 @@ export default {
                     width: 40px;
                     height: 40px;
                     margin: 5px;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .others {
+            border-top: 1px solid #ccc;
+            padding: 20px;
+
+            .scripts_title {
+                font-family: PingFangSC-Medium;
+                font-size: 12px;
+                color: #000000;
+                text-align: center;
+                font-weight: bold;
+            }
+
+            .others_scripts {
+                margin-top: 20px;
+                display: flex;
+                flex-wrap: wrap;
+                img {
+                    width: 40px;
+                    height: 40px;
+                    margin: 5px;
+                    cursor: pointer;
                 }
             }
         }
