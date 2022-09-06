@@ -1,10 +1,13 @@
 
 import { hostName } from "../../config/envConfig"
 // import { Message } from 'element-ui'
+import { JsonApiDataStore } from "jsonapi-datastore"
+
 
 export default class PhDagDatasource {
     constructor(id, projectId, parent) {
         this.id = id
+        this.store = new JsonApiDataStore()
         this.debugToken = 'ebc42cb215e3b18013ee69c75272e1cac202da49b566c8bd41bda948da00d432'
 
         this.adapter = this.defaultAdapter
@@ -35,6 +38,74 @@ export default class PhDagDatasource {
             this.datasource.parent.icon_header = icon_header
             this.datasource.cal = cal
         }
+    }
+
+	// 数据集
+    buildQuery1(ele){
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        let body = {
+            table: "dataset",
+            conditions: {
+                projectId: ["=", ele.projectId]
+            },
+            index_name: "dataset-projectId-name-index",
+            limit: this.dataset_size,
+            start_key: ''
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                Authorization: accessToken,
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                accept: "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+	
+	jsonapiAdapter(data) {
+        const dashToHump = function (value) {
+            const textArr = value.split("-")
+            return textArr.map((item, index) => {
+                if (index === 0) return item
+                return item.slice(0, 1).toUpperCase() + item.slice(1);
+            }).join("");
+        }
+        if (Array.isArray(data)) {
+            data.map(item => {
+                Object.keys(item).map(keys => {
+                    let newK = dashToHump(keys)
+                    if (newK !== keys) {
+                        item[newK] = item[keys]
+                        delete item[keys]
+                    }
+                })
+                return item
+            })
+        } else {
+            Object.keys(data).map(keys => {
+                let newK = dashToHump(keys)
+                if (newK !== keys) {
+                    data[newK] = data[keys]
+                    delete data[keys]
+                }
+            })
+        }
+        return data
+    }
+
+    // 加载数据集
+    async refreshData1(ele) {
+        let that = this
+        await ele.datasource.buildQuery1(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                that.store.sync(response)
+                that.dss = that.jsonapiAdapter(that.store.findAll("datasets"))
+            })
     }
 
     //查询version

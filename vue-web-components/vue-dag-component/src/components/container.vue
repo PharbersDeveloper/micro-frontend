@@ -50,6 +50,7 @@
                 <div class="script_title">脚本</div>
                 <div class="scripts">
                     <img 
+                        @click="newScript(scriptIcon)"
                         v-for="scriptIcon in scriptIconArray"
                         :key="scriptIcon+'icon'"
                         :src="defs.iconsByName(scriptIcon)" alt="" />
@@ -59,6 +60,7 @@
                 <div class="script_title">其他脚本</div>
                 <div class="others_scripts">
                     <img 
+                        @click="newOtherScript(scriptIcon)"
                         v-for="scriptIcon in otherScriptIconArray"
                         :key="scriptIcon+'icon'"
                         :src="defs.iconsByName(scriptIcon, 'normal', '.png')" alt="" />
@@ -133,6 +135,24 @@
                 <el-button type="primary"  @click="triggerPolicy.dagRunPreparing()">确认</el-button>
             </span>
         </el-dialog>
+
+        <!-- 新建脚本 -->
+        <create-scripts-dialog
+            v-if="showAddScriptDialog"
+            :datasets="datasource.dss"
+            :runtime="runtime"
+            @createScripts="createScripts"
+            @closeCreateDialog="closeScriptDialog">
+        </create-scripts-dialog>
+
+        <!-- 新建其他脚本 -->
+        <create-other-scripts-dialog
+            v-if="showAddOtherScriptDialog"
+            :datasets="datasource.dss"
+            :runtime="runtime"
+            @createScripts="createScripts"
+            @closeCreateDialog="closeScriptDialog">
+        </create-other-scripts-dialog>
         
         <div v-if="loading">
             <div id="loadingio-spinner-double-ring-ho1zizxmctu">
@@ -156,6 +176,9 @@ import ElDialog from 'element-ui/packages/dialog/src/component'
 import ElButton from 'element-ui/packages/button/index'
 import runDagDialog from "./run-dag-dialog.vue";
 import progressBar from "./progress-bar-type.vue";
+import createScriptsDialog from './create-scripts-dialog.vue'
+import createOtherScriptsDialog from './create-other-scripts-dialog.vue'
+import { Message } from 'element-ui'
 
 export default {
     name: 'dag-page',
@@ -163,7 +186,9 @@ export default {
         runDagDialog,
         ElDialog,
         ElButton,
-        progressBar
+        progressBar,
+        createScriptsDialog,
+        createOtherScriptsDialog
     },
     props: {
         iframeUrl: {
@@ -227,7 +252,10 @@ export default {
             projectName: "",
             icon_header: "",
             selectItemName: "",
-            selectRecursive: "recursive"
+            selectRecursive: "recursive",
+            showAddScriptDialog: false,
+            runtime: "",
+            showAddOtherScriptDialog: false
         }
     },
     mounted() {
@@ -236,9 +264,6 @@ export default {
         this.projectId = this.getUrlParam(paramArr, "projectId")
         this.projectName = this.getUrlParam(paramArr, "projectName")
         this.flowVersion = this.getUrlParam(paramArr, "flowVersion")
-        // this.projectId = "ggjpDje0HUC2JW"
-        // this.projectName = "demo"
-        // this.flowVersion = "developer"
         this.registerJobEventName = "runDag" + new Date().getTime().toString();
         // 将datasource注册到window中，iframe传递消息this指向为window
         window["datasource"] = this.datasource
@@ -248,6 +273,42 @@ export default {
     watch: {
     },
     methods: {
+        //增加scripts
+        createScripts(data) {
+            let multiInputs = ["join", "stack"]
+            if (
+                data.args.param.inputs.length != 2 &&
+                multiInputs.includes(this.runtime)
+            ) {
+                Message({
+                    type: 'error',
+                    showClose: true,
+                    duration: 3000,
+                    message: '请选择两个输入数据'
+                })
+                return false
+            }
+
+            data.args.param.projectName = this.projectName
+            data.args.param.projectId = this.projectId
+            data.args.param.runtime = this.runtime			
+            this.$emit('event', data)
+            this.showCreateScriptsDialog = false
+        },
+		//关闭scripts弹框
+        closeScriptDialog() {
+            this.showAddScriptDialog = false
+        },
+        async newScript(name) {
+            this.runtime = name
+            await this.datasource.refreshData1(this)
+            this.showAddScriptDialog = true
+        },
+        async newOtherScript(name) {
+            this.runtime = name
+            await this.datasource.refreshData1(this)
+            this.showAddOtherScriptDialog = true
+        },
         registerEvent() {
             this.unRegisterEvent()
             // 注册获取 Dag 点击 Node 的事件
