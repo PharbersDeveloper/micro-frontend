@@ -10,8 +10,8 @@ export async function phAnalyzeBpExecutionsHistoryEventHandler(e, route) {
 					params.projectName +
 					"&projectId=" +
 					params.projectId +
-					"&jobIndex=" +
-					params["executionItem"]["job-index"]
+					"&runnerId=" +
+					params.runnerId
 			}
 			route.router.transitionTo("shell", uri)
 			break
