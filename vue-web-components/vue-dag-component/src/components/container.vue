@@ -23,7 +23,7 @@
             </div>
             <div class="opt_icon_area">
                 <div class="fir_icon_row">
-                    <button type="button" @click="refdag">刷新dag进行重绘</button>
+                    <!-- <button type="button" @click="refdag">刷新dag进行重绘</button> -->
                     <img
                         v-if="!isRunning"
                         :src="defs.iconsByName('run')"
@@ -53,6 +53,15 @@
                         v-for="scriptIcon in scriptIconArray"
                         :key="scriptIcon+'icon'"
                         :src="defs.iconsByName(scriptIcon)" alt="" />
+                </div>
+            </div>
+            <div class="others">
+                <div class="script_title">其他脚本</div>
+                <div class="others_scripts">
+                    <img 
+                        v-for="scriptIcon in otherScriptIconArray"
+                        :key="scriptIcon+'icon'"
+                        :src="defs.iconsByName(scriptIcon, 'normal', '.png')" alt="" />
                 </div>
             </div>
         </div>
@@ -159,9 +168,9 @@ export default {
     props: {
         iframeUrl: {
             type: String,
-            // default: "http://localhost:8080/graph/"
+            default: "http://localhost:8081/graph/"
             // default: "http://dagv2.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/graph/"
-			default: "https://dag.pharbers.com/graph/"
+            // default: "https://dag.pharbers.com/graph/"
         },
         datasource: {
             type: Object,
@@ -179,6 +188,12 @@ export default {
             type: Array,
             default: function () {
                 return ["python", "pyspark", "sparkr", "r", "prepare", "sort", "distinct", "sync", "topn", "join", "stack", "group"]
+            }
+        },
+        otherScriptIconArray: {
+            type: Array,
+            default: function() {
+                return ["datashare", "datadownload"]
             }
         },
         triggerPolicy: {
@@ -449,6 +464,32 @@ export default {
                     width: 40px;
                     height: 40px;
                     margin: 5px;
+                }
+            }
+        }
+
+        .others {
+            border-top: 1px solid #ccc;
+            padding: 20px;
+
+            .scripts_title {
+                font-family: PingFangSC-Medium;
+                font-size: 12px;
+                color: #000000;
+                text-align: center;
+                font-weight: bold;
+            }
+
+            .others_scripts {
+                margin-top: 20px;
+                display: flex;
+                flex-wrap: wrap;
+                img {
+                    width: 40px;
+                    height: 40px;
+                    margin: 5px;
+                    border-radius: 50%;
+                    cursor: pointer;
                 }
             }
         }
