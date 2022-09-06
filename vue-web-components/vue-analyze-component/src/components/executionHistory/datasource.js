@@ -102,12 +102,12 @@ export default class PhContainerDataSource {
             })
     }
 
-    queryLogs(ele) {
+    queryLogs(ele,jobIndex) {
         const logsUrl = `${hostName}/phquerylogfile`
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
         let logsBody = {
             "projectId": this.projectId,
-            "jobIndex": this.jobIndex
+            "jobIndex": jobIndex
         }
         let logsOptions = {
             method: "POST",
@@ -121,9 +121,9 @@ export default class PhContainerDataSource {
         return fetch(logsUrl, logsOptions)
     }
 
-    buildLogsQuery(ele) {
+    buildLogsQuery(ele,jobIndex) {
         const that = this
-        ele.datasource.queryLogs(ele)
+        ele.datasource.queryLogs(ele,jobIndex)
             .then((response) => response.json())
             .then((response) => {
                 ele.dealBuildLogsQuery(response)
