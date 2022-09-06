@@ -8,7 +8,7 @@ export default class PhDagDatasource {
     constructor(id, projectId, parent) {
         this.id = id
         this.store = new JsonApiDataStore()
-        this.debugToken = 'ebc42cb215e3b18013ee69c75272e1cac202da49b566c8bd41bda948da00d432'
+        this.debugToken = '58cf26a7920e8ab6681293be92e7fe240039e28efc94e56bb6d28bbb954378f1'
 
         this.adapter = this.defaultAdapter
         this.projectId = projectId
@@ -18,15 +18,16 @@ export default class PhDagDatasource {
         this.data = []
         this.cal = { calculate: {}, selected: [] }
         this.parent = parent
+        this.versionArr = []
     }
 
     iframeComplete(event) {
-		if(event.data.dagIsComplete && event.data.dagIsComplete.status === "complete") {
+        if(event.data.dagIsComplete && event.data.dagIsComplete.status === "complete") {
             console.info("complete is ok")
             const { data } = event.data.dagIsComplete
             this.datasource.data = JSON.parse(data)
-		}
-	}
+        }
+    }
 
     getClickNodeEvent(event) {
         if (event.data.dagSelectItem) {
@@ -40,33 +41,7 @@ export default class PhDagDatasource {
         }
     }
 
-	// 数据集
-    buildQuery1(ele){
-        const url = `${hostName}/phdydatasource/query`
-        const accessToken = ele.getCookie("access_token") || this.debugToken
-        let body = {
-            table: "dataset",
-            conditions: {
-                projectId: ["=", ele.projectId]
-            },
-            index_name: "dataset-projectId-name-index",
-            limit: this.dataset_size,
-            start_key: ''
-        }
-
-        let options = {
-            method: "POST",
-            headers: {
-                Authorization: accessToken,
-                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-                accept: "application/json"
-            },
-            body: JSON.stringify(body)
-        }
-        return fetch(url, options)
-    }
-	
-	jsonapiAdapter(data) {
+    jsonapiAdapter(data) {
         const dashToHump = function (value) {
             const textArr = value.split("-")
             return textArr.map((item, index) => {
@@ -97,6 +72,32 @@ export default class PhDagDatasource {
         return data
     }
 
+    // 数据集
+    buildQuery1(ele){
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        let body = {
+            table: "dataset",
+            conditions: {
+                projectId: ["=", ele.projectId]
+            },
+            index_name: "dataset-projectId-name-index",
+            limit: this.dataset_size,
+            start_key: ''
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                Authorization: accessToken,
+                "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                accept: "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
     // 加载数据集
     async refreshData1(ele) {
         let that = this
@@ -105,6 +106,37 @@ export default class PhDagDatasource {
             .then((response) => {
                 that.store.sync(response)
                 that.dss = that.jsonapiAdapter(that.store.findAll("datasets"))
+            })
+    }
+
+    // 数据目录
+    buildQueryCatalog(ele){
+        const url = `${hostName}/phgetgluetable`
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        let body = {
+            "glue_database_name": ele.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
+        }
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+           return fetch(url, options)
+    }
+
+    // 加载数据目录
+    async queryCatalog(ele) {
+        let that = this
+        await ele.datasource.buildQueryCatalog(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                that.versionArr = response.data.map((obj) => {
+                    return obj["attributes"]["name"];
+                })
             })
     }
 
@@ -147,6 +179,119 @@ export default class PhDagDatasource {
             .then((response) => response.json())
             .then((response) => {
                 return response.data.map(x => x["attributes"]["name"])
+            })
+    }
+
+    guid() {
+        return "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(
+            /[xy]/g,
+            function (c) {
+                var r = (Math.random() * 16) | 0,
+                    v = c == "x" ? r : (r & 0x3) | 0x8
+                return v.toString(16)
+            }
+        )
+    }
+
+    // 新建脚本
+    buildCreateScripts(ele, data, uuid) {
+        console.log(data)
+        const uri = `${hostName}/phresourcecreationtrigger`
+        const accessToken = ele.getCookie("access_token") || this.debugToken
+        const companyId = ele.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
+        const accountId = ele.getCookie("account_id") || "c89b8123-a120-498f-963c-5be102ee9082"
+        const params = data.args.param
+		const schema = ele.runtime === "shared" ? ele.$refs.createOtherScript.catalog : ele.$refs.createOtherScript.address
+        let datasets = []
+        let dsNames = []
+        params.inputs.forEach((item) => {
+            datasets.push({
+                name: item.name,
+                cat: item.cat,
+                format: "parquet",
+                schema: []
+            })
+            dsNames.push(item.name)
+        })
+        datasets.push({
+            name: params.outputs[0].name,
+            cat: ele.runtime,
+            format: "catalog",
+            schema: schema
+        })
+        const script = {
+            name: params.jobName,
+            flowVersion: "developer",
+            runtime: ele.runtime,
+            inputs: JSON.stringify(dsNames),
+            output: params.outputs[0].name
+        }
+        
+        let message = {
+            common: {
+                traceId: uuid,
+                tenantId: companyId,
+                projectId: params.projectId,
+                projectName: params.projectName,
+                flowVersion: "developer",
+                dagName: params.projectName,
+                owner: accountId,
+                showName:  decodeURI(
+                    decodeURI(
+                        ele.getCookie("user_name_show")
+                    )
+                ) || "test"
+            },
+            action: {
+                cat: "createScript",
+                desc: "create script",
+                comments: "something need to say",
+                message: JSON.stringify({
+                    optionName: "create_script",
+                    cat: "shared",
+                    runtime: "shared",
+                    actionName: params.jobName
+                }),
+                required: true
+            },
+            datasets: datasets,
+            script: script,
+            notification: {
+                required: true
+            },
+            result: {}
+        }
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(message)
+        }
+        return fetch(uri, options)
+    }
+
+    createScripts(ele, data) {
+        const uuid = this.guid()
+        const eventName = "createOtherScript"
+        return ele.datasource.buildCreateScripts(ele, data, uuid)
+            .then((response) => response.json())
+            .then((response) => {
+                if (response.status === "succeed") {
+                    const model = {
+						uuid: uuid,
+						eventName: eventName
+					}
+                    ele.dealCreateOtherScript(model, (param, payload) => {
+						const { status } = JSON.parse(payload)
+						ele.saveNotification(status)
+						ele.loading = false
+                    })
+                } else {
+					ele.saveNotification("failed")
+                }
             })
     }
 

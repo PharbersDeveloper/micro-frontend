@@ -59,26 +59,27 @@
                                     <span class="label">名称</span>
                                     <el-input v-model="dsName.name" placeholder="" ref="newDs" @change="inputStrChecked(dsName.name, 'newDs', 'dsName')"></el-input>
                                 </div>
+								<div class="input_list" v-if="runtime === 'shared'">
+									<span class="label">数据目录</span>
+									<select class="catalog_select" v-model="catalog">
+										<option
+											v-for="(item,index) in versionArr"
+											v-bind:value="item" v-text="item"
+											:key="index+'cata'" ></option>
+									</select>
+								</div>
+								<div class="input_list" v-if="runtime === 'download'">
+                                    <span class="label">地址</span>
+                                    <el-input v-model="address" placeholder=""></el-input>
+                                </div>
                                 <!-- 正常新建脚本 -->
-                                <div class="input_list" v-if="runtime!=='download'">
+                                <div class="input_list">
                                     <span class="label">存储到</span>
                                     <el-input placeholder="" value="本集群" :disabled="true">></el-input>
                                 </div>
-                                <div class="input_list" v-if="runtime!=='download'">
+                                <div class="input_list">
                                     <span class="label">格式</span>
                                     <el-input placeholder="" value="SQL" :disabled="true">></el-input>
-                                </div>
-                                <!-- 下载 -->
-                                 <div class="input_list" v-if="runtime === 'download'">
-                                    <span class="label">存储到</span>
-                                    <el-input placeholder="请输入路径" v-model="path"></el-input>
-                                </div>
-                                <div class="input_list" v-if="runtime === 'download'">
-                                    <span class="label">格式</span>
-                                    <select :choosedValue="format" :src='select_icon'>
-                                        <option text="Parquet" @click="changeFormat('Parquet')" :choosedValue="format"></option>
-                                        <option text="CSV" @click="changeFormat('CSV')" :choosedValue="format"></option>
-                                    </select>
                                 </div>
                             </div>
                             <div class="btn_area">
@@ -138,6 +139,8 @@ export default {
             showOldDataset: true,
             path: "",
             format: "请选择",
+			catalog: "",
+			address: "",
             singleInputRuntime: ["group", "sync", "topn", "sort", "distinct", "prepare"]
         }
     },
@@ -148,6 +151,7 @@ export default {
     props: {
         datasets: Array,
         runtime: String,
+		versionArr: Array,
         defs: {
             type: Object,
             default: function () {
@@ -258,9 +262,7 @@ export default {
                 return false
             }
             //新增output
-            if(this.runtime != "download" && this.dsName.name && this.dsName.name !== "") {
-                this.datasetOutputListShow = true
-            } else if(this.runtime === "download" && this.path !== "" && this.format !== "请选择" && this.dsName.name && this.dsName.name !== "") {
+            if(this.dsName.name && this.dsName.name !== "") {
                 this.datasetOutputListShow = true
             } else {
                 alert("请输入完整数据!")
@@ -620,6 +622,11 @@ export default {
                 border: 1px solid #DCDFE6;
                 background: #fff;
             }
+			.catalog_select {
+				width: 238px;
+				height: 40px;
+				border: 1px solid #ccc;
+			}
         }
     }
     .left {

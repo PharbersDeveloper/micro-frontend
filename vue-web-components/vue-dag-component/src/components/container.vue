@@ -63,7 +63,7 @@
                         @click="newOtherScript(scriptIcon)"
                         v-for="scriptIcon in otherScriptIconArray"
                         :key="scriptIcon+'icon'"
-                        :src="defs.iconsByName(scriptIcon, 'normal', '.png')" alt="" />
+                        :src="defs.iconsByName(scriptIcon)" alt="" />
                 </div>
             </div>
         </div>
@@ -147,10 +147,12 @@
 
         <!-- 新建其他脚本 -->
         <create-other-scripts-dialog
+			ref="createOtherScript"
             v-if="showAddOtherScriptDialog"
             :datasets="datasource.dss"
+			:versionArr="datasource.versionArr"
             :runtime="runtime"
-            @createScripts="createScripts"
+            @createScripts="createOtherScripts"
             @closeCreateDialog="closeScriptDialog">
         </create-other-scripts-dialog>
         
@@ -218,7 +220,7 @@ export default {
         otherScriptIconArray: {
             type: Array,
             default: function() {
-                return ["datashare", "datadownload"]
+                return ["shared", "download"]
             }
         },
         triggerPolicy: {
@@ -273,6 +275,47 @@ export default {
     watch: {
     },
     methods: {
+		dealCreateOtherScript(data, func) {
+			const event = new Event("event")
+            event.args = {
+                callback: "createOtherScript",
+                element: this,
+                param: {
+                    uuid: data.uuid,
+                    eventName: data.eventName,
+                    projectId: this.projectId,
+                    projectName: this.projectName,
+                    callback: func
+                }
+            }
+            this.$emit('event', event)
+			this.showAddOtherScriptDialog = false
+		},
+		saveNotification(status) {
+            if (status == "success" || status == "succeed") {
+                Message({
+                    type: 'success',
+                    showClose: true,
+                    duration: 3000,
+                    message: '新建脚本成功！'
+                })
+				this.refdag()
+            } else {
+                Message({
+                    type: 'error',
+                    showClose: true,
+                    duration: 30000,
+                    message: '新建脚本失败！'
+                })
+            }
+        },
+        //增加其他脚本
+        createOtherScripts(data) {
+            data.args.param.projectName = this.projectName
+            data.args.param.projectId = this.projectId
+            data.args.param.runtime = this.runtime
+            this.datasource.createScripts(this, data)		
+        },
         //增加scripts
         createScripts(data) {
             let multiInputs = ["join", "stack"]
@@ -298,6 +341,7 @@ export default {
 		//关闭scripts弹框
         closeScriptDialog() {
             this.showAddScriptDialog = false
+            this.showAddOtherScriptDialog = false
         },
         async newScript(name) {
             this.runtime = name
@@ -307,6 +351,9 @@ export default {
         async newOtherScript(name) {
             this.runtime = name
             await this.datasource.refreshData1(this)
+			if (name === "shared") {
+				await this.datasource.queryCatalog(this)
+			}
             this.showAddOtherScriptDialog = true
         },
         registerEvent() {
@@ -525,6 +572,7 @@ export default {
                     width: 40px;
                     height: 40px;
                     margin: 5px;
+                    cursor: pointer;
                 }
             }
         }
@@ -549,7 +597,6 @@ export default {
                     width: 40px;
                     height: 40px;
                     margin: 5px;
-                    border-radius: 50%;
                     cursor: pointer;
                 }
             }
