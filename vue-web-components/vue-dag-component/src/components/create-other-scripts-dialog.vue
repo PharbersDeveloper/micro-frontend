@@ -1,7 +1,7 @@
 <template>
     <div>
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
-        <div class="clear_dialog_container">
+        <div class="add_dialog_container">
             <div class="dialog_area">
                <div class="header">
                     <div class="left">
@@ -317,7 +317,7 @@ export default {
     padding: 0;
     box-sizing: border-box;
 }
-.clear_dialog_container {
+.add_dialog_container {
     height: 100vh;
     width: 100vw;
     // background: rgba(37,35,45,0.55);
