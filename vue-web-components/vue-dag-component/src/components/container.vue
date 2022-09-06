@@ -253,6 +253,7 @@ export default {
             flowVersion: "",
             projectName: "",
             icon_header: "",
+            selectItem: null,
             selectItemName: "",
             selectRecursive: "recursive",
             showAddScriptDialog: false,

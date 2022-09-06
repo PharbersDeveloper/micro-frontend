@@ -34,10 +34,11 @@ export default class PhDagDatasource {
             console.debug("click node")
             console.debug(event.data.dagId)
             console.debug(event.data.dagSelectItem)
-            const { selectItemName, icon_header, cal } = JSON.parse(event.data.dagSelectItem)
+            const { selectItemName, icon_header, cal, item } = JSON.parse(event.data.dagSelectItem)
             this.datasource.parent.selectItemName = selectItemName
             this.datasource.parent.icon_header = icon_header
             this.datasource.cal = cal
+            this.datasource.selectItem = item
         }
     }
 
