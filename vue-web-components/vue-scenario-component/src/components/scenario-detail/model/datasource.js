@@ -16,6 +16,10 @@ export default class PhScenarioDetailDatasource {
 		this.datasets = []
         this.datasetsAll = []
         this.reports = []
+        this.history = []
+        this.currentPageToken = ""
+        this.hasMore = true
+        this.stepsCount = 20
     }
 
 
@@ -59,6 +63,59 @@ export default class PhScenarioDetailDatasource {
             .then((response) => response.json())
         this.store.sync(steps)
         this.steps = this.store.findAll("scenario-steps")
+
+        // let historys = {}
+        // historys = await this.buildHistoryQuery(this.projectId)
+        //     .then((response) => response.json())
+        // historys.data.forEach(item=>{
+        //     item.id = item.attributes["trace-id"]
+        // })
+        // this.currentPageToken = historys.meta.start_key
+        // if(this.currentPageToken === "") {
+        //     this.hasMore = false
+        // }
+        // this.store.sync(historys)
+        // this.history = this.store.findAll("scenario-status")
+    }
+
+    buildHistoryQuery(projectId) {
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            "table": "scenario_status",
+            "conditions": {
+                "id": ["=", projectId]
+            },
+            "limit": this.stepsCount,
+            "start_key": this.currentPageToken !== "" ? this.currentPageToken : ""
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/json',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    refreshHistory(projectId) {
+        this.buildHistoryQuery(projectId)
+            .then((response) => response.json())
+            .then((response) => {
+                response.data.forEach(item=>{
+                    item.id = item.attributes["trace-id"]
+                })
+                this.currentPageToken = response.meta.start_key
+                if(this.currentPageToken === "") {
+                    this.hasMore = false
+                }
+                this.store.sync(response)
+                this.history = this.store.findAll("scenario-status")
+            })
     }
 
     buildTriggersQuery(scenarioId) {

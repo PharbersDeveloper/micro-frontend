@@ -21,6 +21,11 @@
 					:scriptParamsData="datasource.scenarioParams"
 					ref="scriptparameters"></script-parameters>
 			</div>
+            <div v-show="activeName === '历史记录'">
+				<scenario-history
+                    :history="datasource.history"
+                    :hasMore="datasource.hasMore" @getHistory="getHistory"></scenario-history>
+			</div>
         </div>
 		<el-dialog title="输入参数" :visible.sync="dialogVisible" width="30%">
 			<el-input 
@@ -49,6 +54,7 @@ import ReportPolicy from "./policy/report-policy"
 import StepPolicy from "./policy/step-policy"
 import datasource from "./model/datasource"
 import scriptParameters from "./script-parameters"
+import ScenarioHistory from "./scenario-history"
 import ElDialog from "element-ui/packages/dialog/index"
 import ElButton from "element-ui/packages/button/index"
 import ElInput from "element-ui/packages/input/index"
@@ -115,6 +121,7 @@ export default {
         ReportLst,
         ScenarioSteps,
 		scriptParameters,
+        ScenarioHistory,
         ElDialog,
 		ElButton,
 		ElInput
@@ -127,6 +134,7 @@ export default {
 		this.datasource.scenarioId = this.getUrlParam("scenarioId")
 		this.datasource.scenarioName = this.getUrlParam("scenarioName")
         this.datasource.model()
+        this.datasource.refreshHistory(this.datasource.projectId)
     },
     watch: {
         "datasource.triggers": function() {
@@ -144,6 +152,9 @@ export default {
         "datasource.datasetsAll": function() {
 			this.datasetsAllAdapter()
 		},
+        "datasource.history": function(n) {
+			this.datasource.history = n
+		},
         activeIsTrue:{
             handler(newValue){
                 this.activeIsTrue.active = newValue.active
@@ -152,6 +163,9 @@ export default {
         }
     },
     methods: {
+        getHistory(){
+            this.datasource.refreshHistory(this.datasource.projectId)
+        },
         getTriggerTrue(value){
             if (value.length == 0) {
                 this.isTriggerTrue = true
