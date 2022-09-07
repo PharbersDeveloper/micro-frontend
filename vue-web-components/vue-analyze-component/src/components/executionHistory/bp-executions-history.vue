@@ -60,7 +60,7 @@
                 </div>
                 <div class="execution-history-logs-panel">
                     <div class="title">Activity</div>
-                    <div style="height: calc(100% - 120px);overflow-y: auto;">
+                    <div style="height: calc(100% - 60px);overflow-y: auto;">
                         <div class="execution-history-logs-panel-item" v-for="(iter,index) in executionItem"
                             :key="index">
                             <div class="execution-history-logs-panel-item-title">
@@ -200,7 +200,8 @@ export default {
         //     }
         // },
         viewLogs(data) {
-            this.datasource.buildLogsQuery(this)
+            // this.datasource.buildLogsQuery(this)
+            this.dealBuildLogsQuery()
         },
         linkToPage (name) {
             const event = new Event("event")
