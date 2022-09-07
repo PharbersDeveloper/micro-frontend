@@ -217,7 +217,7 @@ export default class PhDagDatasource {
         datasets.push({
             name: params.outputs[0].name,
             cat: ele.runtime,
-            format: "catalog",
+            format: "s3",
             schema: schema
         })
         const script = {

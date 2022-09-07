@@ -220,7 +220,7 @@ export default {
         otherScriptIconArray: {
             type: Array,
             default: function() {
-                return ["shared", "download"] 
+                return ["shared", "export"] 
             }
         },
         triggerPolicy: {
