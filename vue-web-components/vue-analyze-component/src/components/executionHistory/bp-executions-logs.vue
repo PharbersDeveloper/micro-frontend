@@ -67,7 +67,8 @@ export default {
             jsonMessage: null,
             executionItem: null,
             iframeUrl: "",
-            projectName: ""
+            projectName: "",
+            executionTemplate: ""
         }
     },
     components: {
@@ -92,15 +93,18 @@ export default {
         let paramArr = href.split("?")[1].split("&")
         this.datasource.projectId = this.getUrlParam(paramArr, "projectId")
         // this.datasource.jobIndex = this.getUrlParam(paramArr, "jobIndex")
-        this.datasource.jobName = this.getUrlParam(paramArr, "jobName")
+        // this.datasource.jobName = this.getUrlParam(paramArr, "jobName")
         this.datasource.runnerId = this.getUrlParam(paramArr, "runnerId")
         this.projectName = this.getUrlParam(paramArr, "projectName")
         this.datasource.buildActivityQuery(this, this.datasource.runnerId, () => {
             this.executionItem = this.datasource.dataActivity
             if (this.executionItem.length >= 1) {
-                this.datasource.buildLogsQuery(this, this.executionItem[0]['job-index'])
+                this.datasource.jobName = this.executionItem[0]['job-name']
+                this.executionTemplate = this.executionItem[0]['execution-template']
+                this.jobIndex = this.executionItem[0]['job-index']
+                this.datasource.buildLogsQuery(this, this.jobIndex)
+                this.datasource.buildExecutionQuery(this)
             }
-            this.datasource.buildExecutionQuery(this)
         })
         // this.datasource.buildExecutionQuery(this)
     },
@@ -132,9 +136,9 @@ export default {
                 this.executionItem = response.data[0]["attributes"]
                 this.executionTemplate = this.executionItem["execution-template"]
                 this.datasource.jobIndex = this.executionItem["job-index"]
-                this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.executionItem[0]["job-name"]}&runnerId=${this.executionItem[0]["runner-id"]}&executionTemplate=${this.executionItem[0]["execution-template"]}`
-                this.datasource.buildLogsQuery(this)
-                this.datasource.buildFlowQuery(this)
+                this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.datasource.jobName}&runnerId=${this.datasource.runnerId}&executionTemplate=${this.datasource.executionTemplate}`
+                // this.datasource.buildLogsQuery(this)
+                // this.datasource.buildFlowQuery(this)
             }
         },
         openActivityLogs(iter, index){
