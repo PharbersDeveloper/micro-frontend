@@ -46,7 +46,6 @@ export default class PhDataSource {
             limit: this.batch_size,
             start_key: key
         }
-
         let options = {
             method: "POST",
             headers: {
