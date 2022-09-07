@@ -6,48 +6,41 @@
                 <el-input v-model="searchString" class="search" placeholder="搜索"></el-input>
                 <div class="execution-sort-btn-lst">
                     <select v-model="curSort">
-                        <option
-                            v-for="(item,index) in sortCandidate"
-                            v-bind:value="item" v-text="item"
-                            :key="index+'type'" ></option>
+                        <option v-for="(item,index) in sortCandidate" v-bind:value="item" v-text="item"
+                            :key="index+'type'"></option>
                     </select>
                     <span class="part">|</span>
                     <select v-model="curStatus">
-                        <option
-                            v-for="(item,index) in statusCandidate"
-                            v-bind:value="item" v-text="item"
-                            :key="index+'type'" ></option>
+                        <option v-for="(item,index) in statusCandidate" v-bind:value="item" v-text="item"
+                            :key="index+'type'"></option>
                     </select>
                 </div>
             </div>
 
-            <div class="execution-history-list-panel" >
-                <div class="execution-history-list" >
-                    <div 
-                        v-for="(item, index) in datasource.data" 
-                        :key="index"
-                        @click="clickExecutionItem(item)"
-                        class="execution-history-item" >
+            <div class="execution-history-list-panel">
+                <div class="execution-history-list">
+                    <div v-for="(item, index) in datasource.data" :key="index" @click="clickExecutionItem(item, index)"
+                        class="execution-history-item">
                         <div class="left">
                             <p v-if="item.status==='success'" class="el-icon-success status-icon" />
                             <p v-else-if="item.status==='running'" class="el-icon-loading status-icon" />
                             <p v-else class="el-icon-error status-icon" />
                             <div class="execution-history-detail">
-                                <span class="name"><b>{{item["job-show-name"]}}</b></span>
+                                <span class="name"><b>{{item["runner-id"]}}</b></span>
                                 <div class="execution-history-time">
                                     <span class="start-time">
-                                        {{formatDateStandard(item["start-at"], 2)}}
+                                        <!-- {{formatDateStandard(item["start-at"], 2)}} -->
+                                        {{item.owner}}
                                     </span>
                                     |
                                     <span class="duration">
-                                        {{getTimes(item)}}
+                                        {{rTime(item.date)}}
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <el-button type="text" 
-                            @click.stop="viewLogs(item)"
-                            v-if="executionItem && executionItem.status !== 'running' && executionItem['id']===item['id']" >
+                        <el-button type="text" @click.stop="viewLogs(item)"
+                            v-if="executionItem && executionItem.status !== 'running' && index === isActive">
                             View Logs</el-button>
                     </div>
                 </div>
@@ -55,30 +48,43 @@
                 <p v-if="!hasMore" class="execution-history-loading">暂无更多</p>
             </div>
         </div>
-        <div class="execution-history-detail-panel" >
+        <div class="execution-history-detail-panel">
             <div class="empty" v-if="!executionItem">
                 点击一个条目查看细节
             </div>
             <div class="execution-history-detail-panel-show" v-if="executionItem">
-                <div class="execution-history-definition-panel" >
+                <div class="execution-history-definition-panel">
                     <!-- <div v-if="JSON.stringify(jsonMessage) == '{}'">暂无数据</div>
                     <viewJson v-else :JsonData="jsonMessage"></viewJson> -->
-                    <iframe 
-                        class="executions-iframe"  
-                        :src="iframeUrl"
-                        frameborder="0"></iframe>
+                    <iframe class="executions-iframe" :src="iframeUrl" frameborder="0"></iframe>
                 </div>
-                <div class="execution-history-logs-panel" >
+                <div class="execution-history-logs-panel">
                     <div class="title">Activity</div>
-                    <div class="execution-history-logs-panel-item">
-                        <div class="execution-history-logs-panel-item-title">
-                            <p v-if="executionItem.status==='success'" class="el-icon-success status-icon" />
-                            <p v-else-if="executionItem.status==='running'" class="el-icon-loading status-icon" />
-                            <p v-else class="el-icon-error status-icon" />
-                            <span class="name"><b>{{executionItem["job-show-name"]}}</b></span>
+                    <div style="height: calc(100% - 120px);overflow-y: auto;">
+                        <div class="execution-history-logs-panel-item" v-for="(iter,index) in executionItem"
+                            :key="index">
+                            <div class="execution-history-logs-panel-item-title">
+                                <p v-if="iter.status==='success'" class="el-icon-success status-icon" />
+                                <p v-else-if="iter.status==='running'" class="el-icon-loading status-icon" />
+                                <p v-else class="el-icon-error status-icon" />
+                                <span class="name"><b>{{iter["job-show-name"]}}</b></span>
+                            </div>
+                            <div class="execution-history-logs-panel-item-time">
+                                <span>
+                                    {{formatDateStandard(iter["start-at"], 0)}}
+                                </span>
+                                -
+                                <span>
+                                    {{formatDateStandard(iter["end-at"], 3)}}
+                                </span>
+                                |
+                                <span>
+                                    {{getTimes(iter)}}
+                                </span>
+                            </div>
                         </div>
-                        <div class="execution-history-logs-panel-item-time">{{getTimes(executionItem)}}</div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -111,7 +117,8 @@ export default {
             projectName: "",
             runnerId: "",
             iframeUrl: "",
-            jobName: ""
+            jobName: "",
+            isActive: null
         }
     },
     components: {
@@ -142,35 +149,50 @@ export default {
         this.datasource.appendExecutionHistory(this)
     },
     methods: {
-        dealBuildLogsQuery(response) {
-            if(response.status !== 0) {
-                alert("数据暂未生成，请刷新重试！")
-            } else if(response.status === 0) {
-                const event = new Event("event")
-                event.args = {
-                    callback: "linkToPage",
-                    element: this,
-                    param: {
-                        "name": "executions-logs",
-                        "projectName": this.projectName,
-                        "projectId": this.datasource.projectId,
-                        "executionItem": this.executionItem
-                    }
-                }
-                this.$emit('event', event)
-            }
+        // 筛选大数组中重复的小数组
+        arrRemoveRepetition(maxArr, minArr) {
+            let nArr = [];
+            nArr = maxArr.filter(function (item) {
+                let temp = minArr.map(function (v) {
+                    return v.id
+                })
+                return !temp.includes(item.id)
+            })
+            return nArr
         },
-        clickExecutionItem(data) {
-            console.log('item', data)
-            this.executionItem = data
+        dealBuildLogsQuery() {
+            // if(response.status !== 0) {
+            //     alert("数据暂未生成，请刷新重试！")
+            // } else if(response.status === 0) {
+            const event = new Event("event")
+            event.args = {
+                callback: "linkToPage",
+                element: this,
+                param: {
+                    "name": "executions-logs",
+                    "projectName": this.projectName,
+                    "projectId": this.datasource.projectId,
+                    "runnerId": this.runnerId
+                }
+            }
+            this.$emit('event', event)
+            // }
+        },
+        clickExecutionItem(data,index) {
+            this.isActive = index
             this.runnerId = data["runner-id"]
-            this.jobName = data["job-name"]
-            this.jobIndex = data["job-index"]
-            this.datasource.jobIndex = data["job-index"]
-            this.executionTemplate = data["execution-template"]
-            // https://executions.pharbers.com
-            this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.jobName}&runnerId=${this.runnerId}&executionTemplate=${this.executionTemplate}`
-            // this.datasource.buildFlowQuery(this)    
+            this.executionItem = []
+            this.datasource.buildActivityQuery(this,data["runner-id"], ()=>{
+                // this.executionItem = data
+                this.executionItem = this.datasource.dataActivity 
+                // this.runnerId = data["runner-id"]
+                this.jobName = this.executionItem.length >= 1 ? this.executionItem[0]["job-name"] : ''
+                this.jobIndex = this.executionItem.length >= 1 ? this.executionItem['job-index'] : ''
+                this.executionTemplate = this.executionItem.length >= 1 ? this.executionItem["execution-template"] : ''
+                // https://executions.pharbers.com
+                this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.jobName}&runnerId=${this.runnerId}&executionTemplate=${this.executionTemplate}` 
+                // this.datasource.buildFlowQuery(this) 
+            })
         },
         // dealBuildFlowQuery(response) {
         //     if (response.status === 0) {
@@ -192,6 +214,10 @@ export default {
                 }
             }
             this.$emit('event', event)
+        },
+        rTime(date) {
+            var json_date = new Date(date).toJSON();
+            return new Date(new Date(json_date) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
         },
         getTimes (data) {
             if(data["end-at"] === "") {
@@ -363,7 +389,7 @@ export default {
                             flex-direction: column;
 
                             .name {
-                                padding-bottom: 10px;
+                                // padding-bottom: 10px;
                             }
 
                             .execution-history-time {

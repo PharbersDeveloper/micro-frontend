@@ -9,6 +9,7 @@ export default class PhContainerDataSource {
         this.currentPageToken = ""
         this.stepsCount = 20
         this.data = []
+        this.dataActivity = []
         this.store = new JsonApiDataStore()
         this.projectId = ""
         this.jobIndex = ''
@@ -20,7 +21,7 @@ export default class PhContainerDataSource {
         const url = `${hostName}/phdydatasource/query`
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
         let body = {
-            "table": "execution",
+            "table": "executionStatus",
             "conditions": {
                 "projectId": ["=", this.projectId]
             },
@@ -32,7 +33,7 @@ export default class PhContainerDataSource {
             method: "POST",
             headers: {
                 "Authorization": accessToken,
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'Content-Type': 'application/json',
                 "accept": "application/json"
             },
             body: JSON.stringify(body)
@@ -49,18 +50,64 @@ export default class PhContainerDataSource {
                 if(that.currentPageToken === "") {
                     ele.hasMore = false
                 }
+                response.data.forEach(item=>{
+                    item.id = item.attributes["runner-id"]
+                })
                 that.store.sync(response)
                 // ele.needRefresh++
-                that.data = that.store.findAll("executions")
+                that.data = that.store.findAll("execution-status")
             })
     }
 
-    queryLogs(ele) {
+    queryActivity(ele,runnerId) {
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = ele.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            table: "execution",
+            index_name: "runnerId-startAt-index",
+            conditions: {
+                "runnerId": ["=", runnerId]
+            },
+            limit: 300,
+            start_key: ""
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/json',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    buildActivityQuery(ele,runnerId,callback=null) {
+        const that = this
+        ele.datasource.queryActivity(ele,runnerId)
+            .then((response) => response.json())
+            .then((response) => {
+                // that.currentPageToken = response.meta.start_key
+                // if(that.currentPageToken === "") {
+                //     ele.hasMore = false
+                // }
+                that.store.syncWithMeta(response)
+                // ele.needRefresh++
+                that.dataActivity = that.store.findAll("executions")
+                // that.dataActivity = ele.arrRemoveRepetition(that.dataActivityMore, that.dataActivity)
+                if(callback)
+                    callback()
+            })
+    }
+
+    queryLogs(ele,jobIndex) {
         const logsUrl = `${hostName}/phquerylogfile`
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
         let logsBody = {
             "projectId": this.projectId,
-            "jobIndex": this.jobIndex
+            "jobIndex": jobIndex
         }
         let logsOptions = {
             method: "POST",
@@ -74,9 +121,9 @@ export default class PhContainerDataSource {
         return fetch(logsUrl, logsOptions)
     }
 
-    buildLogsQuery(ele) {
+    buildLogsQuery(ele,jobIndex) {
         const that = this
-        ele.datasource.queryLogs(ele)
+        ele.datasource.queryLogs(ele,jobIndex)
             .then((response) => response.json())
             .then((response) => {
                 ele.dealBuildLogsQuery(response)
