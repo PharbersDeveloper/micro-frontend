@@ -8,7 +8,7 @@ export default class PhDagDatasource {
     constructor(id, projectId, parent) {
         this.id = id
         this.store = new JsonApiDataStore()
-        this.debugToken = '58cf26a7920e8ab6681293be92e7fe240039e28efc94e56bb6d28bbb954378f1'
+        this.debugToken = 'c4e6842313cacf87b2e7fd762eab2734a8b70f8504efbedf389b23798f8ae430'
 
         this.adapter = this.defaultAdapter
         this.projectId = projectId
@@ -38,7 +38,7 @@ export default class PhDagDatasource {
             this.datasource.parent.selectItemName = selectItemName
             this.datasource.parent.icon_header = icon_header
             this.datasource.cal = cal
-            this.datasource.selectItem = item
+            this.datasource.parent.selectItem = item
         }
     }
 
@@ -291,6 +291,7 @@ export default class PhDagDatasource {
 						ele.loading = false
                     })
                 } else {
+					ele.loading = false
 					ele.saveNotification("failed")
                 }
             })
