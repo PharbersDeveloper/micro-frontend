@@ -196,8 +196,8 @@ export default {
         iframeUrl: {
             type: String,
             // default: "http://localhost:8081/graph/"
-            default: "http://dagv2.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/graph/"
-            // default: "https://dag.pharbers.com/graph/"
+            // default: "http://dagv2.pharbers.com.s3-website.cn-northwest-1.amazonaws.com.cn/graph/"
+            default: "https://dag.pharbers.com/graph/"
         },
         datasource: {
             type: Object,
@@ -220,7 +220,7 @@ export default {
         otherScriptIconArray: {
             type: Array,
             default: function() {
-                return ["shared", "download"]
+                return ["shared", "download"] 
             }
         },
         triggerPolicy: {
@@ -347,8 +347,8 @@ export default {
         },
         async newScript(name) {
             this.runtime = name
-            await this.datasource.refreshData1(this)
-            this.showAddScriptDialog = true
+            // await this.datasource.refreshData1(this)
+            // this.showAddScriptDialog = true
         },
         async newOtherScript(name) {
             this.runtime = name

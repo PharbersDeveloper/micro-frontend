@@ -104,7 +104,7 @@ export default class PhDagDatasource {
                 result = "shared"
             } else if (cat === "job" && runtime === "download"){
                 result = "download"
-            }else if (cat === "dataset") {
+            } else if (cat === "dataset") {
                 result = "dataset"
             } else if (cat === "job") {
                 result = "job"
