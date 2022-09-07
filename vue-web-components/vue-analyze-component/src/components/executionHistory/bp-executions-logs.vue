@@ -20,11 +20,12 @@
                     <div class="title job-activities__header">
                         Activity
                     </div>
-                    <div style="height: 100px;overflow-y: auto;">
-                        <div class="activity-item" @click="openActivityLogs(iter,index)"
+                    <div style="height: calc(100% - 75px);overflow-y: auto;">
+                        <div :class="focus === index ? 'activity-item active' : 'activity-item'" @click="openActivityLogs(iter,index)"
                             v-for="(iter,index) in executionItem" :key="index">
                             <span class="job-name">
                                 <p v-if="iter.status === 'success'" class="el-icon-success status-icon" />
+                                <p v-else-if="iter.status==='running'" class="el-icon-loading status-icon" />
                                 <p v-else class="el-icon-error status-icon" />
                                 {{ iter["job-show-name"] }}
                             </span>
@@ -57,6 +58,7 @@
 import { staticFilePath } from "../../config/envConfig"
 import PhExecutionHistory from "./datasource"
 import viewJson from "./bp-view-json.vue"
+import { Message } from 'element-ui'
 
 export default {
     data() {
@@ -68,7 +70,8 @@ export default {
             executionItem: null,
             iframeUrl: "",
             projectName: "",
-            executionTemplate: ""
+            executionTemplate: "",
+            focus: 0 //默认选中第一个activity
         }
     },
     components: {
@@ -92,8 +95,6 @@ export default {
         let href = window.location.href
         let paramArr = href.split("?")[1].split("&")
         this.datasource.projectId = this.getUrlParam(paramArr, "projectId")
-        // this.datasource.jobIndex = this.getUrlParam(paramArr, "jobIndex")
-        // this.datasource.jobName = this.getUrlParam(paramArr, "jobName")
         this.datasource.runnerId = this.getUrlParam(paramArr, "runnerId")
         this.projectName = this.getUrlParam(paramArr, "projectName")
         this.datasource.buildActivityQuery(this, this.datasource.runnerId, () => {
@@ -101,8 +102,8 @@ export default {
             if (this.executionItem.length >= 1) {
                 this.datasource.jobName = this.executionItem[0]['job-name']
                 this.executionTemplate = this.executionItem[0]['execution-template']
-                this.jobIndex = this.executionItem[0]['job-index']
-                this.datasource.buildLogsQuery(this, this.jobIndex)
+                this.datasource.jobIndex = this.executionItem[0]['job-index']
+                this.datasource.buildLogsQuery(this)
                 this.datasource.buildExecutionQuery(this)
             }
         })
@@ -120,10 +121,16 @@ export default {
             else return null;
         },
         dealBuildLogsQuery(response) {
+            this.logsMessage = ''
             if (response.status === 0) {
                 this.logsMessage = response.message
             } else {
-                alert("数据暂未生成，请刷新重试！")
+                Message({
+                    type: 'error',
+                    showClose: true,
+                    duration: 3000,
+                    message: '数据暂未生成，请刷新重试！'
+                })
             }
         },
         dealBuildFlowQuery(response) {
@@ -133,16 +140,15 @@ export default {
         },
         dealBuildExecutionQuery(response) {
             if (response.data.length > 0) {
-                this.executionItem = response.data[0]["attributes"]
-                this.executionTemplate = this.executionItem["execution-template"]
-                this.datasource.jobIndex = this.executionItem["job-index"]
-                this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.datasource.jobName}&runnerId=${this.datasource.runnerId}&executionTemplate=${this.datasource.executionTemplate}`
+                this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.datasource.jobName}&runnerId=${this.datasource.runnerId}&executionTemplate=${this.executionTemplate}`
                 // this.datasource.buildLogsQuery(this)
-                // this.datasource.buildFlowQuery(this)
+                this.datasource.buildFlowQuery(this)
             }
         },
         openActivityLogs(iter, index){
-            this.datasource.buildLogsQuery(this, this.executionItem[index]['job-index'])
+            this.focus = index
+            this.datasource.jobIndex = this.executionItem[index]['job-index']
+            this.datasource.buildLogsQuery(this)
             // this.dealBuildLogsQuery(this, iter['job-index'])
         },
         formatDateStandard(...params) {

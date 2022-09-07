@@ -89,11 +89,8 @@ export default class PhContainerDataSource {
         ele.datasource.queryActivity(ele,runnerId)
             .then((response) => response.json())
             .then((response) => {
-                // that.currentPageToken = response.meta.start_key
-                // if(that.currentPageToken === "") {
-                //     ele.hasMore = false
-                // }
-                that.store.syncWithMeta(response)
+                that.store.reset()
+                that.store.sync(response)
                 // ele.needRefresh++
                 that.dataActivity = that.store.findAll("executions")
                 // that.dataActivity = ele.arrRemoveRepetition(that.dataActivityMore, that.dataActivity)
@@ -102,12 +99,12 @@ export default class PhContainerDataSource {
             })
     }
 
-    queryLogs(ele,jobIndex) {
+    queryLogs(ele) {
         const logsUrl = `${hostName}/phquerylogfile`
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
         let logsBody = {
             "projectId": this.projectId,
-            "jobIndex": jobIndex
+            "jobIndex": this.jobIndex
         }
         let logsOptions = {
             method: "POST",
@@ -121,9 +118,9 @@ export default class PhContainerDataSource {
         return fetch(logsUrl, logsOptions)
     }
 
-    buildLogsQuery(ele,jobIndex) {
+    buildLogsQuery(ele) {
         const that = this
-        ele.datasource.queryLogs(ele,jobIndex)
+        ele.datasource.queryLogs(ele)
             .then((response) => response.json())
             .then((response) => {
                 ele.dealBuildLogsQuery(response)
