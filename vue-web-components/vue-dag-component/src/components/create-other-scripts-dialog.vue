@@ -68,7 +68,7 @@
 											:key="index+'cata'" ></option>
 									</select>
 								</div>
-								<div class="input_list" v-if="runtime === 'download'">
+								<div class="input_list" v-if="runtime === 'export'">
                                     <span class="label">地址</span>
                                     <el-input v-model="address" placeholder=""></el-input>
                                 </div>

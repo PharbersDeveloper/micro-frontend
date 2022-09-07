@@ -37,13 +37,17 @@
                     <textarea name="runJson" id="" cols="30" rows="10" class="run_json" v-model="userConf"></textarea>
                 </div>
                 <div class="btn">
-                    <div class="timeout">
+					<div class="version-alias">
+						<div class="title">versionAlias:</div>
+						<input type="text" v-model="versionAlias"/>
+					</div>
+                    <!-- <div class="timeout">
                         <div class="title">超时时间: </div>
                         <select name="time" id="" v-model="selectTimeout">
                             <option value="60mins">60mins</option>
                         </select>
-                    </div>
-                    <div class="">
+                    </div> -->
+                    <div class="btn-area">
                         <button class="cancel" @click="close">取消</button>
                         <button class="save btn-margin" v-show="steps !== 0" @click="back">上一步</button>
                         <button class="save btn-margin" @click="next" v-show="steps !== 1">下一步</button>
@@ -84,7 +88,8 @@ export default {
             representId: "",
             dsVersion: [],
             img1: `${staticFilePath}` + "/icons/%E5%8A%A0%E5%8F%B7.svg",
-            cat: ""
+            cat: "",
+			versionAlias: ""
         }
     },
     props: {
@@ -206,6 +211,7 @@ export default {
                 param: {
                     name: "runDag",
                     timeout: parseFloat(this.selectTimeout),
+					versionAlias: this.versionAlias,
                     jsonValue: this.jsonValue == "" ? {} : this.jsonValue
                 }
             }
@@ -359,9 +365,26 @@ export default {
     right: 23px;
     bottom: 15px;
     display: flex;
+	flex-direction: column;
     justify-content: space-between;
     width: 530px;
     box-sizing: border-box;
+
+	.version-alias {
+		display: flex;
+		
+		.title {
+			font-size: 14px;
+			margin-right: 10px;
+		}
+	}
+
+	.btn-area {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+	}
+
     .timeout {
         display: flex;
         select {
