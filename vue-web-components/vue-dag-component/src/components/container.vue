@@ -315,6 +315,7 @@ export default {
             data.args.param.projectName = this.projectName
             data.args.param.projectId = this.projectId
             data.args.param.runtime = this.runtime
+			this.loading = true
             this.datasource.createScripts(this, data)		
         },
         //增加scripts
