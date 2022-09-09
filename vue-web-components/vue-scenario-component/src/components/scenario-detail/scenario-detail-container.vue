@@ -24,7 +24,8 @@
             <div v-show="activeName === '历史记录'">
 				<scenario-history
                     :history="datasource.history"
-                    :hasMore="datasource.hasMore" @getHistory="getHistory"></scenario-history>
+                    :hasMore="datasource.hasMore" 
+                    :detailList="getFirstDetail" @getHistory="getHistory"></scenario-history>
 			</div>
         </div>
 		<el-dialog title="输入参数" :visible.sync="dialogVisible" width="30%">
@@ -76,7 +77,8 @@ export default {
 			dialogVisible: false,
 			codeFreeParams: JSON.stringify({
 				"CodeFree": {}
-			})
+			}),
+            getFirstDetail: {}
         }
     },
     props: {
@@ -134,7 +136,12 @@ export default {
 		this.datasource.scenarioId = this.getUrlParam("scenarioId")
 		this.datasource.scenarioName = this.getUrlParam("scenarioName")
         this.datasource.model()
-        this.datasource.refreshHistory(this.datasource.projectId)
+        this.datasource.refreshHistory(this.datasource.projectId, ()=>{
+            if(this.datasource.history.length >= 1){
+                this.getFirstDetail = this.datasource.history[0]
+            }
+            // this.datasource.refreshStep(this.datasource.history[0]["scenario-id"])
+        })
     },
     watch: {
         "datasource.triggers": function() {
@@ -151,9 +158,6 @@ export default {
 		},
         "datasource.datasetsAll": function() {
 			this.datasetsAllAdapter()
-		},
-        "datasource.history": function(n) {
-			this.datasource.history = n
 		},
         activeIsTrue:{
             handler(newValue){

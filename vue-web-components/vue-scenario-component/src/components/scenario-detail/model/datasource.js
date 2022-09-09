@@ -17,6 +17,7 @@ export default class PhScenarioDetailDatasource {
         this.datasetsAll = []
         this.reports = []
         this.history = []
+        this.stepHistory = []
         this.currentPageToken = ""
         this.hasMore = true
         this.stepsCount = 20
@@ -102,7 +103,7 @@ export default class PhScenarioDetailDatasource {
         return fetch(url, options)
     }
 
-    refreshHistory(projectId) {
+    refreshHistory(projectId ,callback=null) {
         this.buildHistoryQuery(projectId)
             .then((response) => response.json())
             .then((response) => {
@@ -115,6 +116,8 @@ export default class PhScenarioDetailDatasource {
                 }
                 this.store.sync(response)
                 this.history = this.store.findAll("scenario-status")
+                if(callback)
+                    callback()
             })
     }
 
@@ -238,4 +241,23 @@ export default class PhScenarioDetailDatasource {
         }
         return fetch(url, options)
     }
+
+    // refreshStep(scenarioId ,callback=null) {
+    //     this.buildStepsQuery(scenarioId)
+    //         .then((response) => response.json())
+    //         .then((response) => {
+    //             // response.data.forEach(item=>{
+    //             //     item.id = item.attributes["trace-id"]
+    //             // })
+    //             // this.currentPageToken = response.meta.start_key
+    //             // if(this.currentPageToken === "") {
+    //             //     this.hasMore = false
+    //             // }
+    //             this.store.reset()
+    //             this.store.sync(response)
+    //             this.stepHistory = this.store.findAll("scenario-steps")
+    //             if(callback)
+    //                 callback()
+    //         })
+    // }
 }

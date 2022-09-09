@@ -7,7 +7,8 @@
             </div>
             <div class="scenario-history-listAll">
                 <div class="scenario-history-list">
-                    <div :class="focus === index ?'scenario-history-item active' : 'scenario-history-item'" v-for="(item, index) in history" :key="index">
+                    <div :class="focus === index ?'scenario-history-item active' : 'scenario-history-item'"
+                        v-for="(item, index) in history" :key="index" @click="historyDetail(item,index)">
                         <div class="left">
                             <p v-if="item.status==='success'" class="el-icon-success status-icon" />
                             <p v-else-if="item.status==='running'" class="el-icon-loading status-icon" />
@@ -15,7 +16,7 @@
                             <div class="scenario-history-item-detail">
                                 <span class="name"><b>{{item.status}}</b></span>
                                 <div class="scenario-history-time">
-                                    <span class="start-time">{{item.name === 'unknown' ?name : item.name}}&nbsp;</span>
+                                    <span class="start-time">{{item.name === 'unknown' ? name : item.name}}&nbsp;</span>
                                     |
                                     <span>&nbsp;{{formatDateStandard(item["start-at"], 0)}}</span>
                                     -
@@ -38,15 +39,46 @@
             <div class="scenario-history-detail-con">
                 <div class="scenario-history-detail-top">
                     <div>
-                        <span><b>张慧芳</b></span>
-                        <span>1234</span>
+                        <span><b>{{detail.name === 'unknown' ? name : detail.name}}&nbsp;</b></span>
+                        <span>{{detail.status}}</span>
                     </div>
                     <span>bbbbbb</span>
-                    <span>2022-98-8990</span>
-                    <span>runtime&nbsp;&nbsp;20s</span>
+                    <span>on&nbsp;{{formatDateStandard(detail["start-at"], 0)}}</span>
+                    <span>runtime&nbsp;&nbsp;{{getTimes(detail)}}</span>
                 </div>
                 <div class="scenario-history-detail-bottom">
                     <span><b>detail</b></span>
+                    <div class="detail-step">
+                        <div>
+                            <div class="detail-step-con">
+                                <div>
+                                    <!-- <p v-if="item.status==='success'" class="el-icon-success status-icon" />
+                                <p v-else-if="item.status==='running'" class="el-icon-loading status-icon" /> -->
+                                    <p class="el-icon-error status-icon" />
+                                    <span>Build - Step</span>
+                                </div>
+                                <span>bbbbbbb</span>
+                                <!-- <span>{{formatDateStandard(detailList["start-at"], 0)}}</span>
+                            <span>{{getTimes(detailList)}}</span> -->
+                                <span>at&nbsp;11:20</span>
+                                <span>20s</span>
+                            </div>
+                        </div>
+                        <div style="margin-left: 100px;">
+                            <div>
+                                <!-- <p v-if="item.status==='success'" class="el-icon-success status-icon" />
+                            <p v-else-if="item.status==='running'" class="el-icon-loading status-icon" /> -->
+                                <p class="el-icon-error status-icon" />
+                                <span>job</span>
+                            </div>
+                            <div>
+                                <!-- <p v-if="item.status==='success'" class="el-icon-success status-icon" />
+                            <p v-else-if="item.status==='running'" class="el-icon-loading status-icon" /> -->
+                                <p class="el-icon-error status-icon" />
+                                <span>job</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,12 +116,14 @@
      data() {
          return {
             focus: 0,
-            name: '未知'
+            name: '未知',
+            detail: {}
          }
      },
      props: {
         history: Array,
         hasMore: Boolean,
+        detailList: Object
         //  defs: {
         //      type: Object,
         //      default: function () {
@@ -98,7 +132,21 @@
         //  },
         //  scriptParamsData: Array
      },
+    watch: {
+        detailList: {
+            handler(newValue) {
+                this.detail = newValue
+            },
+            deep: true
+        }
+     },
      methods: {
+        // 点击列表显示detail
+        historyDetail(item, index){
+            this.focus = index
+            this.detail = {}
+            this.detail = item
+        },
         loadMoreExecutionHistory() {
             this.$emit("getHistory")
         },
@@ -151,8 +199,6 @@
      },
      mounted() {
      },
-     watch: {
-     }
  }
  </script>
  <style lang="scss" scoped>
@@ -280,6 +326,25 @@
                     display: flex;
                     flex-direction: row;
                     justify-content: space-between;
+                }
+
+                .scenario-history-detail-bottom {
+                    display: flex;
+                    flex-direction: column;
+
+                    .detail-step {
+                        margin-left: 50px;
+
+                        .detail-step-con {
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: space-between;
+
+                            span {
+                                line-height: 54px;
+                            }
+                        }
+                    }
                 }
             }
             // .empty {

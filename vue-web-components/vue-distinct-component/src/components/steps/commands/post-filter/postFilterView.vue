@@ -3,7 +3,7 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="condition-title">
             <div class="condition-title-p">
-                <h2>Pre Filter</h2>
+                <h2>Post Filter</h2>
                 <div class="ver-center" v-if="datasource">
                     <el-switch 
 						v-model="datasource.enabled" 
