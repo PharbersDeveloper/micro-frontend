@@ -9,6 +9,7 @@
                 <el-radio-button label="Setting"></el-radio-button>
                 <el-radio-button label="Steps"></el-radio-button>
                 <el-radio-button label="脚本参数"></el-radio-button>
+                <el-radio-button label="历史记录"></el-radio-button>
             </el-radio-group>
             <el-button type="primary" @click="$emit('save')">Save</el-button>
             <el-button type="primary" @click="$emit('trigger')" >运行</el-button>
