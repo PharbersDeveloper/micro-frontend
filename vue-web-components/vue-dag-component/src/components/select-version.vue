@@ -19,7 +19,7 @@
                         <div class="dlg-all-version-container">
                             <div class="dlg-flex-version-item" v-for="(item, index) in versionArrShow" :key="item+index" @click="appendSelectVersionTags(item, index)">
                                 <span>{{item}}</span>
-								<span>（{{datasource.aliasArray[item]}}）</span>
+								<span v-show="datasource.aliasArray[item].length > 0">（{{datasource.aliasArray[item]}}）</span>
                             </div>
                         </div>
                     </div>
