@@ -72,8 +72,8 @@ export default class PhDagDatasource {
                 result = "catalog"
             } else if (cat === "dataset" && runtime === "shared") {
                 result = "DSshared"
-            } else if (cat === "dataset" && runtime === "download") {
-                result = "DSdownload"
+            } else if (cat === "dataset" && runtime === "export") {
+                result = "DSexport"
             } else if (cat === "job" && runtime === "python3") {
                 result = "python"
             } else if (cat === "job" && runtime === "pyspark") {
@@ -102,9 +102,9 @@ export default class PhDagDatasource {
                 result = "pivot"
             } else if (cat === "job" && runtime === "shared"){
                 result = "shared"
-            } else if (cat === "job" && runtime === "download"){
-                result = "download"
-            }else if (cat === "dataset") {
+            } else if (cat === "job" && runtime === "export"){
+                result = "export"
+            } else if (cat === "dataset") {
                 result = "dataset"
             } else if (cat === "job") {
                 result = "job"

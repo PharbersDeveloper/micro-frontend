@@ -7,7 +7,7 @@ export default class PhFilterStep {
     constructor(dbstep, schema) {
         this.content= dbstep
         this.expressions = JSON.parse(dbstep["expressions"])
-        const defs = this.expressions["params"]["preFilter"]
+        const defs = this.expressions["params"]["postFilter"]
         this.distinct = defs["distinct"]
         this.enabled = defs["enabled"]
         this.preFilterExpression = defs["expression"]

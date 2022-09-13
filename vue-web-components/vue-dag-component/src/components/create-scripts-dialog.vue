@@ -60,25 +60,13 @@
                                     <el-input v-model="dsName.name" placeholder="" ref="newDs" @change="inputStrChecked(dsName.name, 'newDs', 'dsName')"></el-input>
                                 </div>
                                 <!-- 正常新建脚本 -->
-                                <div class="input_list" v-if="runtime!=='download'">
+                                <div class="input_list">
                                     <span class="label">存储到</span>
                                     <el-input placeholder="" value="本集群" :disabled="true">></el-input>
                                 </div>
-                                <div class="input_list" v-if="runtime!=='download'">
+                                <div class="input_list">
                                     <span class="label">格式</span>
                                     <el-input placeholder="" value="SQL" :disabled="true">></el-input>
-                                </div>
-                                <!-- 下载 -->
-                                 <div class="input_list" v-if="runtime === 'download'">
-                                    <span class="label">存储到</span>
-                                    <el-input placeholder="请输入路径" v-model="path"></el-input>
-                                </div>
-                                <div class="input_list" v-if="runtime === 'download'">
-                                    <span class="label">格式</span>
-                                    <select :choosedValue="format" :src='select_icon'>
-                                        <option text="Parquet" @click="changeFormat('Parquet')" :choosedValue="format"></option>
-                                        <option text="CSV" @click="changeFormat('CSV')" :choosedValue="format"></option>
-                                    </select>
                                 </div>
                             </div>
                             <div class="btn_area">
@@ -283,9 +271,7 @@ export default {
                 return false
             }
             //新增output
-            if(this.runtime != "download" && this.dsName.name && this.dsName.name !== "") {
-                this.datasetOutputListShow = true
-            } else if(this.runtime === "download" && this.path !== "" && this.format !== "请选择" && this.dsName.name && this.dsName.name !== "") {
+            if(this.dsName.name && this.dsName.name !== "") {
                 this.datasetOutputListShow = true
             } else {
                 alert("请输入完整数据!")

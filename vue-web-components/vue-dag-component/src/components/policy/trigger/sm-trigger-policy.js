@@ -117,7 +117,8 @@ export default class PhDagTriggerPolicy {
                 projectName: this.parent.projectName,
                 owner: confData.ownerId,
                 showName: confData.showName,
-                tenantId: this.parent.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
+                tenantId: this.parent.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg",
+				versionAlias: data.args.param.versionAlias
             },
             action: {
                 cat: "runDag",

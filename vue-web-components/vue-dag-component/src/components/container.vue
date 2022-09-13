@@ -220,7 +220,7 @@ export default {
         otherScriptIconArray: {
             type: Array,
             default: function() {
-                return ["shared", "download"]
+                return ["shared", "export"] 
             }
         },
         triggerPolicy: {
@@ -347,8 +347,8 @@ export default {
         },
         async newScript(name) {
             this.runtime = name
-            await this.datasource.refreshData1(this)
-            this.showAddScriptDialog = true
+            // await this.datasource.refreshData1(this)
+            // this.showAddScriptDialog = true
         },
         async newOtherScript(name) {
             this.runtime = name

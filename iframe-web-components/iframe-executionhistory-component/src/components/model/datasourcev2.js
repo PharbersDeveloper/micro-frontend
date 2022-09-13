@@ -31,6 +31,10 @@ export default class PhDagDatasource {
                 result = "DSuploaded"
             } else if (cat === "dataset" && runtime === "intermediate") {
                 result = "DSIntermediate"
+            } else if (cat === "dataset" && runtime === "shared") {
+                result = "DSshared"
+            } else if (cat === "dataset" && runtime === "download") {
+                result = "DSdownload"
             } else if (cat === "dataset" && runtime === "input_index") {
                 result = "max-in"
             } else if (cat === "dataset" && runtime === "output_index") {
@@ -63,6 +67,10 @@ export default class PhDagDatasource {
                 result = "stack"
             } else if (cat === "job" && runtime === "group"){
                 result = "group"
+            } else if (cat === "job" && runtime === "shared"){
+                result = "shared"
+            } else if (cat === "job" && runtime === "download"){
+                result = "download"
             } else if (cat === "dataset") {
                 result = "dataset"
             } else if (cat === "job") {
