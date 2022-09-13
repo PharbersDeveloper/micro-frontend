@@ -176,9 +176,15 @@ export default class PhDagDatasource {
     }
 
     queryDlgDistinctCol(ele, row, cat, dsName) {
+		const that = this
         return ele.datasource.buildDistinctColQuery(ele, row, cat, dsName)
             .then((response) => response.json())
             .then((response) => {
+				let obj = {}
+				response.data.forEach(x => {
+					obj[x["attributes"]["name"]] = x["attributes"]["alias"]
+				})
+				that.aliasArray = obj
                 return response.data.map(x => x["attributes"]["name"])
             })
     }

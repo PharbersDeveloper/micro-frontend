@@ -850,8 +850,8 @@ export default {
                 return this.defs.iconsByName("group")
             case "pivot":
                 return this.defs.iconsByName("pivot")
-            case "download":
-                return this.defs.iconsByName("download")
+            case "export":
+                return this.defs.iconsByName("export")
             case "shared":
                 return this.defs.iconsByName("shared")
             default:

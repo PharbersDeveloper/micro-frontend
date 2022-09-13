@@ -6,7 +6,7 @@
                 <h2>Computed Columns</h2>
             </div>
         </div>
-        <div class="computed-list" v-if="datasource">
+        <div class="computed-list" v-if="datasource && datasource.command.computedCols.length > 0">
             <div class="computed-item"
                  v-for="(item, index) in datasource.command.computedCols"
                  :key="index"

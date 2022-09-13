@@ -19,6 +19,7 @@
                         <div class="dlg-all-version-container">
                             <div class="dlg-flex-version-item" v-for="(item, index) in versionArrShow" :key="item+index" @click="appendSelectVersionTags(item, index)">
                                 <span>{{item}}</span>
+								<span v-show="datasource.aliasArray[item].length > 0">（{{datasource.aliasArray[item]}}）</span>
                             </div>
                         </div>
                     </div>
@@ -136,8 +137,8 @@ export default {
     background: rgba(0,0,0,0.31);
 }
 .dialog_area {
-    width: 400px;
-    height: 500px;
+    width: 700px;
+    height: 400px;
     border: 1px solid #ddd;
     background-color: #fff;
     position: absolute;
