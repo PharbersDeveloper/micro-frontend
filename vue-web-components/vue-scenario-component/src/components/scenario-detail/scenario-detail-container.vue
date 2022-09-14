@@ -23,10 +23,18 @@
 			</div>
             <div v-show="activeName === '历史记录'">
 				<scenario-history
-                    :history="datasource.history"
+                    :history="arr"
                     :hasMore="datasource.hasMore" 
-                    :detailList="getFirstDetail" @getHistory="getHistory"></scenario-history>
+                    :detailList="getFirstDetail" 
+                    :scenarioExecution="datasource.scenarioExecution"
+                    :scenarioJob="scenarioJob"
+                    @getHistory="getHistory"
+                    @getExecution="getExecution"
+                    @getScenarioJob="getScenarioJob"></scenario-history>
 			</div>
+            <!-- 
+                    :scenarioStep="datasource.scenarioStep"
+             -->
         </div>
 		<el-dialog title="输入参数" :visible.sync="dialogVisible" width="30%">
 			<el-input 
@@ -78,7 +86,9 @@ export default {
 			codeFreeParams: JSON.stringify({
 				"CodeFree": {}
 			}),
-            getFirstDetail: {}
+            getFirstDetail: {},
+            arr: [],
+            scenarioJob: []
         }
     },
     props: {
@@ -137,10 +147,11 @@ export default {
 		this.datasource.scenarioName = this.getUrlParam("scenarioName")
         this.datasource.model()
         this.datasource.refreshHistory(this.datasource.projectId, ()=>{
+            this.arr = this.datasource.history
             if(this.datasource.history.length >= 1){
                 this.getFirstDetail = this.datasource.history[0]
+                this.datasource.refreshScenarioExecution(this.getFirstDetail['trace-id'])
             }
-            // this.datasource.refreshStep(this.datasource.history[0]["scenario-id"])
         })
     },
     watch: {
@@ -159,6 +170,12 @@ export default {
         "datasource.datasetsAll": function() {
 			this.datasetsAllAdapter()
 		},
+        scenarioJob: {
+			handler(newValue) {
+                this.scenarioJob = newValue
+            },
+            deep: true
+		},
         activeIsTrue:{
             handler(newValue){
                 this.activeIsTrue.active = newValue.active
@@ -167,8 +184,26 @@ export default {
         }
     },
     methods: {
+        getScenarioJob(runnerId, scenarioId , stepId){
+            this.datasource.refreshScenarioJob(runnerId, ()=>{
+                this.datasource.refreshScenarioStep(scenarioId, stepId, ()=>{
+                    if (this.datasource.scenarioStep.length >= 1) {
+                        for (let i = 0; i < this.datasource.scenarioJob.length; i++) {
+                            this.datasource.scenarioJob[i]['job-show-name'] = this.datasource.scenarioStep[i].name
+                        }
+                    }
+                    this.scenarioJob = this.datasource.scenarioJob
+                })
+            })
+            
+        },
+        getExecution(value){
+            this.datasource.refreshScenarioExecution(value)
+        },
         getHistory(){
-            this.datasource.refreshHistory(this.datasource.projectId)
+            this.datasource.refreshHistory(this.datasource.projectId, ()=>{
+                this.arr = this.arr.concat(this.datasource.history)
+            })
         },
         getTriggerTrue(value){
             if (value.length == 0) {

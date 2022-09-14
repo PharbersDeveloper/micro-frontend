@@ -14,18 +14,12 @@
                             <p v-else-if="item.status==='running'" class="el-icon-loading status-icon" />
                             <p v-else class="el-icon-error status-icon" />
                             <div class="scenario-history-item-detail">
-                                <span class="name"><b>{{item.status}}</b></span>
+                                <span class="name"><b>{{item.name === 'unknown' ? name : item.name}} |
+                                        {{item.status}}</b></span>
                                 <div class="scenario-history-time">
-                                    <span class="start-time">{{item.name === 'unknown' ? name : item.name}}&nbsp;</span>
-                                    |
-                                    <span>&nbsp;{{formatDateStandard(item["start-at"], 0)}}</span>
+                                    <span>{{formatDateStandard(item["start-at"], 0)}}</span>
                                     -
                                     <span>{{formatDateStandard(item["end-at"], 3)}}</span>
-                                    <!-- <span class="start-time">张慧芳</span>
-                                    | -->
-                                    <!-- <span class="duration">
-
-                                    </span> -->
                                 </div>
                             </div>
                         </div>
@@ -42,41 +36,41 @@
                         <span><b>{{detail.name === 'unknown' ? name : detail.name}}&nbsp;</b></span>
                         <span>{{detail.status}}</span>
                     </div>
-                    <span>bbbbbb</span>
                     <span>on&nbsp;{{formatDateStandard(detail["start-at"], 0)}}</span>
                     <span>runtime&nbsp;&nbsp;{{getTimes(detail)}}</span>
                 </div>
                 <div class="scenario-history-detail-bottom">
-                    <span><b>detail</b></span>
+                    <span style="padding: 10px;"><b>detail</b></span>
                     <div class="detail-step">
-                        <div>
-                            <div class="detail-step-con">
+                        <!-- {{scenarioExecutionDetail}} -->
+                        <div class="detail-step-list" v-show="scenarioExecutionDetail.length >= 1 "
+                        v-for="(item, index) in scenarioExecutionDetail" :key="index" >
+                            <div class="detail-step-con" @click="getJobDetail(item, index)">
                                 <div>
-                                    <!-- <p v-if="item.status==='success'" class="el-icon-success status-icon" />
-                                <p v-else-if="item.status==='running'" class="el-icon-loading status-icon" /> -->
-                                    <p class="el-icon-error status-icon" />
-                                    <span>Build - Step</span>
+                                    <span>{{item['runner-id']}}</span>
                                 </div>
-                                <span>bbbbbbb</span>
-                                <!-- <span>{{formatDateStandard(detailList["start-at"], 0)}}</span>
-                            <span>{{getTimes(detailList)}}</span> -->
-                                <span>at&nbsp;11:20</span>
-                                <span>20s</span>
+                                <span>{{item.runtime}}</span>
+                                <span>at&nbsp;{{formatDateStandard(item.date, 3)}}</span>
                             </div>
+                            <div v-show="scenarioJobDetail.length >= 1 && item.showJob" class="detail-job" v-for="(iter, ind) in scenarioJobDetail" :key="ind">
+                                <div>
+                                    <p v-if="iter.status==='success'" class="el-icon-success status-icon" />
+                                    <p v-else-if="iter.status==='running'" class="el-icon-loading status-icon" />
+                                    <p v-else class="el-icon-error status-icon" />
+                                    <span>{{iter['job-show-name']}}</span>
+                                </div>
+                                <div>
+                                    <span>{{formatDateStandard(iter["start-at"], 3)}}</span>
+                                    -
+                                    <span>{{formatDateStandard(iter["end-at"], 3)}}</span>
+                                </div>
+                            </div>
+                            <!-- <div v-show="scenarioJobDetail.length === 0  && item.showJob" class="detail-job">
+                                <span>暂无job</span>
+                            </div> -->
                         </div>
-                        <div style="margin-left: 100px;">
-                            <div>
-                                <!-- <p v-if="item.status==='success'" class="el-icon-success status-icon" />
-                            <p v-else-if="item.status==='running'" class="el-icon-loading status-icon" /> -->
-                                <p class="el-icon-error status-icon" />
-                                <span>job</span>
-                            </div>
-                            <div>
-                                <!-- <p v-if="item.status==='success'" class="el-icon-success status-icon" />
-                            <p v-else-if="item.status==='running'" class="el-icon-loading status-icon" /> -->
-                                <p class="el-icon-error status-icon" />
-                                <span>job</span>
-                            </div>
+                        <div class="detail-step-con" v-show="scenarioExecutionDetail.length == 0">
+                            暂无数据
                         </div>
                     </div>
                 </div>
@@ -117,13 +111,18 @@
          return {
             focus: 0,
             name: '未知',
-            detail: {}
+            detail: {},
+            scenarioExecutionDetail: [],
+            scenarioJobDetail: [],
+            index: 0
          }
      },
      props: {
         history: Array,
         hasMore: Boolean,
-        detailList: Object
+        detailList: Object,
+        scenarioExecution: Array,
+        scenarioJob: Array,
         //  defs: {
         //      type: Object,
         //      default: function () {
@@ -138,14 +137,43 @@
                 this.detail = newValue
             },
             deep: true
-        }
+        },
+        scenarioExecution: {
+            handler(newValue) {
+                this.scenarioExecutionDetail = newValue
+            },
+            deep: true
+        },
+        scenarioJob: {
+            handler(newValue) {
+                // this.scenarioExecution[this.index].scenarioJobDetail = newValue
+                // console.log(this.scenarioExecutionDetail[this.index].scenarioJobDetail,111)
+                // console.log(this.scenarioExecutionDetail,222)
+                this.scenarioJobDetail = newValue
+            },
+            deep: true
+        },
      },
      methods: {
+        getJobDetail(item, index){
+            this.index = index
+            this.scenarioJobDetail = []
+             if (item.showJob) {
+                 item.showJob = !item.showJob
+             } else {
+                 this.$set(item, 'showJob', false)
+                 item.showJob = !item.showJob
+             }
+            if (item.showJob) {
+                this.$emit("getScenarioJob",item['runner-id'], item['scenario-id'], item['step-id'])
+            }
+        },
         // 点击列表显示detail
         historyDetail(item, index){
             this.focus = index
             this.detail = {}
             this.detail = item
+            this.$emit("getExecution",item['trace-id'])
         },
         loadMoreExecutionHistory() {
             this.$emit("getHistory")
@@ -169,18 +197,18 @@
                     // D1 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
 
                     h = ( date.getHours() < 10 ? `0${date.getHours()}` : date.getHours() ),
-                    m = ( date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes() ) 
-                    // s = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
+                    m = ( date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes() ) ,
+                    s = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
 
                 // 输出结果：yyyy/mm/dd hh:mm
                 if(params[1] === 0){
-                    return Y + "/" + M + "/" + D0 + " " + h + ":" + m
+                    return Y + "/" + M + "/" + D0 + " " + h + ":" + m + ":" + s
                 } else if(params[1] === 1) {
-                    return Y + "-" + M + "-" + D0 + " " + h + ":" + m
+                    return Y + "-" + M + "-" + D0 + " " + h + ":" + m + ":" + s
                 } else if(params[1] === 2) {
                     return Y + "-" + M + "-" + D0
                 } else if(params[1] === 3) {
-                    return h + ":" + m
+                    return h + ":" + m + ":" + s
                 }
             }
         },
@@ -277,22 +305,11 @@
                         display: flex;
                         flex-direction: column;
 
-                        .name {
-                            // padding-bottom: 10px;
-                        }
-
                         .scenario-history-time {
                             display: flex;
                             align-items: center;
                             flex-direction: row;
                             font-size: 14px;
-                            // .start-time {
-                            //     margin-right: 4px;
-                            // }
-
-                            // .duration {
-                            //     margin-left: 4px;
-                            // }
                         }
                     }
                 }
@@ -315,6 +332,8 @@
 
             .scenario-history-detail-con {
                 width: calc(100% - 100px);
+                height: 100%;
+                overflow-y: auto;
                 padding: 20px;
                 margin-top: 20px;
                 background-color: #fff;
@@ -331,48 +350,43 @@
                 .scenario-history-detail-bottom {
                     display: flex;
                     flex-direction: column;
+                    padding-top: 10px;
 
                     .detail-step {
                         margin-left: 50px;
+
+                        .detail-step-list{
+                            margin-bottom: 10px;
+                            background-color: #F2F2F2;
+                        }
 
                         .detail-step-con {
                             display: flex;
                             flex-direction: row;
                             justify-content: space-between;
+                            background-color: #f2f2f2;
+                            padding: 0 10px;
+                            line-height: 40px;
+                            font-size: 16px;
+                            cursor: pointer;
 
                             span {
-                                line-height: 54px;
+                                line-height: 40px;
                             }
+                        }
+
+                        .detail-job{
+                            background-color: #f2f2f2;
+                            padding-right: 10px;
+                            padding-left: 50px;
+                            line-height: 40px;
+                            font-size: 16px;
+                            display: flex;
+                            justify-content: space-between;
                         }
                     }
                 }
             }
-            // .empty {
-            //     height: 100%;
-            //     display: flex;
-            //     justify-content: center;
-            //     padding-top: 100px;
-            //     text-align: center;
-            //     margin-top: 100px;
-            //     color: #bbbbbb;
-            //     font-weight: 400;
-            // }
-            // .execution-history-detail-panel-show {
-            //     display: flex;
-            //     flex-grow: 1;
-            //     flex-direction: column;
-            //     .execution-history-definition-panel {
-            //         flex-grow: 1;
-            //         border: 1px solid #dddddd;
-            //         overflow: auto;
-            //         height: 500px;
-            //         .executions-iframe {
-            //             width: 100vw;
-            //             // height: 500px;
-            //             height: 100%;
-            //         }
-            //     }
-            // }
         }
     }
 </style>
