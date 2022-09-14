@@ -3,7 +3,11 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/index.css">
         <div class="execution-search-sort-panel ">
             <div class="execution-sort-btn-lst-search">
-                <el-input v-model="searchString" class="search" placeholder="搜索"></el-input>
+                <el-input 
+                    v-model="searchString"
+                    class="search" 
+                    @input="inputSearch(searchString)"
+                    placeholder="搜索"></el-input>
                 <div class="execution-sort-btn-lst">
                     <select v-model="curSort">
                         <option v-for="(item,index) in sortCandidate" v-bind:value="item" v-text="item"
@@ -19,14 +23,14 @@
 
             <div class="execution-history-list-panel">
                 <div class="execution-history-list">
-                    <div v-for="(item, index) in datasource.data" :key="index" @click="clickExecutionItem(item, index)"
+                    <div v-for="(item, index) in dataShow" :key="index" @click="clickExecutionItem(item, index)"
                         class="execution-history-item">
                         <div class="left">
                             <p v-if="item.status==='success'" class="el-icon-success status-icon" />
                             <p v-else-if="item.status==='running'" class="el-icon-loading status-icon" />
                             <p v-else class="el-icon-error status-icon" />
                             <div class="execution-history-detail">
-                                <span class="name"><b>{{item["runner-id"]}}</b></span>
+                                <span class="name"><b>{{item["runner-id"]}}_{{item.owner}}</b></span>
                                 <div class="execution-history-time">
                                     <span class="start-time">
                                         <!-- {{formatDateStandard(item["start-at"], 2)}} -->
@@ -128,7 +132,8 @@ export default {
             runnerId: "",
             iframeUrl: "",
             jobName: "",
-            isActive: null
+            isActive: null,
+            dataShow: []
         }
     },
     components: {
@@ -159,6 +164,13 @@ export default {
         this.datasource.appendExecutionHistory(this)
     },
     methods: {
+        inputSearch(data) {
+            if (data.length === 0) {
+                this.dataShow = this.datasource.data
+            } else {
+                this.dataShow = this.datasource.data.filter(it => it.owner.indexOf(data) > -1 || this.rTime(it.date).indexOf(data) > -1)
+            }
+        },
         dealBuildLogsQuery() {
             // if(response.status !== 0) {
             //     alert("数据暂未生成，请刷新重试！")

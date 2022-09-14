@@ -64,6 +64,7 @@ export default class PhContainerDataSource {
                 that.store.sync(response)
                 // ele.needRefresh++
                 that.data = that.store.findAll("execution-status")
+                ele.dataShow = that.data
             })
     }
 
@@ -141,7 +142,7 @@ export default class PhContainerDataSource {
                     callback()
             })
     }
-
+    
     queryLogs(ele) {
         const logsUrl = `${hostName}/phquerylogfile`
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
