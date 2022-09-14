@@ -18,6 +18,9 @@ export default class PhScenarioDetailDatasource {
         this.reports = []
         this.history = []
         this.stepHistory = []
+        this.scenarioExecution = []
+        this.scenarioJob = []
+        this.scenarioStep = []
         this.currentPageToken = ""
         this.hasMore = true
         this.stepsCount = 20
@@ -64,19 +67,6 @@ export default class PhScenarioDetailDatasource {
             .then((response) => response.json())
         this.store.sync(steps)
         this.steps = this.store.findAll("scenario-steps")
-
-        // let historys = {}
-        // historys = await this.buildHistoryQuery(this.projectId)
-        //     .then((response) => response.json())
-        // historys.data.forEach(item=>{
-        //     item.id = item.attributes["trace-id"]
-        // })
-        // this.currentPageToken = historys.meta.start_key
-        // if(this.currentPageToken === "") {
-        //     this.hasMore = false
-        // }
-        // this.store.sync(historys)
-        // this.history = this.store.findAll("scenario-status")
     }
 
     buildHistoryQuery(projectId) {
@@ -114,8 +104,124 @@ export default class PhScenarioDetailDatasource {
                 if(this.currentPageToken === "") {
                     this.hasMore = false
                 }
+                this.store.reset()
                 this.store.sync(response)
                 this.history = this.store.findAll("scenario-status")
+                if(callback)
+                    callback()
+            })
+    }
+
+    buildScenarioExecutionQuery(traceId) {
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            "table": "scenario_execution",
+            "index_name": "traceId-scenarioId-index",
+            "conditions": {
+                "traceId": ["=", traceId],
+            },
+            "limit": 100,
+            "start_key": {}
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    refreshScenarioExecution(traceId) {
+        this.buildScenarioExecutionQuery(traceId)
+            .then((response) => response.json())
+            .then((response) => {
+                response.data.forEach(item=>{
+                    item.id = item.attributes["runner-id"]
+                })
+                this.store.reset()
+                this.store.sync(response)
+                this.scenarioExecution = this.store.findAll("scenario-executions")
+            })
+    }
+
+    buildScenarioStepQuery(scenarioId, stepId) {
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            "table": "scenario_step",
+            "conditions": {
+                "scenarioId": ["=", scenarioId],
+                "id": ["=", stepId],
+            },
+            "limit": 100,
+            "start_key": {}
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    refreshScenarioStep(scenarioId, stepId,callback=null) {
+        this.buildScenarioStepQuery(scenarioId, stepId)
+            .then((response) => response.json())
+            .then((response) => {
+                this.store.reset()
+                this.store.sync(response)
+                this.scenarioStep = this.store.findAll("scenario-steps")
+                if(callback)
+                    callback()
+            })
+    }
+
+    buildScenarioJobQuery(runnerId) {
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            "table": "execution",
+            "index_name": "runnerId-jobName-index",
+            "conditions": {
+                "runnerId": ["=", runnerId],
+            },
+            "limit": 100,
+            "start_key": {}
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    refreshScenarioJob(runnerId,callback=null) {
+        this.buildScenarioJobQuery(runnerId)
+            .then((response) => response.json())
+            .then((response) => {
+                // response.data.forEach(item=>{
+                //     item.id = item.attributes["runner-id"]
+                // })
+                // this.store.reset()
+                this.store.sync(response)
+                this.scenarioJob = this.store.findAll("executions")
                 if(callback)
                     callback()
             })
@@ -241,23 +347,4 @@ export default class PhScenarioDetailDatasource {
         }
         return fetch(url, options)
     }
-
-    // refreshStep(scenarioId ,callback=null) {
-    //     this.buildStepsQuery(scenarioId)
-    //         .then((response) => response.json())
-    //         .then((response) => {
-    //             // response.data.forEach(item=>{
-    //             //     item.id = item.attributes["trace-id"]
-    //             // })
-    //             // this.currentPageToken = response.meta.start_key
-    //             // if(this.currentPageToken === "") {
-    //             //     this.hasMore = false
-    //             // }
-    //             this.store.reset()
-    //             this.store.sync(response)
-    //             this.stepHistory = this.store.findAll("scenario-steps")
-    //             if(callback)
-    //                 callback()
-    //         })
-    // }
 }
