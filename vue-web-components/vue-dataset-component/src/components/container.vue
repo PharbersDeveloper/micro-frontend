@@ -761,8 +761,8 @@ export default {
                 return this.intermediate_icon
             case "catalog":
                 return this.catalog_icon
-            case "download":
-                return this.defs.iconsByName("DSdownload")
+            case "export":
+                return this.defs.iconsByName("DSexport")
             case "shared":
                 return this.defs.iconsByName("DSshared")
             default:
