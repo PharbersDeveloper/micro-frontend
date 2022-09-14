@@ -84,18 +84,17 @@ export default {
     },
     methods: {
         registerEvent() {
-            this.unRegisterEvent();
+            this.unRegisterEvent()
             // 设置Dag初始参数 如宽高 主题 缩放 project id project name flow version 等
             window.addEventListener("message", this.initDag)
             // 更改dag node的状态
-            window.addEventListener("message", this.changeDagNodeStatus);
+            window.addEventListener("message", this.changeDagNodeStatus)
             // 刷新Dag
-            window.addEventListener("message", this.refreshDag);
+            window.addEventListener("message", this.refreshDag)
             // 清空内部状态  这里面的状态没全部提出来 先出来一般  后面我来重写逻辑
-            window.addEventListener("message", this.clearDag);
+            window.addEventListener("message", this.clearDag)
         },
-        unRegisterEvent() { 
-            console.debug("取消注册事件");
+        unRegisterEvent() {
             window.removeEventListener("message", this.initDag);
             window.removeEventListener("message", this.changeDagNodeStatus);
             window.removeEventListener("message", this.refreshDag);

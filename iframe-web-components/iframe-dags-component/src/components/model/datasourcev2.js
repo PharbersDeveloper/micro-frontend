@@ -8,10 +8,8 @@ export default class PhDagDatasource {
         this.name = "demo"
         this.projectId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = 'c4e6842313cacf87b2e7fd762eab2734a8b70f8504efbedf389b23798f8ae430'
+        this.debugToken = 'a485d935b8705b15d3d49a42b7d8213581fa51ef68fdb142d293e3993474de9b'
         this.sizeHit = [0, 0]
-        // this.hitWidthStep = 300
-        // this.hitHeightStep = 500
         this.cal = { calculate: {}, selected: [] }
     }
 
@@ -49,7 +47,7 @@ export default class PhDagDatasource {
 
         that.jobArr = response.data.filter(it => it.attributes.cat === "job" && it.attributes.ctype === "node")
         ele.datasource.data = response.data.filter(x => x["attributes"]["ctype"] === "node")
-        let maxLevel = -999
+        // let maxLevel = -999
         ele.datasource.data = ele.datasource.data.map(x => {
             x["id"] = x["attributes"]["represent-id"]
             x["parentIds"] = []
@@ -118,9 +116,6 @@ export default class PhDagDatasource {
             return x
         })
         const links = response.data.filter(x => x["attributes"]["ctype"] === "link")
-        // let maxHeight = -999
-        // let maxHeightV2 = -999
-        // let maxHeightV3 = 0
         for (let idx = 0; idx < links.length; ++idx) {
             const cmessage = JSON.parse(links[idx]["attributes"]["cmessage"])
             const targetId = cmessage["targetId"]
@@ -129,9 +124,6 @@ export default class PhDagDatasource {
                 const tmp = ele.datasource.data.find(x => x["id"] === targetId)
                 if(tmp) {
                     tmp["parentIds"].push(sourceId)
-                    // if (maxHeight < tmp["parentIds"].length) {
-                    //     maxHeight = tmp["parentIds"].length
-                    // }
                 }
             }
 
@@ -139,27 +131,10 @@ export default class PhDagDatasource {
                 const tmp = ele.datasource.data.find(x => x["id"] === sourceId)
                 if(tmp) {
                     tmp["childrenIds"].push(targetId)
-                    // if (maxHeightV2 < tmp["childrenIds"].length) {
-                    //     maxHeightV2 = tmp["childrenIds"].length
-                    // }
                 }
             }
         }
-
-        // for (let idx = 0; idx < ele.datasource.data.length; ++idx) {
-        //     if (ele.datasource.data[idx]['parentIds'].length === 0 &&
-        //         ele.datasource.data[idx]['childrenIds'].length === 0) {
-        //         ++maxHeightV3
-        //     }
-        // }
-
-        // that.sizeHit = [maxLevel * that.hitWidthStep, Math.max(maxHeight, maxHeightV2) * that.hitHeightStep]
         ele.needRefresh++
-        // ele.datasource.buildQuery(ele)
-        //     .then((response) => response.json())
-        //     .then((response) => {
-                
-        //     })
     }
 
     //查询 select
@@ -195,7 +170,6 @@ export default class PhDagDatasource {
             },
             body: JSON.stringify(body)
         }
-        // return null
         return fetch(uri, options)
     }
 
@@ -204,12 +178,5 @@ export default class PhDagDatasource {
         const response = (await (await ele.datasource.buildSelectItemsQuery(ele)).json())
         that.cal = response
         ele.needRefresh++
-        // ele.datasource.buildSelectItemsQuery(ele)
-        //     .then((response) => response.json())
-        //     .then((response) => {
-        //         debugger
-        //         that.cal = response
-        //         ele.needRefresh++
-        //     })
     }
 }
