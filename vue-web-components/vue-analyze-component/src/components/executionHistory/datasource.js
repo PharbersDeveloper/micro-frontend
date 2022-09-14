@@ -17,6 +17,14 @@ export default class PhContainerDataSource {
         this.runnerId = ''
     }
 
+    getCookie (name) {
+        let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+        if (arr = document.cookie.match(reg))
+            return (arr[2]);
+        else
+            return null;
+    }
+
     buildQuery(ele) {
         const url = `${hostName}/phdydatasource/query`
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
@@ -94,6 +102,41 @@ export default class PhContainerDataSource {
                 // ele.needRefresh++
                 that.dataActivity = that.store.findAll("executions")
                 // that.dataActivity = ele.arrRemoveRepetition(that.dataActivityMore, that.dataActivity)
+                if(callback)
+                    callback()
+            })
+    }
+
+    queryConf(dagName, runnerId) {
+        const url = `${hostName}/phs3userconf`
+        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            "dagName": ["=", dagName],
+            "runnerId": ["=", runnerId]
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/json',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    buildConfQuery(dagName, runnerId, callback=null) {
+        const that = this
+        this.queryConf(dagName, runnerId)
+            .then((response) => response.json())
+            .then((response) => {
+                console.log(response)
+                that.dataConf = response
+                // that.store.reset()
+                // that.store.sync(response)
+                // that.dataConf = that.store.findAll("executions")
                 if(callback)
                     callback()
             })

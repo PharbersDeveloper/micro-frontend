@@ -57,6 +57,16 @@
                     <!-- <div v-if="JSON.stringify(jsonMessage) == '{}'">暂无数据</div>
                     <viewJson v-else :JsonData="jsonMessage"></viewJson> -->
                     <iframe class="executions-iframe" :src="iframeUrl" frameborder="0"></iframe>
+                    <div class="execution-conf">
+                        <div class="title">
+                            运行参数
+                        </div>
+                        <div class="logs">
+                            <div class="logs-container">
+                                {{ datasource.dataConf }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="execution-history-logs-panel">
                     <div class="title">Activity</div>
@@ -149,17 +159,6 @@ export default {
         this.datasource.appendExecutionHistory(this)
     },
     methods: {
-        // 筛选大数组中重复的小数组
-        arrRemoveRepetition(maxArr, minArr) {
-            let nArr = [];
-            nArr = maxArr.filter(function (item) {
-                let temp = minArr.map(function (v) {
-                    return v.id
-                })
-                return !temp.includes(item.id)
-            })
-            return nArr
-        },
         dealBuildLogsQuery() {
             // if(response.status !== 0) {
             //     alert("数据暂未生成，请刷新重试！")
@@ -192,6 +191,8 @@ export default {
                 // https://executions.pharbers.com
                 this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.jobName}&runnerId=${this.runnerId}&executionTemplate=${this.executionTemplate}` 
                 // this.datasource.buildFlowQuery(this) 
+                const dagName = this.projectName + "_" + this.projectName + "_developer"
+                this.datasource.buildConfQuery(dagName,this.runnerId)
             })
         },
         // dealBuildFlowQuery(response) {
@@ -438,13 +439,31 @@ export default {
                 flex-direction: column;
                 .execution-history-definition-panel {
                     flex-grow: 1;
+                    display: flex;
                     border: 1px solid #dddddd;
                     overflow: auto;
                     height: 500px;
                     .executions-iframe {
-                        width: 100vw;
+                        width: 50vw;
                         // height: 500px;
                         height: 100%;
+                    }
+                    .execution-conf {
+                        width: 50vw;
+                        height: 100%;
+                        border-left: 1px solid #ddd;
+                        padding: 20px;
+                        .title {
+                            padding-bottom: 20px;
+                            // border-bottom: 1px solid red;
+                        }
+                        .logs {
+                            border:1px solid red;
+                            overflow-y: auto;
+                            .logs-container {
+                                height: 100px;
+                            }
+                        }
                     }
                 }
                 .execution-history-logs-panel {
