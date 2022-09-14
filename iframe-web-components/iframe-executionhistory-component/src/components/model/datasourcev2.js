@@ -10,7 +10,7 @@ export default class PhDagDatasource {
         this.projectId = "ggjpDje0HUC2JW"
         this.runnerId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = 'cb319b8522f324d6f477a87c234e028511fd466bf00660d413c4140a08b98753'
+        this.debugToken = 'a92226f1c86f14c03a571bf0ae4bacb8e44d4d7fbd3bdb3e36018dc56deeb283'
         this.cal = { calculate: {}, selected: [] }
         this.isChanged = false
     }

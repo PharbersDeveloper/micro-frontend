@@ -8,7 +8,7 @@ export default class PhDagDatasource {
     constructor(id, projectId, parent) {
         this.id = id
         this.store = new JsonApiDataStore()
-        this.debugToken = 'c4e6842313cacf87b2e7fd762eab2734a8b70f8504efbedf389b23798f8ae430'
+        this.debugToken = 'a485d935b8705b15d3d49a42b7d8213581fa51ef68fdb142d293e3993474de9b'
 
         this.adapter = this.defaultAdapter
         this.projectId = projectId
@@ -18,6 +18,8 @@ export default class PhDagDatasource {
         this.data = []
         this.cal = { calculate: {}, selected: [] }
         this.parent = parent
+		this.version_start_key = ""
+		this.version_total_count = 0
         this.versionArr = []
     }
 
@@ -160,8 +162,8 @@ export default class PhDagDatasource {
                     id
                 ]
             },
-            "limit": 3000,
-            "start_key": ""
+            "limit": 100,
+            "start_key": this.version_start_key
         }
         let options = {
             method: "POST",
@@ -185,6 +187,8 @@ export default class PhDagDatasource {
 					obj[x["attributes"]["name"]] = x["attributes"]["alias"]
 				})
 				that.aliasArray = obj
+				that.version_start_key = response.meta.start_key
+				that.version_total_count = response.meta.total_count
                 return response.data.map(x => x["attributes"]["name"])
             })
     }
