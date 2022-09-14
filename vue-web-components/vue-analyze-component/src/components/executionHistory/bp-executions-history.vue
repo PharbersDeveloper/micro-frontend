@@ -3,7 +3,11 @@
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/index.css">
         <div class="execution-search-sort-panel ">
             <div class="execution-sort-btn-lst-search">
-                <el-input v-model="searchString" class="search" placeholder="搜索"></el-input>
+                <el-input 
+                    v-model="searchString"
+                    class="search" 
+                    @input="inputSearch(searchString)"
+                    placeholder="搜索"></el-input>
                 <div class="execution-sort-btn-lst">
                     <select v-model="curSort">
                         <option v-for="(item,index) in sortCandidate" v-bind:value="item" v-text="item"
@@ -19,14 +23,14 @@
 
             <div class="execution-history-list-panel">
                 <div class="execution-history-list">
-                    <div v-for="(item, index) in datasource.data" :key="index" @click="clickExecutionItem(item, index)"
+                    <div v-for="(item, index) in dataShow" :key="index" @click="clickExecutionItem(item, index)"
                         class="execution-history-item">
                         <div class="left">
                             <p v-if="item.status==='success'" class="el-icon-success status-icon" />
                             <p v-else-if="item.status==='running'" class="el-icon-loading status-icon" />
                             <p v-else class="el-icon-error status-icon" />
                             <div class="execution-history-detail">
-                                <span class="name"><b>{{item["runner-id"]}}</b></span>
+                                <span class="name"><b>{{item["runner-id"]}}_{{item.owner}}</b></span>
                                 <div class="execution-history-time">
                                     <span class="start-time">
                                         <!-- {{formatDateStandard(item["start-at"], 2)}} -->
@@ -57,6 +61,16 @@
                     <!-- <div v-if="JSON.stringify(jsonMessage) == '{}'">暂无数据</div>
                     <viewJson v-else :JsonData="jsonMessage"></viewJson> -->
                     <iframe class="executions-iframe" :src="iframeUrl" frameborder="0"></iframe>
+                    <div class="execution-conf">
+                        <div class="title">
+                            运行参数
+                        </div>
+                        <div class="logs">
+                            <div class="logs-container">
+                                {{ datasource.dataConf }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="execution-history-logs-panel">
                     <div class="title">Activity</div>
@@ -118,7 +132,8 @@ export default {
             runnerId: "",
             iframeUrl: "",
             jobName: "",
-            isActive: null
+            isActive: null,
+            dataShow: []
         }
     },
     components: {
@@ -149,16 +164,12 @@ export default {
         this.datasource.appendExecutionHistory(this)
     },
     methods: {
-        // 筛选大数组中重复的小数组
-        arrRemoveRepetition(maxArr, minArr) {
-            let nArr = [];
-            nArr = maxArr.filter(function (item) {
-                let temp = minArr.map(function (v) {
-                    return v.id
-                })
-                return !temp.includes(item.id)
-            })
-            return nArr
+        inputSearch(data) {
+            if (data.length === 0) {
+                this.dataShow = this.datasource.data
+            } else {
+                this.dataShow = this.datasource.data.filter(it => it.owner.indexOf(data) > -1 || this.rTime(it.date).indexOf(data) > -1)
+            }
         },
         dealBuildLogsQuery() {
             // if(response.status !== 0) {
@@ -192,6 +203,8 @@ export default {
                 // https://executions.pharbers.com
                 this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.jobName}&runnerId=${this.runnerId}&executionTemplate=${this.executionTemplate}` 
                 // this.datasource.buildFlowQuery(this) 
+                const dagName = this.projectName + "_" + this.projectName + "_developer"
+                this.datasource.buildConfQuery(dagName,this.runnerId)
             })
         },
         // dealBuildFlowQuery(response) {
@@ -438,13 +451,31 @@ export default {
                 flex-direction: column;
                 .execution-history-definition-panel {
                     flex-grow: 1;
+                    display: flex;
                     border: 1px solid #dddddd;
                     overflow: auto;
                     height: 500px;
                     .executions-iframe {
-                        width: 100vw;
+                        width: 50vw;
                         // height: 500px;
                         height: 100%;
+                    }
+                    .execution-conf {
+                        width: 50vw;
+                        height: 100%;
+                        border-left: 1px solid #ddd;
+                        padding: 20px;
+                        .title {
+                            padding-bottom: 20px;
+                            // border-bottom: 1px solid red;
+                        }
+                        .logs {
+                            border:1px solid red;
+                            overflow-y: auto;
+                            .logs-container {
+                                height: 100px;
+                            }
+                        }
                     }
                 }
                 .execution-history-logs-panel {
