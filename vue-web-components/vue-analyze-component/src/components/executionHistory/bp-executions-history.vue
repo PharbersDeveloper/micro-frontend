@@ -455,7 +455,7 @@ export default {
                     display: flex;
                     border: 1px solid #dddddd;
                     overflow: auto;
-                    height: 50%;
+                    height: 70%;
                     .executions-iframe {
                         width: 70%;
                         // height: 500px;
@@ -483,7 +483,7 @@ export default {
                     flex-grow: 1;
                     border: 1px solid #dddddd;
                     min-height: 30%;
-                    height: 50%;
+                    height: 30%;
                     .title {
                         height: 40px;
                         background: #f2f2f2;
