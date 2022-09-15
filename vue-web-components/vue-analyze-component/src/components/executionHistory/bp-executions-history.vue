@@ -313,6 +313,7 @@ export default {
             console.log(item)
         },
         loadMoreExecutionHistory () {
+            this.searchString = ""
             this.datasource.appendExecutionHistory(this)
         }
     }
