@@ -456,12 +456,12 @@ export default {
                     overflow: auto;
                     height: 500px;
                     .executions-iframe {
-                        width: 50%;
+                        width: 70%;
                         // height: 500px;
                         height: 100%;
                     }
                     .execution-conf {
-                        width: 50%;
+                        width: 30%;
                         height: 100%;
                         border-left: 1px solid #ddd;
                         padding: 20px;
