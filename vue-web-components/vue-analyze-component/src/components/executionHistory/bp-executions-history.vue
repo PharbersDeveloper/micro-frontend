@@ -66,8 +66,11 @@
                             运行参数
                         </div>
                         <div class="logs">
-                            <div class="logs-container">
+                            <div class="logs-container" v-show="!hasError">
                                 {{ datasource.dataConf }}
+                            </div>
+                            <div class="logs-container" v-show="hasError">
+                                运行脚本参数已被删除，请联系管理员!
                             </div>
                         </div>
                     </div>
@@ -133,7 +136,9 @@ export default {
             iframeUrl: "",
             jobName: "",
             isActive: null,
-            dataShow: []
+            dataShow: [],
+            dagName: '',
+            hasError: null
         }
     },
     components: {
@@ -203,8 +208,8 @@ export default {
                 // https://executions.pharbers.com
                 this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.jobName}&runnerId=${this.runnerId}&executionTemplate=${this.executionTemplate}` 
                 // this.datasource.buildFlowQuery(this) 
-                const dagName = this.projectName + "_" + this.projectName + "_developer"
-                this.datasource.buildConfQuery(dagName,this.runnerId)
+                this.dagName = this.projectName + "_" + this.projectName + "_developer"
+                this.datasource.buildConfQuery(this)
             })
         },
         // dealBuildFlowQuery(response) {
@@ -402,11 +407,6 @@ export default {
                         .execution-history-detail {
                             display: flex;
                             flex-direction: column;
-
-                            .name {
-                                // padding-bottom: 10px;
-                            }
-
                             .execution-history-time {
                                 display: flex;
                                 align-items: center;
@@ -450,31 +450,32 @@ export default {
                 display: flex;
                 flex-grow: 1;
                 flex-direction: column;
+                height: calc(100vh - 40px);
                 .execution-history-definition-panel {
                     flex-grow: 1;
                     display: flex;
                     border: 1px solid #dddddd;
                     overflow: auto;
-                    height: 500px;
+                    height: 70%;
                     .executions-iframe {
-                        width: 50vw;
+                        width: 70%;
                         // height: 500px;
                         height: 100%;
                     }
                     .execution-conf {
-                        width: 50vw;
+                        width: 30%;
                         height: 100%;
                         border-left: 1px solid #ddd;
                         padding: 20px;
                         .title {
                             padding-bottom: 20px;
-                            // border-bottom: 1px solid red;
                         }
                         .logs {
-                            border:1px solid red;
                             overflow-y: auto;
+                            padding: 10px;
+                            height: calc(100% - 30px);
                             .logs-container {
-                                height: 100px;
+                                font-size: 16px;
                             }
                         }
                     }
@@ -483,6 +484,7 @@ export default {
                     flex-grow: 1;
                     border: 1px solid #dddddd;
                     min-height: 30%;
+                    height: 30%;
                     .title {
                         height: 40px;
                         background: #f2f2f2;

@@ -15,14 +15,7 @@ export default class PhContainerDataSource {
         this.jobIndex = ''
         this.jobName = ''
         this.runnerId = ''
-    }
-
-    getCookie (name) {
-        let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-        if (arr = document.cookie.match(reg))
-            return (arr[2]);
-        else
-            return null;
+        this.dataConf = ''
     }
 
     buildQuery(ele) {
@@ -108,12 +101,12 @@ export default class PhContainerDataSource {
             })
     }
 
-    queryConf(dagName, runnerId) {
+    queryConf(ele) {
         const url = `${hostName}/phs3userconf`
-        const accessToken = this.getCookie( "access_token" ) || this.debugToken
+        const accessToken = ele.getCookie( "access_token" ) || this.debugToken
         let body = {
-            "dagName": ["=", dagName],
-            "runnerId": ["=", runnerId]
+            "dagName": ele.dagName,
+            "runnerId": ele.runnerId
         }
 
         let options = {
@@ -128,13 +121,18 @@ export default class PhContainerDataSource {
         return fetch(url, options)
     }
 
-    buildConfQuery(dagName, runnerId, callback=null) {
+    buildConfQuery(ele, callback=null) {
         const that = this
-        this.queryConf(dagName, runnerId)
+        this.queryConf(ele)
             .then((response) => response.json())
             .then((response) => {
                 console.log(response)
-                that.dataConf = response
+                if (response.status == 1) {
+                    ele.hasError = true
+                } else {
+                    ele.hasError = false
+                }
+                that.dataConf = response.message
                 // that.store.reset()
                 // that.store.sync(response)
                 // that.dataConf = that.store.findAll("executions")
