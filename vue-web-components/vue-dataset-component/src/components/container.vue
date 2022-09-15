@@ -117,7 +117,7 @@
                                 </div>
                                 <div class="item_list">
                                     <span class="script_icon">
-                                        <img :src="selectDatasetIcon(dataset.cat)" alt="">
+                                        <img :src="selectDatasetIcon(dataset.cat,'normal')" alt="">
                                     </span>
                                     <p class="data_name" @click.stop="clickDatasetName(dataset)" :title="dataset.name">
                                         {{ dataset.name }}</p>
@@ -250,9 +250,9 @@ export default {
             ascending_order: `${staticFilePath}` + "/down.svg",
             descending_order: `${staticFilePath}` + "/top.svg",
             dataset_icon: `${staticFilePath}` + "/normal.svg",
-            input_index_icon: `${staticFilePath}` + "/input_index.svg",
-            output_index_icon: `${staticFilePath}` + "/output_index.svg",
-            intermediate_icon: `${staticFilePath}` + "/intermediate.svg",
+            // input_index_icon: `${staticFilePath}` + "/input_index.svg",
+            // output_index_icon: `${staticFilePath}` + "/output_index.svg",
+            // intermediate_icon: `${staticFilePath}` + "/intermediate.svg",
             database_icon: `${staticFilePath}` + "/icons/all_dataset.svg",
             catalog_icon: `${staticFilePath}` + "/icons/catalog/normal.svg",
             showDialog: false,
@@ -487,7 +487,7 @@ export default {
         },
         //点击list主体
         clickOnlyOne(dataset) {
-            this.database_icon = this.selectDatasetIcon(dataset.cat)
+            this.database_icon = this.selectDatasetIcon(dataset.cat,'reverse')
             this.datasetcheckedIds = []
             this.datasetcheckedNames = []
             this.datasetcheckedIds.push(dataset.id)
@@ -507,7 +507,7 @@ export default {
                 this.datasetcheckedNames.push(dataset.name)
             }
             if (this.datasetcheckedIds.length == 1) {
-                this.database_icon = this.selectDatasetIcon(dataset.cat)
+                this.database_icon = this.selectDatasetIcon(dataset.cat,'reverse')
             } else {
                 this.database_icon = `${staticFilePath}` + "/icons/all_dataset.svg"
             }
@@ -531,7 +531,7 @@ export default {
                 this.datasetcheckedNames.push(dataset.name)
             }
             if (this.datasetcheckedIds.length == 1) {
-                this.database_icon = this.selectDatasetIcon(dataset.cat)
+                this.database_icon = this.selectDatasetIcon(dataset.cat,'reverse')
             } else {
                 this.database_icon = `${staticFilePath}` + "/icons/all_dataset.svg"
             }
@@ -752,20 +752,20 @@ export default {
         toggle() {
             this.showDialog = !this.showDialog
         },
-        selectDatasetIcon(cat) {
+        selectDatasetIcon(cat,status) {
             switch (cat) {
             case "input_index":
-                return this.input_index_icon
+                return this.defs.iconsByName("input_index",status)
             case "output_index":
-                return this.output_index_icon
+                return this.defs.iconsByName("output_index",status)
             case "intermediate":
-                return this.intermediate_icon
+                return this.defs.iconsByName("intermediate",status)
             case "catalog":
-                return this.catalog_icon
+                return this.defs.iconsByName("catalog",status)
             case "export":
-                return this.defs.iconsByName("DSexport")
+                return this.defs.iconsByName("DSexport",status)
             case "shared":
-                return this.defs.iconsByName("DSshared")
+                return this.defs.iconsByName("DSshared",status)
             default:
                 return this.dataset_icon
             }
