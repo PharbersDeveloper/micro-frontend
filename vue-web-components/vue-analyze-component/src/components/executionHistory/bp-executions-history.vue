@@ -461,25 +461,23 @@ export default {
                     overflow: auto;
                     height: 500px;
                     .executions-iframe {
-                        width: 50vw;
+                        width: 50%;
                         // height: 500px;
                         height: 100%;
                     }
                     .execution-conf {
-                        width: 50vw;
+                        width: 50%;
                         height: 100%;
                         border-left: 1px solid #ddd;
                         padding: 20px;
                         .title {
                             padding-bottom: 20px;
-                            // border-bottom: 1px solid red;
                         }
                         .logs {
-                            // border:1px solid red;
                             overflow-y: auto;
                             padding: 10px;
+                            height: calc(100% - 30px);
                             .logs-container {
-                                height: 100px;
                             }
                         }
                     }
