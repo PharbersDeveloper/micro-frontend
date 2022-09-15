@@ -406,11 +406,6 @@ export default {
                         .execution-history-detail {
                             display: flex;
                             flex-direction: column;
-
-                            .name {
-                                // padding-bottom: 10px;
-                            }
-
                             .execution-history-time {
                                 display: flex;
                                 align-items: center;
@@ -478,6 +473,7 @@ export default {
                             padding: 10px;
                             height: calc(100% - 30px);
                             .logs-container {
+                                font-size: 16px;
                             }
                         }
                     }
