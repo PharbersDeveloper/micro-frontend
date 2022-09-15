@@ -14,6 +14,19 @@
                 <!-- <div v-if="!jsonMessage">暂无数据</div>
             <viewJson v-else :JsonData="jsonMessage"></viewJson> -->
                 <iframe class="executions-iframe" :src="iframeUrl" frameborder="0"></iframe>
+                <div class="execution-conf">
+                    <div class="title">
+                        运行参数
+                    </div>
+                    <div class="logs">
+                        <div class="logs-container" v-show="!hasError">
+                            {{ datasource.dataConf }}
+                        </div>
+                        <div class="logs-container" v-show="hasError">
+                            运行脚本参数已被删除，请联系管理员!
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="job-activities-logs">
                 <div class="job-activities">
@@ -71,7 +84,10 @@ export default {
             iframeUrl: "",
             projectName: "",
             executionTemplate: "",
-            focus: 0 //默认选中第一个activity
+            focus: 0 ,//默认选中第一个activity,
+            dagName: '',
+            hasError: null,
+            runnerId: ''
         }
     },
     components: {
@@ -96,7 +112,9 @@ export default {
         let paramArr = href.split("?")[1].split("&")
         this.datasource.projectId = this.getUrlParam(paramArr, "projectId")
         this.datasource.runnerId = this.getUrlParam(paramArr, "runnerId")
+        this.runnerId = this.getUrlParam(paramArr, "runnerId")
         this.projectName = this.getUrlParam(paramArr, "projectName")
+        this.dagName = this.projectName + "_" + this.projectName + "_developer"
         this.datasource.buildActivityQuery(this, this.datasource.runnerId, () => {
             this.executionItem = this.datasource.dataActivity
             if (this.executionItem.length >= 1) {
@@ -105,6 +123,7 @@ export default {
                 this.datasource.jobIndex = this.executionItem[0]['job-index']
                 this.datasource.buildLogsQuery(this)
                 this.datasource.buildExecutionQuery(this)
+                this.datasource.buildConfQuery(this)
             }
         })
         // this.datasource.buildExecutionQuery(this)
@@ -237,16 +256,37 @@ export default {
         flex-grow: 1;
         display: flex;
         flex-direction: column;
+        height: calc(100vh - 88px);
 
         .job-flow {
             overflow: hidden;
             flex-grow: 1;
+            height: 50px;
+            display: flex;
 
             .executions-iframe {
                 height: 100%;
                 // min-height: 350px;
-                width: 100%;
+                width: 70%;
                 overflow-y: scroll;
+            }
+
+            .execution-conf {
+                width: 30%;
+                height: 100%;
+                border-left: 1px solid #ddd;
+                padding: 20px;
+                .title {
+                    padding-bottom: 20px;
+                }
+                .logs {
+                    overflow-y: auto;
+                    padding: 10px;
+                    height: calc(100% - 30px);
+                    .logs-container {
+                        font-size: 16px;
+                    }
+                }
             }
         }
 
@@ -254,6 +294,7 @@ export default {
             flex-grow: 1;
             display: flex;
             border-top: 1px solid #ddd;
+            height: 50px;
 
             .title {
                 height: 60px;

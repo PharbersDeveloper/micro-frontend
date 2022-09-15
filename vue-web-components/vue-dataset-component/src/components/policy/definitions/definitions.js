@@ -5,7 +5,7 @@ export default class PhDagDefinitions {
         this.id = id
     }
 
-    iconsByName(name, status='normal', suffix='.svg') {
+    iconsByName(name, status, suffix='.svg') {
         return `${staticFilePath}` + "/icons/" + name + "/" + status + suffix
     }
 }

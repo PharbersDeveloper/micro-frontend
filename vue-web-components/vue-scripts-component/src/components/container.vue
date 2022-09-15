@@ -37,19 +37,19 @@
                             <button class="upload_btn" @click="toggle">新建脚本</button>
                             <div class="dialog" v-show="showDialog">
                                 <div class="list" ref="classVisual" @mouseenter="showVisual" @mouseleave="hide" >
-                                    <img :src="defs.iconsByName('visual')" alt="">
+                                    <img :src="defs.iconsByName('visual','normal')" alt="">
                                     <p class="">Visual</p>
-                                    <img :src="defs.iconsByName('path')" class="path" ref="pathVisual" alt="">
+                                    <img :src="defs.iconsByName('path','normal')" class="path" ref="pathVisual" alt="">
                                 </div>
                                 <div class="list" ref="classCode" @mouseenter="showCode" @mouseleave="hide">
-                                    <img :src="defs.iconsByName('code')" alt="">
+                                    <img :src="defs.iconsByName('code','normal')" alt="">
                                     <p class="">Code</p>
-                                    <img :src="defs.iconsByName('path')" class="path" ref="pathCode" alt="">
+                                    <img :src="defs.iconsByName('path','normal')" class="path" ref="pathCode" alt="">
                                 </div>
                                 <div class="list" ref="classSpark" @mouseenter="showSpark" @mouseleave="hide">
-                                    <img :src="defs.iconsByName('spark')" alt="">
+                                    <img :src="defs.iconsByName('spark','normal')" alt="">
                                     <p class="">Hadoop&Spark</p>
-                                    <img :src="defs.iconsByName('path')" class="path" ref="pathSpark" alt="">
+                                    <img :src="defs.iconsByName('path','normal')" class="path" ref="pathSpark" alt="">
                                 </div>
                                 <!-- <div 
                                     class="list"
@@ -69,7 +69,7 @@
                                     @mouseenter="showVisualList"
                                     @mouseleave="hideVisual"
                                     @click="selectScripts(script.scriptName)">
-                                    <img :src="defs.iconsByName(script.iconName)" alt="">
+                                    <img :src="defs.iconsByName(script.iconName,'normal')" alt="">
                                     <p class="">{{script.name}}</p>
                                 </div>
                             </div>
@@ -82,7 +82,7 @@
                                     @mouseenter="showCodeList"
                                     @mouseleave="hideCode"
                                     @click="selectScripts(script.scriptName)">
-                                    <img :src="defs.iconsByName(script.iconName)" alt="">
+                                    <img :src="defs.iconsByName(script.iconName,'normal')" alt="">
                                     <p class="">{{script.name}}</p>
                                 </div>
                             </div>
@@ -95,7 +95,7 @@
                                     @mouseenter="showSparkList"
                                     @mouseleave="hideSpark"
                                     @click="selectScripts(script.scriptName)">
-                                    <img :src="defs.iconsByName(script.iconName)" alt="">
+                                    <img :src="defs.iconsByName(script.iconName,'normal')" alt="">
                                     <p class="">{{script.name}}</p>
                                 </div>
                             </div>
@@ -148,7 +148,7 @@
                                 </div>
                                 <div class="item_list">
                                     <span class="script_icon">
-                                        <img :src="selectScriptIcon(recipt.runtime)" alt="">
+                                        <img :src="selectScriptIcon(recipt.runtime,'normal')" alt="">
                                     </span>
                                     <p class="data_name" @click.stop="clickReciptName(recipt)" :title="recipt.outputs">compute_{{recipt.outputs}}</p>
                                     <div class="tag_area" ref="tagsArea">
@@ -296,11 +296,11 @@ export default {
             ascending_order: `${staticFilePath}` + "/down.svg",
             descending_order: `${staticFilePath}` + "/top.svg",
             script_icon: `${staticFilePath}` + "/script_select.svg",
-            prepare_icon: `${staticFilePath}` + "/prepare_icon.svg",
-            pyspark_icon: `${staticFilePath}` + "/pyspark_icon.svg",
-            python_icon: `${staticFilePath}` + "/python_icon.svg",
-            R_icon: `${staticFilePath}` + "/R_icon.svg",
-            sparkR_icon: `${staticFilePath}` + "/sparkR_icon.svg",
+            // prepare_icon: `${staticFilePath}` + "/prepare_icon.svg",
+            // pyspark_icon: `${staticFilePath}` + "/pyspark_icon.svg",
+            // python_icon: `${staticFilePath}` + "/python_icon.svg",
+            // R_icon: `${staticFilePath}` + "/R_icon.svg",
+            // sparkR_icon: `${staticFilePath}` + "/sparkR_icon.svg",
             script_icon_show: `${staticFilePath}` + "/icons/all_script.svg",
             showDialog: false,
             state: '',
@@ -531,7 +531,7 @@ export default {
         },
         //点击list主体
         clickOnlyOne(recipt) {
-            this.script_icon_show = this.selectScriptIcon(recipt.runtime)
+            this.script_icon_show = this.selectScriptIcon(recipt.runtime,'reverse')
             this.reciptcheckedIds = []
             this.reciptcheckedNames = []
             this.reciptcheckedIds.push(recipt.id)
@@ -550,7 +550,7 @@ export default {
                 this.reciptcheckedNames.push(recipt.jobShowName)
             }
             if (this.reciptcheckedIds.length == 1) {
-                this.script_icon_show = this.selectScriptIcon(recipt.runtime)
+                this.script_icon_show = this.selectScriptIcon(recipt.runtime,'reverse')
             } else {
                 this.script_icon_show = `${staticFilePath}` + "/icons/all_script.svg"
             }
@@ -574,7 +574,7 @@ export default {
                 this.reciptcheckedNames.push(recipt.jobShowName)
             }
             if (this.reciptcheckedIds.length == 1) {
-                this.script_icon_show = this.selectScriptIcon(recipt.runtime)
+                this.script_icon_show = this.selectScriptIcon(recipt.runtime,'reverse')
             } else {
                 this.script_icon_show = `${staticFilePath}` + "/icons/all_script.svg"
             }
@@ -822,38 +822,38 @@ export default {
             this.$refs.classSpark.className = 'list active'
             this.showSpark(e)
         },
-        selectScriptIcon(runtime) {
+        selectScriptIcon(runtime,status) {
             switch (runtime) {
             case "python3":
-                return this.python_icon
+                return this.defs.iconsByName("python",status)
             case "pyspark":
-                return this.pyspark_icon
+                return this.defs.iconsByName("pyspark",status)
             case "r":
-                return this.R_icon
+                return this.defs.iconsByName("r",status)
             case "sparkr":
-                return this.sparkR_icon
+                return this.defs.iconsByName("sparkr",status)
             case "prepare":
-                return this.prepare_icon
+                return this.defs.iconsByName("prepare",status)
             case "sync":
-                return this.defs.iconsByName("sync")
+                return this.defs.iconsByName("sync",status)
             case "topn":
-                return this.defs.iconsByName("topn")
+                return this.defs.iconsByName("topn",status)
             case "sort":
-                return this.defs.iconsByName("sort")
+                return this.defs.iconsByName("sort",status)
             case "distinct":
-                return this.defs.iconsByName("distinct")
+                return this.defs.iconsByName("distinct",status)
             case "join":
-                return this.defs.iconsByName("join")
+                return this.defs.iconsByName("join",status)
             case "stack":
-                return this.defs.iconsByName("stack")
+                return this.defs.iconsByName("stack",status)
             case "group":
-                return this.defs.iconsByName("group")
+                return this.defs.iconsByName("group",status)
             case "pivot":
-                return this.defs.iconsByName("pivot")
+                return this.defs.iconsByName("pivot",status)
             case "export":
-                return this.defs.iconsByName("export")
+                return this.defs.iconsByName("export",status)
             case "shared":
-                return this.defs.iconsByName("shared")
+                return this.defs.iconsByName("shared",status)
             default:
                 return this.script_icon
             }
