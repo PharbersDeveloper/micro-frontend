@@ -449,12 +449,13 @@ export default {
                 display: flex;
                 flex-grow: 1;
                 flex-direction: column;
+                height: calc(100vh - 40px);
                 .execution-history-definition-panel {
                     flex-grow: 1;
                     display: flex;
                     border: 1px solid #dddddd;
                     overflow: auto;
-                    height: 500px;
+                    height: 50%;
                     .executions-iframe {
                         width: 70%;
                         // height: 500px;
@@ -482,6 +483,7 @@ export default {
                     flex-grow: 1;
                     border: 1px solid #dddddd;
                     min-height: 30%;
+                    height: 50%;
                     .title {
                         height: 40px;
                         background: #f2f2f2;
