@@ -19,8 +19,11 @@
                         <div class="dlg-all-version-container">
                             <div class="dlg-flex-version-item" v-for="(item, index) in versionArrShow" :key="item+index" @click="appendSelectVersionTags(item, index)">
                                 <span>{{item}}</span>
+								<span v-show="datasource.aliasArray[item] && datasource.aliasArray[item].length > 0">（{{datasource.aliasArray[item]}}）</span>
                             </div>
                         </div>
+						<span v-if="datasource.version_total_count > selectVersionTags.length + versionArr.length" class="more" @click="moreVersion">更多</span>
+						<span v-else class="more">暂无更多</span>
                     </div>
                 </div>
                 <div class="btn">
@@ -32,8 +35,8 @@
     </div>
 </template>
 <script>
-import PhDagDatasource from './model/datasourcev2'
-import { staticFilePath, hostName } from "../config/envConfig"
+import PhDagDatasource from './model/datasource'
+import { staticFilePath } from "../config/envConfig"
 
 export default {
     data() {
@@ -50,7 +53,7 @@ export default {
         datasource: {
             type: Object,
             default: function() {
-                return new PhDagDatasource('1')
+                return new PhDagDatasource('1', this.projectId, this)
             }
         },
         datasetName: String,
@@ -61,18 +64,22 @@ export default {
     },
     computed: {},
     mounted() {
-        let that = this
         this.selectVersionTags = this.dsVersion
         this.datasource.name = this.datasetName
-        this.datasource.projectId = this.projectId
-        this.datasource.queryDlgDistinctCol(this, this.representId, this.cat, this.datasetName).then((data) => {
-            //完整的显示行列表数据
-            that.versionArr = data.filter(it => that.selectVersionTags.indexOf(it) === -1)
-            that.versionArrShow = that.versionArr
-        })
+        this.moreVersion()
     },
     watch: {},
     methods: {
+		moreVersion() {
+			const that = this
+			this.searchRow = []
+			this.datasource.queryDlgDistinctCol(this, this.representId, this.cat, this.datasetName).then((data) => {
+				//完整的显示行列表数据
+				const arr = data.filter(it => that.selectVersionTags.indexOf(it) === -1)
+				that.versionArr = that.versionArr.concat(arr)
+				that.versionArrShow = that.versionArr
+			})
+		},
         appendSelectVersionTags(data, index) {
             //去重
             let setArr = new Set(this.selectVersionTags).add(data)
@@ -91,11 +98,10 @@ export default {
             this.versionArrShow.push(data)
         },
         getCookie(name) {
-            let arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
-            if (arr = document.cookie.match(reg))
-                return (arr[2]);
-            else
-                return null;
+            let arr,
+                reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if ((arr = document.cookie.match(reg))) return arr[2];
+            else return null;
         },
         save() {
             const event = new Event("event")
@@ -134,12 +140,10 @@ export default {
     top: 0;
     right: 0;
     z-index: 9999;
-    justify-content: center;
-    align-items: center;
     background: rgba(0,0,0,0.31);
 }
 .dialog_area {
-    width: 400px;
+    width: 700px;
     height: 500px;
     border: 1px solid #ddd;
     background-color: #fff;
@@ -226,6 +230,12 @@ export default {
                     border-bottom: 1px solid #ccc;
                 }
         }
+
+		.more {
+			margin: 0 auto;
+			cursor: pointer;
+			margin-top: 20px;
+		}
     }
 
 }

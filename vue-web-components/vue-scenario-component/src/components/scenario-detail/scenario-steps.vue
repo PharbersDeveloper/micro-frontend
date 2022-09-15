@@ -33,8 +33,9 @@
                     </div>
                     <span class="dsEmpty" v-show="isDsEmpty()">数据集不能为空！</span>
                 </el-form-item>
-                <el-form-item label="">
+                <el-form-item label="" class="button_area">
                     <el-button class="add-ds" type="primary" @click="dialogVisible = true">选择目标数据集</el-button>
+                    <el-button class="add-ds" type="primary" @click="dialogVisible = true">选择最终目标</el-button>
                 </el-form-item>
                 <el-form-item label="配置参数">
                     <el-input type="textarea" :rows="4" placeholder="请输入配置参数" v-model="selectStep.confData"
@@ -418,13 +419,23 @@ export default {
             margin-top: 20px;
         }
 
-        .add-ds {
-            width: 120px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+		.button_area {
+			
+			/deep/.el-form-item__content {
+				display: flex;
+
+				.add-ds {
+					width: 120px;
+					height: 30px;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					margin-right: 10px;
+				}
+			}
+		}
+
+        
 
         .scenario-step-ds-item {
             display: flex;

@@ -287,7 +287,8 @@ export default {
             AllData: [],
             tagsArray: [],
             totalCount: 0,
-            loading: false
+            loading: false,
+            datasetRelaResult: []
         }
     },
     props: {
@@ -545,6 +546,10 @@ export default {
         },
         //点击dataset name
         clickDatasetName(dataset) {
+            const arr = ["uploaded", "catalog", "intermediate"]
+            if (!arr.includes(dataset.cat)) {
+                return false
+            }
             const event = new Event("event")
             event.args = {
                 callback: "linkToPage",
@@ -757,6 +762,10 @@ export default {
                 return this.intermediate_icon
             case "catalog":
                 return this.catalog_icon
+            case "export":
+                return this.defs.iconsByName("DSexport")
+            case "shared":
+                return this.defs.iconsByName("DSshared")
             default:
                 return this.dataset_icon
             }
@@ -1497,7 +1506,7 @@ export default {
 }
 
 /* 	使用transform: translateZ(0)加快动画和过渡的速度
-	使用scale进行缩放
+    使用scale进行缩放
 */
 .ldio-400lpppmiue {
     position: absolute;
@@ -1505,9 +1514,9 @@ export default {
 }
 
 /*  创建动画
-	1. 0%是动画开始时间
-	2. 100%是动画结束时间
-	3. transform: rorate()是正时针旋转的角度
+    1. 0%是动画开始时间
+    2. 100%是动画结束时间
+    3. transform: rorate()是正时针旋转的角度
 */
 @keyframes ldio-400lpppmiue {
     0% {

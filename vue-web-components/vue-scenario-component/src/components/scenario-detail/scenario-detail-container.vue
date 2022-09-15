@@ -4,24 +4,55 @@
         <div class="scenario">
             <scenario-nav :scenario="datasource.scenario" :activeTrue="activeIsTrue" @active="activeChange"
                 @save="saveAll" @trigger="trigger"></scenario-nav>
-            <div class="scenario-container" v-if="activeName === 'Setting'">
+            <div class="scenario-container" v-show="activeName === 'Setting'">
                 <!-- <div class="scenario-container" v-if="activeName === ''">  -->
                 <detail-form :scenario="datasource.scenario"></detail-form>
                 <trigger-lst :triggers="triggerDisplay" :datasetsAll="datasetsAllDisplay"
                     @isTriggerTrue="getTriggerTrue" :scenario-id="datasource.scenario.id" />
                 <report-lst :reports="reportDisplay" @isTrue="getTrue" :scenario-id="datasource.scenario.id" />
             </div>
-            <div v-else class="scenario-container">
+            <div v-show="activeName === 'Steps'" class="scenario-container">
                 <scenario-steps :steps="stepDisplay" :datasets="datasetsDisplay"
                     :scenario-id="datasource.scenario.id" />
                 <!-- @isStepTrue="getSteptrue" -->
             </div>
+			<div v-show="activeName === '脚本参数'">
+				<script-parameters 
+					:scriptParamsData="datasource.scenarioParams"
+					ref="scriptparameters"></script-parameters>
+			</div>
+            <div v-show="activeName === '历史记录'">
+				<scenario-history
+                    :history="arr"
+                    :hasMore="datasource.hasMore" 
+                    :detailList="getFirstDetail" 
+                    :scenarioExecution="datasource.scenarioExecution"
+                    :scenarioJob="scenarioJob"
+                    @getHistory="getHistory"
+                    @getExecution="getExecution"
+                    @getScenarioJob="getScenarioJob"></scenario-history>
+			</div>
+            <!-- 
+                    :scenarioStep="datasource.scenarioStep"
+             -->
         </div>
+		<el-dialog title="输入参数" :visible.sync="dialogVisible" width="30%">
+			<el-input 
+				type="textarea" 
+				:rows="4" 
+				placeholder="请输入参数" 
+				:class="isAll() ? 'error-border' : ''"
+				v-model="codeFreeParams"></el-input>
+			<span v-show="isAll()" class="error-msg">请输入正确参数!</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="dialogVisible = false" style="padding: 10px;">Cancel</el-button>
+                <el-button type="primary" @click="triggerConfirm" style="padding: 10px;">Confirm</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 
 <script>
-// import { staticFilePath } from '../../config/envConfig'
 import DetailForm from "./detail-form"
 import ScenarioNav from "./scenario-nav"
 import TriggerLst from "./trigger-list"
@@ -31,6 +62,11 @@ import TriggerPolicy from "./policy/trigger-policy"
 import ReportPolicy from "./policy/report-policy"
 import StepPolicy from "./policy/step-policy"
 import datasource from "./model/datasource"
+import scriptParameters from "./script-parameters"
+import ScenarioHistory from "./scenario-history"
+import ElDialog from "element-ui/packages/dialog/index"
+import ElButton from "element-ui/packages/button/index"
+import ElInput from "element-ui/packages/input/index"
 import { Message } from 'element-ui'
 
 export default {
@@ -45,7 +81,14 @@ export default {
             isTrue: true,
             isTriggerTrue: true,
             isStepTrue: false,
-            activeIsTrue: {active: false}
+            activeIsTrue: {active: false},
+			dialogVisible: false,
+			codeFreeParams: JSON.stringify({
+				"CodeFree": {}
+			}),
+            getFirstDetail: {},
+            arr: [],
+            scenarioJob: []
         }
     },
     props: {
@@ -88,7 +131,12 @@ export default {
         ScenarioNav,
         TriggerLst,
         ReportLst,
-        ScenarioSteps
+        ScenarioSteps,
+		scriptParameters,
+        ScenarioHistory,
+        ElDialog,
+		ElButton,
+		ElInput
     },
     computed: {
 
@@ -98,6 +146,13 @@ export default {
 		this.datasource.scenarioId = this.getUrlParam("scenarioId")
 		this.datasource.scenarioName = this.getUrlParam("scenarioName")
         this.datasource.model()
+        this.datasource.refreshHistory(this.datasource.projectId, ()=>{
+            this.arr = this.datasource.history
+            if(this.datasource.history.length >= 1){
+                this.getFirstDetail = this.datasource.history[0]
+                this.datasource.refreshScenarioExecution(this.getFirstDetail['trace-id'])
+            }
+        })
     },
     watch: {
         "datasource.triggers": function() {
@@ -115,6 +170,12 @@ export default {
         "datasource.datasetsAll": function() {
 			this.datasetsAllAdapter()
 		},
+        scenarioJob: {
+			handler(newValue) {
+                this.scenarioJob = newValue
+            },
+            deep: true
+		},
         activeIsTrue:{
             handler(newValue){
                 this.activeIsTrue.active = newValue.active
@@ -123,6 +184,27 @@ export default {
         }
     },
     methods: {
+        getScenarioJob(runnerId, scenarioId , stepId){
+            this.datasource.refreshScenarioJob(runnerId, ()=>{
+                this.datasource.refreshScenarioStep(scenarioId, stepId, ()=>{
+                    if (this.datasource.scenarioStep.length >= 1) {
+                        for (let i = 0; i < this.datasource.scenarioJob.length; i++) {
+                            this.datasource.scenarioJob[i]['job-show-name'] = this.datasource.scenarioStep[i].name
+                        }
+                    }
+                    this.scenarioJob = this.datasource.scenarioJob
+                })
+            })
+            
+        },
+        getExecution(value){
+            this.datasource.refreshScenarioExecution(value)
+        },
+        getHistory(){
+            this.datasource.refreshHistory(this.datasource.projectId, ()=>{
+                this.arr = this.arr.concat(this.datasource.history)
+            })
+        },
         getTriggerTrue(value){
             if (value.length == 0) {
                 this.isTriggerTrue = true
@@ -150,6 +232,32 @@ export default {
             let paramArr = href.split("?")[1].split("&")
             let data = paramArr.find(item => item.indexOf(value) > -1)
             return data ? decodeURI(data).split("=")[1] : undefined
+        },
+		isConfEmpty() {
+            if (this.codeFreeParams.length == 0) {
+                return true
+            } else {
+                return false
+            }
+        },
+        isAll() {
+            if (!this.isConfEmpty() && !this.isJSON_codeFreeParams()) {
+                return false
+            } else {
+                return true
+            }
+        },
+		isJSON_codeFreeParams() {
+            try {
+                var obj = JSON.parse(this.codeFreeParams);
+                if (Object.prototype.toString.call(obj) == '[object Object]' && obj) {
+                    return false
+                } else {
+                    return true
+                }
+            } catch (e) {
+                return true
+            }
         },
         isJSON_test(value) {
             try {
@@ -291,7 +399,21 @@ export default {
             })
         },
 		trigger() {
-			this.saveAll("trigger")
+			this.dialogVisible = true
+		},
+		triggerConfirm() {
+			if (!this.isAll()) {
+				this.saveAll("trigger")
+				this.dialogVisible = false
+			} else {
+				Message({
+					type: 'error',
+					showClose: true,
+					duration: 3000,
+					message: '请输入正确的参数！'
+				})
+				this.dialogVisible = true
+			}
 		},
         forArray(array){
             for (let i = 0; i < array.length; i++) {
@@ -304,7 +426,6 @@ export default {
             let stepDisplay = []
             let triggerDisplay = []
             let reportDisplay = []
-
             triggerDisplay = this.triggerPolicy.dealTriggerDisplay(this.triggerDisplay.filter(it => !it.deleted))
             reportDisplay = this.reportPolicy.dealReportDisplay(this.reportDisplay.filter(it => !it.deleted))
             stepDisplay = this.stepPolicy.dealStepDisplay(this.stepDisplay.filter(it => !it.deleted))
@@ -326,7 +447,9 @@ export default {
                             triggerDisplay: triggerDisplay,
                             stepDisplay: stepDisplay,
                             reportDisplay: reportDisplay,
-                            type: type
+                            type: type,
+							args: JSON.stringify(this.$refs.scriptparameters.scriptParamsList),
+							codeFree: JSON.parse(this.codeFreeParams).CodeFree
                         }
                     }
 					console.log(event)
@@ -359,6 +482,14 @@ export default {
         margin: 0;
         box-sizing: border-box;
     }
+
+	.error-border {
+		border: 1px solid red !important;
+	}
+
+	.error-msg {
+		color: red;
+	}
 
     .scenario {
         display: flex;

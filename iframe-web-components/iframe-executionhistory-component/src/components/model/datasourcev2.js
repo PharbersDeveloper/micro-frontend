@@ -10,7 +10,7 @@ export default class PhDagDatasource {
         this.projectId = "ggjpDje0HUC2JW"
         this.runnerId = "ggjpDje0HUC2JW"
         this.title = "need a title"
-        this.debugToken = 'cb319b8522f324d6f477a87c234e028511fd466bf00660d413c4140a08b98753'
+        this.debugToken = 'e89b531b01ff1eec456e60b23829e2ba3a671fd7936bf5005ac091e5acf2c6ad'
         this.cal = { calculate: {}, selected: [] }
         this.isChanged = false
     }
@@ -31,6 +31,10 @@ export default class PhDagDatasource {
                 result = "DSuploaded"
             } else if (cat === "dataset" && runtime === "intermediate") {
                 result = "DSIntermediate"
+            } else if (cat === "dataset" && runtime === "shared") {
+                result = "DSshared"
+            } else if (cat === "dataset" && runtime === "export") {
+                result = "DSexport"
             } else if (cat === "dataset" && runtime === "input_index") {
                 result = "max-in"
             } else if (cat === "dataset" && runtime === "output_index") {
@@ -63,6 +67,10 @@ export default class PhDagDatasource {
                 result = "stack"
             } else if (cat === "job" && runtime === "group"){
                 result = "group"
+            } else if (cat === "job" && runtime === "shared"){
+                result = "shared"
+            } else if (cat === "job" && runtime === "export"){
+                result = "export"
             } else if (cat === "dataset") {
                 result = "dataset"
             } else if (cat === "job") {

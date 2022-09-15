@@ -2,170 +2,33 @@
     <div class="graphWrap">
         <link rel="stylesheet" href="https://components.pharbers.com/element-ui/element-ui.css">
         <div class="show_area">
-            <div class="show_header">
-                <div class="show_header_left">
-                    <input type="text" />
-                    <select name="" id=""></select>
-                </div>
-                <div class="show_header_right">
-                    <button>构建DAG</button>
-                    <button>脚本</button>
-                    <button>数据集</button>
-                </div>
-            </div>
             <div class="viewport" ref="viewport">
                 <div ref="chart" class="chart"></div>
             </div>
         </div>
-
-        <div class="opt_area">
-            <div class="opt_header">
-                <img :src="icon_header" alt="" />
-                <div class="dataset_name">{{ selectItemName }}</div>
-            </div>
-            <div class="opt_icon_area">
-                <div class="fir_icon_row">
-                    <img
-                        v-if="!isRunning"
-                        :src="defs.iconsByName('run')"
-                        alt=""
-                        @click="triggerPolicy.runDagSelect()"
-                    />
-                    <img
-                        v-if="isRunning"
-                        :src="defs.iconsByName('run', 'disabled')"
-                        alt=""
-                    />
-                    <img
-                        v-if="isRunning"
-                        :src="defs.iconsByName('stop')"
-                        @click="triggerPolicy.stopDag()"
-                    />
-                    <img
-                        v-if="!isRunning"
-                        :src="defs.iconsByName('stop', 'disabled')"
-                    />
-                </div>
-            </div>
-            <div class="scripts_area">
-                <div class="script_title">脚本</div>
-                <div class="scripts">
-                    <img 
-                        v-for="scriptIcon in scriptIconArray"
-                        :key="scriptIcon+'icon'"
-                        :src="defs.iconsByName(scriptIcon)" alt="" />
-                </div>
-            </div>
-        </div>
-
-        <run-dag-dialog
-            v-if="showRunJson"
-            :selectRecursive="selectRecursive"
-            :textConf="textConf"
-            :projectId="projectId"
-            @confirmeRunDag="confirmeRunDag"
-            @closeRunDagDialog="closeRunDagDialog"
-        ></run-dag-dialog>
-
-        <div class="job_status_area">
-            <div
-                class="job_status"
-                v-for="(item, index) in failedLogs"
-                :key="index"
-            >
-                <div class="job_notice">
-                    <div class="item title">Job failed</div>
-                    <div class="item" :title="jobShowName">
-                        {{ item.jobShowName }}
-                    </div>
-                </div>
-                <button @click="logsPolicy.showLogs(item)">
-                    Logs
-                </button>
-            </div>
-        </div>
-
-        <div v-if="loading">
-            <div id="loadingio-spinner-double-ring-ho1zizxmctu">
-                <div class="ldio-400lpppmiue">
-                    <div></div>
-                    <div></div>
-                    <div><div></div></div>
-                    <div><div></div></div>
-                </div>
-            </div>
-        </div>
-
-        <progress-bar
-            v-if="showProgress"
-            @closeProgress="closeProgress"
-            :progressOver="progressOver"
-        >
-        </progress-bar>
-
-        <el-dialog
-            :title="getSelectItemName()"
-            :visible.sync="runDagSelectVisible"
-            width="800px">
-            <div class="run-dag-select-dialog">
-                <div class="select-area">
-                    <div class="select-item"
-                        @click="selectRecursive = 'nonRecursive'"
-                        :class="[{'run-dag-active': selectRecursive === 'nonRecursive'}]">
-                        <div class="title">Non recursive</div>
-                        <div class="desc">只运行当前脚本</div>
-                    </div>
-                    <div class="select-item"
-                        @click="selectRecursive = 'recursive'"
-                        :class="[{'run-dag-active': selectRecursive === 'recursive'}]">
-                        <div class="title">Recursive</div>
-                        <div class="desc">运行上游所有脚本</div>
-                    </div>
-                </div>
-                <div class="img">
-                    <img 
-                        v-if="selectRecursive === 'nonRecursive'" 
-                        :src="defs.iconsByName('runDag', 'nonRecursive')" alt="">
-                    <img 
-                        v-if="selectRecursive === 'recursive'"
-                        :src="defs.iconsByName('runDag', 'recursive')" alt="">
-                </div>
-            </div>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="runDagSelectVisible = false">取消</el-button>
-                <el-button type="primary"  @click="triggerPolicy.dagRunPreparing()">确认</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 <script>
 import PhDagDatasource from "./model/datasourcev2";
 import PhRenderPolicy from "./policy/render/dag-render-policy";
 import PhDagDefinitions from "./policy/definitions/definitions";
-import PhLogsPolicy from "./policy/logs/log-policy";
 import PhStatusPolicy from "./policy/handler/dagstatushandler";
-import PhAirflowPolicy from "./policy/trigger/airflow-trigger-policy";
-import PhAlfredPolicy from "./policy/trigger/sm-trigger-policy";
-import runDagDialog from "./run-dag-dialog.vue";
-// import dagLogsDialog from "./dag-log-dialog.vue";
-import progressBar from "./progress-bar-type.vue";
-import ElDialog from 'element-ui/packages/dialog/src/component'
-import ElButton from 'element-ui/packages/button/index'
 
 export default {
     data: () => {
         return {
+            dagId: "",
             name: "dag",
             needRefresh: 0,
             projectId: "",
             flowVersion: "",
+            projectName: "",
             icon_header: null,
             selectItem: null,
             showRunJson: false,
             runId: "",
             representId: "",
             failedLogs: [],
-            projectName: "ETL_Iterator",
             loading: false,
             jobShowName: "",
             selectItemName: "", //单击的dag的名字
@@ -185,11 +48,6 @@ export default {
         };
     },
     components: {
-        runDagDialog,
-        // dagLogsDialog,
-        progressBar,
-        ElDialog,
-        ElButton
     },
     props: {
         schedulerPolicyName: {
@@ -200,6 +58,12 @@ export default {
             type: Object,
             default: function () {
                 return new PhDagDatasource("1");
+            }
+        },
+        eventPolicy: {
+            type: Object,
+            default: function () {
+                return new PhStatusPolicy("1", this);
             }
         },
         renderPolicy: {
@@ -213,59 +77,58 @@ export default {
             default: function () {
                 return new PhDagDefinitions("1");
             }
-        },
-        logsPolicy: {
-            type: Object,
-            default: function () {
-                return new PhLogsPolicy("1", this);
-            }
-        },
-        eventPolicy: {
-            type: Object,
-            default: function () {
-                return new PhStatusPolicy("1", this);
-            }
-        },
-        triggerPolicy: {
-            type: Object,
-            default: function () {
-                if (this.schedulerPolicyName === "airflow") {
-                    return new PhAirflowPolicy("1", this);
-                } else {
-                    return new PhAlfredPolicy("1", this);
-                }
-            }
-        },
-        scriptIconArray: {
-            type: Array,
-            default: function () {
-                return ["python", "pyspark", "sparkr", "r", "prepare", "sort", "distinct", "sync", "topn", "join", "stack", "group"]
-            }
         }
     },
     mounted() {
-        let href = window.location.href;
-        console.log(href);
-        let paramArr = href.split("?")[1].split("&");
-        this.projectId = this.getUrlParam(paramArr, "projectId");
-        this.projectName = this.getUrlParam(paramArr, "projectName");
-        this.flowVersion = this.getUrlParam(paramArr, "flowVersion");
-        // 判断环境
-        this.datasource.projectId = this.projectId;
-        this.initChart();
-        // window.addEventListener('message', this.eventPolicy.handleForwardMessage)
-        window.addEventListener("message", this.handleForwardMessage);
-        this.registerJobEventName = "runDag" + new Date().getTime().toString();
-    },
-    destroyed() {
-        // 移除监听
-        window.removeEventListener("message", this.handleForwardMessage);
+        this.registerEvent();
     },
     methods: {
-        getSelectItemName() {
-            return "构建" + this.selectItemName
-        },	
-        handleForwardMessage(event) {
+        registerEvent() {
+            this.unRegisterEvent()
+            // 设置Dag初始参数 如宽高 主题 缩放 project id project name flow version 等
+            window.addEventListener("message", this.initDag)
+            // 更改dag node的状态
+            window.addEventListener("message", this.changeDagNodeStatus)
+            // 刷新Dag
+            window.addEventListener("message", this.refreshDag)
+            // 清空内部状态  这里面的状态没全部提出来 先出来一般  后面我来重写逻辑
+            window.addEventListener("message", this.clearDag)
+        },
+        unRegisterEvent() {
+            window.removeEventListener("message", this.initDag);
+            window.removeEventListener("message", this.changeDagNodeStatus);
+            window.removeEventListener("message", this.refreshDag);
+            window.removeEventListener("message", this.clearDag);
+        },
+        async initDag(event) { 
+            // 目前只设置 ProjectID  ProjectName FlowVersion
+            if (event.data.dagParameters) {
+                const { 
+                    dagId,
+                    projectId,
+                    flowVersion,
+                    projectName
+                } = event.data.dagParameters;
+
+                this.dagId = dagId;
+                this.projectId = projectId;
+                this.flowVersion = flowVersion;
+                this.projectName = projectName;
+
+                await this.datasource.refreshData(this);
+                window.parent.postMessage({
+                    dagIsComplete: {
+                        dagId: this.dagId,
+                        status: "complete",
+                        data: JSON.stringify(this.datasource.data)
+                    }
+                }, '*')
+                // 发布前解注
+                document.domain = "pharbers.com"
+
+            }
+        },
+        changeDagNodeStatus(event) {
             const that = this;
             if (event.data.message) {
                 if (event.data.message.cmd === "render_dag") {
@@ -276,22 +139,17 @@ export default {
                 }
             }
         },
-        getUrlParam(arr, value) {
-            let data = arr.find((item) => item.indexOf(value) > -1);
-            return data ? decodeURI(data).split("=")[1] : undefined;
+        returnSelectItem(item) {
+            // 返回选中的dag的信息 如坐标 类型 图片等
+            window.parent.postMessage({
+                dagId: this.dagId,
+                dagSelectItem: JSON.stringify(item)
+            }, '*')
         },
-        //关闭进度条
-        closeProgress() {
-            this.showProgress = false;
-        },
-        closeRunDagDialog() {
-            this.showRunJson = false;
-        },
-        async initChart() {
-            // 初始化echarts实例
-            await this.datasource.refreshData(this);
-            // 发布前解注
-            document.domain = "pharbers.com"
+        async refreshDag(event) {
+            if (event.data.refreshDag) {
+                await this.datasource.refreshData(this);
+            }
         },
         // 监听屏幕大小改变
         bindChangeWindow() {
@@ -316,7 +174,6 @@ export default {
                 if (that.isFirstRendering) {
                     that.isFirstRendering = false
                     const windowHeight = that.$refs.chart.offsetHeight
-                    // const height = Math.max(that.datasource.sizeHit[0], windowHeight)
                     const step = Math.round(height / windowHeight)
                     const adjust = height / step / 2
                     that.offsetLeft = 0
@@ -329,21 +186,50 @@ export default {
                 })
             });
         },
-        confirmeRunDag(data) {
-            this.triggerPolicy.runDag(data);
+        returnRunDagStatus() {
+            // 返回dag运行状态
+            window.parent.postMessage({
+                dagId: this.dagId,
+                toVueDagRunStatus: {
+                    isRunning: this.isRunning,
+                    failedLogs: JSON.stringify(this.failedLogs),
+                    progressOver: this.progressOver,
+                    retryButtonShow: this.retryButtonShow
+                }
+            }, '*')
+        },
+        clearDag(event) { 
+            if (event.data.clearDag) {
+                this.isRunning = false;
+                this.failedLogs = [];
+                this.progressOver = false;
+                this.retryButtonShow = false;
+            }
         }
     },
     watch: {
         needRefresh(n, o) {
             this.renderDag();
         },
-        selectItem(n, o) {
+        async selectItem(n, o) {
             this.selectItemName = n.attributes.name;
             this.icon_header = this.defs.iconsByName(n.category);
             this.offsetLeft = this.$refs.viewport.scrollLeft
             this.offsetTop = this.$refs.viewport.scrollTop
             this.isFirstRendering = false
-            this.$nextTick(this.datasource.selectOneElement(this));
+            
+            this.$nextTick(await this.datasource.selectOneElement(this));
+            const obj = {
+                selectItemName: this.selectItemName,
+                icon_header: this.icon_header,
+                offsetLeft: this.offsetLeft,
+                offsetTop: this.offsetTop,
+                isFirstRendering: this.isFirstRendering,
+                item: n,
+                cal: this.datasource.cal
+            }
+            
+            this.returnSelectItem(obj);
         }
     }
 };

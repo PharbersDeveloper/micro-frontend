@@ -5,22 +5,24 @@ import { JsonApiDataStore } from "jsonapi-datastore"
 export default class PhContainerDataSource {
     constructor(id) {
         this.id = id
-        this.debugToken = "f0da11d193fbc1ce2740b9b355146d3cf9b45b272a5abac4f3d9c3e42b1dd564"
+        this.debugToken = "e89b531b01ff1eec456e60b23829e2ba3a671fd7936bf5005ac091e5acf2c6ad"
         this.currentPageToken = ""
         this.stepsCount = 20
         this.data = []
+        this.dataActivity = []
         this.store = new JsonApiDataStore()
         this.projectId = ""
         this.jobIndex = ''
         this.jobName = ''
         this.runnerId = ''
+        this.dataConf = ''
     }
 
     buildQuery(ele) {
         const url = `${hostName}/phdydatasource/query`
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken
         let body = {
-            "table": "execution",
+            "table": "executionStatus",
             "conditions": {
                 "projectId": ["=", this.projectId]
             },
@@ -32,7 +34,7 @@ export default class PhContainerDataSource {
             method: "POST",
             headers: {
                 "Authorization": accessToken,
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'Content-Type': 'application/json',
                 "accept": "application/json"
             },
             body: JSON.stringify(body)
@@ -49,12 +51,96 @@ export default class PhContainerDataSource {
                 if(that.currentPageToken === "") {
                     ele.hasMore = false
                 }
+                response.data.forEach(item=>{
+                    item.id = item.attributes["runner-id"]
+                })
                 that.store.sync(response)
                 // ele.needRefresh++
-                that.data = that.store.findAll("executions")
+                that.data = that.store.findAll("execution-status")
+                ele.dataShow = that.data
             })
     }
 
+    queryActivity(ele,runnerId) {
+        const url = `${hostName}/phdydatasource/query`
+        const accessToken = ele.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            table: "execution",
+            index_name: "runnerId-startAt-index",
+            conditions: {
+                "runnerId": ["=", runnerId]
+            },
+            limit: 300,
+            start_key: ""
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/json',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    buildActivityQuery(ele,runnerId,callback=null) {
+        const that = this
+        ele.datasource.queryActivity(ele,runnerId)
+            .then((response) => response.json())
+            .then((response) => {
+                that.store.reset()
+                that.store.sync(response)
+                // ele.needRefresh++
+                that.dataActivity = that.store.findAll("executions")
+                // that.dataActivity = ele.arrRemoveRepetition(that.dataActivityMore, that.dataActivity)
+                if(callback)
+                    callback()
+            })
+    }
+
+    queryConf(ele) {
+        const url = `${hostName}/phs3userconf`
+        const accessToken = ele.getCookie( "access_token" ) || this.debugToken
+        let body = {
+            "dagName": ele.dagName,
+            "runnerId": ele.runnerId
+        }
+
+        let options = {
+            method: "POST",
+            headers: {
+                "Authorization": accessToken,
+                'Content-Type': 'application/json',
+                "accept": "application/json"
+            },
+            body: JSON.stringify(body)
+        }
+        return fetch(url, options)
+    }
+
+    buildConfQuery(ele, callback=null) {
+        const that = this
+        this.queryConf(ele)
+            .then((response) => response.json())
+            .then((response) => {
+                console.log(response)
+                if (response.status == 1) {
+                    ele.hasError = true
+                } else {
+                    ele.hasError = false
+                }
+                that.dataConf = response.message
+                // that.store.reset()
+                // that.store.sync(response)
+                // that.dataConf = that.store.findAll("executions")
+                if(callback)
+                    callback()
+            })
+    }
+    
     queryLogs(ele) {
         const logsUrl = `${hostName}/phquerylogfile`
         const accessToken = ele.getCookie( "access_token" ) || this.debugToken

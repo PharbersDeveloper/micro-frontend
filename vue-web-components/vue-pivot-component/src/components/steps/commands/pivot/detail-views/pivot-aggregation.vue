@@ -20,7 +20,7 @@
             </div>
         </div>
         <div>
-            <select class="sel" v-model="selectValue" @change="selectInsertValueColumn" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
+            <select class="sel" v-model="selectValue" @change="selectInsertValueColumn" onfocus="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                 <option label="选择添加" value="选择添加" ></option>
                 <option v-for="(op, idx) in selection" :key="idx" :label="op" :value="op" />
             </select>

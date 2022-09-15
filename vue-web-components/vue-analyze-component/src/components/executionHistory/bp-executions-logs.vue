@@ -6,7 +6,7 @@
                 <img :src="job_img" alt="" class="">
             </div>
             <span class="job-name">
-                {{ executionItem["job-show-name"] }}
+                {{ datasource.runnerId }}
             </span>
         </div>
         <div class="job">
@@ -20,16 +20,27 @@
                     <div class="title job-activities__header">
                         Activity
                     </div>
-                    <div class="activity-item">
-                        <span class="job-name">
-                            <p v-if="executionItem.status === 'success'" class="el-icon-success status-icon" />
-                            <p v-else class="el-icon-error status-icon" />
-                            {{ executionItem["job-show-name"] }}
-                        </span>
-                        <span>{{ getTimes(executionItem) }}</span>
+                    <div style="height: calc(100% - 75px);overflow-y: auto;">
+                        <div :class="focus === index ? 'activity-item active' : 'activity-item'" @click="openActivityLogs(iter,index)"
+                            v-for="(iter,index) in executionItem" :key="index">
+                            <span class="job-name">
+                                <p v-if="iter.status === 'success'" class="el-icon-success status-icon" />
+                                <p v-else-if="iter.status==='running'" class="el-icon-loading status-icon" />
+                                <p v-else class="el-icon-error status-icon" />
+                                {{ iter["job-show-name"] }}
+                            </span>
+                            <!-- <span>{{ getTimes(executionItem) }}</span> -->
+                            <div>
+                                <span>{{formatDateStandard(iter["start-at"], 0)}}</span>
+                                -
+                                <span>{{formatDateStandard(iter["end-at"], 3)}}</span>
+                                |
+                                <span>{{getTimes(iter)}}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="activity-logs" >
+                <div class="activity-logs">
                     <div class="title">
                         Activity Log
                     </div>
@@ -47,6 +58,7 @@
 import { staticFilePath } from "../../config/envConfig"
 import PhExecutionHistory from "./datasource"
 import viewJson from "./bp-view-json.vue"
+import { Message } from 'element-ui'
 
 export default {
     data() {
@@ -55,9 +67,11 @@ export default {
             jobIndex: "",
             logsMessage: null,
             jsonMessage: null,
-            executionItem: {},
+            executionItem: null,
             iframeUrl: "",
-            projectName: ""
+            projectName: "",
+            executionTemplate: "",
+            focus: 0 //默认选中第一个activity
         }
     },
     components: {
@@ -81,11 +95,19 @@ export default {
         let href = window.location.href
         let paramArr = href.split("?")[1].split("&")
         this.datasource.projectId = this.getUrlParam(paramArr, "projectId")
-        this.datasource.jobIndex = this.getUrlParam(paramArr, "jobIndex")
-        this.datasource.jobName = this.getUrlParam(paramArr, "jobName")
         this.datasource.runnerId = this.getUrlParam(paramArr, "runnerId")
         this.projectName = this.getUrlParam(paramArr, "projectName")
-        this.datasource.buildExecutionQuery(this)
+        this.datasource.buildActivityQuery(this, this.datasource.runnerId, () => {
+            this.executionItem = this.datasource.dataActivity
+            if (this.executionItem.length >= 1) {
+                this.datasource.jobName = this.executionItem[0]['job-name']
+                this.executionTemplate = this.executionItem[0]['execution-template']
+                this.datasource.jobIndex = this.executionItem[0]['job-index']
+                this.datasource.buildLogsQuery(this)
+                this.datasource.buildExecutionQuery(this)
+            }
+        })
+        // this.datasource.buildExecutionQuery(this)
     },
     methods: {
         getUrlParam(arr, value) {
@@ -99,8 +121,16 @@ export default {
             else return null;
         },
         dealBuildLogsQuery(response) {
+            this.logsMessage = ''
             if (response.status === 0) {
                 this.logsMessage = response.message
+            } else {
+                Message({
+                    type: 'error',
+                    showClose: true,
+                    duration: 3000,
+                    message: '数据暂未生成，请刷新重试！'
+                })
             }
         },
         dealBuildFlowQuery(response) {
@@ -110,12 +140,46 @@ export default {
         },
         dealBuildExecutionQuery(response) {
             if (response.data.length > 0) {
-                this.executionItem = response.data[0]["attributes"]
-                this.executionTemplate = this["executionItem"]["execution-template"]
-                this.datasource.jobIndex = this["executionItem"]["job-index"]
-                this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.executionItem["job-name"]}&runnerId=${this.executionItem["runner-id"]}&executionTemplate=${this.executionItem["execution-template"]}`
-                this.datasource.buildLogsQuery(this)
+                this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.datasource.jobName}&runnerId=${this.datasource.runnerId}&executionTemplate=${this.executionTemplate}`
+                // this.datasource.buildLogsQuery(this)
                 this.datasource.buildFlowQuery(this)
+            }
+        },
+        openActivityLogs(iter, index){
+            this.focus = index
+            this.datasource.jobIndex = this.executionItem[index]['job-index']
+            this.datasource.buildLogsQuery(this)
+            // this.dealBuildLogsQuery(this, iter['job-index'])
+        },
+        formatDateStandard(...params) {
+            if(params.length === 2) {
+                let date = new Date( Number(params[0]) ),
+                    Y = date.getFullYear(),
+                    M =
+                        ( date.getMonth() + 1 < 10 ?
+                            `0${date.getMonth() + 1}` :
+                            date.getMonth() + 1 ),
+                    D0 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+                    D1 = ( date.getDate() < 10 ? `0${date.getDate()}` : date.getDate() ),
+
+                    h =
+                        ( date.getHours() < 10 ? `0${date.getHours()}` : date.getHours() ),
+                    m =
+                        ( date.getMinutes() < 10 ?
+                            `0${date.getMinutes()}` :
+                            date.getMinutes() ) ,
+                    s = date.getSeconds() < 10 ? `0${date.getSeconds()}` : date.getSeconds()
+
+                // 输出结果：yyyy/mm/dd hh:mm
+                if(params[1] === 0){
+                    return Y + "/" + M + "/" + D0 + " " + h + ":" + m
+                } else if(params[1] === 1) {
+                    return Y + "-" + M + "-" + D0 + " " + h + ":" + m
+                } else if(params[1] === 2) {
+                    return Y + "-" + M + "-" + D0
+                } else if(params[1] === 3) {
+                    return h + ":" + m
+                }
             }
         },
         getTimes(data) {
@@ -139,6 +203,10 @@ export default {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+}
+
+.active {
+    background-color: #ccc;
 }
 
 .executions-logs {
@@ -169,10 +237,12 @@ export default {
         flex-grow: 1;
         display: flex;
         flex-direction: column;
+        height: calc(100vh - 88px);
 
         .job-flow {
             overflow: hidden;
             flex-grow: 1;
+            height: 50px;
 
             .executions-iframe {
                 height: 100%;
@@ -186,6 +256,7 @@ export default {
             flex-grow: 1;
             display: flex;
             border-top: 1px solid #ddd;
+            height: 50px;
 
             .title {
                 height: 60px;

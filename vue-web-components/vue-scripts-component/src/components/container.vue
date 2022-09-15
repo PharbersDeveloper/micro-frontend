@@ -552,7 +552,7 @@ export default {
             if (this.reciptcheckedIds.length == 1) {
                 this.script_icon_show = this.selectScriptIcon(recipt.runtime)
             } else {
-                this.script_icon_show = `${staticFilePath}` + "/icons/all_script.svg"
+                this.script_icon_show = `${staticFilePath}` + "/icons/distinct/reverse.svg"
             }
             if (this.reciptcheckedIds.length < this.datasource.dcs.length && this.reciptcheckedIds.length !== 0) {
                 this.$refs.all.indeterminate = true
@@ -576,7 +576,7 @@ export default {
             if (this.reciptcheckedIds.length == 1) {
                 this.script_icon_show = this.selectScriptIcon(recipt.runtime)
             } else {
-                this.script_icon_show = `${staticFilePath}` + "/icons/all_script.svg"
+                this.script_icon_show = `${staticFilePath}` + "/icons/distinct/reverse.svg"
             }
             if (this.reciptcheckedIds.length < this.datasource.dcs.length && this.reciptcheckedIds.length !== 0) {
                 this.$refs.all.indeterminate = true
@@ -616,7 +616,7 @@ export default {
             this.reciptcheckedNames = []
             //全选状态
             if(this.isCheckedAllDataset) {
-                this.script_icon_show  = `${staticFilePath}` + "/icons/all_script.svg"
+                this.script_icon_show  = `${staticFilePath}` + "/icons/distinct/reverse.svg"
                 this.datasource.dcs.forEach(item => {
                     this.reciptcheckedIds.push(item.id)
                     this.reciptcheckedNames.push(item.jobShowName)
@@ -850,6 +850,10 @@ export default {
                 return this.defs.iconsByName("group")
             case "pivot":
                 return this.defs.iconsByName("pivot")
+            case "export":
+                return this.defs.iconsByName("export")
+            case "shared":
+                return this.defs.iconsByName("shared")
             default:
                 return this.script_icon
             }

@@ -33,6 +33,7 @@
                 <li v-for="(item, index) in schema" :key="index" @click="itemClicked(item.src)">{{item.src}}</li>
             </ul>
             <el-input class="computed-expression-expr"
+				:class="[{'el-input-error': currentExpr === ''}]"
 				type="textarea"
 				:rows="10"
 				v-model="currentExpr"

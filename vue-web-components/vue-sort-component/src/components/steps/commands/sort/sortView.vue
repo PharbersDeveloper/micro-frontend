@@ -22,9 +22,9 @@
                 </div>
             </div>
             <div class="sort-add-btn">
-                <select v-model="placeholderSort" @change="sortInserted" onmousedown="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
+                <select v-model="placeholderSort" @change="sortInserted" onfocus="if(this.options.length>3){this.size=4}" onblur="this.size=1" onchange="this.size=1">
                     <option value="选择列" label="选择列" />
-                    <option v-for="(item, index) in schemaArray" :value="item.src" :key="index" :label="item.src" />
+                    <option v-for="(item, index) in schemaArray" :value="item.title" :key="index" :label="item.title" />
                 </select>
             </div>
         </div>
@@ -50,12 +50,12 @@ export default {
         return {
             datasource: null,
             placeholderSort: "选择列",
-            schemaArray: []
+            schemaArray: [],
+			schema: []
         }
     },
     props: {
         step: Object,
-        schema: Array,
         concretDefs: {
             type: Object,
             default: () => {
@@ -70,20 +70,29 @@ export default {
     },
     mounted() {
         this.datasource = new PhSortStep(this.step)
-		this.schemaArray = this.schema
 		this.validate()
     },
     methods: {
+		renderSchema() {
+			const cols = this.$parent.computeSchema()
+			const colsArr = cols.map(it => it.title)
+			this.datasource.command.orders = this.datasource.command.orders.filter(it => colsArr.includes(it.column))
+			const arr = this.datasource.command.orders.map(it => it.column)
+            this.schemaArray = cols.filter(it => !arr.includes(it.title))
+			this.schema = cols
+        },
         sortInserted() {
             this.datasource.command.insertSortCloase(this.placeholderSort)
-			this.schemaArray = this.schemaArray.filter(it => it.src !== this.placeholderSort)
+			this.schemaArray = this.schemaArray.filter(it => it.title !== this.placeholderSort)
             this.placeholderSort = "选择列"
         },
         sortDeletion(item, idx) {
             this.datasource.command.deleteSortCloase(idx)
-			this.schemaArray = this.schemaArray.concat(this.schema.filter(it => it.src === item.column))
+			this.schemaArray = this.schemaArray.concat(this.schema.filter(it => it.title === item.column))
         },
         validate() {
+            this.renderSchema()
+
             const ErrorVales = this.datasource.command.orders.length === 0
             this.$emit('statusChange', ErrorVales)
         }

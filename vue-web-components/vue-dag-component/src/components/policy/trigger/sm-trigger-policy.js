@@ -117,7 +117,8 @@ export default class PhDagTriggerPolicy {
                 projectName: this.parent.projectName,
                 owner: confData.ownerId,
                 showName: confData.showName,
-                tenantId: this.parent.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg"
+                tenantId: this.parent.getCookie("company_id") || "zudIcG_17yj8CEUoCTHg",
+				versionAlias: data.args.param.versionAlias
             },
             action: {
                 cat: "runDag",
@@ -153,24 +154,27 @@ export default class PhDagTriggerPolicy {
             this.parent.loading = false
             return false
         }
-        const tmpMsg = {
-            message: {
-                notification: {
-                    eventName: this.parent.registerJobEventName,
-                    projectId: this.parent.projectId,
-                    id: this.runnerId
 
-                },
-                executionStatus: {
-                    id: this.runnerId,
-                    eventName: "executionStatus"
-                }
+        // 触发状态请求
+        this.parent.dealRunDag({
+            eventName: "runDagStatus",
+            projectId: this.parent.projectId
+        }, {
+            notification: {
+                runnerId: this.runnerId,
+                eventName: this.parent.registerJobEventName,
+                func: this.parent.runDagCallBack
+            },
+            executionStatus: {
+                runnerId: this.runnerId,
+                eventName: "executionStatus",
+                func: this.parent.executionStatusCallback
             }
-        }
-        this.parent.eventPolicy.forwardMessageToParent(tmpMsg)
+        })
+
         this.parent.showRunJson = false
         this.parent.loading = false
-        this.parent.renderPolicy.resetDagStatus("trigger")
+        this.parent.clearDag()
     }
 
     handlerJSON(str) {
@@ -190,4 +194,5 @@ export default class PhDagTriggerPolicy {
         d = d.substring(0, i) + "+00:00"
         return [projectName, projectName, flowVersion, d].join("_")
     }
+
 }

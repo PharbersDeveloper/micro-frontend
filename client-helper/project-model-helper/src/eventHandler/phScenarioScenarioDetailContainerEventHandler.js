@@ -54,7 +54,8 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 						active: params.active,
 						scenarioName: params.scenarioName,
 						deletion: false,
-						index: 0
+						index: 0,
+						args: params.args
 					},
 					triggers: params.triggerDisplay,
 					steps: params.stepDisplay,
@@ -75,7 +76,6 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 				let updateScenarioResult = await fetch(url, options).then(
 					(res) => res.json()
 				)
-				console.log(updateScenarioResult)
 				route.noticeService.defineAction({
 					type: "iot",
 					remoteResource: "notification",
@@ -142,7 +142,8 @@ export async function phScenarioScenarioDetailContainerEventHandler(e, route) {
 			},
 			scenario: {
 				scenarioId: params.scenarioId,
-				runtime: "manual"
+				runtime: "manual",
+				codeFree: params.codeFree ? params.codeFree : {}
 			}
 		}
 		let options = {

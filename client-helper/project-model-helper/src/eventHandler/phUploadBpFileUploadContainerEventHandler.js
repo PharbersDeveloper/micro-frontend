@@ -164,7 +164,8 @@ export async function phUploadBpFileUploadContainerEventHandler(e, route) {
 					datasetId: param.dsId,
 					projectId: param.projectId,
 					owner: route.cookies.read("account_id"),
-					date: new Date().getTime()
+					date: new Date().getTime(),
+					alias: param.dataID
 				}
 			}
 

@@ -40,7 +40,6 @@
                 <sort v-show="active === 3"
 					ref="sort"
 					:step="datasource.step"
-					:schema="datasource.dataset.schema"
 					@statusChange="sortStatus" />
                 <outputs v-show="active === 4"
 					ref="outputs"
