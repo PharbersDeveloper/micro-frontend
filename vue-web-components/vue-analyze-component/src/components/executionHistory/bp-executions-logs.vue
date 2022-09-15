@@ -237,10 +237,12 @@ export default {
         flex-grow: 1;
         display: flex;
         flex-direction: column;
+        height: calc(100vh - 88px);
 
         .job-flow {
             overflow: hidden;
             flex-grow: 1;
+            height: 50px;
 
             .executions-iframe {
                 height: 100%;
@@ -254,6 +256,7 @@ export default {
             flex-grow: 1;
             display: flex;
             border-top: 1px solid #ddd;
+            height: 50px;
 
             .title {
                 height: 60px;
