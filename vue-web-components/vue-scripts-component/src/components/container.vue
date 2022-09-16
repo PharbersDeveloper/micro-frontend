@@ -121,9 +121,9 @@
                                 </span>
                                 <div class="label_selected" v-if="labelShowDialog">
                                     <div class="tag_arr">
-                                        <div class="label_name" v-for="(item,index) in tagsArray" :key="index">
-                                            <span  :style="{background: tagsColorArray[tagsArray.indexOf(item)]}"></span>
-                                            <!-- <div class="tags_name">{{item}}</div> -->
+                                        <div class="label_name" v-for="(item,index) in datasource.tagsArray" :key="index">
+                                            <span  :style="{ background: tagsColorArray[datasource.tagsArray.indexOf(item)] }"></span>
+                                            <div class="tags_name">{{item}}</div>
                                         </div>
                                     </div>
                                     <div class="management">
@@ -152,12 +152,12 @@
                                     </span>
                                     <p class="data_name" @click.stop="clickReciptName(recipt)" :title="recipt.outputs">compute_{{recipt.outputs}}</p>
                                     <div class="tag_area" ref="tagsArea">
-                                        <div v-for="(tag,inx) in recipt.label" :key="inx">
-                                            <span v-if="recipt.label !== ''">
+                                        <div v-for="(tag,inx) in recipt.labels" :key="inx">
+                                            <span v-if="recipt.labels !== ''">
                                                 <p
                                                     :title="tag"
                                                     class="tag_bg"
-                                                    :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">{{tag}}
+                                                    :style="{ background: tagsColorArray[datasource.tagsArray.indexOf(tag)] }">{{tag}}
                                                 </p>
                                             </span>
                                         </div>
@@ -246,9 +246,9 @@
         <create-tags-dialog
             v-if="showCreateTagsDialog"
             :reciptcheckedIds="reciptcheckedIds"
-            :datasetcheckedNames="reciptcheckedNames"
-            :datasets="allData.dcs"
-            :tagsArray="allData.tagsArray"
+            :reciptcheckedNames="reciptcheckedNames"
+            :datasets="datasource.dcs"
+            :tagsArray="datasource.tagsArray"
             :tagsColorArray="tagsColorArray"
             @addTagsEvent="addTagsEvent"
             @closeCreateDialog="closeCreateDialog">
@@ -443,6 +443,12 @@ export default {
         // this.datasource.refreshData1()
     },
     watch: {
+        "datasource.tagsArray": function () {
+            this.tagsColorArray = []
+            this.datasource.tagsArray.forEach((item, index) => {
+                this.tagsColorArray.push(this.color[Math.floor(Math.random() * 10 + Math.random() * 10)])
+            })
+        },
         searchValue(newValue, oldValue) {
             this.searchValue = newValue
             this.state = 'search'
