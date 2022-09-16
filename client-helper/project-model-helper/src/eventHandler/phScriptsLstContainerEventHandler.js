@@ -788,16 +788,16 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						(it) => it.id == targetId
 					)[0]
 					let targetLabels = Array.from(
-						new Set(targetDataset.label.concat(selectedTags))
+						new Set(targetDataset.labels.concat(selectedTags))
 					)
 					const url = `${hostName}/phdydatasource/put_item`
 					const accessToken = route.cookies.read("access_token")
 					let body = {
-						table: "dataset",
+						table: "dagconf",
 						item: {
 							id: targetDataset.id,
 							projectId: params.projectId,
-							label: JSON.stringify(targetLabels),
+							labels: JSON.stringify(targetLabels),
 							schema: targetDataset.schema,
 							date: new Date().getTime(),
 							version: targetDataset.version,

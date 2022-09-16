@@ -10,6 +10,7 @@ export default class PhDataSource {
         this.totalCount = 0
         this.projectId = ''
         this.batch_size = 20
+        this.tagsArray = []
         // this.curPage = 0
         this.store = new JsonApiDataStore()
         this.debugToken = "2d2c2d462cff65ef47ad18d7ad3bae299639e5fa2a4adb7dc2c483ee2c7e9357"
@@ -68,7 +69,18 @@ export default class PhDataSource {
                 that.startKey = response.meta.start_key
                 that.totalCount = response.meta.total_count
                 that.data = that.store.findAll("datasets")
-                // that.curPage = 1
+
+                let tags = new Set()
+                that.data.forEach((iter) => {
+                	if (typeof iter.label == "string") {
+                		iter.label = JSON.parse(iter.label)
+                		iter.label.map((it) => {
+                			tags.add(it)
+                		})
+                	}
+                })
+                that.tagsArray = Array.from(tags)
+
                 ele.needRefresh++
                 if(callback)
                     callback()
@@ -82,13 +94,20 @@ export default class PhDataSource {
             .then((response) => {
                 that.store.sync(response)
                 that.data = that.store.findAll("datasets")
-                // var newData = response.data.map(x=>{
-                //     let attributes = x.attributes
-                //     attributes.id = x.id
-                //     return attributes
-                // })
-                // ele.datasource.data = ele.AllData.concat(newData)
                 ele.datasource.data = that.data
+                
+                let tags = new Set()
+                that.data.forEach((iter) => {
+                	if (typeof iter.label == "string") {
+                		iter.label = JSON.parse(iter.label)
+                		iter.label.map((it) => {
+                			tags.add(it)
+                		})
+                	}
+                })
+                that.tagsArray = []
+                that.tagsArray = Array.from(tags)
+
                 that.startKey = response.meta.start_key
                 // ele.cur_page++
                 ele.needRefresh++

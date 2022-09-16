@@ -5,8 +5,8 @@
                <div class="header">
                     <div class="left">
                         <img :src="label_icon" class="label" alt="">
-                        <p v-show="datasetcheckedIds.length >= 2">为 {{datasetcheckedIds.length}} 个数据集添加标签</p>
-                        <p class="dataset_name" :title="datasetcheckedNames[0]" v-show="datasetcheckedIds.length < 2">为 {{datasetcheckedNames[0]}} 添加标签</p>
+                        <p v-show="reciptcheckedIds.length >= 2">为 {{reciptcheckedIds.length}} 个数据集添加标签</p>
+                        <p class="dataset_name" :title="reciptcheckedNames[0]" v-show="reciptcheckedIds.length < 2">为 {{reciptcheckedNames[0]}} 添加标签</p>
                     </div>
                     <img :src="img1" alt="" class="close_icon" @click="close">
                </div>
@@ -56,8 +56,8 @@ export default {
         }
     },
     props: {
-        datasetcheckedIds: Array,
-        datasetcheckedNames: Array,
+        reciptcheckedIds: Array,
+        reciptcheckedNames: Array,
         datasets: Array,
         tagsArray: Array, //后端返回的tag数组
         tagsColorArray: Array
@@ -65,10 +65,10 @@ export default {
     computed: {},
     mounted() {
         this.tagsArrayShow = this.tagsArray.filter(it => it != '')
-        if(this.datasetcheckedIds.length == 1) {
-            let selDatasetId = this.datasetcheckedIds[0]
+        if(this.reciptcheckedIds.length == 1) {
+            let selDatasetId = this.reciptcheckedIds[0]
             let selDataset = this.datasets.filter(item => item.id == selDatasetId)[0]
-            this.selectedTags = selDataset.label
+            this.selectedTags = selDataset.labels
         }
     },
     watch: {
@@ -298,7 +298,7 @@ export default {
     width: 20px;
     position: absolute;
     left: 45px;
-    top: 82px;
+    top: 85px;
 }
 .create {
     display: flex;
