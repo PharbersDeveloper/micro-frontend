@@ -149,6 +149,13 @@ export default {
         async refreshDag(event) {
             if (event.data.refreshDag) {
                 await this.datasource.refreshData(this);
+                window.parent.postMessage({
+                    dagIsComplete: {
+                        dagId: this.dagId,
+                        status: "complete",
+                        data: JSON.stringify(this.datasource.data)
+                    }
+                }, '*')
             }
         },
         // 监听屏幕大小改变
