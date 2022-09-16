@@ -58,11 +58,11 @@
                                 </span>
                                 <div class="label_selected" v-if="labelShowDialog">
                                     <div class="tag_arr">
-                                        <!-- <div class="label_name" v-for="(item, index) in allData.tagsArray" :key="index">
+                                        <div class="label_name" v-for="(item, index) in datasource.tagsArray" :key="index">
                                             <span
-                                                :style="{ background: tagsColorArray[allData.tagsArray.indexOf(item)] }"></span>
+                                                :style="{ background: tagsColorArray[datasource.tagsArray.indexOf(item)] }"></span>
                                             <div class="tags_name">{{ item }}</div>
-                                        </div> -->
+                                        </div>
                                     </div>
                                     <div class="management">
                                         <div class="manage_label" @click="createTagsOpen">管理标签</div>
@@ -108,11 +108,11 @@
                                             <el-tag type="danger" v-if="owner === notebook.detail.owner">我的编译器</el-tag>
 
                                             <div class="tag_area" ref="tagsArea">
-                                                <div v-for="(tag, inx) in notebook.label" :key="inx">
-                                                    <span v-if="notebook.label !== ''">
+                                                <div v-for="(tag, inx) in notebook.detail.label" :key="inx">
+                                                    <span v-if="notebook.detail.label !== ''">
                                                         <p :title="tag" class="tag_bg"
-                                                            :style="{ background: tagsColorArray[allData.tagsArray.indexOf(tag)] }">
-                                                            <!-- {{ tag }} -->
+                                                            :style="{ background: tagsColorArray[datasource.tagsArray.indexOf(tag)] }">
+                                                            {{ tag }}
                                                         </p>
                                                     </span>
                                                 </div>
@@ -171,7 +171,7 @@
             </div>
             <!-- 添加tag -->
             <create-tags-dialog v-if="showCreateTagsDialog" :datasetchecked-ids="notebookscheckedIds"
-                :datasetchecked-names="notebookscheckedNames" :datasets="datasource.dns" :tagsArray="allData.tagsArray"
+                :datasetchecked-names="notebookscheckedNames" :datasets="datasource.dns" :tagsArray="datasource.tagsArray"
                 :tagsColorArray="tagsColorArray" @addTagsEvent="addTagsEvent" @closeCreateDialog="closeCreateDialog">
             </create-tags-dialog>
             <!-- 新建NoteBook -->
@@ -307,13 +307,13 @@ export default {
         })
     },
     watch: {
-        // "allData.tagsArray": function () {
-        //     this.tagsColorArray = []
-        //     this.allData.tagsArray.forEach(() => {
-        //         // this.allData.tagsArray.forEach((item, index) => {
-        //         this.tagsColorArray.push(this.color[Math.floor(Math.random() * 10 + Math.random() * 10)])
-        //     })
-        // },
+        "datasource.tagsArray": function () {
+            this.tagsColorArray = []
+            this.datasource.tagsArray.forEach(() => {
+                // this.allData.tagsArray.forEach((item, index) => {
+                this.tagsColorArray.push(this.color[Math.floor(Math.random() * 10 + Math.random() * 10)])
+            })
+        },
         searchValue(newValue) {
             this.searchValue = newValue
             this.state = 'search'
@@ -535,7 +535,11 @@ export default {
         },
         //打开tag添加弹框
         createTagsOpen() {
-            this.showCreateTagsDialog = true;
+            if (this.notebookscheckedOwners.every(item => item === this.owner)) {
+                this.showCreateTagsDialog = true;
+            } else {
+                Message.error("抱歉,您没有权限操作当前Jupyter!", { duration: 0, showClose: true })
+            }
         },
         //关闭tag添加弹框
         closeCreateDialog() {

@@ -385,28 +385,30 @@ export async function phNotebooksContainerEventHandler(e, route) {
 				let selectedTags = params.selectedTags //选中的tag数组
 				for (const targetId of selectedNotebooks) {
 					let targetNotebook = notebooksArray.filter(
-						(it) => it.id === targetId
+						(it) => it.detail.id === targetId
 					)[0]
 					let targetLabels = Array.from(
-						new Set(targetNotebook.label.concat(selectedTags))
+						new Set(
+							targetNotebook.detail.label.concat(selectedTags)
+						)
 					)
 					const url = `${hostName}/phdydatasource/put_item`
 					const accessToken = route.cookies.read("access_token")
 					let body = {
 						table: "resource",
 						item: {
-							id: targetNotebook.id,
-							name: targetNotebook.name,
+							id: targetNotebook.detail.id,
+							name: targetNotebook.detail.name,
 							label: JSON.stringify(targetLabels),
-							tenantId: targetNotebook.tenantId,
-							ctype: targetNotebook.ctype,
-							owner: targetNotebook.owner,
-							ownership: targetNotebook.ownership,
-							platform: targetNotebook.platform,
-							properties: targetNotebook.properties,
-							resultPath: targetNotebook.resultPath,
-							role: targetNotebook.role,
-							priority: targetNotebook.priority
+							tenantId: targetNotebook.detail.tenantId,
+							ctype: targetNotebook.detail.ctype,
+							owner: targetNotebook.detail.owner,
+							ownership: targetNotebook.detail.ownership,
+							platform: targetNotebook.detail.platform,
+							properties: targetNotebook.detail.properties,
+							resultPath: targetNotebook.detail.resultPath,
+							role: targetNotebook.detail.role,
+							priority: targetNotebook.detail.priority
 						}
 					}
 

@@ -64,11 +64,13 @@ export default {
     },
     computed: {},
     mounted() {
+        console.log(this.datasets,1111)
         this.tagsArrayShow = this.tagsArray.filter(it => it !== '')
         if(this.datasetcheckedIds.length === 1) {
             let selDatasetId = this.datasetcheckedIds[0]
-            let selDataset = this.datasets.filter(item => item.id === selDatasetId)[0]
-            this.selectedTags = selDataset.label
+            let selDataset = this.datasets.filter(item => item.detail.id === selDatasetId)[0]
+            console.log(selDataset,222)
+            this.selectedTags = selDataset.detail.label
         }
     },
     watch: {
@@ -298,7 +300,7 @@ export default {
     width: 20px;
     position: absolute;
     left: 45px;
-    top: 82px;
+    top: 85px;
 }
 .create {
     display: flex;
