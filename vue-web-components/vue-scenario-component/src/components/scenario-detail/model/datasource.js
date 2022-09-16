@@ -8,13 +8,14 @@ export default class PhScenarioDetailDatasource {
         this.projectId = projectId
         this.scenarioId = scenarioId
 		this.scenarioName = ""
-        this.debugToken = "eab8d11b79ebf042a4289654ac620b7abbb67f291bfdbde7c1322b716b24b842"
+        this.debugToken = "dee845222103c6289a2080b3216b176a6d2c40bbabc146f1ff08384c51aff147"
         this.store = new JsonApiDataStore()
         this.scenario = {}
         this.triggers = []
         this.steps = []
 		this.datasets = []
         this.datasetsAll = []
+		this.sharedExportArr = []
         this.reports = []
         this.history = []
         this.stepHistory = []
@@ -40,8 +41,12 @@ export default class PhScenarioDetailDatasource {
 		const datasets = await this.buildDatasetQuery().then((response) => response.json())
         this.store.sync(datasets)
         this.datasetsAll = this.store.findAll("datasets")
+
         this.datasets = this.datasetsAll.filter(
             (it) => it.cat === "intermediate"
+        )
+		this.sharedExportArr = this.datasetsAll.filter(
+            (it) => it.cat === "export" || it.cat === "shared"
         )
 
         const scenarios = await this.buildScenarioQuery().then((response) => response.json())

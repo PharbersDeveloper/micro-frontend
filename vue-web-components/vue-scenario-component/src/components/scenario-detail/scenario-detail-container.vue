@@ -12,7 +12,9 @@
                 <report-lst :reports="reportDisplay" @isTrue="getTrue" :scenario-id="datasource.scenario.id" />
             </div>
             <div v-show="activeName === 'Steps'" class="scenario-container">
-                <scenario-steps :steps="stepDisplay" :datasets="datasetsDisplay"
+                <scenario-steps :steps="stepDisplay" 
+					:sharedExportArr="sharedExportArr"
+					:datasets="datasetsDisplay"
                     :scenario-id="datasource.scenario.id" />
                 <!-- @isStepTrue="getSteptrue" -->
             </div>
@@ -88,7 +90,8 @@ export default {
 			}),
             getFirstDetail: {},
             arr: [],
-            scenarioJob: []
+            scenarioJob: [],
+			sharedExportArr: []
         }
     },
     props: {
@@ -319,6 +322,7 @@ export default {
         },
 		datasetsAdapter() {
 			this.datasetsDisplay = this.datasource.datasets.map(x => x)
+			this.sharedExportArr = this.datasource.sharedExportArr.map(x => x)
 		},
         datasetsAllAdapter() {
 			this.datasetsAllDisplay = this.datasource.datasetsAll.map(x => x)

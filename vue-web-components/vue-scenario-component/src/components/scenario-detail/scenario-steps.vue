@@ -34,8 +34,8 @@
                     <span class="dsEmpty" v-show="isDsEmpty()">数据集不能为空！</span>
                 </el-form-item>
                 <el-form-item label="" class="button_area">
-                    <el-button class="add-ds" type="primary" @click="dialogVisible = true">选择目标数据集</el-button>
-                    <el-button class="add-ds" type="primary" @click="dialogVisible = true">选择最终目标</el-button>
+                    <el-button class="add-ds" type="primary" @click="selectDS('ds')">选择目标数据集</el-button>
+                    <el-button class="add-ds" type="primary" @click="selectDS('final')">选择最终目标</el-button>
                 </el-form-item>
                 <el-form-item label="配置参数">
                     <el-input type="textarea" :rows="4" placeholder="请输入配置参数" v-model="selectStep.confData"
@@ -55,12 +55,11 @@
                 </el-form-item>
             </el-form>
         </div>
-        <el-dialog title="输入数据集名称" :visible.sync="dialogVisible" width="30%">
+        <el-dialog title="选择数据集名称" :visible.sync="dialogVisible" width="30%">
             <el-form label-width="120px">
                 <el-form-item label="数据集名称">
-                    <!-- <el-input v-model="dsName" ></el-input> -->
                     <select class="select-pattern" v-model="dsName">
-                        <option v-for="(iter, index) in datasets" :key="iter.name + index" :label="iter.name"
+                        <option v-for="(iter, index) in dsArr" :key="iter.name + index" :label="iter.name"
                             :value="iter.name">
                         </option>
                     </select>
@@ -116,6 +115,7 @@ export default {
         steps: Array,
         scenarioId: String,
         datasets: Array,
+		sharedExportArr: Array
         // defs: {
         //     type: Object,
         //     default: function () {
@@ -145,6 +145,14 @@ export default {
 
     },
     methods: {
+		selectDS(data) {
+			this.dialogVisible = true
+			if (data === "final") {
+				this.dsArr = this.sharedExportArr
+			} else {
+				this.dsArr = this.datasets
+			}
+		},
         selectedStep(item, index) {
             this.selectStep = item
             this.steps[index].name = this.selectStep.name
