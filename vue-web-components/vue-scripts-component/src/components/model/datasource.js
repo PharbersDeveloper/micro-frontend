@@ -108,13 +108,13 @@ export default class PhDataSource {
                 let tags = new Set()
                 that.dcs.forEach((iter) => {
                 	if (typeof iter.labels == "string") {
-                        if(iter.labels == ""){
+                        if (iter.labels == "" || iter.label == 'unknown') {
                             iter.labels = "[]"
                             iter.labels = JSON.parse(iter.labels)
                             iter.labels.map((it) => {
                                 tags.add(it)
                             })
-                        }else{
+                        } else {
                             iter.labels = JSON.parse(iter.labels)
                             iter.labels.map((it) => {
                                 tags.add(it)
@@ -141,10 +141,18 @@ export default class PhDataSource {
                 let tags = new Set()
                 ele.datasource.dcs.forEach((iter) => {
                 	if (typeof iter.labels == "string") {
-                		iter.labels = JSON.parse(iter.labels)
-                		iter.labels.map((it) => {
-                			tags.add(it)
-                		})
+                        if (iter.labels == "" || iter.label == 'unknown') {
+                            iter.labels = "[]"
+                            iter.labels = JSON.parse(iter.labels)
+                            iter.labels.map((it) => {
+                                tags.add(it)
+                            })
+                        } else {
+                            iter.labels = JSON.parse(iter.labels)
+                            iter.labels.map((it) => {
+                                tags.add(it)
+                            })
+                        }
                 	}
                 })
                 that.tagsArray = []

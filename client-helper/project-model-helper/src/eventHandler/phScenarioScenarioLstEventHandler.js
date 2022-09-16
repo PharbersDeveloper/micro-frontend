@@ -39,7 +39,7 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 							owner: targetscenario.owner,
 							active: targetscenario.active,
 							index: targetscenario.index,
-							name: targetscenario.name,
+							// name: targetscenario.name,
 							traceId: targetscenario.traceId
 						}
 					}

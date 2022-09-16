@@ -803,7 +803,17 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 							jobDisplayName: targetDataset.jobDisplayName,
 							jobName: targetDataset.jobName,
 							jobPath: targetDataset.jobPath,
-							jobShowName: targetDataset.jobShowName
+							jobShowName: targetDataset.jobShowName,
+							dagName: targetDataset.dagName,
+							inputs: targetDataset.inputs,
+							jobId: targetDataset.jobId,
+							jobVersion: targetDataset.jobVersion,
+							outputs: targetDataset.outputs,
+							owner: targetDataset.owner,
+							projectName: targetDataset.projectName,
+							runtime: targetDataset.runtime,
+							targetJobId: targetDataset.targetJobId,
+							timeout: targetDataset.timeout
 							// schema: targetDataset.schema,
 							// date: new Date().getTime(),
 							// version: targetDataset.version,
