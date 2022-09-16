@@ -122,8 +122,8 @@
                                 <div class="label_selected" v-if="labelShowDialog">
                                     <div class="tag_arr">
                                         <div class="label_name" v-for="(item,index) in datasource.tagsArray" :key="index">
-                                            <span  :style="{background: tagsColorArray[datasource.tagsArray.indexOf(item)]}"></span>
-                                            <!-- <div class="tags_name">{{item}}</div> -->
+                                            <span  :style="{ background: tagsColorArray[datasource.tagsArray.indexOf(item)] }"></span>
+                                            <div class="tags_name">{{item}}</div>
                                         </div>
                                     </div>
                                     <div class="management">
@@ -157,7 +157,7 @@
                                                 <p
                                                     :title="tag"
                                                     class="tag_bg"
-                                                    :style="{background: tagsColorArray[datasource.tagsArray.indexOf(tag)]}">{{tag}}
+                                                    :style="{ background: tagsColorArray[datasource.tagsArray.indexOf(tag)] }">{{tag}}
                                                 </p>
                                             </span>
                                         </div>

@@ -798,10 +798,16 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 							id: targetDataset.id,
 							projectId: params.projectId,
 							labels: JSON.stringify(targetLabels),
-							schema: targetDataset.schema,
-							date: new Date().getTime(),
-							version: targetDataset.version,
-							name: targetDataset.name
+							actionName: targetDataset.actionName,
+							flowVersion: targetDataset.flowVersion,
+							jobDisplayName: targetDataset.jobDisplayName,
+							jobName: targetDataset.jobName,
+							jobPath: targetDataset.jobPath,
+							jobShowName: targetDataset.jobShowName
+							// schema: targetDataset.schema,
+							// date: new Date().getTime(),
+							// version: targetDataset.version,
+							// name: targetDataset.name
 						}
 					}
 
