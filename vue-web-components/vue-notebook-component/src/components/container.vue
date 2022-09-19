@@ -65,7 +65,7 @@
                                         </div>
                                     </div>
                                     <div class="management">
-                                        <div class="manage_label" @click="createTagsOpen">管理标签</div>
+                                        <div class="manage_label">管理标签</div>
                                     </div>
                                 </div>
                             </div>
