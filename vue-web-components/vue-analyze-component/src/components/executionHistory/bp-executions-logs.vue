@@ -20,7 +20,8 @@
                     </div>
                     <div class="logs">
                         <div class="logs-container" v-show="!hasError">
-                            {{ datasource.dataConf }}
+                            <!-- {{ datasource.dataConf }} -->
+                            <JsonViewer :value="confMessage" :expand-depth=5 :expanded="true"></JsonViewer>
                         </div>
                         <div class="logs-container" v-show="hasError">
                             运行脚本参数已被删除，请联系管理员!
@@ -70,8 +71,9 @@
 <script>
 import { staticFilePath } from "../../config/envConfig"
 import PhExecutionHistory from "./datasource"
-import viewJson from "./bp-view-json.vue"
+// import viewJson from "./bp-view-json.vue"
 import { Message } from 'element-ui'
+import JsonViewer from 'vue-json-viewer'
 
 export default {
     data() {
@@ -87,11 +89,13 @@ export default {
             focus: 0 ,//默认选中第一个activity,
             dagName: '',
             hasError: null,
-            runnerId: ''
+            runnerId: '',
+            confMessage: null
         }
     },
     components: {
-        viewJson
+        // viewJson
+        JsonViewer
     },
     props: {
         allData: {
@@ -123,7 +127,9 @@ export default {
                 this.datasource.jobIndex = this.executionItem[0]['job-index']
                 this.datasource.buildLogsQuery(this)
                 this.datasource.buildExecutionQuery(this)
-                this.datasource.buildConfQuery(this)
+                this.datasource.buildConfQuery(this,()=>{
+                    this.confMessage = this.datasource.dataConf
+                })
             }
         })
         // this.datasource.buildExecutionQuery(this)

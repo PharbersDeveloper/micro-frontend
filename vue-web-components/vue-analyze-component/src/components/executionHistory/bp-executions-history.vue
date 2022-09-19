@@ -67,7 +67,8 @@
                         </div>
                         <div class="logs">
                             <div class="logs-container" v-show="!hasError">
-                                {{ datasource.dataConf }}
+                                <!-- {{ datasource.dataConf }} -->
+                                <JsonViewer :value="jsonMessage" :expand-depth=5 :expanded="true"></JsonViewer>
                             </div>
                             <div class="logs-container" v-show="hasError">
                                 运行脚本参数已被删除，请联系管理员!
@@ -115,6 +116,7 @@ import ElButton from "element-ui/packages/button"
 import PhExecutionHistory from "./datasource"
 import "element-ui/lib/theme-chalk/infiniteScroll.css"
 // import viewJson from "./bp-view-json.vue"
+import JsonViewer from 'vue-json-viewer'
 
 export default {
     data() {
@@ -138,13 +140,14 @@ export default {
             isActive: null,
             dataShow: [],
             dagName: '',
-            hasError: null
+            hasError: null,
+            jsonMessage: {}
         }
     },
     components: {
         ElInput,
-        ElButton
-        // viewJson
+        ElButton,
+        JsonViewer
     },
     props: {
         allData: {
@@ -209,7 +212,9 @@ export default {
                 this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.jobName}&runnerId=${this.runnerId}&executionTemplate=${this.executionTemplate}` 
                 // this.datasource.buildFlowQuery(this) 
                 this.dagName = this.projectName + "_" + this.projectName + "_developer"
-                this.datasource.buildConfQuery(this)
+                this.datasource.buildConfQuery(this, ()=>{
+                    this.jsonMessage = this.datasource.dataConf
+                })
             })
         },
         // dealBuildFlowQuery(response) {
