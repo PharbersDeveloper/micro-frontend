@@ -129,7 +129,7 @@ export default {
             searchString: '',
             hasMore: true,
             executionItem: null,
-            // jsonMessage: null,
+            jsonMessage: null,
             jobIndex: "",
             executionTemplate: "",
             projectName: "",
@@ -205,22 +205,22 @@ export default {
                 this.executionItem = this.datasource.dataActivity 
                 // this.runnerId = data["runner-id"]
                 this.jobName = this.executionItem.length >= 1 ? this.executionItem[0]["job-name"] : ''
-                this.jobIndex = this.executionItem.length >= 1 ? this.executionItem['job-index'] : ''
-                this.executionTemplate = this.executionItem.length >= 1 ? this.executionItem["execution-template"] : ''
+                this.jobIndex = this.executionItem.length >= 1 ? this.executionItem[0]['job-index'] : ''
+                this.executionTemplate = this.executionItem.length >= 1 ? this.executionItem[0]["execution-template"] : ''
                 // https://executions.pharbers.com
                 this.iframeUrl = `https://executions.pharbers.com/#/history?projectName=${this.projectName}&projectId=${this.datasource.projectId}&jobName=${this.jobName}&runnerId=${this.runnerId}&executionTemplate=${this.executionTemplate}` 
-                // this.datasource.buildFlowQuery(this) 
                 this.dagName = this.projectName + "_" + this.projectName + "_developer"
                 this.datasource.buildConfQuery(this, ()=>{
                     this.jsonData = this.datasource.dataConf
                 })
+                this.datasource.buildFlowQuery(this) 
             })
         },
-        // dealBuildFlowQuery(response) {
-        //     if (response.status === 0) {
-        //         this.jsonMessage = response.message
-        //     }
-        // },
+        dealBuildFlowQuery(response) {
+            if (response.status === 0) {
+                this.jsonMessage = response.message
+            }
+        },
         viewLogs(data) {
             // this.datasource.buildLogsQuery(this)
             this.dealBuildLogsQuery()
