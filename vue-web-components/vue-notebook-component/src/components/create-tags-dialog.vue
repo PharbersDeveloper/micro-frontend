@@ -14,7 +14,7 @@
                     <img :src="search_icon" class="search" alt="">
                     <input type="text" placeholder="筛选标签或创建新标签" class="text_input" v-model="searchValue" @keyup.enter="submit">
                     <p class="tags_name">标签名</p>
-                    <div class="create" v-if="tagsArrayShow.length === 0 " @click="submit" >
+                    <div class="create" @click="submit" >
                         <img :src="add_icon" alt="" class="add">
                         <p>Create《{{searchValue}}》</p>
                         <img :src="enter_icon" alt="" class="enter">
