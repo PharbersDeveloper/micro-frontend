@@ -1054,6 +1054,7 @@ export default {
                     
                             .item_list {
                                 display: flex;
+                                width: calc(100% - 174px);
                                 flex-grow: 1;
                                 align-items: center;
                             }
@@ -1087,7 +1088,9 @@ export default {
                             .tag_area {
                                 display: flex;
                                 flex-wrap: wrap;
-                                overflow: hidden;
+                                overflow: auto;
+                                min-width: 300px;
+                                height: 42px;
                     
                                 img {
                                     width: 20px;

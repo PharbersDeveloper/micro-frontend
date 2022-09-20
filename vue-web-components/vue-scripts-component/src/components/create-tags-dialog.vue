@@ -14,6 +14,11 @@
                     <img :src="search_icon" class="search" alt="">
                     <input type="text" placeholder="筛选标签或创建新标签" class="text_input" v-model="searchValue" @keyup.enter="submit">
                     <p class="tags_name">标签名</p>
+                    <div class="create" @click="submit" >
+                        <img :src="add_icon" alt="" class="add">
+                        <p>Create《{{searchValue}}》</p>
+                        <img :src="enter_icon" alt="" class="enter">
+                    </div>
                     <div class="tags_list" v-if="tagsArrayShow.length !== 0 ">
                         <div class="tags" @click.stop="checkedOneTag(tag)" v-for="(tag,index) in tagsArrayShow" :key="index+'tag'">
                             <input type="checkbox" class="checkout" :checked="selectedTags.indexOf(tag) > -1">
@@ -22,11 +27,6 @@
                                 {{tag}}
                             </div>
                         </div>
-                    </div>
-                    <div class="create" v-if="tagsArrayShow.length === 0 " @click="submit" >
-                        <img :src="add_icon" alt="" class="add">
-                        <p>Create《{{searchValue}}》</p>
-                        <img :src="enter_icon" alt="" class="enter">
                     </div>
                </div>
               <div class="btn">
@@ -40,6 +40,7 @@
 
 <script>
 import { staticFilePath } from '../config/envConfig'
+import { Message } from 'element-ui'
 
 export default {
     data() {
@@ -110,13 +111,49 @@ export default {
         close() {
             this.tagsArrayShow = []
             this.tagsArrayShow = this.tagsArray
+            if(this.reciptcheckedIds.length == 1) {
+                this.newTagsArray.forEach(item=>{
+                    this.selectedTags.forEach((iter,ind)=>{
+                        if(item == iter){
+                            this.selectedTags.splice(ind, 1)
+                        }
+                    })
+                })
+            }
             this.$emit('closeCreateDialog');
         },
         submit() {
+            // debugger
+            let arr = []
+            if (this.reciptcheckedIds.length == 1) {
+                // debugger
+                if (this.selectedTags.length > 20) {
+                    Message.error("超出数量上限,最多同时创建20标签!", { duration: 0, showClose: true })
+                    return
+                }
+            } else if(this.reciptcheckedIds.length > 1){
+                this.reciptcheckedIds.forEach(item=>{
+                    let selDataset = this.datasets.filter(iter => iter.id == item)[0]
+                    // let arr = []
+                    arr = arr.concat(selDataset.labels)
+                    arr = Array.from(new Set(arr))
+                })
+                if(arr.length > 20){
+                    Message.error("超出数量上限,最多同时创建20标签!", { duration: 0, showClose: true })
+                    return
+                }
+            }
             if(this.searchValue.trim() != '' && this.tagsArrayShow.indexOf(this.searchValue) == -1) {
                 this.tagsArrayShow = this.tagsArray.filter(it => it != '')
                 this.selectedTags.push(this.searchValue) //默认选中新增tag
                 this.newTagsArray.push(this.searchValue) //关闭弹框前新增的tag array
+                if(this.reciptcheckedIds.length >= 1){
+                    arr = arr.concat(this.selectedTags)
+                    if(arr.length > 20){
+                        Message.error("超出数量上限,最多同时创建20标签!", { duration: 0, showClose: true })
+                        return
+                    }
+                }
                 this.tagsArrayShow = this.tagsArrayShow.concat(this.newTagsArray) //将新增tag添加到tagShow数组
                 this.searchValue = ''
             }

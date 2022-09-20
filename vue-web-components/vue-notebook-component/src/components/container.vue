@@ -1142,6 +1142,7 @@ export default {
                             display: flex;
                             justify-content: space-between;
                             flex-grow: 1;
+                            width:calc(100% - 40px);
                         }
                         .tag_bg:hover::after {
                             content: attr(data-title); //取到data-title属性的值
@@ -1178,6 +1179,7 @@ export default {
 
                         .item_list {
                             display: flex;
+                            // width: calc(100% - 174px);
                         }
 
                         .script_icon {
@@ -1210,7 +1212,9 @@ export default {
                         .tag_area {
                             display: flex;
                             flex-wrap: wrap;
-                            overflow: hidden;
+                            overflow: auto;
+                            // min-width: 300px;
+                            height: 42px;
 
                             img {
                                 width: 20px;
@@ -1413,6 +1417,7 @@ export default {
     .content-left {
         display: flex;
         flex-direction: row;
+        width: calc(100% - 110px);
     }
 }
 

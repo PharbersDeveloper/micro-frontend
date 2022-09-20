@@ -1382,6 +1382,7 @@ export default {
                     
                         .item_list {
                             display: flex;
+                            width:calc(100% - 40px);
                         }
                 
                         .script_icon {
@@ -1414,7 +1415,9 @@ export default {
                         .tag_area {
                             display: flex;
                             flex-wrap: wrap;
-                            overflow: hidden;
+                            overflow: auto;
+                            min-width: 450px;
+                            height: 42px;
                 
                             img {
                                 width: 20px;
