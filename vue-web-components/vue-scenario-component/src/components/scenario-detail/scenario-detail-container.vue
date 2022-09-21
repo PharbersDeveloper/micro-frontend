@@ -29,14 +29,11 @@
                     :hasMore="datasource.hasMore" 
                     :detailList="getFirstDetail" 
                     :scenarioExecution="datasource.scenarioExecution"
-                    :scenarioJob="scenarioJob"
+                    :scenarioStep="scenarioStep"
                     @getHistory="getHistory"
                     @getExecution="getExecution"
                     @getScenarioJob="getScenarioJob"></scenario-history>
 			</div>
-            <!-- 
-                    :scenarioStep="datasource.scenarioStep"
-             -->
         </div>
 		<el-dialog title="输入参数" :visible.sync="dialogVisible" width="30%">
 			<el-input 
@@ -91,7 +88,8 @@ export default {
             getFirstDetail: {},
             arr: [],
             scenarioJob: [],
-			sharedExportArr: []
+			sharedExportArr: [],
+            scenarioStep: []
         }
     },
     props: {
@@ -173,9 +171,9 @@ export default {
         "datasource.datasetsAll": function() {
 			this.datasetsAllAdapter()
 		},
-        scenarioJob: {
+        scenarioStep: {
 			handler(newValue) {
-                this.scenarioJob = newValue
+                this.scenarioStep = newValue
             },
             deep: true
 		},
@@ -187,21 +185,41 @@ export default {
         }
     },
     methods: {
-        getScenarioJob(runnerId, scenarioId , stepId){
+        sortBy(){
+            return function(a,b){
+                // a-b 升序排列，b-a 降序排列
+                return b.date - a.date
+            }
+        },
+        getScenarioJob(runnerId,index){
             this.datasource.refreshScenarioJob(runnerId, ()=>{
-                this.datasource.refreshScenarioStep(scenarioId, stepId, ()=>{
-                    if (this.datasource.scenarioStep.length >= 1) {
-                        for (let i = 0; i < this.datasource.scenarioJob.length; i++) {
-                            this.datasource.scenarioJob[i]['job-show-name'] = this.datasource.scenarioStep[i].name
-                        }
-                    }
-                    this.scenarioJob = this.datasource.scenarioJob
-                })
+                // this.datasource.scenarioJob.sortBy("['start-at']")
+                this.scenarioStep[index].scenarioJob = this.datasource.scenarioJob
             })
-            
         },
         getExecution(value){
-            this.datasource.refreshScenarioExecution(value)
+            this.datasource.refreshScenarioExecution(value, ()=>{
+                if (this.datasource.scenarioExecution.length >= 1) {
+                    this.scenarioStep = []
+                    this.datasource.scenarioExecution.forEach(item => {
+                        this.datasource.refreshScenarioStep(item['scenario-id'], item['step-id'],()=>{
+                            this.scenarioStep = this.scenarioStep.concat(this.datasource.scenarioStep)
+                            this.scenarioStep.sortBy()
+                            this.datasource.scenarioExecution.forEach(item => {
+                                this.scenarioStep.forEach(iter => {
+                                    if (item['step-id'] === iter.id) {
+                                        iter.runtime = item.runtime
+                                        iter['runner-id'] = item['runner-id']
+                                        iter.date = item.date
+                                    }
+                                })
+                            })
+                        })
+                    }) 
+                } else {
+                    this.scenarioStep = []
+                }
+            })
         },
         getHistory(){
             this.datasource.refreshHistory(this.datasource.projectId, ()=>{
