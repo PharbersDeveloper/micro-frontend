@@ -16,6 +16,7 @@ export default class PhDataSource {
         this.startKey = ""
         this.totalCount = 0
         this.batch_size = 20
+        this.tagsArray = []
         this.store = new JsonApiDataStore()
     }
 
@@ -93,6 +94,26 @@ export default class PhDataSource {
                 that.startKey = response.meta.start_key
                 that.totalCount = response.meta.total_count
                 that.dns = that.jsonapiAdapter(that.store.findAll("resources"))
+
+                let tags = new Set()
+                that.dns.forEach((iter) => {
+                	if (typeof iter.label == "string") {
+                        if (iter.label == "" || iter.label == 'unknown') {
+                            iter.label = "[]"
+                            iter.label = JSON.parse(iter.label)
+                            iter.label.map((it) => {
+                                tags.add(it)
+                            })
+                        } else {
+                            iter.label = JSON.parse(iter.label)
+                            iter.label.map((it) => {
+                                tags.add(it)
+                            })
+                        }
+                	}
+                })
+                that.tagsArray = Array.from(tags)
+
                 ele.needRefresh++
                 if(callback)
                     callback()
@@ -109,6 +130,24 @@ export default class PhDataSource {
                 that.store.sync(response)
                 ele.datasource.dns = that.jsonapiAdapter(that.store.findAll("resources"))
                 that.startKey = response.meta.start_key
+                let tags = new Set()
+                that.dns.forEach((iter) => {
+                	if (typeof iter.label == "string") {
+                        if (iter.label == "" || iter.label == 'unknown') {
+                            iter.label = "[]"
+                            iter.label = JSON.parse(iter.label)
+                            iter.label.map((it) => {
+                                tags.add(it)
+                            })
+                        } else {
+                            iter.label = JSON.parse(iter.label)
+                            iter.label.map((it) => {
+                                tags.add(it)
+                            })
+                        }
+                	}
+                })
+                that.tagsArray = Array.from(tags)
                 ele.needRefresh++
                 if(callback)
                     callback()

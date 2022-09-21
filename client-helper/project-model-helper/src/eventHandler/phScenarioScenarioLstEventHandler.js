@@ -39,8 +39,11 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 							owner: targetscenario.owner,
 							active: targetscenario.active,
 							index: targetscenario.index,
-							name: targetscenario.name,
-							traceId: targetscenario.traceId
+							// name: targetscenario.name,
+							traceId: targetscenario.traceId,
+							showName: decodeURI(
+								route.cookies.read("user_name_show")
+							)
 						}
 					}
 
@@ -55,8 +58,8 @@ export async function phScenarioScenarioLstEventHandler(e, route) {
 						body: JSON.stringify(body)
 					}
 					await fetch(url, options)
+					window.location.reload()
 				})
-				window.location.reload()
 			}
 			break
 		case "resetScenario":

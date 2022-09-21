@@ -20,7 +20,8 @@
                     </div>
                     <div class="logs">
                         <div class="logs-container" v-show="!hasError">
-                            {{ datasource.dataConf }}
+                            <!-- {{ datasource.dataConf }} -->
+                            <JsonViewer :value="datasource.dataConf" copyable :show-array-index="false" :expand-depth=5 :expanded="true"></JsonViewer>
                         </div>
                         <div class="logs-container" v-show="hasError">
                             运行脚本参数已被删除，请联系管理员!
@@ -70,8 +71,9 @@
 <script>
 import { staticFilePath } from "../../config/envConfig"
 import PhExecutionHistory from "./datasource"
-import viewJson from "./bp-view-json.vue"
+// import viewJson from "./bp-view-json.vue"
 import { Message } from 'element-ui'
+import JsonViewer from 'vue-json-viewer'
 
 export default {
     data() {
@@ -87,11 +89,13 @@ export default {
             focus: 0 ,//默认选中第一个activity,
             dagName: '',
             hasError: null,
-            runnerId: ''
+            runnerId: '',
+            confMessage: null
         }
     },
     components: {
-        viewJson
+        // viewJson
+        JsonViewer
     },
     props: {
         allData: {
@@ -123,7 +127,9 @@ export default {
                 this.datasource.jobIndex = this.executionItem[0]['job-index']
                 this.datasource.buildLogsQuery(this)
                 this.datasource.buildExecutionQuery(this)
-                this.datasource.buildConfQuery(this)
+                this.datasource.buildConfQuery(this,()=>{
+                    // this.confMessage = this.datasource.dataConf
+                })
             }
         })
         // this.datasource.buildExecutionQuery(this)
@@ -361,4 +367,233 @@ export default {
     }
 
 }
+
+/deep/.jv-node {
+        position: relative
+    }
+    
+    /deep/.jv-node:after {
+        content: ","
+    }
+    
+    /deep/.jv-node:last-of-type:after {
+        content: ""
+    }
+    
+    /deep/.jv-node.toggle {
+        margin-left: 13px !important
+    }
+    
+    /deep/.jv-node .jv-node {
+        margin-left: 25px
+    }
+    
+    /deep/.jv-container {
+        box-sizing: border-box;
+        position: relative
+    }
+    
+    /deep/.jv-container.boxed {
+        // border: 1px solid #eee;
+        border-radius: 6px
+    }
+    
+    /deep/.jv-container.boxed:hover {
+        box-shadow: 0 2px 7px rgba(0, 0, 0, .15);
+        border-color: transparent;
+        position: relative
+    }
+    
+    /deep/.jv-container.jv-light {
+        background: #fff;
+        white-space: nowrap;
+        color: #525252;
+        font-size: 14px;
+        font-family: Consolas, Menlo, Courier, monospace
+    }
+    
+    /deep/.jv-container.jv-light .jv-ellipsis {
+        color: #999;
+        background-color: #eee;
+        display: inline-block;
+        line-height: .9;
+        font-size: .9em;
+        padding: 0 4px 2px;
+        margin: 0 4px;
+        border-radius: 3px;
+        vertical-align: 2px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        user-select: none
+    }
+    
+    /deep/.jv-container.jv-light .jv-button {
+        color: #49b3ff
+    }
+    
+    /deep/.jv-container.jv-light .jv-key {
+        color: #111;
+        margin-right: 4px
+    }
+    
+    /deep/.jv-container.jv-light .jv-item.jv-array {
+        color: #111
+    }
+    
+    /deep/.jv-container.jv-light .jv-item.jv-boolean {
+        color: #fc1e70
+    }
+    
+    /deep/.jv-container.jv-light .jv-item.jv-function {
+        color: #067bca
+    }
+    
+    /deep/.jv-container.jv-light .jv-item.jv-number {
+        color: #fc1e70
+    }
+    
+    /deep/.jv-container.jv-light .jv-item.jv-object {
+        color: #111
+    }
+    
+    /deep/.jv-container.jv-light .jv-item.jv-undefined {
+        color: #e08331
+    }
+    
+    /deep/.jv-container.jv-light .jv-item.jv-string {
+        color: #42b983;
+        word-break: break-word;
+        white-space: normal
+    }
+    
+    /deep/.jv-container.jv-light .jv-item.jv-string .jv-link {
+        color: #0366d6
+    }
+    
+    /deep/.jv-container.jv-light .jv-code .jv-toggle:before {
+        padding: 0 2px;
+        border-radius: 2px
+    }
+    
+    /deep/.jv-container.jv-light .jv-code .jv-toggle:hover:before {
+        background: #eee
+    }
+    
+    /deep/.jv-container .jv-code {
+        overflow: hidden;
+        padding: 30px 20px
+    }
+    
+    /deep/.jv-container .jv-code.boxed {
+        max-height: 300px
+    }
+    
+    /deep/.jv-container .jv-code.open {
+        max-height: none !important;
+        overflow: visible;
+        overflow-x: auto;
+        padding-bottom: 45px
+    }
+    
+    /deep/.jv-container .jv-toggle {
+        background-image: url(data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjE2IiB3aWR0aD0iOCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsPSIjNjY2IiBkPSJNMCAwbDggOC04IDh6Ii8+PC9zdmc+);
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: 50%;
+        cursor: pointer;
+        width: 10px;
+        height: 10px;
+        margin-right: 2px;
+        display: inline-block;
+        -webkit-transition: -webkit-transform .1s;
+        transition: -webkit-transform .1s;
+        transition: transform .1s;
+        transition: transform .1s, -webkit-transform .1s
+    }
+    
+    /deep/.jv-container .jv-toggle.open {
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg)
+    }
+    
+    /deep/.jv-container .jv-more {
+        position: absolute;
+        z-index: 1;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 40px;
+        width: 100%;
+        text-align: center;
+        cursor: pointer
+    }
+    
+    /deep/.jv-container .jv-more .jv-toggle {
+        position: relative;
+        top: 40%;
+        z-index: 2;
+        color: #888;
+        -webkit-transition: all .1s;
+        transition: all .1s;
+        -webkit-transform: rotate(90deg);
+        transform: rotate(90deg)
+    }
+    
+    /deep/.jv-container .jv-more .jv-toggle.open {
+        -webkit-transform: rotate(-90deg);
+        transform: rotate(-90deg)
+    }
+    
+    /deep/.jv-container .jv-more:after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        z-index: 1;
+        background: -webkit-linear-gradient(top, transparent 20%, hsla(0, 0%, 90.2%, .3));
+        background: linear-gradient(180deg, transparent 20%, hsla(0, 0%, 90.2%, .3));
+        -webkit-transition: all .1s;
+        transition: all .1s
+    }
+    
+    /deep/.jv-container .jv-more:hover .jv-toggle {
+        top: 50%;
+        color: #111
+    }
+    
+    /deep/.jv-container .jv-more:hover:after {
+        background: -webkit-linear-gradient(top, transparent 20%, hsla(0, 0%, 90.2%, .3));
+        background: linear-gradient(180deg, transparent 20%, hsla(0, 0%, 90.2%, .3))
+    }
+    
+    /deep/.jv-container .jv-button {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        padding: 5px;
+        z-index: 5
+    }
+    
+    /deep/.jv-container .jv-button.copied {
+        opacity: .4;
+        cursor: default
+    }
+    
+    /deep/.jv-container .jv-tooltip {
+        position: absolute
+    }
+    
+    /deep/.jv-container .jv-tooltip.right {
+        right: 15px
+    }
+    
+    /deep/.jv-container .jv-tooltip.left {
+        left: 15px
+    }
+    
+    /deep/.jv-container .j-icon {
+        font-size: 12px
+    }
 </style>

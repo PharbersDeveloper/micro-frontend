@@ -65,10 +65,10 @@
                                 </span>
                                 <div class="label_selected" v-if="labelShowDialog">
                                     <div class="tag_arr">
-                                        <div class="label_name" v-for="(item,index) in allData.tagsArray" :key="index">
+                                        <div class="label_name" v-for="(item,index) in datasource.tagsArray" :key="index">
                                             <span
-                                                :style="{background: tagsColorArray[allData.tagsArray.indexOf(item)]}"></span>
-                                            <!-- <div class="tags_name">{{item}}</div> -->
+                                                :style="{background: tagsColorArray[datasource.tagsArray.indexOf(item)]}"></span>
+                                            <div class="tags_name">{{item}}</div>
                                         </div>
                                     </div>
                                     <div class="management">
@@ -104,10 +104,10 @@
                                     <div class="tag_area" ref="tagsArea">
                                         <div v-for="(tag,inx) in scenario.label" :key="inx">
                                             <span v-if="scenario.label !== ''">
-                                                <!-- <p :title="tag" class="tag_bg"
-                                               :style="{background: tagsColorArray[allData.tagsArray.indexOf(tag)]}">
+                                                <p :title="tag" class="tag_bg"
+                                               :style="{background: tagsColorArray[datasource.tagsArray.indexOf(tag)]}">
                                                {{tag}}
-                                            </p> -->
+                                            </p>
                                             </span>
                                         </div>
 
@@ -176,7 +176,8 @@
         </div>
         <!-- 添加tag -->
         <create-tags-dialog v-if="showCreateTagsDialog" :scenarioCheckedIds="scenarioCheckedIds"
-            :scenarioCheckedNames="scenarioCheckedNames" :tagsArray="tagsArray" :tagsColorArray="tagsColorArray"
+            :scenarioCheckedNames="scenarioCheckedNames" :scenarios="datasource.data" 
+            :tagsArray="datasource.tagsArray" :tagsColorArray="tagsColorArray"
             @addTagsEvent="addTagsEvent" @closeCreateDialog="closeCreateDialog">
         </create-tags-dialog>
         <!-- 管理标签 -->
@@ -316,12 +317,12 @@ export default {
         })
     },
     watch: {
-        // "allData.tagsArray": function() {
-        //     this.tagsColorArray = []
-        //     this.allData.tagsArray.forEach(() => {
-        //         this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
-        //     })
-        // },
+        "datasource.tagsArray": function() {
+            this.tagsColorArray = []
+            this.datasource.tagsArray.forEach(() => {
+                this.tagsColorArray.push(this.color[Math.floor(Math.random()*10+Math.random()*10)])
+            })
+        },
         searchValue(newValue) {
             this.searchValue = newValue
             this.state = 'search'
@@ -1053,6 +1054,7 @@ export default {
                     
                             .item_list {
                                 display: flex;
+                                width: calc(100% - 174px);
                                 flex-grow: 1;
                                 align-items: center;
                             }
@@ -1086,7 +1088,9 @@ export default {
                             .tag_area {
                                 display: flex;
                                 flex-wrap: wrap;
-                                overflow: hidden;
+                                overflow: auto;
+                                min-width: 300px;
+                                height: 42px;
                     
                                 img {
                                     width: 20px;

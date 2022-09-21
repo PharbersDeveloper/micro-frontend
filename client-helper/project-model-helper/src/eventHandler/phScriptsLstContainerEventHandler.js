@@ -788,20 +788,36 @@ export async function phScriptsLstContainerEventHandler(e, route) {
 						(it) => it.id == targetId
 					)[0]
 					let targetLabels = Array.from(
-						new Set(targetDataset.label.concat(selectedTags))
+						new Set(targetDataset.labels.concat(selectedTags))
 					)
 					const url = `${hostName}/phdydatasource/put_item`
 					const accessToken = route.cookies.read("access_token")
 					let body = {
-						table: "dataset",
+						table: "dagconf",
 						item: {
 							id: targetDataset.id,
 							projectId: params.projectId,
-							label: JSON.stringify(targetLabels),
-							schema: targetDataset.schema,
-							date: new Date().getTime(),
-							version: targetDataset.version,
-							name: targetDataset.name
+							labels: JSON.stringify(targetLabels),
+							actionName: targetDataset.actionName,
+							flowVersion: targetDataset.flowVersion,
+							jobDisplayName: targetDataset.jobDisplayName,
+							jobName: targetDataset.jobName,
+							jobPath: targetDataset.jobPath,
+							jobShowName: targetDataset.jobShowName,
+							dagName: targetDataset.dagName,
+							inputs: targetDataset.inputs,
+							jobId: targetDataset.jobId,
+							jobVersion: targetDataset.jobVersion,
+							outputs: targetDataset.outputs,
+							owner: targetDataset.owner,
+							projectName: targetDataset.projectName,
+							runtime: targetDataset.runtime,
+							targetJobId: targetDataset.targetJobId,
+							timeout: targetDataset.timeout
+							// schema: targetDataset.schema,
+							// date: new Date().getTime(),
+							// version: targetDataset.version,
+							// name: targetDataset.name
 						}
 					}
 

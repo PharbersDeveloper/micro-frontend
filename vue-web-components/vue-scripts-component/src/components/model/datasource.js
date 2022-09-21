@@ -12,6 +12,7 @@ export default class PhDataSource {
         this.projectId = ''
         this.batch_size = 20
         this.dataset_size = 1000
+        this.tagsArray = []
         // this.curPage = 0
         this.store = new JsonApiDataStore()
         this.debugToken = "23468fc87c8f6fd40f961d49cceeaeb2ee091d657cdcee906e823f56c1266466"
@@ -104,6 +105,24 @@ export default class PhDataSource {
                 that.totalCount = response.meta.total_count
                 that.dcs = that.jsonapiAdapter(that.store.findAll("dag-confs"))
                 // that.curPage = 1
+                let tags = new Set()
+                that.dcs.forEach((iter) => {
+                	if (typeof iter.labels == "string") {
+                        if (iter.labels == "" || iter.label == 'unknown') {
+                            iter.labels = "[]"
+                            iter.labels = JSON.parse(iter.labels)
+                            iter.labels.map((it) => {
+                                tags.add(it)
+                            })
+                        } else {
+                            iter.labels = JSON.parse(iter.labels)
+                            iter.labels.map((it) => {
+                                tags.add(it)
+                            })
+                        }
+                	}
+                })
+                that.tagsArray = Array.from(tags)
                 ele.needRefresh++
                 if(callback)
                     callback()
@@ -117,13 +136,27 @@ export default class PhDataSource {
             .then((response) => response.json())
             .then((response) => {
                 that.store.sync(response)
-                // var newData = response.data.map(x=>{
-                //     let attributes = x.attributes
-                //     attributes.id = x.id
-                //     return attributes
-                // })
                 ele.datasource.dcs = that.jsonapiAdapter(that.store.findAll("dag-confs"))
                 that.startKey = response.meta.start_key
+                let tags = new Set()
+                ele.datasource.dcs.forEach((iter) => {
+                	if (typeof iter.labels == "string") {
+                        if (iter.labels == "" || iter.label == 'unknown') {
+                            iter.labels = "[]"
+                            iter.labels = JSON.parse(iter.labels)
+                            iter.labels.map((it) => {
+                                tags.add(it)
+                            })
+                        } else {
+                            iter.labels = JSON.parse(iter.labels)
+                            iter.labels.map((it) => {
+                                tags.add(it)
+                            })
+                        }
+                	}
+                })
+                that.tagsArray = []
+                that.tagsArray = Array.from(tags)
                 // ele.cur_page++
                 ele.needRefresh++
                 if(callback)

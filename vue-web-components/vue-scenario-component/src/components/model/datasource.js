@@ -10,8 +10,9 @@ export default class PhDataSource {
         this.totalCount = 0
         this.projectId = ''
         this.batch_size = 20
+        this.tagsArray = []
         this.store = new JsonApiDataStore()
-        this.debugToken = "eab8d11b79ebf042a4289654ac620b7abbb67f291bfdbde7c1322b716b24b842"
+        this.debugToken = "dee845222103c6289a2080b3216b176a6d2c40bbabc146f1ff08384c51aff147"
         if (!adapter) {
             this.adapter = this.defaultAdapter
         }
@@ -97,6 +98,24 @@ export default class PhDataSource {
                 that.startKey = response.meta.start_key
                 that.totalCount = response.meta.total_count
                 that.data = that.jsonapiAdapter(that.store.findAll("scenarios"))
+                let tags = new Set()
+                that.data.forEach((iter) => {
+                    if (typeof iter.label == "string") {
+                        if (iter.label == 'unknown' || iter.label == '') {
+                            iter.label = '[]'
+                            iter.label = JSON.parse(iter.label)
+                            iter.label.map((it) => {
+                                tags.add(it)
+                            })
+                        } else {
+                            iter.label = JSON.parse(iter.label)
+                            iter.label.map((it) => {
+                                tags.add(it)
+                            })
+                        }
+                    }
+                })
+                that.tagsArray = Array.from(tags)
                 ele.needRefresh++
                 if(callback)
                     callback()
@@ -111,6 +130,24 @@ export default class PhDataSource {
                 that.store.sync(response)
                 that.data = that.jsonapiAdapter(that.store.findAll("scenarios"))
                 that.startKey = response.meta.start_key
+                let tags = new Set()
+                that.data.forEach((iter) => {
+                    if (typeof iter.label == "string") {
+                        if (iter.label == 'unknown' || iter.label == '') {
+                            iter.label = '[]'
+                            iter.label = JSON.parse(iter.label)
+                            iter.label.map((it) => {
+                                tags.add(it)
+                            })
+                        } else {
+                            iter.label = JSON.parse(iter.label)
+                            iter.label.map((it) => {
+                                tags.add(it)
+                            })
+                        }
+                    }
+                })
+                that.tagsArray = Array.from(tags)
                 // ele.cur_page++
                 ele.needRefresh++
                 if(callback)

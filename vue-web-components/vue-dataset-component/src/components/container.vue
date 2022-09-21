@@ -85,9 +85,9 @@
                                 </span>
                                 <div class="label_selected" v-if="labelShowDialog">
                                     <div class="tag_arr">
-                                        <div class="label_name" v-for="(item, index) in tagsArray" :key="index">
+                                        <div class="label_name" v-for="(item, index) in datasource.tagsArray" :key="index">
                                             <span
-                                                :style="{ background: tagsColorArray[tagsArray.indexOf(item)] }"></span>
+                                                :style="{ background: tagsColorArray[datasource.tagsArray.indexOf(item)] }"></span>
                                             <div class="tags_name">{{ item }}</div>
                                         </div>
                                     </div>
@@ -125,8 +125,8 @@
                                         <div v-for="(tag, inx) in dataset.label" :key="inx">
                                             <span v-if="dataset.label !== ''">
                                                 <p :title="tag" class="tag_bg"
-                                                    :style="{ background: tagsColorArray[tagsArray.indexOf(tag)] }">
-                                                    <!-- {{ tag }} -->
+                                                    :style="{ background: tagsColorArray[datasource.tagsArray.indexOf(tag)] }">
+                                                    {{ tag }}
                                                 </p>
                                             </span>
                                         </div>
@@ -203,7 +203,7 @@
         </clear-delete>
         <!-- 添加tag -->
         <create-tags-dialog v-if="showCreateTagsDialog" :datasetcheckedIds="datasetcheckedIds"
-            :datasetcheckedNames="datasetcheckedNames" :datasets="datasource.data" :tagsArray="tagsArray"
+            :datasetcheckedNames="datasetcheckedNames" :datasets="datasource.data" :tagsArray="datasource.tagsArray"
             :tagsColorArray="tagsColorArray" @addTagsEvent="addTagsEvent" @closeCreateDialog="closeCreateDialog">
         </create-tags-dialog>
         <!-- 管理标签 -->
@@ -348,12 +348,12 @@ export default {
         })
     },
     watch: {
-        // "allData.tagsArray": function () {
-        //     this.tagsColorArray = []
-        //     this.allData.tagsArray.forEach((item, index) => {
-        //         this.tagsColorArray.push(this.color[Math.floor(Math.random() * 10 + Math.random() * 10)])
-        //     })
-        // },
+        "datasource.tagsArray": function () {
+            this.tagsColorArray = []
+            this.datasource.tagsArray.forEach((item, index) => {
+                this.tagsColorArray.push(this.color[Math.floor(Math.random() * 10 + Math.random() * 10)])
+            })
+        },
         // "allData.dss": function(n, o) {
         //     console.log(n)
         //     this.searchData = Array.from(n)
@@ -1235,6 +1235,7 @@ export default {
 
                         .item_list {
                             display: flex;
+                            width: calc(100% - 40px);
                         }
 
                         .script_icon {
@@ -1267,7 +1268,9 @@ export default {
                         .tag_area {
                             display: flex;
                             flex-wrap: wrap;
-                            overflow: hidden;
+                            overflow: auto;
+                            min-width: 450px;
+                            height: 42px;
 
                             img {
                                 width: 20px;
