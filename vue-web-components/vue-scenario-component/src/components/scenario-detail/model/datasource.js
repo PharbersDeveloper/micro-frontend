@@ -142,7 +142,7 @@ export default class PhScenarioDetailDatasource {
         return fetch(url, options)
     }
 
-    refreshScenarioExecution(traceId) {
+    refreshScenarioExecution(traceId,callback=null) {
         this.buildScenarioExecutionQuery(traceId)
             .then((response) => response.json())
             .then((response) => {
@@ -152,6 +152,8 @@ export default class PhScenarioDetailDatasource {
                 this.store.reset()
                 this.store.sync(response)
                 this.scenarioExecution = this.store.findAll("scenario-executions")
+                if(callback)
+                    callback()
             })
     }
 
@@ -221,10 +223,7 @@ export default class PhScenarioDetailDatasource {
         this.buildScenarioJobQuery(runnerId)
             .then((response) => response.json())
             .then((response) => {
-                // response.data.forEach(item=>{
-                //     item.id = item.attributes["runner-id"]
-                // })
-                // this.store.reset()
+                this.store.reset()
                 this.store.sync(response)
                 this.scenarioJob = this.store.findAll("executions")
                 if(callback)

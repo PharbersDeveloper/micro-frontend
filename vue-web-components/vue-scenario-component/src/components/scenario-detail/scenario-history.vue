@@ -42,35 +42,36 @@
                 <div class="scenario-history-detail-bottom">
                     <span style="padding: 10px;"><b>detail</b></span>
                     <div class="detail-step">
-                        <!-- {{scenarioExecutionDetail}} -->
-                        <div class="detail-step-list" v-show="scenarioExecutionDetail.length >= 1 "
-                        v-for="(item, index) in scenarioExecutionDetail" :key="index" >
+                        <div class="detail-step-list" v-show="scenarioStepDetail.length >= 1 "
+                        v-for="(item, index) in scenarioStepDetail" :key="index" >
                             <div class="detail-step-con" @click="getJobDetail(item, index)">
                                 <div>
-                                    <span>{{item['runner-id']}}</span>
+                                    <span>{{item.name}}</span>
                                 </div>
                                 <span>{{item.runtime}}</span>
                                 <span>at&nbsp;{{formatDateStandard(item.date, 3)}}</span>
                             </div>
-                            <div v-show="scenarioJobDetail.length >= 1 && item.showJob" class="detail-job" v-for="(iter, ind) in scenarioJobDetail" :key="ind">
-                                <div>
-                                    <p v-if="iter.status==='success'" class="el-icon-success status-icon" />
-                                    <p v-else-if="iter.status==='running'" class="el-icon-loading status-icon" />
-                                    <p v-else class="el-icon-error status-icon" />
-                                    <span>{{iter['job-show-name']}}</span>
-                                </div>
-                                <div>
-                                    <span>{{formatDateStandard(iter["start-at"], 3)}}</span>
-                                    -
-                                    <span>{{formatDateStandard(iter["end-at"], 3)}}</span>
+                            <div v-show="item.scenarioJob && item.scenarioJob.length >= 1 && item.showJob" >
+                                <div class="detail-job" v-for="(iter, ind) in item.scenarioJob" :key="ind">
+                                    <div>
+                                        <p v-if="iter.status==='success'" class="el-icon-success status-icon" />
+                                        <p v-else-if="iter.status==='running'" class="el-icon-loading status-icon" />
+                                        <p v-else class="el-icon-error status-icon" />
+                                        <span>{{iter['job-show-name']}}</span>
+                                    </div>
+                                    <div>
+                                        <span>{{formatDateStandard(iter["start-at"], 3)}}</span>
+                                        -
+                                        <span>{{formatDateStandard(iter["end-at"], 3)}}</span>
+                                    </div>
                                 </div>
                             </div>
-                            <!-- <div v-show="scenarioJobDetail.length === 0  && item.showJob" class="detail-job">
+                            <div v-show="item.scenarioJob && item.scenarioJob.length === 0  && item.showJob" class="detail-job">
                                 <span>暂无job</span>
-                            </div> -->
+                            </div>
                         </div>
-                        <div class="detail-step-con" v-show="scenarioExecutionDetail.length == 0">
-                            暂无数据
+                        <div class="detail-step-con" v-show="scenarioStepDetail.length == 0">
+                            step已被删除
                         </div>
                     </div>
                 </div>
@@ -78,7 +79,7 @@
         </div>
     </div>
 </template>
- <script>
+<script>
 //  import ElForm from "element-ui/packages/form/index"
 //  import ElFormItem from "element-ui/packages/form-item/index"
  import ElInput from "element-ui/packages/input/index"
@@ -113,8 +114,10 @@
             name: '未知',
             detail: {},
             scenarioExecutionDetail: [],
-            scenarioJobDetail: [],
-            index: 0
+            // scenarioJobDetail: [],
+            scenarioStepDetail: [],
+            // index: 0
+            // showJob: false
          }
      },
      props: {
@@ -122,7 +125,8 @@
         hasMore: Boolean,
         detailList: Object,
         scenarioExecution: Array,
-        scenarioJob: Array,
+        scenarioStep: Array,
+        // scenarioJob: Array,
         //  defs: {
         //      type: Object,
         //      default: function () {
@@ -144,28 +148,25 @@
             },
             deep: true
         },
-        scenarioJob: {
+        scenarioStep: {
             handler(newValue) {
-                // this.scenarioExecution[this.index].scenarioJobDetail = newValue
-                // console.log(this.scenarioExecutionDetail[this.index].scenarioJobDetail,111)
-                // console.log(this.scenarioExecutionDetail,222)
-                this.scenarioJobDetail = newValue
+                this.scenarioStepDetail = newValue
             },
             deep: true
         },
      },
      methods: {
+        // 点击step显示job
         getJobDetail(item, index){
-            this.index = index
-            this.scenarioJobDetail = []
+            this.$set(item, 'scenarioJob', [])
              if (item.showJob) {
-                 item.showJob = !item.showJob
+                item.showJob = !item.showJob
              } else {
                  this.$set(item, 'showJob', false)
                  item.showJob = !item.showJob
              }
             if (item.showJob) {
-                this.$emit("getScenarioJob",item['runner-id'], item['scenario-id'], item['step-id'])
+                this.$emit("getScenarioJob",item['runner-id'],index)
             }
         },
         // 点击列表显示detail
@@ -229,7 +230,7 @@
      },
  }
  </script>
- <style lang="scss" scoped>
+<style lang="scss" scoped>
     * {
         box-sizing: border-box;
     }
